@@ -242,6 +242,7 @@
   /* ---------- Courses ---------- */
   const shopDone = store.get("lili-r2-shop") || {};
   function item(k, title, desc, qty, q, check) { return { k, title, desc, qty, q, check }; }
+  const CART_SVG = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>', CHECK_SVG = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   const amz = q => "https://www.amazon.fr/s?k=" + encodeURIComponent(q);
   function renderShop() {
     const box = $("shop"); box.textContent = "";
@@ -277,11 +278,13 @@
         const li = document.createElement("li");
         li.innerHTML = `<label class="item"><input type="checkbox" data-k="${it.k}"><span><b></b><small></small></span><span class="qty"></span></label>`;
         li.querySelector("b").textContent = it.title; li.querySelector("small").textContent = it.desc; li.querySelector(".qty").textContent = it.qty;
-        if (it.check || it.q) {
-          const row = document.createElement("span"); row.className = "buy-row";
-          if (it.check) { const c = document.createElement("span"); c.className = "spec"; c.textContent = it.q ? "À vérifier : " + it.check : it.check; row.appendChild(c); }
-          if (it.q) { const a = document.createElement("a"); a.className = "buy"; a.href = amz(it.q); a.target = "_blank"; a.rel = "noopener"; a.textContent = "Voir sur Amazon ↗"; row.appendChild(a); }
-          li.querySelector("label > span:not(.qty)").appendChild(row);
+        const qty = li.querySelector(".qty"); qty.textContent = ""; const qt = document.createElement("span"); qt.textContent = it.qty; qty.appendChild(qt);
+        if (it.q) {
+          const c = document.createElement("span"); c.className = "spec"; c.innerHTML = CHECK_SVG + "<span><b>Vérifie :</b> </span>"; c.lastChild.appendChild(document.createTextNode(it.check));
+          li.querySelector("label > span:not(.qty)").appendChild(c);
+          const a = document.createElement("a"); a.className = "buy"; a.href = amz(it.q); a.target = "_blank"; a.rel = "noopener"; a.innerHTML = CART_SVG + "Amazon"; qty.appendChild(a);
+        } else if (it.check) {
+          const st = document.createElement("span"); st.className = "store"; st.textContent = "Bricolage"; qty.appendChild(st);
         }
         const cb = li.querySelector("input"); cb.checked = !!shopDone[it.k];
         cb.addEventListener("change", () => { shopDone[it.k] = cb.checked; store.set("lili-r2-shop", shopDone); if (shopCount() === allBoxes().length) say("Tout est là ! On peut construire !"); });
