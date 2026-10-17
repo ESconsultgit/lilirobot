@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Light-up Sign · Lili's Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="alternate" hreflang="fr" href="../enseigne.html">
+<link rel="stylesheet" href="../assets/atelier.css">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  --night:#0F2410; --night-2:#183A17;}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+/* ---------- Configurateur (bannière) ---------- */
+.studio{background:radial-gradient(120% 90% at 70% 30%,#24502A 0%,var(--night) 70%);color:#EAF5DE}
+.studio .wrap{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:28px;padding-block:28px 40px;align-items:start}
+.studio .studio-title{color:#fff;font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:800}
+.studio .eyebrow{color:#C6E87F}
+.studio p.lead{color:#D5E9C4;font-weight:600;margin-top:6px}
+.panel{display:grid;gap:16px;margin-top:18px}
+.field{display:grid;gap:6px}
+.field>label,.field>.lbl{font-weight:800;font-size:.95rem;display:flex;justify-content:space-between;color:#EAF5DE}
+.field output{font-family:var(--font-mono);color:#C6E87F}
+.field small{color:#A9C79A;font-size:.85rem;line-height:1.35}
+#nameInput{font:inherit;font-family:var(--font-display);font-weight:800;font-size:2rem;letter-spacing:.04em;width:100%;padding:8px 16px;border-radius:16px;border:3px solid #8CC63F;background:#0B1B0B;color:#fff}
+#nameInput::placeholder{color:#4F6F45}
+.seg{display:flex;background:#0B1B0B;border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{flex:1;font:inherit;font-weight:800;font-size:.9rem;border:0;border-radius:999px;padding:6px 10px;background:transparent;color:#A9C79A;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:#8CC63F;color:#163514}
+.studio input[type=range]{accent-color:#8CC63F}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatches button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.swatches button[aria-pressed="true"]{border-color:#fff;transform:scale(1.12)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:700;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:#8CC63F;margin-top:2px}
+.check small{display:block;font-weight:600;color:#A9C79A}
+
+.stage{min-width:0}
+.canvas-wrap{position:relative}
+.stage canvas{display:block;width:100%;aspect-ratio:16/10;border-radius:22px;background:radial-gradient(circle at 50% 40%,#1E3E1F,#0A170A);touch-action:none}
+.stage-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}
+.anim-seg{background:rgba(11,27,11,.75)}
+.pill-btn{font:inherit;font-weight:800;font-size:.85rem;border:0;border-radius:999px;padding:6px 12px;background:rgba(11,27,11,.75);color:#EAF5DE;cursor:pointer}
+.stage-hint{pointer-events:none;position:absolute;bottom:12px;left:14px;font-size:.8rem;color:#A9C79A;font-weight:700}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;color:#C6E87F}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.stat{background:rgba(255,255,255,.06);border:1.5px solid rgba(198,232,127,.25);border-radius:14px;padding:10px 12px}
+.stat span{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;font-weight:800;color:#A9C79A}
+.stat b{font-family:var(--font-display);font-size:1.2rem;color:#fff;font-variant-numeric:tabular-nums}
+.dl-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.dl-row .note{color:#A9C79A;font-size:.88rem;font-weight:600;flex:1;min-width:200px}
+.alert{margin-top:12px;background:#4A2414;color:#FFD9C6;border-radius:14px;padding:10px 14px;font-weight:700;font-size:.92rem}
+.studio .lili .bubble{background:#2A4A22;color:#EAF5DE}
+.studio .lili .bubble::before{border-right-color:#2A4A22}
+.studio .lili .tag{color:#C6E87F}
+@media (max-width:900px){.studio .wrap{grid-template-columns:1fr}}
+@media (max-width:560px){.stats{grid-template-columns:1fr 1fr}.stage canvas{aspect-ratio:4/3}}
+
+/* ---------- Plans de pose ---------- */
+.plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-block:14px}
+.plan{background:var(--bg);border:2px solid var(--line);border-radius:16px;padding:10px;display:grid;gap:4px;min-width:0}
+.plan svg{width:100%;height:auto;max-height:220px}
+.plan b{font-family:var(--font-display);font-size:1.05rem;color:var(--green-deep)}
+.plan small{color:var(--ink-soft);font-weight:700;font-size:.8rem}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;font-weight:700;color:var(--ink-soft)}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:-2px;margin-right:6px}
+
+/* Tableau des pixels */
+.pixtable{overflow-x:auto;margin-block:12px}
+.pixtable table{border-collapse:collapse;min-width:360px;width:100%}
+.pixtable th,.pixtable td{padding:6px 10px;border-bottom:2px solid var(--line);text-align:left}
+.pixtable th{font-family:var(--font-display);color:var(--green-deep)}
+.pixtable td.l{font-family:var(--font-display);font-weight:800;font-size:1.3rem;color:var(--green)}
+.pixtable input{width:80px;font:inherit;font-family:var(--font-mono);padding:4px 8px;border-radius:8px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.pixtable button{margin-top:8px}
+.mini{font-size:.85rem;padding:6px 14px}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html"><img src="../assets/lili-avatar.webp" alt="">Lili's Workshop</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">Robot 2 · The Light-up Sign
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt" href="index.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 1 · The Balancer</b><small>It keeps a ping-pong ball balanced</small></span>
+        </a>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>Robot 2 · The Light-up Sign</b><small>Your name in 3D-printed letters that glow</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Robot 3 · The Roller</b><small>Unlocks after mission 2</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapters">
+      <a href="#comprendre">How it works</a>
+      <a href="#courses">Shopping list</a>
+      <a href="#montage">Building</a>
+    </nav>
+    <nav class="lang" aria-label="Language"><a href="../enseigne.html" hreflang="fr" lang="fr">FR</a><a href="enseigne.html" aria-current="true" lang="en">EN</a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="../assets/banner.mp4" poster="../assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili building a robot in her workshop"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot no. 2 · Light mission</span>
+        <h1>The Light-up Sign</h1>
+        <p class="lead">Your name in 3D-printed letters that light up when you walk into your room.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#studio">Create your sign</a>
+          <a class="btn btn-ghost" href="#courses">Shopping list</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== DESIGNER ===================== -->
+  <section class="studio" id="studio">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">The 3D workshop</span>
+        <h2 class="studio-title">Type your name</h2>
+        <p class="lead">Lili draws your letters in 3D, works out the lights and gets the program ready.</p>
+        <div class="panel">
+          <div class="field">
+            <label for="nameInput">Your name</label>
+            <input id="nameInput" type="text" maxlength="10" autocomplete="off" spellcheck="false" value="Lili">
+            <small>10 letters max. Accents work too (é, è, ç…).</small>
+          </div>
+          <div class="field">
+            <span class="lbl">Letter style</span>
+            <div class="seg" id="caseSeg">
+              <button type="button" data-v="upper" aria-pressed="true">CAPITALS</button>
+              <button type="button" data-v="asis" aria-pressed="false">As I type it</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="height">Letter height <output id="heightOut">140 mm</output></label>
+            <input type="range" id="height" min="100" max="200" step="5" value="140">
+          </div>
+          <div class="field">
+            <label for="depth">Thickness <output id="depthOut">25 mm</output></label>
+            <input type="range" id="depth" min="20" max="40" step="1" value="25">
+          </div>
+          <div class="field">
+            <span class="lbl">Your favourite colour</span>
+            <div class="swatches" id="swatches"></div>
+          </div>
+          <div class="field">
+            <span class="lbl">Printer bed size</span>
+            <div class="seg" id="bedSeg">
+              <button type="button" data-v="180" aria-pressed="false">18 cm</button>
+              <button type="button" data-v="220" aria-pressed="true">22 cm</button>
+              <button type="button" data-v="256" aria-pressed="false">25.6 cm</button>
+            </div>
+          </div>
+          <label class="check"><input type="checkbox" id="micChk" checked><span>Add the microphone<small>Clap twice to switch it on or off, plus a mode that dances to music.</small></span></label>
+          <label class="check"><input type="checkbox" id="pirChk" checked><span>Add the motion sensor<small>The sign wakes up when someone walks into the room.</small></span></label>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="stage-bar">
+          <div class="seg anim-seg" id="animSeg">
+            <button type="button" data-v="0" aria-pressed="true">Rainbow</button>
+            <button type="button" data-v="1" aria-pressed="false">One by one</button>
+            <button type="button" data-v="2" aria-pressed="false">Sparkles</button>
+            <button type="button" data-v="3" aria-pressed="false">My colour</button>
+            <button type="button" data-v="4" aria-pressed="false" class="mic-only">Music</button>
+          </div>
+          <button class="pill-btn" id="lidBtn" type="button">Look inside</button>
+        </div>
+        <div class="canvas-wrap">
+        <canvas id="view" aria-label="3D preview of your sign"></canvas>
+        <div class="loading" id="loading">Lili is setting up the 3D workshop…</div>
+        <span class="stage-hint">Spin it with your mouse or finger</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><span>Letters</span><b id="stLetters">–</b></div>
+          <div class="stat"><span>Pixels</span><b id="stPixels">–</b></div>
+          <div class="stat"><span>Sign</span><b id="stSize">–</b></div>
+          <div class="stat"><span>Filament</span><b id="stFil">–</b></div>
+        </div>
+        <div class="alert" id="bedAlert" hidden></div>
+        <div class="dl-row">
+          <button class="btn btn-lime" id="dlBtn" type="button" disabled>Download my 3D parts</button>
+          <p class="note" id="dlNote">A ZIP file with a body and a front for each letter (STL format), the plan and the program.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>How does it work?</h2><p>A sign that knows when you arrive is already a little robot!</p></div>
+      </div>
+      <div class="lili">
+        <img src="../assets/lili-coucou.webp" alt="Lili waving">
+        <div class="bubble"><span class="tag">Hi there!</span><p>Each letter is a small 3D-printed box. Inside, we glue <strong>pixels</strong>: lights that can turn any colour. On the front, a white cover makes the whole letter glow, like a lantern.</p></div>
+      </div>
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M8 24a16 16 0 0132 0M14 24a10 10 0 0120 0"/></svg>
+          <span class="role">The eyes</span><h3>The motion sensor</h3>
+          <p>It feels the warmth of your body when you move in front of it. If nobody walks by for 2 minutes, the sign falls asleep.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="12" y="8" width="24" height="32" rx="3"/><path d="M18 2v6M30 2v6M18 40v6M30 40v6"/></svg>
+          <span class="role">The brain</span><h3>The Arduino Nano</h3>
+          <p>The Arduino Uno's little brother. It picks the colour of every pixel, 50 times a second.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10" cy="24" r="5"/><circle cx="24" cy="24" r="5"/><circle cx="38" cy="24" r="5"/><path d="M15 24h4M29 24h4"/></svg>
+          <span class="role">The lights</span><h3>The pixel string</h3>
+          <p>Each pixel holds 3 tiny lamps: red, green and blue. By mixing them, we can make every colour.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><path d="M10 8h20v6H18v6h10v6H18v14h-8z"/></svg>
+          <span class="role">The body</span><h3>The 3D letters</h3>
+          <p>The printer makes them layer by layer, from a thread of melted plastic. Each letter has a hole for the wires.</p>
+        </div>
+      </div>
+      <p class="loop-line">The sensor feels → the brain picks the colours → the pixels shine… and again!</p>
+      <div class="lili tip mic-only">
+        <img src="../assets/lili-mon-idee.webp" alt="Lili has an idea">
+        <div class="bubble"><span class="tag">The ears</span><p>With the microphone, your sign can hear! <strong>Clap twice</strong> to switch it off or back on. In <strong>Music</strong> mode, the letters glow brighter as the sound gets louder and change colour on every "boom".</p></div>
+      </div>
+      <div class="lili ask">
+        <img src="../assets/lili-explique.webp" alt="Lili explaining">
+        <div class="bubble"><span class="tag">Let me explain</span><p>The pixels are linked in a line, like train carriages. The Arduino sends a long list of colours to the first pixel: it keeps the first colour for itself and passes the rest on to the next one. That's why the order of the pixels matters so much!</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SHOPPING ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>Shopping list</h2><p>It adapts to your name by itself. Tick what you've found.</p></div>
+      </div>
+      <div class="progress"><span id="shopCount">0 / 0 found</span><div class="bar"><i id="shopBar"></i></div></div>
+      <div class="shop" id="shop"></div>
+      <div class="lili warn">
+        <img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed">
+        <div class="bubble"><span class="tag">Watch the voltage</span><p>Your pixel string must be <strong>5 V</strong>, like the power supply. A 12 V string won't work, and a 12 V power supply would fry your pixels!</p></div>
+      </div>
+      <p class="total">Tools: 3D printer, hot glue gun, drill with a 14 mm bit (with a grown-up), screwdriver, computer with Arduino IDE. Prices are rough guides. The Amazon buttons open a search: pick a well-rated seller and compare with the "Check" line.</p>
+    </div>
+  </section>
+
+  <!-- ===================== BUILDING ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Building, step by step</h2><p>Click "Done!" at the end of each step.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0 steps</span><div class="bar"><i id="stepBar"></i></div></div>
+
+      <div class="steps">
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Print your letters</h3><small>A few hours per letter · the printer works on its own</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>At the top of the page, type your name and click <strong>Download my 3D parts</strong>.</li>
+              <li>Open the <code>_body.stl</code> files in your printer's software. Print them in <strong>coloured PLA</strong>, lying flat on their back, no supports.</li>
+              <li>Print the <code>_front.stl</code> files in <strong>white PLA</strong>. They're thin, so light shines through.</li>
+              <li>Suggested settings: 0.2 mm layers, 3 outlines ("perimeters"), 15 % infill.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Print just one letter first as a test. If all goes well, start the others. And write each letter's number inside it in pencil!</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>Get the board ready</h3><small>30 minutes · with a grown-up for the drill</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span id="boardNeed">Board</span><span>2 battens</span><span>Drill + 14 mm bit</span></div>
+            <ol>
+              <li>Paint the board if you like (let it dry well).</li>
+              <li>Lay your letters on it, nicely lined up on a pencil line.</li>
+              <li>For each letter, mark in pencil where its wire hole is.</li>
+              <li>With a grown-up, drill a <strong>14 mm</strong> hole on each mark.</li>
+              <li>Screw two battens on the back of the board: they leave room for the wires and the Arduino.</li>
+            </ol>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">With a grown-up</span><p>The drill is always used with a grown-up. You make the marks and hold the board.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>Place the pixels in the letters</h3><small>45 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Here's the layout plan for <strong id="planName">your name</strong>. The black dot is the wire hole, the green circles are the pixels, in the order of the string.</p>
+            <div class="legend"><span><i style="background:#1D351B"></i>wire hole</span><span><i style="background:#8CC63F"></i>pixel and its number</span></div>
+            <div class="plans" id="plans"></div>
+            <ol>
+              <li>Find the end of the string where the little arrows start from: that's the <strong>input</strong>. It goes to the Arduino.</li>
+              <li>Pass the string from the back of the board into the first letter, through its hole.</li>
+              <li>Glue each pixel <strong>lying down</strong> in its spot with a drop of hot glue, its head facing the middle of the letter.</li>
+              <li>Come back out through the same hole and carry on to the next letter.</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">A pixel too many?</span><p>If the letters are far apart, a pixel may end up hidden behind the board. That's fine! You'll find it again in step 5.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>Wiring</h3><small>30 minutes · power unplugged!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Everything plugs into the breadboard. The two long lines along the edge are the <strong>power roads</strong>: <strong>+</strong> (5V) and <strong>−</strong> (GND).</p>
+            <div class="wiring"><table>
+              <thead><tr><th>Part</th><th>Leg or wire</th><th>Goes to</th></tr></thead>
+              <tbody>
+                <tr><td>5 V power supply (terminal)</td><td>+ and −</td><td>+ road and − road</td></tr>
+                <tr><td>1000 µF capacitor</td><td>long leg / leg with the stripe</td><td>+ road / − road</td></tr>
+                <tr><td>Arduino Nano</td><td>5V / GND</td><td>+ road / − road</td></tr>
+                <tr><td>Pixel string (input)</td><td>5V / GND</td><td>+ road / − road</td></tr>
+                <tr><td>Pixel string (input)</td><td>DIN (data)</td><td>330 Ω resistor, then D6</td></tr>
+                <tr><td>Button</td><td>one leg / the other</td><td>D3 / − road</td></tr>
+                <tr class="pir-only"><td>HC-SR501 sensor</td><td>VCC / OUT / GND</td><td>+ road / D2 / − road</td></tr>
+                <tr class="mic-only"><td>MAX9814 microphone</td><td>VDD / OUT / GND</td><td>+ road / A0 / − road (leave the Gain and AR legs free)</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Golden rule</span><p>We wire everything <strong>with the power unplugged</strong>. The capacitor has a direction: the stripe on its side always goes to −. Ask a grown-up to check before plugging back in.</p></div></div>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Wire colours</span><p>Colours change from one string to another. Read what's written on the first pixel's little circuit instead: 5V, DIN, GND.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>The pixel census</h3><small>20 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>In Arduino IDE, open <strong>Tools → Manage Libraries</strong>, search for <strong>FastLED</strong> and click Install.</li>
+              <li>Choose the <strong>Arduino Nano</strong> board, plug in the 5 V power supply, then the USB cable.</li>
+              <li>Upload this program: it lights the pixels one by one and writes their number in the Serial Monitor.</li>
+            </ol>
+            <div class="code"><div class="code-name">census.ino</div><button class="copy" type="button">Copy</button><pre><code id="codeCensus"></code></pre></div>
+            <ol start="4">
+              <li>For each letter, write down the number of the <strong>first pixel</strong> that lights up inside it and how many pixels it holds.</li>
+              <li>Fix the table if needed: the big program updates itself.</li>
+            </ol>
+            <div class="pixtable"><table><thead><tr><th>Letter</th><th>First pixel</th><th>Number of pixels</th></tr></thead><tbody id="pixRows"></tbody></table>
+              <button class="btn btn-soft mini" id="pixReset" type="button">Reset to the calculated values</button></div>
+          </div><img class="pose" src="../assets/lili-reflexion.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>Your sign's big program</h3><small>15 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>This program was written especially for <strong id="codeName">your name</strong>. The button changes the animation, and the green comments explain everything.</p>
+            <div class="code"><div class="code-name" id="codeFile">sign.ino</div><button class="copy" type="button">Copy</button><pre><code id="codeMain"></code></pre></div>
+            <div class="lili ask mic-only"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Switching off by itself?</span><p>Your room might be noisy. Raise <code>CLAP_THRESHOLD</code> (try 450, then 550) so only real claps count. If it doesn't hear your claps, lower it.</p></div></div>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Red and green swapped?</span><p>If your rainbow has strange colours, replace <code>RGB</code> with <code>GRB</code> in the <code>addLeds</code> line. Every string has its own habits!</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="7">
+          <div class="step-head"><span class="num">7</span><div><h3>Close the letters and hang your sign</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Check that every letter lights up <strong>before</strong> you close them.</li>
+              <li>Put a thin line of glue on top of the walls and lay the white front on it.</li>
+              <li>Glue each letter onto the board, its hole lined up with the drilled hole.</li>
+              <li>Stick the Arduino and the breadboard on the back of the board with double-sided tape.</li>
+              <li>Screw in two hooks and hang your sign on the wall!</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Keep the button reachable at the side of the board so you can change the animation without taking everything down.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+      </div>
+
+      <div class="finale">
+        <img src="../assets/lili-aventure.webp" alt="Lili ready for adventure">
+        <div>
+          <span class="eyebrow">Mission accomplished</span>
+          <h2>Your name shines on the wall!</h2>
+          <p>You've made something that senses, decides and reacts: a real little robot, from the 3D part to the program.</p>
+          <ul>
+            <li><strong>Challenge 1:</strong> invent a 5th animation (a wave running through the letters?).</li>
+            <li><strong>Challenge 2:</strong> make your sign flash in your favourite team's colours.</li>
+            <li><strong>Challenge 3:</strong> the sign falls asleep after 2 minutes. Change that time in the code.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Lili's Workshop · Build tomorrow's robots today!</div></footer>
+<div class="toast" id="toast" role="status"><img src="../assets/lili-contente.webp" alt=""><span id="toastTxt">Well done!</span></div>
+
+<script>window.LILI_BASE = "../";</script>
+<script src="../assets/vendor/opentype.min.js"></script>
+<script src="../assets/vendor/clipper.js"></script>
+<script src="../assets/vendor/earcut.min.js"></script>
+<script src="../assets/vendor/jszip.min.js"></script>
+<script src="../assets/vendor/three.min.js"></script>
+<script src="../assets/vendor/OrbitControls.js"></script>
+<script src="../assets/enseigne-geo.js"></script>
+<script src="../assets/enseigne.js"></script>
+</body>
+</html>

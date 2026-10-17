@@ -230,13 +230,14 @@
   }
 
   /* Pièces à imprimer, posées à l'origine */
-  function parts(sign) {
+  function parts(sign, names) {
+    const nm = Object.assign({ body: "corps", lid: "facade", piece: "morceau" }, names || {});
     const out = []; let k = 0;
     sign.letters.forEach((l, li) => l.islands.forEach((is, ii) => {
       k++; const dx = -is.bbox.x0, dy = -is.bbox.y0;
-      const tag = String(li + 1).padStart(2, "0") + "_" + safe(l.ch) + (l.islands.length > 1 ? "_morceau" + (ii + 1) : "");
-      out.push({ name: tag + "_corps.stl", mesh: is.body.translated(dx, dy) });
-      out.push({ name: tag + "_facade.stl", mesh: is.lid.translated(dx, dy) });
+      const tag = String(li + 1).padStart(2, "0") + "_" + safe(l.ch) + (l.islands.length > 1 ? "_" + nm.piece + (ii + 1) : "");
+      out.push({ name: tag + "_" + nm.body + ".stl", mesh: is.body.translated(dx, dy) });
+      out.push({ name: tag + "_" + nm.lid + ".stl", mesh: is.lid.translated(dx, dy) });
     }));
     return out;
   }

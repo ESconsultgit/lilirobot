@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lili's Workshop</title>
+<meta name="description" content="Lili's Workshop: robots to build as a family, explained step by step for kids.">
+<link rel="icon" href="../assets/lili-avatar.webp" type="image/webp">
+<link rel="alternate" hreflang="fr" href="../index.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/atelier.css">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="../assets/lili-avatar.webp" alt="">Lili's Workshop</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">Robot 1 · The Balancer
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 1 · The Balancer</b><small>It keeps a ping-pong ball balanced</small></span>
+        </a>
+        <a class="robot-opt" href="enseigne.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>Robot 2 · The Light-up Sign</b><small>Your name in 3D-printed letters that glow</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Robot 3 · The Roller</b><small>Unlocks after mission 2</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapters">
+      <a href="#comprendre">How it works</a>
+      <a href="#courses">Shopping list</a>
+      <a href="#montage">Building</a>
+    </nav>
+    <nav class="lang" aria-label="Language"><a href="../index.html" hreflang="fr" lang="fr">FR</a><a href="index.html" aria-current="true" lang="en">EN</a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="../assets/banner.mp4" poster="../assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili building a robot in her workshop"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot no. 1 · Balance mission</span>
+        <h1>The Balancer</h1>
+        <p class="lead">Build a robot with Lili that keeps a ping-pong ball balanced on a rail, all by itself.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#comprendre">Let's start!</a>
+          <a class="btn btn-ghost" href="#courses">Shopping list</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><span>Difficulty</span><b class="stars">★★☆☆</b></div>
+      <div><span>Time</span><b>3 afternoons</b></div>
+      <div><span>Budget</span><b>≈ €45</b></div>
+      <div><span>You'll learn</span><b>Sensor, motor, code</b></div>
+    </div>
+  </div>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>How does it work?</h2><p>First we understand, then we build. That's the workshop rule!</p></div>
+      </div>
+
+      <div class="lili">
+        <img src="../assets/lili-coucou.webp" alt="Lili waving">
+        <div class="bubble"><span class="tag">Hi there!</span><p>I'm Lili! Have you ever tried to balance a ball on a ruler? As soon as it tilts a little, the ball rolls off. Our robot will do what your hands do without thinking: <strong>watch the ball and tilt the ruler just the right amount</strong>.</p></div>
+      </div>
+
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="14" cy="24" r="8"/><circle cx="34" cy="24" r="8"/><path d="M6 10h36"/></svg>
+          <span class="role">The eyes</span><h3>The ultrasonic sensor</h3>
+          <p>It shouts a very high sound you can't hear and listens for the echo, like a bat. That's how it knows where the ball is.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="10" y="10" width="28" height="28" rx="4"/><path d="M18 4v6M30 4v6M18 38v6M30 38v6M4 18h6M4 30h6M38 18h6M38 30h6"/></svg>
+          <span class="role">The brain</span><h3>The Arduino board</h3>
+          <p>A tiny computer. It reads what the eyes see and decides how much to tilt the rail.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6"/></svg>
+          <span class="role">The muscle</span><h3>The servo motor</h3>
+          <p>A motor that turns to the exact angle you ask for. It pushes the end of the rail up or down.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M4 34l40-8"/><circle cx="30" cy="20" r="7"/><path d="M8 34v10M4 44h8"/></svg>
+          <span class="role">The playground</span><h3>The rail</h3>
+          <p>Two wooden dowels the ball rolls on. It moves like a seesaw, around a hinge.</p>
+        </div>
+      </div>
+      <p class="loop-line">The eyes look → the brain thinks → the muscle moves… and again, 25 times a second!</p>
+
+      <div class="lili ask">
+        <img src="../assets/lili-explique.webp" alt="Lili explaining with a tablet">
+        <div class="bubble"><span class="tag">Let me explain</span><p>The brain's secret is a 3-ingredient recipe called <strong>PID</strong>. <strong>P</strong> for "Push": the further the ball is from the middle, the more we tilt. <strong>D</strong> for "Dampen": if the ball comes in fast, we brake before it overshoots. <strong>I</strong> for "Insist": if the ball always stops a little off, we correct it bit by bit.</p></div>
+      </div>
+
+      <!-- Simulator -->
+      <div class="sim">
+        <canvas id="simCanvas" width="640" height="320" aria-label="Simulation of the rail and the ball"></canvas>
+        <div class="sim-ctrl">
+          <h3>Play with the robot's brain</h3>
+          <div class="slider">
+            <label for="kp">P · Push <output id="kpOut">4</output></label>
+            <input type="range" id="kp" min="0" max="10" step="0.5" value="4">
+            <small>The force that brings the ball back to the middle.</small>
+          </div>
+          <div class="slider">
+            <label for="kd">D · Dampen <output id="kdOut">0</output></label>
+            <input type="range" id="kd" min="0" max="5" step="0.25" value="0">
+            <small>The brake that stops the ball from overshooting.</small>
+          </div>
+          <div class="row">
+            <button class="btn btn-green" id="simDrop" type="button">Drop the ball</button>
+            <button class="btn btn-soft" id="simPush" type="button">Flick it!</button>
+          </div>
+          <p class="sim-msg" id="simMsg">Try with D at zero: the ball keeps swinging back and forth. Now raise D little by little…</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SHOPPING ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>Shopping list</h2><p>Tick each thing once it's on your table. Lili remembers your ticks.</p></div>
+      </div>
+
+      <div class="progress"><span id="shopCount">0 / 0 found</span><div class="bar"><i id="shopBar"></i></div></div>
+
+      <div class="shop">
+        <div class="shop-group">
+          <h3><span class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>Electronics</h3>
+          <ul class="items" id="shopElec"></ul>
+        </div>
+        <div class="shop-group">
+          <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>Wood and hardware</h3>
+          <ul class="items" id="shopWood"></ul>
+        </div>
+      </div>
+
+      <div class="lili warn">
+        <img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed">
+        <div class="bubble"><span class="tag">With a grown-up</span><p>The saw, the drill and the hot glue gun are used <strong>with a grown-up</strong>, never alone. I ask for help with those too!</p></div>
+      </div>
+      <p class="total">Tools to get ready: ruler, pencil, Phillips screwdriver, small saw, hot glue gun, and a computer with the free <strong>Arduino IDE</strong> software. Prices are rough guides. The Amazon buttons open a search: pick a well-rated seller and compare with the "Check" line.</p>
+    </div>
+  </section>
+
+  <!-- ===================== BUILDING ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Building, step by step</h2><p>One step at a time. Click "Done!" when you've finished.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0 steps</span><div class="bar"><i id="stepBar"></i></div></div>
+
+      <div class="steps">
+
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Set up your workshop</h3><small>10 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Clear a big table and protect it with an old piece of cardboard.</li>
+              <li>Lay out every part from the shopping list in front of you.</li>
+              <li>Put the small parts (screws, screw eye, paper clip) in a bowl so they don't get lost.</li>
+              <li>Ask a grown-up to install the <strong>Arduino IDE</strong> software on the computer.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Take a photo of all your parts before you start. It will be the first page of your robot-builder's logbook!</p></div></div>
+          </div><img class="pose" src="../assets/lili-coucou.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>The base and the post</h3><small>20 minutes · with a grown-up for the saw</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Board</span><span>Square batten</span><span>Wood glue</span><span>Saw</span></div>
+            <ol>
+              <li>Cut a <strong>12 cm</strong> piece from the batten: that's the post.</li>
+              <li>Cut a second piece of <strong>6 cm</strong>: that will hold the motor.</li>
+              <li>Glue the post standing up, <strong>3 cm</strong> from the left edge of the board, right in the middle of its width.</li>
+              <li>Let it dry for 30 minutes. Meanwhile, move on to step 3!</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-reflexion.webp" alt=""><div class="bubble"><span class="tag">What do you think?</span><p>Why does the post need to be perfectly straight? Hint: if the rail already tilts at the start, who will have to work harder?</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>The ball rail</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>40 cm strip</span><span>2 round dowels</span><span>Wood glue</span><span>1 ball</span></div>
+            <ol>
+              <li>Lay the two dowels on the strip, nicely parallel, about <strong>2.5 cm</strong> apart.</li>
+              <li>Test with a ball: it must roll <strong>on</strong> the dowels without touching the strip.</li>
+              <li>When the gap is right, glue the dowels and hold them with tape while they dry.</li>
+              <li>Glue a small piece of cardboard on the right end: it's a stopper so the ball doesn't fly off.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Draw two pencil lines on the strip before gluing. The dowels will stay nice and straight.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>The hinge</h3><small>15 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Hinge + screws</span><span>Screwdriver</span></div>
+            <ol>
+              <li>Screw one half of the hinge on top of the post.</li>
+              <li>Screw the other half under the rail, about <strong>2 cm</strong> from its left end.</li>
+              <li>Lift the right end of the rail with your hand: it should go up and down easily, like a seesaw.</li>
+            </ol>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Careful</span><p>If the hinge rubs or squeaks, the motor will struggle. Loosen the screws just a tiny bit.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>Wiring</h3><small>20 minutes · USB cable unplugged!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Wires are like roads: each colour goes to one exact place. Use the breadboard so the motor and the sensor share the <strong>5V</strong> and the <strong>GND</strong>.</p>
+            <div class="diagram">
+              <svg viewBox="0 0 640 250" role="img" aria-label="Wiring diagram">
+                <rect x="20" y="40" width="180" height="170" rx="12" fill="#2F6E2B"/>
+                <text x="110" y="70" text-anchor="middle" fill="#FFFFFF" font-family="Baloo 2, sans-serif" font-size="20" font-weight="800">Arduino Uno</text>
+                <g font-family="JetBrains Mono, monospace" font-size="13" fill="#FFFFFF">
+                  <text x="190" y="105" text-anchor="end">5V</text><text x="190" y="135" text-anchor="end">GND</text>
+                  <text x="190" y="165" text-anchor="end">pin 9</text><text x="190" y="190" text-anchor="end">pin 8</text><text x="190" y="205" text-anchor="end" font-size="11">pin 7</text>
+                </g>
+                <circle cx="200" cy="101" r="5" fill="#E04A3A"/><circle cx="200" cy="131" r="5" fill="#3A3A3A"/>
+                <circle cx="200" cy="161" r="5" fill="#F29A1F"/><circle cx="200" cy="186" r="5" fill="#3D7DD8"/><circle cx="200" cy="203" r="5" fill="#9B5FD0"/>
+                <rect x="270" y="80" width="80" height="70" rx="8" fill="#F4F4F0" stroke="#8CC63F" stroke-width="2"/>
+                <text x="310" y="72" text-anchor="middle" font-family="Nunito, sans-serif" font-size="13" font-weight="700" style="fill:var(--ink)">Breadboard</text>
+                <line x1="280" y1="101" x2="340" y2="101" stroke="#E04A3A" stroke-width="4"/><line x1="280" y1="131" x2="340" y2="131" stroke="#3A3A3A" stroke-width="4"/>
+                <path d="M200 101H280" stroke="#E04A3A" stroke-width="4" fill="none"/>
+                <path d="M200 131H280" stroke="#3A3A3A" stroke-width="4" fill="none"/>
+                <rect x="460" y="20" width="160" height="80" rx="10" fill="#3D7DD8" opacity=".15" stroke="#3D7DD8" stroke-width="2"/>
+                <text x="540" y="45" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="17" font-weight="800" style="fill:var(--ink)">HC-SR04 sensor</text>
+                <g font-family="JetBrains Mono, monospace" font-size="12" style="fill:var(--ink)"><text x="480" y="90">VCC</text><text x="515" y="90">Trig</text><text x="553" y="90">Echo</text><text x="590" y="90">GND</text></g>
+                <rect x="460" y="150" width="160" height="80" rx="10" fill="#F29A1F" opacity=".15" stroke="#F29A1F" stroke-width="2"/>
+                <text x="540" y="178" text-anchor="middle" font-family="Baloo 2, sans-serif" font-size="17" font-weight="800" style="fill:var(--ink)">Servo motor</text>
+                <g font-family="Nunito, sans-serif" font-size="12" font-weight="700" style="fill:var(--ink)"><text x="470" y="215">red</text><text x="515" y="215">brown</text><text x="568" y="215">orange</text></g>
+                <path d="M340 101C410 101 420 75 492 75" stroke="#E04A3A" stroke-width="3" fill="none"/>
+                <path d="M340 131C420 131 520 110 600 78" stroke="#3A3A3A" stroke-width="3" fill="none"/>
+                <path d="M200 186C330 186 420 60 527 75" stroke="#3D7DD8" stroke-width="3" fill="none"/>
+                <path d="M200 203C340 203 440 50 566 75" stroke="#9B5FD0" stroke-width="3" fill="none"/>
+                <path d="M340 101C400 101 430 200 485 200" stroke="#E04A3A" stroke-width="3" fill="none"/>
+                <path d="M340 131C400 131 470 200 530 200" stroke="#3A3A3A" stroke-width="3" fill="none"/>
+                <path d="M200 161C300 161 380 236 450 236C520 236 580 220 585 200" stroke="#F29A1F" stroke-width="3" fill="none"/>
+              </svg>
+            </div>
+            <div class="wiring"><table>
+              <thead><tr><th>Part</th><th>Wire</th><th>Goes to the Arduino</th></tr></thead>
+              <tbody>
+                <tr><td>Servo motor</td><td><span class="wire" style="background:#E04A3A"></span>red</td><td>5V (through the breadboard)</td></tr>
+                <tr><td>Servo motor</td><td><span class="wire" style="background:#6B3E26"></span>brown</td><td>GND (through the breadboard)</td></tr>
+                <tr><td>Servo motor</td><td><span class="wire" style="background:#F29A1F"></span>orange</td><td>pin 9</td></tr>
+                <tr><td>Sensor</td><td>VCC</td><td>5V (through the breadboard)</td></tr>
+                <tr><td>Sensor</td><td>GND</td><td>GND (through the breadboard)</td></tr>
+                <tr><td>Sensor</td><td>Trig</td><td>pin 8</td></tr>
+                <tr><td>Sensor</td><td>Echo</td><td>pin 7</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Golden rule</span><p>We plug and unplug wires <strong>only with the USB cable unplugged</strong>. And we check twice before plugging it back in.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>First program: the motor goes straight</h3><small>15 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Connect the Arduino to the computer with the USB cable.</li>
+              <li>In Arduino IDE, choose <strong>Tools → Board → Arduino Uno</strong> and the right <strong>Port</strong>.</li>
+              <li>Copy this little program, then click the <strong>Upload</strong> arrow.</li>
+            </ol>
+            <div class="code"><div class="code-name">motor_test.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="k">#include</span> &lt;Servo.h&gt;
+
+Servo motor;
+
+<span class="k">void</span> setup() {
+  motor.attach(<span class="n">9</span>);    <span class="c">// the orange wire is on pin 9</span>
+  motor.write(<span class="n">90</span>);    <span class="c">// 90 degrees = the middle position</span>
+}
+
+<span class="k">void</span> loop() {
+  <span class="c">// nothing: the motor stays in the middle</span>
+}</code></pre></div>
+            <ol start="4">
+              <li>The motor moves a little, then stops: it's now <strong>exactly in the middle</strong>.</li>
+              <li>Push the little plastic arm (the horn) onto the shaft, <strong>perfectly level</strong>.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Why code first?</span><p>If you fix the arm first, you don't know where the motor's "middle" is. The rail might never be flat.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="7">
+          <div class="step-head"><span class="num">7</span><div><h3>The motor and the rod</h3><small>25 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Servo motor</span><span>6 cm block</span><span>Paper clip</span><span>Screw eye</span><span>Hot glue</span></div>
+            <ol>
+              <li>Screw the screw eye under the rail, <strong>35 cm</strong> from the hinge.</li>
+              <li>Fix the servo onto its wooden block (hot glue or cable ties), shaft facing forward.</li>
+              <li>Place the block on the board, right under the screw eye. Don't glue it yet!</li>
+              <li>Unfold the paper clip into a straight rod and bend a small hook at each end with pliers.</li>
+              <li>Hook one end into the outer hole of the horn, the other into the screw eye.</li>
+              <li>Slide the block until the rail is <strong>perfectly flat</strong>. Check with a ball: it must not roll. Now you can glue the block.</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Stuck?</span><p>If the rail is too high or too low, change the length of the rod instead of forcing the motor.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="8">
+          <div class="step-head"><span class="num">8</span><div><h3>The robot's eyes</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Glue the sensor at the left end of the rail, on the hinge side, its two "eyes" facing along the rail.</li>
+              <li>The eyes should be at the height of the <strong>middle of the ball</strong>.</li>
+              <li>Upload this program, then open <strong>Tools → Serial Monitor</strong>.</li>
+            </ol>
+            <div class="code"><div class="code-name">sensor_test.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="k">const int</span> PIN_TRIG = <span class="n">8</span>;
+<span class="k">const int</span> PIN_ECHO = <span class="n">7</span>;
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">9600</span>);
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
+}
+
+<span class="k">void</span> loop() {
+  digitalWrite(PIN_TRIG, LOW);  delayMicroseconds(<span class="n">2</span>);
+  digitalWrite(PIN_TRIG, HIGH); delayMicroseconds(<span class="n">10</span>);  <span class="c">// the shout!</span>
+  digitalWrite(PIN_TRIG, LOW);
+  <span class="k">long</span> duration = pulseIn(PIN_ECHO, HIGH, <span class="n">25000</span>);  <span class="c">// listen for the echo</span>
+  <span class="k">float</span> cm = duration * <span class="n">0.0343</span> / <span class="n">2</span>;               <span class="c">// there and back again</span>
+  Serial.print(<span class="n">"Ball at "</span>);
+  Serial.print(cm);
+  Serial.println(<span class="n">" cm"</span>);
+  delay(<span class="n">100</span>);
+}</code></pre></div>
+            <ol start="4">
+              <li>Roll the ball gently with your finger. Do the numbers change? Well done, your robot can see!</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Did you know?</span><p>Sound travels at 343 metres per second. We divide by 2 because the sound goes to the ball <em>and</em> comes back.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="9">
+          <div class="step-head"><span class="num">9</span><div><h3>The Balancer's big program</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Here's the complete brain. Read the green comments: they explain every line. Upload it, put the ball on the rail and watch!</p>
+            <div class="code"><div class="code-name">balancer.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="k">#include</span> &lt;Servo.h&gt;
+
+<span class="c">// ----- The wiring -----</span>
+<span class="k">const int</span> PIN_SERVO = <span class="n">9</span>;
+<span class="k">const int</span> PIN_TRIG  = <span class="n">8</span>;
+<span class="k">const int</span> PIN_ECHO  = <span class="n">7</span>;
+
+<span class="c">// ----- Lili's settings -----</span>
+<span class="k">float</span> TARGET     = <span class="n">18.0</span>;  <span class="c">// where the ball should stop (cm from the sensor)</span>
+<span class="k">int</span>   FLAT_ANGLE = <span class="n">90</span>;    <span class="c">// motor angle when the rail is flat</span>
+<span class="k">int</span>   DIRECTION  = <span class="n">1</span>;     <span class="c">// set to -1 if the ball runs away instead of coming back</span>
+<span class="k">float</span> Kp = <span class="n">2.0</span>;   <span class="c">// P: Push</span>
+<span class="k">float</span> Ki = <span class="n">0.02</span>;  <span class="c">// I: Insist</span>
+<span class="k">float</span> Kd = <span class="n">0.8</span>;   <span class="c">// D: Dampen</span>
+
+Servo motor;
+<span class="k">float</span> distance = TARGET;
+<span class="k">float</span> lastError = <span class="n">0</span>;
+<span class="k">float</span> sum = <span class="n">0</span>;
+<span class="k">unsigned long</span> lastTime = <span class="n">0</span>;
+
+<span class="k">float</span> measure() {
+  digitalWrite(PIN_TRIG, LOW);  delayMicroseconds(<span class="n">2</span>);
+  digitalWrite(PIN_TRIG, HIGH); delayMicroseconds(<span class="n">10</span>);
+  digitalWrite(PIN_TRIG, LOW);
+  <span class="k">long</span> duration = pulseIn(PIN_ECHO, HIGH, <span class="n">25000</span>);
+  <span class="k">if</span> (duration == <span class="n">0</span>) <span class="k">return</span> -<span class="n">1</span>;           <span class="c">// no echo: ignore it</span>
+  <span class="k">return</span> duration * <span class="n">0.0343</span> / <span class="n">2</span>;
+}
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">9600</span>);
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
+  motor.attach(PIN_SERVO);
+  motor.write(FLAT_ANGLE);
+  delay(<span class="n">1000</span>);
+  lastTime = millis();
+}
+
+<span class="k">void</span> loop() {
+  <span class="c">// 1. The eyes look</span>
+  <span class="k">float</span> d = measure();
+  <span class="k">if</span> (d &gt; <span class="n">2</span> &amp;&amp; d &lt; <span class="n">40</span>) {
+    distance = <span class="n">0.7</span> * distance + <span class="n">0.3</span> * d;   <span class="c">// smooth out jumpy readings</span>
+  }
+
+  <span class="c">// 2. The brain thinks</span>
+  <span class="k">unsigned long</span> now = millis();
+  <span class="k">float</span> dt = (now - lastTime) / <span class="n">1000.0</span>;
+  lastTime = now;
+
+  <span class="k">float</span> error = distance - TARGET;                      <span class="c">// how far from the goal?</span>
+  sum = constrain(sum + error * dt, -<span class="n">50</span>, <span class="n">50</span>);           <span class="c">// I</span>
+  <span class="k">float</span> speed = (error - lastError) / dt;                <span class="c">// D</span>
+  lastError = error;
+
+  <span class="k">float</span> correction = Kp * error + Ki * sum + Kd * speed;
+  correction = constrain(correction, -<span class="n">30</span>, <span class="n">30</span>);         <span class="c">// no more than 30 degrees</span>
+
+  <span class="c">// 3. The muscle moves</span>
+  motor.write(FLAT_ANGLE + DIRECTION * correction);
+
+  <span class="c">// For the Serial Plotter: the ball and the target</span>
+  Serial.print(distance); Serial.print(<span class="n">" "</span>); Serial.println(TARGET);
+  delay(<span class="n">40</span>);
+}</code></pre></div>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Ball running away?</span><p>Don't panic, that's normal the first time! The motor may be mounted the other way round. Change <code>DIRECTION = 1</code> to <code>DIRECTION = -1</code> and upload again.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+
+        <article class="step" data-step="10">
+          <div class="step-head"><span class="num">10</span><div><h3>Tuning, like a real engineer</h3><small>As long as it takes!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Open <strong>Tools → Serial Plotter</strong>: you'll see two lines, the ball and the target. Your goal: get the ball's line to meet the target and stay there. Change <strong>only one number at a time</strong>, upload, watch.</p>
+            <div class="tune">
+              <div><b>1. P only</b><p>Set Ki = 0 and Kd = 0. Raise Kp until the ball swings back and forth around the target.</p></div>
+              <div><b>2. Add D</b><p>Raise Kd little by little. The swinging calms down. Too much D? The motor shakes.</p></div>
+              <div><b>3. A pinch of I</b><p>If the ball always stops a little off, raise Ki very gently (0.01, 0.02…).</p></div>
+            </div>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Logbook</span><p>Write down every try in a notebook: "Kp = 2, Kd = 0.8 → the ball swings 3 times". That's exactly what engineers do!</p></div></div>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Motor shaking and the Arduino restarting?</span><p>The motor is asking for too much power from the USB cable. Ask a grown-up to add a 4×AA battery holder for the motor, with its "minus" connected to the Arduino's GND.</p></div></div>
+          </div><img class="pose" src="../assets/lili-reflexion.webp" alt=""></div>
+        </article>
+      </div>
+
+      <div class="finale">
+        <img src="../assets/lili-mission.webp" alt="Lili raising her arms, mission accomplished">
+        <div>
+          <span class="eyebrow">Mission accomplished</span>
+          <h2>Your Balancer holds the ball!</h2>
+          <p>You've built a real feedback control system, the same idea used by drones, walking robots and rockets that land standing up.</p>
+          <ul>
+            <li><strong>Challenge 1:</strong> change TARGET so the ball stops at 10 cm, then at 25 cm.</li>
+            <li><strong>Challenge 2:</strong> give the ball a flick. How long does it take to come back?</li>
+            <li><strong>Challenge 3:</strong> try a heavier ball. Do you need to change the settings?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Lili's Workshop · Build tomorrow's robots today!</div></footer>
+<div class="toast" id="toast" role="status"><img src="../assets/lili-contente.webp" alt=""><span id="toastTxt">Well done!</span></div>
+
+<script>
+(function(){
+  const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* Shopping list */
+  const CART='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>';
+  const CHECK='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const ELEC=[
+    ["uno","Arduino Uno R3 board","The brain. A \"compatible\" board works just as well and costs less. Get it with its USB cable.","Uno R3, comes with a USB cable","×1 · ≈ €15–25","arduino uno r3 usb cable"],
+    ["servo","MG90S servo motor","The muscle. Choose the metal-gear version: it's tougher than the plastic SG90.","MG90S with metal gears, not SG90","×1 · ≈ €4–6","MG90S servo metal gear"],
+    ["hcsr04","HC-SR04 ultrasonic sensor","The eyes. It measures distances from 2 to 400 cm.","HC-SR04 with 4 pins (VCC, Trig, Echo, GND)","×1 · ≈ €2–4","HC-SR04 ultrasonic sensor"],
+    ["breadboard","Mini breadboard","For connecting wires without soldering.","400 points","×1 · ≈ €3","mini breadboard 400 points"],
+    ["jumpers","Jumper wires","One set male-male and one set male-female.","mixed set, male-male and male-female","×20 · ≈ €4","dupont jumper wires male male female"],
+    ["balls","Ping-pong balls","Get several: they love escaping under furniture!","40 mm, standard balls","×6 · ≈ €3","ping pong balls 40mm"]
+  ];
+  const WOOD=[
+    ["socle","Board for the base","Plywood or MDF, about 45 × 15 cm, 1 cm thick.","×1 · ≈ €4"],
+    ["latte","Flat wooden strip","About 40 × 4 cm, thin and light. It's the base of the rail.","×1 · ≈ €2"],
+    ["baguettes","Round dowels, 6 mm","Cut to 40 cm. The ball rolls on them.","×2 · ≈ €2"],
+    ["tasseaux","Square batten, 2 × 2 cm","For the hinge post (12 cm) and the motor block (6 cm).","×1 · ≈ €2"],
+    ["charniere","Small hinge with screws","About 25 mm. It lets the rail tilt.","×1 · ≈ €2"],
+    ["piton","Small screw eye + big paper clip","The unfolded paper clip becomes the rod linking the motor to the rail.","×1 · ≈ €1"],
+    ["colle","Wood glue, double-sided tape, cable ties","You may already have these at home.","set"]
+  ];
+  const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  document.getElementById("shopElec").innerHTML=ELEC.map(([k,t,d,c,q,s])=>`<li><label class="item"><input type="checkbox" data-k="${k}"><span><b>${esc(t)}</b><small>${esc(d)}</small><span class="spec">${CHECK}<span><b>Check:</b> ${esc(c)}</span></span></span><span class="qty"><span>${q}</span><a class="buy" href="https://www.amazon.com/s?k=${encodeURIComponent(s)}" target="_blank" rel="noopener">${CART}Amazon</a></span></label></li>`).join("");
+  document.getElementById("shopWood").innerHTML=WOOD.map(([k,t,d,q],i)=>`<li><label class="item"><input type="checkbox" data-k="${k}"><span><b>${esc(t)}</b><small>${esc(d)}</small></span><span class="qty"><span>${q}</span>${i<WOOD.length-1?'<span class="store">Hardware store</span>':""}</span></label></li>`).join("");
+
+  /* Robot menu */
+  const pb=document.getElementById("pickerBtn"),pm=document.getElementById("pickerMenu");
+  pb.addEventListener("click",e=>{e.stopPropagation();const o=pm.hidden;pm.hidden=!o;pb.setAttribute("aria-expanded",String(o));});
+  document.addEventListener("click",e=>{if(!pm.contains(e.target)){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  pm.querySelector(".is-current").addEventListener("click",()=>{pm.hidden=true;pb.setAttribute("aria-expanded","false");});
+
+  /* Video */
+  const v=document.getElementById("heroVideo"),vt=document.getElementById("vidToggle");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.pause();v.removeAttribute("autoplay");vt.textContent="▶ Play";}
+  vt.addEventListener("click",()=>{if(v.paused){v.play();vt.textContent="❚❚ Pause";}else{v.pause();vt.textContent="▶ Play";}});
+
+  /* Toast */
+  const toast=document.getElementById("toast"),tt=document.getElementById("toastTxt");let tid;
+  function say(msg){tt.textContent=msg;toast.classList.add("show");clearTimeout(tid);tid=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+  const shop=store.get("lili-r1-shop")||{};
+  const boxes=[...document.querySelectorAll(".items input")];
+  function shopUpd(){const n=boxes.filter(b=>b.checked).length;document.getElementById("shopCount").textContent=n+" / "+boxes.length+" found";document.getElementById("shopBar").style.width=(100*n/boxes.length)+"%";return n;}
+  boxes.forEach(b=>{b.checked=!!shop[b.dataset.k];b.addEventListener("change",()=>{shop[b.dataset.k]=b.checked;store.set("lili-r1-shop",shop);if(shopUpd()===boxes.length)say("Everything's here! Let's build!");});});
+  shopUpd();
+
+  /* Steps */
+  const done=store.get("lili-r1-steps")||{};
+  const steps=[...document.querySelectorAll(".step")];
+  const cheers=["Well done!","Great work!","Keep it up!","You're a real engineer!","Another one done!"];
+  function stepUpd(){const n=steps.filter(s=>s.classList.contains("is-done")).length;document.getElementById("stepCount").textContent=n+" / "+steps.length+" steps";document.getElementById("stepBar").style.width=(100*n/steps.length)+"%";return n;}
+  steps.forEach(s=>{const k=s.dataset.step,btn=s.querySelector(".done-btn");
+    const set=on=>{s.classList.toggle("is-done",on);btn.textContent=on?"✓ Done":"Done!";btn.setAttribute("aria-pressed",String(on));};
+    set(!!done[k]);
+    btn.addEventListener("click",()=>{const on=!s.classList.contains("is-done");set(on);done[k]=on;store.set("lili-r1-steps",done);const n=stepUpd();if(on)say(n===steps.length?"Mission accomplished!":cheers[n%cheers.length]);});
+  });
+  stepUpd();
+
+  /* Copy code */
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+    const pre=b.parentElement.querySelector("pre");const txt=pre.innerText;
+    const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500);};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{selectEl(pre);b.textContent="Ctrl+C";});}catch(e){selectEl(pre);b.textContent="Ctrl+C";}
+  }));
+  function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  /* Active menu */
+  const links=[...document.querySelectorAll(".navlinks a")];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["comprendre","courses","montage"].forEach(id=>io.observe(document.getElementById(id)));
+
+  /* Ball-on-rail simulator */
+  const cv=document.getElementById("simCanvas"),ctx=cv.getContext("2d");
+  const kp=document.getElementById("kp"),kd=document.getElementById("kd"),msg=document.getElementById("simMsg");
+  const L=0.2; let x=0.15,vx=0,tilt=0,last=performance.now(),calm=0,fell=false;
+  function col(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#2F6E2B";}
+  kp.addEventListener("input",()=>document.getElementById("kpOut").textContent=kp.value);
+  kd.addEventListener("input",()=>document.getElementById("kdOut").textContent=kd.value);
+  document.getElementById("simDrop").addEventListener("click",()=>{x=0.15;vx=0;tilt=0;fell=false;calm=0;});
+  document.getElementById("simPush").addEventListener("click",()=>{if(fell){x=0;fell=false;}vx+=0.35;calm=0;});
+  function step(dt){
+    if(fell)return;
+    const P=+kp.value,D=+kd.value;
+    let cmd=P*0.25*x+D*0.12*vx; cmd=Math.max(-0.35,Math.min(0.35,cmd));
+    tilt+=(cmd-tilt)*Math.min(1,dt/0.09);
+    vx+=-(5/7)*9.81*Math.sin(tilt)*dt; vx*=0.999; x+=vx*dt;
+    if(Math.abs(x)>L){fell=true;x=Math.sign(x)*L;}
+    calm=(Math.abs(x)<0.01&&Math.abs(vx)<0.02)?calm+dt:0;
+  }
+  function draw(){
+    const W=cv.width,H=cv.height,cx=W/2,cy=H*0.58,half=W*0.4,r=18;
+    ctx.clearRect(0,0,W,H);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(-tilt);
+    ctx.fillStyle=col("--lime");ctx.fillRect(-half,0,half*2,10);
+    ctx.fillStyle=col("--green");ctx.fillRect(-2,-14,4,14);
+    ctx.fillStyle=col("--warn");ctx.fillRect(-half-14,-30,14,40);
+    const bx=(x/L)*half;ctx.beginPath();ctx.arc(bx,-r,r,0,Math.PI*2);ctx.fillStyle="#FFFFFF";ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle=col("--green-deep");ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle=col("--green-deep");ctx.beginPath();ctx.moveTo(cx-16,cy+40);ctx.lineTo(cx+16,cy+40);ctx.lineTo(cx,cy+8);ctx.fill();
+    ctx.fillRect(cx-60,cy+40,120,8);
+    ctx.font="700 15px Nunito, sans-serif";ctx.fillStyle=col("--ink-soft");ctx.fillText("sensor",cx-half-24,cy-40);ctx.fillText("target",cx-20,cy-52);
+  }
+  let lastMsg="";
+  function loop(t){const dt=Math.min(0.03,(t-last)/1000);last=t;for(let i=0;i<4;i++)step(dt/4);draw();
+    let m;
+    if(fell)m="Oops, the ball fell! Click \"Drop the ball\" to try again.";
+    else if(calm>1.2)m="Well done! The ball is steady in the middle. Give it a flick and see.";
+    else if(+kd.value===0)m="Without D, the ball swings back and forth and never calms down. Raise D little by little…";
+    else if(+kp.value===0)m="Without P, nothing brings the ball back to the middle. Raise P!";
+    else m="The robot is working… watch how it tilts the rail.";
+    if(m!==lastMsg){msg.textContent=m;lastMsg=m;}
+    requestAnimationFrame(loop);}
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
