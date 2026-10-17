@@ -25,7 +25,8 @@
 
   /* ---------- État ---------- */
   const saved = store.get("lili-r2-config") || {};
-  const state = Object.assign({ name: "Lili", mode: "upper", height: 140, depth: 25, color: 4, bed: 220, pir: true, anim: 0 }, saved);
+  const state = Object.assign({ name: "Lili", mode: "upper", height: 140, depth: 25, color: 4, bed: 220, pir: true, mic: true, anim: 0 }, saved);
+  if (!state.mic && state.anim === 4) state.anim = 0;
   const text = () => { const t = state.name.trim().replace(/\s+/g, " ").slice(0, 10); return state.mode === "upper" ? t.toLocaleUpperCase("fr") : t; };
   const save = () => store.set("lili-r2-config", state);
 
@@ -51,10 +52,11 @@
     const sync = () => el.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(cast(b.dataset.v) === state[key])));
     el.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state[key] = cast(b.dataset.v); sync(); save(); after && after(); });
     sync();
+    return sync;
   }
   seg("caseSeg", "mode", String, () => schedule());
   seg("bedSeg", "bed", Number, () => renderBed());
-  seg("animSeg", "anim", Number);
+  const syncAnim = seg("animSeg", "anim", Number);
   const hEl = $("height"), dEl = $("depth");
   hEl.value = state.height; dEl.value = state.depth;
   const showRange = () => { $("heightOut").textContent = state.height + " mm"; $("depthOut").textContent = state.depth + " mm"; };
@@ -71,7 +73,12 @@
   syncSw();
   const pirChk = $("pirChk"); pirChk.checked = state.pir;
   pirChk.addEventListener("change", () => { state.pir = pirChk.checked; save(); renderShop(); renderCode(); renderPirRows(); });
-  function renderPirRows() { document.querySelectorAll(".pir-only").forEach(r => r.hidden = !state.pir); }
+  const micChk = $("micChk"); micChk.checked = state.mic;
+  micChk.addEventListener("change", () => { state.mic = micChk.checked; if (!state.mic && state.anim === 4) { state.anim = 0; syncAnim(); } save(); renderShop(); renderCode(); renderPirRows(); });
+  function renderPirRows() {
+    document.querySelectorAll(".pir-only").forEach(r => r.hidden = !state.pir);
+    document.querySelectorAll(".mic-only").forEach(r => r.hidden = !state.mic);
+  }
   renderPirRows();
 
   /* ---------- Construction ---------- */
@@ -176,6 +183,7 @@
     const fav = COLORS[state.color].h;
     if (state.anim === 0) return { h: ((ms / 20) + li * 40) % 256, v: 1 };
     if (state.anim === 1) { const step = Math.floor(ms / 500) % (n + 3); return { h: fav, v: li < step ? 1 : 0 }; }
+    if (state.anim === 4) { const beat = Math.floor(ms / 500), ph = (ms % 500) / 500; return { h: (beat * 40 + li * 20) % 256, v: 0.15 + 0.85 * Math.exp(-ph * 4) }; }
     if (state.anim === 3) { const b = 120 + (255 - 120) * (0.5 + 0.5 * Math.sin(ms / 1000 * Math.PI * 2 * 12 / 60)); return { h: fav, v: b / 255 }; }
     return null;
   }
@@ -233,26 +241,29 @@
 
   /* ---------- Courses ---------- */
   const shopDone = store.get("lili-r2-shop") || {};
-  function item(k, title, desc, qty) { return { k, title, desc, qty }; }
+  function item(k, title, desc, qty, q, check) { return { k, title, desc, qty, q, check }; }
+  const amz = q => "https://www.amazon.fr/s?k=" + encodeURIComponent(q);
   function renderShop() {
     const box = $("shop"); box.textContent = "";
     const n = sign ? sign.pixels : 0, packs = Math.max(1, Math.ceil(n * 1.15 / 50));
     const gBody = sign ? Math.round(sign.volBody / 1000 * 1.24) : 0, gLid = sign ? Math.round(sign.volLid / 1000 * 1.24) : 0;
     const groups = [
       { t: "L'électronique", icon: "chip", items: [
-        item("nano", "Arduino Nano (ou compatible)", "Le cerveau. Tu peux aussi réutiliser l'Arduino Uno du robot 1.", "×1 · ≈ 6–20 €"),
-        item("pixels", "Guirlande de 50 pixels WS2811, 12 mm, 5 V", `Ton enseigne a besoin de ${n} pixels. On en garde quelques-uns en réserve.`, `×${packs} · ≈ ${packs * 12}–${packs * 18} €`),
-        item("alim", "Alimentation 5 V, 3 A", "Avec une prise jack, plus un adaptateur jack femelle à bornier (pour visser les fils sans soudure).", "×1 · ≈ 10 €"),
-        item("cond", "Condensateur 1000 µF et résistance 330 Ω", "Le condensateur protège les pixels au démarrage, la résistance protège le fil de données.", "×1 + ×1 · ≈ 1 €"),
-        item("bouton", "Bouton poussoir", "Pour changer d'animation.", "×1 · ≈ 1 €"),
-        ...(state.pir ? [item("pir", "Détecteur de présence HC-SR501", "Les yeux de ton enseigne.", "×1 · ≈ 3 €")] : []),
-        item("plaque", "Mini plaque d'essai et fils de connexion", "Tu en as peut-être encore depuis le robot 1.", "×1 · ≈ 6 €")
+        item("nano", "Arduino Nano (ou compatible)", "Le cerveau. Tu peux aussi réutiliser l'Arduino Uno du robot 1.", "×1 · ≈ 6–20 €", "Arduino Nano ATmega328P broches soudées", "ATmega328P, broches déjà soudées (sinon il faut souder)"),
+        item("pixels", "Guirlande de 50 pixels WS2811, 12 mm, 5 V", `Ton enseigne a besoin de ${n} pixels. On en garde quelques-uns en réserve.`, `×${packs} · ≈ ${packs * 12}–${packs * 18} €`, "guirlande pixels WS2811 12mm 5V 50", "WS2811, 12 mm, 5 V (pas 12 V !), 50 pixels"),
+        item("alim", "Alimentation 5 V, 3 A", "Avec une prise jack, plus un adaptateur jack femelle à bornier (pour visser les fils sans soudure).", "×1 · ≈ 10 €", "alimentation 5V 3A jack 5,5 x 2,1 adaptateur bornier", "5 V et au moins 3 A, prise jack 5,5 × 2,1 mm"),
+        item("cond", "Condensateur 1000 µF", "Il protège les pixels au démarrage.", "×1 · ≈ 1 €", "condensateur électrolytique 1000uF 16V", "1000 µF, 10 V ou plus"),
+        item("resist", "Résistance 330 Ω", "Elle protège le fil de données.", "×1 · ≈ 1 €", "résistance 330 ohm", "330 Ω (orange, orange, marron)"),
+        item("bouton", "Bouton poussoir", "Pour changer d'animation.", "×1 · ≈ 1 €", "bouton poussoir 12mm momentané", "momentané (pas à verrouillage)"),
+        ...(state.pir ? [item("pir", "Détecteur de présence HC-SR501", "Les yeux de ton enseigne.", "×1 · ≈ 3 €", "HC-SR501 détecteur mouvement PIR", "HC-SR501 avec ses 2 petits réglages orange")] : []),
+        ...(state.mic ? [item("micro", "Module micro MAX9814", "Les oreilles : pour les claps et la musique.", "×1 · ≈ 4 €", "MAX9814 module microphone", "MAX9814 (il règle le volume tout seul)")] : []),
+        item("plaque", "Mini plaque d'essai et fils de connexion", "Tu en as peut-être encore depuis le robot 1.", "×1 · ≈ 6 €", "mini breadboard 400 points câbles dupont", "400 points, avec fils mâle-mâle et mâle-femelle")
       ]},
       { t: "L'impression et le bois", icon: "gear", items: [
-        item("pla-c", "Filament PLA de couleur", `Pour les corps des lettres : environ ${gBody} g.`, `≈ ${gBody} g`),
-        item("pla-b", "Filament PLA blanc", `Pour les façades qui font briller les lettres : environ ${gLid} g.`, `≈ ${gLid} g`),
-        item("planche", "Planche de fond", sign ? `Contreplaqué ou médium de 5 à 10 mm, environ ${boardSize()}.` : "Contreplaqué ou médium de 5 à 10 mm.", "×1 · ≈ 8 €"),
-        item("tasseaux", "2 tasseaux et 2 crochets", "Derrière la planche, pour la place des fils et pour l'accrocher.", "≈ 4 €"),
+        item("pla-c", "Filament PLA de couleur", `Pour les corps des lettres : environ ${gBody} g.`, `≈ ${gBody} g`, "filament PLA 1,75 mm vert", "le diamètre de ton imprimante (souvent 1,75 mm)"),
+        item("pla-b", "Filament PLA blanc", `Pour les façades qui font briller les lettres : environ ${gLid} g.`, `≈ ${gLid} g`, "filament PLA 1,75 mm blanc", "blanc ou « naturel », même diamètre"),
+        item("planche", "Planche de fond", sign ? `Contreplaqué ou médium de 5 à 10 mm, environ ${boardSize()}.` : "Contreplaqué ou médium de 5 à 10 mm.", "×1 · ≈ 8 €", null, "En magasin de bricolage"),
+        item("tasseaux", "2 tasseaux et 2 crochets", "Derrière la planche, pour la place des fils et pour l'accrocher.", "≈ 4 €", null, "En magasin de bricolage"),
         item("colle", "Bâtons de colle chaude, scotch double face", "Tu en as sûrement à la maison.", "lot")
       ]}
     ];
@@ -266,6 +277,12 @@
         const li = document.createElement("li");
         li.innerHTML = `<label class="item"><input type="checkbox" data-k="${it.k}"><span><b></b><small></small></span><span class="qty"></span></label>`;
         li.querySelector("b").textContent = it.title; li.querySelector("small").textContent = it.desc; li.querySelector(".qty").textContent = it.qty;
+        if (it.check || it.q) {
+          const row = document.createElement("span"); row.className = "buy-row";
+          if (it.check) { const c = document.createElement("span"); c.className = "spec"; c.textContent = it.q ? "À vérifier : " + it.check : it.check; row.appendChild(c); }
+          if (it.q) { const a = document.createElement("a"); a.className = "buy"; a.href = amz(it.q); a.target = "_blank"; a.rel = "noopener"; a.textContent = "Voir sur Amazon ↗"; row.appendChild(a); }
+          li.querySelector("label > span:not(.qty)").appendChild(row);
+        }
         const cb = li.querySelector("input"); cb.checked = !!shopDone[it.k];
         cb.addEventListener("change", () => { shopDone[it.k] = cb.checked; store.set("lili-r2-shop", shopDone); if (shopCount() === allBoxes().length) say("Tout est là ! On peut construire !"); });
         ul.appendChild(li);
@@ -336,13 +353,14 @@ void loop() {
     const rows = table.length ? table : [{ ch: "?", start: 1, count: 0 }];
     const nbPix = Math.max(1, ...rows.map(r => r.start - 1 + r.count));
     const col = COLORS[state.color];
+    const mic = state.mic;
     codeMainSrc =
 `// L'enseigne lumineuse de ${nm}, préparée dans l'atelier de Lili
 #include <FastLED.h>
 
 #define PIN_PIXELS     6
 #define PIN_BOUTON     3
-#define PIN_PRESENCE   2
+#define PIN_PRESENCE   2${mic ? "\n#define PIN_MICRO      A0" : ""}
 #define NB_PIXELS      ${nbPix}
 #define AVEC_DETECTEUR ${state.pir ? "true" : "false"}
 
@@ -356,10 +374,19 @@ const byte NB_LETTRES = ${rows.length};
 
 byte couleurPreferee = ${col.h};   // ${col.n}
 byte animation = 0;
-const byte NB_ANIMATIONS = 4;
+const byte NB_ANIMATIONS = ${mic ? 5 : 4};
 unsigned long derniereVisite = 0;
 const unsigned long VEILLE = 120000UL;   // 2 minutes sans personne : dodo
-
+${mic ? `
+// Les oreilles
+int son = 0;                   // le bruit en ce moment
+int niveau = 0;                // le bruit lissé, pour la musique
+int moyenne = 50;              // le bruit habituel de la pièce
+const int SEUIL_CLAP = 350;    // monte ce chiffre si l'enseigne réagit trop facilement
+unsigned long dernierClap = 0;
+bool eteinte = false;          // deux claps : on éteint ou on rallume
+byte teinteMusique = 0;
+` : ""}
 // Colorie toute une lettre (n = 0 pour la première)
 void lettre(byte n, CRGB couleur) {
   for (byte i = 0; i < LETTRES[n][1]; i++) {
@@ -387,7 +414,42 @@ void maCouleur() {
   byte respire = beatsin8(12, 120, 255);   // la lumière respire doucement
   for (byte n = 0; n < NB_LETTRES; n++) lettre(n, CHSV(couleurPreferee, 255, respire));
 }
+${mic ? `
+// Écoute pendant 10 millisecondes : plus le son est fort, plus l'écart est grand
+int lireSon() {
+  int mini = 1023, maxi = 0;
+  unsigned long debut = millis();
+  while (millis() - debut < 10) {
+    int v = analogRead(PIN_MICRO);
+    if (v < mini) mini = v;
+    if (v > maxi) maxi = v;
+  }
+  return maxi - mini;
+}
 
+// Deux claps rapprochés : on éteint ou on rallume
+void ecouterClaps() {
+  if (son > SEUIL_CLAP) {
+    unsigned long ecart = millis() - dernierClap;
+    if (ecart > 150 && ecart < 700) {
+      eteinte = !eteinte;
+      dernierClap = 0;
+      delay(300);
+    } else if (ecart >= 150) {
+      dernierClap = millis();
+    }
+  }
+}
+
+// Les lettres dansent sur la musique
+void musique() {
+  niveau = max(son, niveau * 9 / 10);            // le niveau retombe doucement
+  moyenne = (moyenne * 15 + son) / 16;           // le bruit habituel
+  if (son > moyenne * 2 && son > 60) teinteMusique += 40;   // un « boum » : on change de couleur
+  byte lumiere = constrain(map(niveau, 0, 300, 20, 255), 20, 255);
+  for (byte n = 0; n < NB_LETTRES; n++) lettre(n, CHSV(teinteMusique + n * 20, 255, lumiere));
+}
+` : ""}
 void setup() {
   FastLED.addLeds<WS2811, PIN_PIXELS, RGB>(pixels, NB_PIXELS);
   FastLED.setMaxPowerInVoltsAndMilliamps(5, 2500);   // protège l'alimentation
@@ -407,13 +469,17 @@ void loop() {
 
   // Les yeux : quelqu'un est là ?
   if (!AVEC_DETECTEUR || digitalRead(PIN_PRESENCE) == HIGH) derniereVisite = millis();
-
-  if (millis() - derniereVisite > VEILLE) {
-    fadeToBlackBy(pixels, NB_PIXELS, 8);   // personne : on s'endort
+${mic ? `
+  // Les oreilles : on écoute la pièce
+  son = lireSon();
+  if (animation != 4) ecouterClaps();   // en mode musique, on ne compte pas les claps
+` : ""}
+  if (${mic ? "eteinte || " : ""}millis() - derniereVisite > VEILLE) {
+    fadeToBlackBy(pixels, NB_PIXELS, 8);   // on s'endort
   } else if (animation == 0) arcEnCiel();
   else if (animation == 1) uneParUne();
   else if (animation == 2) etincelles();
-  else maCouleur();
+  ${mic ? "else if (animation == 3) maCouleur();\n  else musique();" : "else maCouleur();"}
 
   FastLED.show();
   delay(20);

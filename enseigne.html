@@ -169,6 +169,7 @@ img{max-width:100%}
               <button type="button" data-v="256" aria-pressed="false">25,6 cm</button>
             </div>
           </div>
+          <label class="check"><input type="checkbox" id="micChk" checked><span>Ajouter le micro<small>Deux claps dans les mains pour l'allumer ou l'éteindre, et un mode qui danse sur la musique.</small></span></label>
           <label class="check"><input type="checkbox" id="pirChk" checked><span>Ajouter le détecteur de présence<small>L'enseigne se réveille quand quelqu'un entre dans la chambre.</small></span></label>
         </div>
       </div>
@@ -180,6 +181,7 @@ img{max-width:100%}
             <button type="button" data-v="1" aria-pressed="false">Une par une</button>
             <button type="button" data-v="2" aria-pressed="false">Étincelles</button>
             <button type="button" data-v="3" aria-pressed="false">Ma couleur</button>
+            <button type="button" data-v="4" aria-pressed="false" class="mic-only">Musique</button>
           </div>
           <button class="pill-btn" id="lidBtn" type="button">Voir dedans</button>
         </div>
@@ -237,6 +239,10 @@ img{max-width:100%}
         </div>
       </div>
       <p class="loop-line">Le détecteur sent → le cerveau choisit les couleurs → les pixels brillent… et on recommence !</p>
+      <div class="lili tip mic-only">
+        <img src="assets/lili-mon-idee.webp" alt="Lili a une idée">
+        <div class="bubble"><span class="tag">Les oreilles</span><p>Avec le micro, ton enseigne entend ! Frappe <strong>deux fois dans tes mains</strong> pour l'éteindre ou la rallumer. En mode <strong>Musique</strong>, les lettres brillent plus fort quand le son monte et changent de couleur à chaque « boum ».</p></div>
+      </div>
       <div class="lili ask">
         <img src="assets/lili-explique.webp" alt="Lili explique">
         <div class="bubble"><span class="tag">J'explique</span><p>Les pixels sont reliés en file indienne, comme des wagons. L'Arduino envoie une longue liste de couleurs au premier pixel : il garde la première couleur pour lui et passe le reste au suivant. C'est pour ça que l'ordre des pixels est si important !</p></div>
@@ -257,7 +263,7 @@ img{max-width:100%}
         <img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés">
         <div class="bubble"><span class="tag">Attention au voltage</span><p>Ta guirlande doit être en <strong>5 V</strong>, comme l'alimentation. Une guirlande 12 V ne marchera pas, et une alimentation 12 V grillerait tes pixels !</p></div>
       </div>
-      <p class="total">Outils : imprimante 3D, pistolet à colle chaude, perceuse avec un foret de 14 mm (avec un adulte), tournevis, ordinateur avec Arduino IDE. Les prix sont indicatifs.</p>
+      <p class="total">Outils : imprimante 3D, pistolet à colle chaude, perceuse avec un foret de 14 mm (avec un adulte), tournevis, ordinateur avec Arduino IDE. Les prix sont indicatifs. Les liens ouvrent une recherche Amazon : choisis un vendeur bien noté et compare avec la ligne « À vérifier ».</p>
     </div>
   </section>
 
@@ -329,6 +335,7 @@ img{max-width:100%}
                 <tr><td>Guirlande (entrée)</td><td>DIN (données)</td><td>résistance 330 Ω, puis D6</td></tr>
                 <tr><td>Bouton</td><td>une patte / l'autre</td><td>D3 / route −</td></tr>
                 <tr class="pir-only"><td>Détecteur HC-SR501</td><td>VCC / OUT / GND</td><td>route + / D2 / route −</td></tr>
+                <tr class="mic-only"><td>Micro MAX9814</td><td>VDD / OUT / GND</td><td>route + / A0 / route − (laisse les pattes Gain et AR libres)</td></tr>
               </tbody>
             </table></div>
             <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout <strong>alimentation débranchée</strong>. Le condensateur a un sens : la bande sur son côté va toujours sur le −. Fais vérifier par papa avant de rebrancher.</p></div></div>
@@ -359,6 +366,7 @@ img{max-width:100%}
           <div class="step-body"><div>
             <p>Ce programme a été écrit spécialement pour <strong id="codeName">ton prénom</strong>. Le bouton change d'animation, et les commentaires en vert expliquent tout.</p>
             <div class="code"><div class="code-name" id="codeFile">enseigne.ino</div><button class="copy" type="button">Copier</button><pre><code id="codeMain"></code></pre></div>
+            <div class="lili ask mic-only"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Elle s'éteint toute seule ?</span><p>Ta pièce est peut-être bruyante. Monte <code>SEUIL_CLAP</code> (essaie 450, puis 550) pour que seuls de vrais claps comptent. Si elle n'entend pas tes claps, descends-le.</p></div></div>
             <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Rouge et vert inversés ?</span><p>Si ton arc-en-ciel a des couleurs bizarres, remplace <code>RGB</code> par <code>GRB</code> dans la ligne <code>addLeds</code>. Chaque guirlande a ses habitudes !</p></div></div>
           </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
         </article>

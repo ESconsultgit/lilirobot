@@ -212,3 +212,9 @@ footer{padding-block:30px;color:var(--ink-soft);font-size:.9rem;text-align:cente
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--green-deep);color:var(--surface);font-weight:800;padding:10px 18px;border-radius:999px;transition:transform .3s;z-index:80;display:flex;align-items:center;gap:8px}
 .toast.show{transform:translate(-50%,0)}
 .toast img{width:34px;height:34px}
+
+/* Liens d'achat */
+.buy-row{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:6px}
+.buy-row .spec{font-size:.8rem;font-weight:700;color:var(--green);line-height:1.35}
+.buy{font-size:.82rem;font-weight:800;color:var(--green-deep);background:var(--lime-soft);border:1.5px solid var(--lime);border-radius:999px;padding:2px 10px;text-decoration:none;white-space:nowrap}
+.buy:hover{background:var(--lime);color:#163514}
