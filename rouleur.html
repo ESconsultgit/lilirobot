@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="assets/atelier.css">
+<link rel="stylesheet" href="assets/atelier.css?v=2">
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0} img{max-width:100%} [hidden]{display:none!important}
@@ -99,6 +99,23 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
         <img src="assets/lili-coucou.webp" alt="Lili fait coucou">
         <div class="bubble"><span class="tag">Coucou !</span><p>Tu as déjà vu un robot aspirateur ? Il fonce, s'arrête juste avant le canapé, réfléchit et repart ailleurs. Le Rouleur fait pareil : il <strong>regarde devant lui</strong>, et s'il y a un obstacle, il <strong>tourne la tête à gauche et à droite</strong> pour choisir le chemin le plus libre.</p></div>
       </div>
+      <!-- À quoi doit-il ressembler ? -->
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton Rouleur une fois terminé, vu de trois quarts avant. L'avant, c'est le côté de la tête : c'est par là qu'il roule.</p></div>
+        <a class="look-pic" href="assets/look-rouleur.svg" target="_blank" rel="noopener" title="Ouvrir l'image en grand"><img src="assets/look-rouleur.svg" alt="Le Rouleur terminé, vu de trois quarts : châssis transparent, roues jaunes, tête avec le capteur sur le servomoteur, Arduino, L298N et plaque d'essai" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Touche l'image pour l'agrandir.</p>
+        <ol class="look-key">
+          <li><span><b>Le capteur à ultrasons</b>Les yeux. Clipsé dans son support sur le servomoteur, il regarde droit devant.</span></li>
+          <li><span><b>Le servomoteur</b>Le cou. Collé à l'avant, l'axe vers le haut.</span></li>
+          <li><span><b>L'Arduino Uno</b>Le cerveau. Au milieu de la plaque, prise USB vers l'arrière.</span></li>
+          <li><span><b>Le module L298N</b>Le chef des muscles. À l'arrière, radiateur vers le haut.</span></li>
+          <li><span><b>Les moteurs jaunes et les roues</b>Les jambes. Sous la plaque, en miroir, une roue de chaque côté.</span></li>
+          <li><span><b>Le boîtier de piles</b>Sous la plaque, près des roues, avec son interrupteur.</span></li>
+          <li><span><b>La roue folle</b>À l'avant, sous la plaque. Le Rouleur tient sur 3 roues.</span></li>
+          <li><span><b>La mini plaque d'essai</b>À l'avant, à côté de la tête.</span></li>
+        </ol>
+      </figure>
+
       <div class="how">
         <div class="how-card">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="14" cy="24" r="8"/><circle cx="34" cy="24" r="8"/><path d="M6 10h36"/></svg>

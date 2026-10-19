@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-label="L'Enseigne lumineuse terminée, accrochée au mur">
+  <defs>
+    <linearGradient id="plank" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3D7A8"/><stop offset="1" stop-color="#E6BF84"/></linearGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F4F7EC"/></linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E9EEF1"/><stop offset="1" stop-color="#A9B4BB"/></linearGradient>
+    <filter id="glow" x="-80%" y="-50%" width="260%" height="200%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+
+  <!-- mur et sol -->
+  <rect width="800" height="470" rx="22" fill="#FBFDF6"/>
+  <rect x="0" y="428" width="800" height="42" fill="#ECF3DE"/>
+  <rect x="0" y="420" width="800" height="10" fill="#FFFFFF" stroke="#CFE2B8" stroke-width="1.5"/>
+
+  <!-- câble d'alimentation -->
+  <path d="M650 300C660 350 700 352 712 384" fill="none" stroke="#3E4A44" stroke-width="5" stroke-linecap="round"/>
+  <rect x="694" y="380" width="46" height="34" rx="8" fill="#FFFFFF" stroke="#C9CCC2" stroke-width="2"/>
+  <rect x="702" y="388" width="30" height="18" rx="4" fill="#2B2F2C"/>
+  <text x="717" y="401" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#C6E87F">5V</text>
+
+  <!-- ombre de la planche (tasseaux derrière) -->
+  <rect x="122" y="112" width="580" height="206" rx="10" fill="#1D351B" opacity=".18" filter="url(#soft)"/>
+  <!-- planche -->
+  <rect x="110" y="100" width="580" height="206" rx="10" fill="url(#plank)" stroke="#C9945A" stroke-width="2"/>
+  <g stroke="#D9AE72" stroke-width="1.4" fill="none" opacity=".7">
+    <path d="M130 140C260 132 380 150 520 138S660 146 676 142"/>
+    <path d="M126 220C250 212 400 232 540 218S650 226 676 222"/>
+  </g>
+  <!-- crochets -->
+  <g fill="none" stroke="#8E9AA2" stroke-width="3" stroke-linecap="round">
+    <path d="M190 100V88a8 8 0 0116 0"/><path d="M594 100V88a8 8 0 0116 0"/>
+  </g>
+  <circle cx="198" cy="104" r="3" fill="#8E9AA2"/><circle cx="602" cy="104" r="3" fill="#8E9AA2"/>
+
+  <!-- Arduino Nano + plaque d'essai, cachés derrière -->
+  <g stroke-dasharray="6 5" stroke-width="2" fill="none">
+    <rect x="128" y="272" width="80" height="28" rx="5" stroke="#3D7DD8"/>
+    <rect x="216" y="272" width="56" height="28" rx="5" stroke="#7C8F76"/>
+  </g>
+  <g font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#3D7DD8" text-anchor="middle"><text x="168" y="290">NANO</text></g>
+
+  <!-- halos de lumière -->
+  <g filter="url(#glow)" opacity="1">
+    <path d="M232 132h30v100h50v30h-80z" fill="#FF6B6B"/>
+    <rect x="350" y="132" width="30" height="130" fill="#F2C230"/>
+    <path d="M422 132h30v100h50v30h-80z" fill="#8CC63F"/>
+  </g>
+
+  <!-- lettres fermées : épaisseur puis façade -->
+  <g fill="#6FA52E" stroke="#4E7F1F" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M232 132h30l9 8v92h50l9 8v30h-80l-9-8z"/>
+    <path d="M350 132h30l9 8v130h-30l-9-8z"/>
+    <path d="M422 132h30l9 8v92h50l9 8v30h-80l-9-8z"/>
+  </g>
+  <g stroke-linejoin="round" stroke-width="1.5">
+    <path d="M232 132h30v100h50v30h-80z" fill="url(#face)" stroke="#E7B9B9"/>
+    <rect x="350" y="132" width="30" height="130" fill="url(#face)" stroke="#EADBA4"/>
+    <path d="M422 132h30v100h50v30h-80z" fill="url(#face)" stroke="#C9E39F"/>
+  </g>
+  <g opacity=".55">
+    <path d="M236 136h22v100h50v22h-72z" fill="#FFB3B3"/>
+    <rect x="354" y="136" width="22" height="122" fill="#FCE79A"/>
+    <path d="M426 136h22v100h50v22h-72z" fill="#D7EDB9"/>
+  </g>
+
+  <!-- dernière lettre ouverte : on voit les pixels -->
+  <path d="M540 132h30l9 8v130h-30l-9-8z" fill="#6FA52E" stroke="#4E7F1F" stroke-width="1.5" stroke-linejoin="round"/>
+  <rect x="540" y="132" width="30" height="130" fill="#4E7F1F" stroke="#3E6A16" stroke-width="1.5"/>
+  <rect x="545" y="137" width="20" height="120" rx="2" fill="#2E4A1A"/>
+  <path d="M555 250V146" stroke="#1D2B14" stroke-width="2.4"/>
+  <circle cx="555" cy="252" r="4" fill="#111"/>
+  <g filter="url(#soft)" fill="#3D7DD8" opacity=".9"><circle cx="555" cy="152" r="7"/><circle cx="555" cy="182" r="7"/><circle cx="555" cy="212" r="7"/><circle cx="555" cy="240" r="7"/></g>
+  <g fill="#9CC6FF" stroke="#FFFFFF" stroke-width="1.5"><circle cx="555" cy="152" r="4"/><circle cx="555" cy="182" r="4"/><circle cx="555" cy="212" r="4"/><circle cx="555" cy="240" r="4"/></g>
+  <!-- sa façade, posée à côté -->
+  <g transform="rotate(8 622 196)">
+    <rect x="608" y="138" width="30" height="120" rx="2" fill="url(#face)" stroke="#C9CCC2" stroke-width="1.5"/>
+  </g>
+  <path d="M600 200C590 204 584 204 578 202" fill="none" stroke="#7C8F76" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M576 202l9-5v9z" fill="#7C8F76"/>
+
+  <!-- détecteur de présence et micro -->
+  <g fill="none" stroke="#8CC63F" stroke-width="2.4" stroke-linecap="round" opacity=".8">
+    <path d="M340 334a20 20 0 0040 0"/><path d="M330 340a30 30 0 0060 0" opacity=".6"/>
+  </g>
+  <rect x="340" y="296" width="40" height="12" rx="2" fill="#2E7D4F"/>
+  <path d="M344 308a16 16 0 0032 0z" fill="#F7F7F2" stroke="#C9CCC2" stroke-width="1.5"/>
+  <path d="M352 321l4-13M368 321l-4-13M346 314h28" stroke="#DADCD3" stroke-width="1.2"/>
+  <rect x="430" y="294" width="34" height="16" rx="2" fill="#2C6FB7"/>
+  <circle cx="447" cy="314" r="8" fill="url(#metal)" stroke="#8E9AA2" stroke-width="1.2"/>
+  <circle cx="447" cy="314" r="3.5" fill="#5F6B66"/>
+
+  <!-- bouton sur le côté -->
+  <rect x="690" y="186" width="10" height="30" rx="2" fill="#2B2F2C"/>
+  <rect x="699" y="193" width="9" height="16" rx="3" fill="#E04A3A" stroke="#B53A2D" stroke-width="1"/>
+
+  <!-- cote hauteur des lettres -->
+  <g stroke="#7C8F76" stroke-width="1.6" fill="none"><path d="M206 132h12M206 262h12M212 132V262"/></g>
+  <path d="M212 126l-4 8h8zM212 268l-4-8h8z" fill="#7C8F76"/>
+  <rect x="150" y="186" width="60" height="22" rx="11" fill="#F3D7A8"/>
+  <text x="180" y="202" text-anchor="middle" font-family="Nunito,'Trebuchet MS',Arial,sans-serif" font-weight="800" font-size="16" fill="#4C5E49">14 cm</text>
+
+  <!-- pastilles numérotées -->
+  <g font-family="Nunito,'Trebuchet MS',Arial,sans-serif" font-weight="800" font-size="17" text-anchor="middle">
+    <g stroke="#2F6E2B" stroke-width="2">
+      <path d="M296 62L264 138"/><path d="M664 70L630 150"/><path d="M530 60L554 166"/><path d="M280 372L344 314"/><path d="M500 392L450 322"/><path d="M110 380L160 300"/><path d="M752 196L708 200"/><path d="M640 392L700 398"/>
+    </g>
+    <g fill="#8CC63F"><circle cx="264" cy="138" r="3.5"/><circle cx="630" cy="150" r="3.5"/><circle cx="554" cy="166" r="3.5"/><circle cx="344" cy="314" r="3.5"/><circle cx="450" cy="322" r="3.5"/><circle cx="160" cy="300" r="3.5"/><circle cx="708" cy="200" r="3.5"/><circle cx="700" cy="398" r="3.5"/></g>
+    <g fill="#1F4D1D" stroke="#FBFDF6" stroke-width="3">
+      <circle cx="300" cy="50" r="16"/><circle cx="670" cy="58" r="16"/><circle cx="526" cy="48" r="16"/><circle cx="272" cy="382" r="16"/><circle cx="510" cy="402" r="16"/><circle cx="102" cy="392" r="16"/><circle cx="766" cy="196" r="16"/><circle cx="626" cy="396" r="16"/>
+    </g>
+    <g fill="#FFFFFF"><text x="300" y="56">1</text><text x="670" y="64">2</text><text x="526" y="54">3</text><text x="272" y="388">4</text><text x="510" y="408">5</text><text x="102" y="398">6</text><text x="766" y="202">7</text><text x="626" y="402">8</text></g>
+  </g>
+</svg>

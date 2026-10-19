@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-label="L'Équilibriste terminé, vu de côté">
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E2B57A"/><stop offset="1" stop-color="#C9945A"/></linearGradient>
+    <linearGradient id="woodTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F0CD98"/><stop offset="1" stop-color="#E5BB80"/></linearGradient>
+    <radialGradient id="ball" cx="0.38" cy="0.32" r="0.75"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.7" stop-color="#F3F1EA"/><stop offset="1" stop-color="#D8D5CB"/></radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E9EEF1"/><stop offset="1" stop-color="#A9B4BB"/></linearGradient>
+  </defs>
+
+  <!-- fond -->
+  <rect width="800" height="470" rx="22" fill="#FBFDF6"/>
+  <rect x="0" y="364" width="800" height="106" fill="#ECF3DE"/>
+  <path d="M0 364H800" stroke="#CFE2B8" stroke-width="2"/>
+
+  <!-- cotes -->
+  <g stroke="#7C8F76" stroke-width="1.6" fill="none">
+    <path d="M92 104v14M572 104v14M92 111H572"/>
+    <path d="M86 111l8-4v8zM578 111l-8-4v8z" fill="#7C8F76" stroke="none"/>
+    <path d="M66 202h12M66 346h12M72 202V346"/>
+    <path d="M72 196l-4 8h8zM72 352l-4-8h8z" fill="#7C8F76" stroke="none"/>
+  </g>
+  <g font-family="Nunito,'Trebuchet MS',Arial,sans-serif" font-weight="800" font-size="16" fill="#4C5E49">
+    <rect x="400" y="100" width="64" height="22" rx="11" fill="#FBFDF6"/>
+    <text x="432" y="116" text-anchor="middle">40 cm</text>
+    <rect x="14" y="262" width="60" height="22" rx="11" fill="#FBFDF6"/><text x="44" y="278" text-anchor="middle">12 cm</text>
+  </g>
+
+  <!-- câbles (derrière) -->
+  <g fill="none" stroke-linecap="round" stroke-width="2.6">
+    <path d="M100 182C96 250 230 330 330 372S470 392 486 404" stroke="#E04A3A"/>
+    <path d="M102 182C100 252 236 334 336 376S474 398 490 410" stroke="#2B2B2B"/>
+    <path d="M104 182C104 254 242 338 342 380S478 404 494 416" stroke="#3D7DD8"/>
+    <path d="M106 182C108 256 248 342 348 384S482 410 498 422" stroke="#F2C230"/>
+    <path d="M552 260C590 300 580 360 548 396" stroke="#E04A3A"/>
+    <path d="M552 264C594 304 586 366 556 400" stroke="#6B3E26"/>
+    <path d="M552 268C598 308 592 372 564 404" stroke="#F29A1F"/>
+  </g>
+
+  <!-- socle -->
+  <path d="M60 352L80 340H620L600 352Z" fill="url(#woodTop)"/>
+  <rect x="60" y="352" width="540" height="12" fill="url(#wood)"/>
+  <path d="M600 352L620 340V352L600 364Z" fill="#B98149"/>
+
+  <!-- pilier -->
+  <rect x="104" y="202" width="24" height="144" fill="url(#wood)" stroke="#A8743F" stroke-width="1.5"/>
+  <path d="M128 202l6-4v144l-6 4z" fill="#B98149"/>
+
+  <!-- support moteur -->
+  <rect x="520" y="274" width="24" height="72" fill="url(#wood)" stroke="#A8743F" stroke-width="1.5"/>
+  <path d="M544 274l6-4v72l-6 4z" fill="#B98149"/>
+
+  <!-- servomoteur -->
+  <rect x="506" y="251" width="52" height="6" rx="2" fill="#2F64B8"/>
+  <rect x="512" y="240" width="40" height="34" rx="4" fill="#3D7DD8" stroke="#2A5DA8" stroke-width="1.5"/>
+  <circle cx="524" cy="240" r="7" fill="#F4F4F0" stroke="#9AA4AA" stroke-width="1.5"/>
+  <rect x="520" y="236" width="30" height="8" rx="4" fill="#F4F4F0" stroke="#9AA4AA" stroke-width="1.5"/>
+  <circle cx="545" cy="240" r="1.8" fill="#6F7A80"/>
+  <circle cx="524" cy="240" r="2.4" fill="#6F7A80"/>
+
+  <!-- tige trombone + piton -->
+  <path d="M545 240C548 236 542 226 540 216L537 206" fill="none" stroke="#8E9AA2" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="536" cy="202" r="4.5" fill="none" stroke="#8E9AA2" stroke-width="2.4"/>
+  <path d="M536 196v2" stroke="#8E9AA2" stroke-width="2.4"/>
+
+  <!-- charnière -->
+  <rect x="100" y="196" width="34" height="6" rx="1.5" fill="url(#metal)" stroke="#8E9AA2" stroke-width="1"/>
+  <circle cx="102" cy="199" r="4.5" fill="url(#metal)" stroke="#8E9AA2" stroke-width="1"/>
+
+  <!-- rail : latte + baguettes -->
+  <rect x="92" y="188" width="480" height="8" rx="2" fill="url(#wood)" stroke="#A8743F" stroke-width="1.2"/>
+  <rect x="92" y="181" width="480" height="7" rx="3.5" fill="#E9C48C" stroke="#B98149" stroke-width="1"/>
+  <!-- butée -->
+  <rect x="566" y="152" width="7" height="36" rx="1.5" fill="#B6A58A" stroke="#8C7B62" stroke-width="1"/>
+
+  <!-- capteur à ultrasons -->
+  <rect x="92" y="150" width="8" height="31" rx="1.5" fill="#2C6FB7"/>
+  <rect x="100" y="153" width="15" height="21" rx="3" fill="url(#metal)" stroke="#8E9AA2" stroke-width="1.2"/>
+  <ellipse cx="115" cy="163.5" rx="2.6" ry="10" fill="#C9D1D6" stroke="#8E9AA2" stroke-width="1"/>
+  <g fill="none" stroke="#8CC63F" stroke-width="2.6" stroke-linecap="round">
+    <path d="M128 152a16 16 0 010 23"/>
+    <path d="M142 145a26 26 0 010 37"/>
+    <path d="M156 139a36 36 0 010 49" opacity=".55"/>
+  </g>
+
+  <!-- balle -->
+  <ellipse cx="332" cy="182" rx="20" ry="3" fill="#000" opacity=".12"/>
+  <circle cx="332" cy="159" r="24" fill="url(#ball)" stroke="#CFCABD" stroke-width="1.2"/>
+
+  <!-- plaque d'essai (vue de dessus) -->
+  <rect x="462" y="388" width="104" height="56" rx="5" fill="#FAFAF6" stroke="#C9CCC2" stroke-width="1.5"/>
+  <path d="M468 395H560M468 437H560" stroke="#E04A3A" stroke-width="1.2" opacity=".6"/>
+  <path d="M468 399H560M468 433H560" stroke="#3D7DD8" stroke-width="1.2" opacity=".6"/>
+  <g fill="#B9BDB2">
+    <circle cx="476" cy="408" r="1.4"/><circle cx="484" cy="408" r="1.4"/><circle cx="492" cy="408" r="1.4"/><circle cx="500" cy="408" r="1.4"/><circle cx="508" cy="408" r="1.4"/><circle cx="516" cy="408" r="1.4"/><circle cx="524" cy="408" r="1.4"/><circle cx="532" cy="408" r="1.4"/><circle cx="540" cy="408" r="1.4"/><circle cx="548" cy="408" r="1.4"/>
+    <circle cx="476" cy="424" r="1.4"/><circle cx="484" cy="424" r="1.4"/><circle cx="492" cy="424" r="1.4"/><circle cx="500" cy="424" r="1.4"/><circle cx="508" cy="424" r="1.4"/><circle cx="516" cy="424" r="1.4"/><circle cx="524" cy="424" r="1.4"/><circle cx="532" cy="424" r="1.4"/><circle cx="540" cy="424" r="1.4"/><circle cx="548" cy="424" r="1.4"/>
+  </g>
+  <!-- fils plaque → Arduino -->
+  <g fill="none" stroke-width="2.6" stroke-linecap="round">
+    <path d="M560 412C590 408 610 410 640 404" stroke="#E04A3A"/>
+    <path d="M560 420C590 418 612 420 640 414" stroke="#2B2B2B"/>
+    <path d="M556 428C600 432 620 432 650 424" stroke="#F29A1F"/>
+    <path d="M552 432C600 442 630 440 660 430" stroke="#3D7DD8"/>
+    <path d="M548 436C600 450 640 446 670 434" stroke="#F2C230"/>
+  </g>
+
+  <!-- Arduino Uno (vue de dessus) -->
+  <rect x="636" y="382" width="122" height="72" rx="7" fill="#00878F" stroke="#00666C" stroke-width="1.5"/>
+  <rect x="624" y="390" width="24" height="18" rx="2" fill="url(#metal)" stroke="#8E9AA2"/>
+  <rect x="626" y="424" width="20" height="16" rx="3" fill="#2B2B2B"/>
+  <rect x="650" y="386" width="96" height="6" rx="1" fill="#1E2B1D"/>
+  <rect x="660" y="444" width="80" height="6" rx="1" fill="#1E2B1D"/>
+  <rect x="694" y="406" width="36" height="16" rx="2" fill="#1E2B1D"/>
+  <text x="712" y="418" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" font-weight="700" fill="#FFFFFF">UNO</text>
+  <!-- câble USB vers l'ordinateur -->
+  <path d="M624 399C600 399 596 456 640 462H800" fill="none" stroke="#5F6B66" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- pastilles numérotées -->
+  <g font-family="Nunito,'Trebuchet MS',Arial,sans-serif" font-weight="800" font-size="17" text-anchor="middle">
+    <g stroke="#2F6E2B" stroke-width="2"><path d="M50 150L94 160"/><path d="M226 268L128 268"/><path d="M262 60L318 142"/><path d="M462 160L470 184"/><path d="M630 238L562 252"/><path d="M620 196L540 214"/><path d="M766 344L732 386"/></g>
+    <g fill="#8CC63F"><circle cx="94" cy="160" r="3.5"/><circle cx="128" cy="268" r="3.5"/><circle cx="318" cy="142" r="3.5"/><circle cx="470" cy="184" r="3.5"/><circle cx="562" cy="252" r="3.5"/><circle cx="540" cy="214" r="3.5"/><circle cx="732" cy="386" r="3.5"/></g>
+    <g fill="#1F4D1D" stroke="#FBFDF6" stroke-width="3">
+      <circle cx="40" cy="148" r="16"/><circle cx="240" cy="268" r="16"/><circle cx="252" cy="48" r="16"/><circle cx="458" cy="148" r="16"/><circle cx="644" cy="236" r="16"/><circle cx="634" cy="192" r="16"/><circle cx="770" cy="330" r="16"/>
+    </g>
+    <g fill="#FFFFFF"><text x="40" y="154">1</text><text x="240" y="274">6</text><text x="252" y="54">5</text><text x="458" y="154">4</text><text x="644" y="242">3</text><text x="634" y="198">7</text><text x="770" y="336">2</text></g>
+  </g>
+</svg>

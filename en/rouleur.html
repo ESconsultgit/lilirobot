@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="../assets/atelier.css">
+<link rel="stylesheet" href="../assets/atelier.css?v=2">
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0} img{max-width:100%} [hidden]{display:none!important}
@@ -99,6 +99,23 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
         <img src="../assets/lili-coucou.webp" alt="Lili waving">
         <div class="bubble"><span class="tag">Hi there!</span><p>Have you ever watched a robot vacuum? It zooms along, stops just before the sofa, thinks, and heads off somewhere else. The Roller does the same: it <strong>looks ahead</strong>, and if there's an obstacle, it <strong>turns its head left and right</strong> to pick the clearest way.</p></div>
       </div>
+      <!-- À quoi doit-il ressembler ? -->
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">The finished robot</span><h3>What should it look like?</h3><p>Here is your Roller once it's finished, seen from the front at an angle. The front is the side with the head: that's the way it drives.</p></div>
+        <a class="look-pic" href="../assets/look-rouleur.svg" target="_blank" rel="noopener" title="Open the picture full size"><img src="../assets/look-rouleur.svg" alt="The finished Roller seen from the front three-quarter: clear chassis, yellow wheels, head with the sensor on the servo, Arduino, L298N and breadboard" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Tap the picture to see it bigger.</p>
+        <ol class="look-key">
+          <li><span><b>The ultrasonic sensor</b>The eyes. Clipped into its holder on the servo, looking straight ahead.</span></li>
+          <li><span><b>The servo motor</b>The neck. Glued at the front, shaft pointing up.</span></li>
+          <li><span><b>The Arduino Uno</b>The brain. In the middle of the plate, USB socket towards the back.</span></li>
+          <li><span><b>The L298N module</b>The boss of the muscles. At the back, heatsink facing up.</span></li>
+          <li><span><b>The yellow motors and the wheels</b>The legs. Under the plate, mirrored, one wheel on each side.</span></li>
+          <li><span><b>The battery holder</b>Under the plate, near the wheels, with its switch.</span></li>
+          <li><span><b>The caster wheel</b>At the front, under the plate. The Roller stands on 3 wheels.</span></li>
+          <li><span><b>The mini breadboard</b>At the front, next to the head.</span></li>
+        </ol>
+      </figure>
+
       <div class="how">
         <div class="how-card">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="14" cy="24" r="8"/><circle cx="34" cy="24" r="8"/><path d="M6 10h36"/></svg>
