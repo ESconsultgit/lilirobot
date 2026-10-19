@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Balancer 2 · Lili's Workshop</title>
+<meta name="description" content="Robot 2 from Lili's Workshop: a steel ball balanced on a touch plate, tilted by three servo motors.">
+<link rel="icon" href="../assets/lili-avatar.webp" type="image/webp">
+<link rel="alternate" hreflang="fr" href="../plateau.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/atelier.css?v=2">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="../assets/lili-avatar.webp" alt="">Lili's Workshop</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">Robot 2 · The Balancer 2<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt" href="index.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 1 · The Balancer 1</b><small>A ping-pong ball balanced on a rail</small></span>
+        </a>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 2 · The Balancer 2</b><small>A ball on a plate, 3 motors · expert level</small></span>
+        </a>
+        <a class="robot-opt" href="enseigne.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>Robot 3 · The Light-up Sign</b><small>Your name in 3D-printed letters that glow</small></span>
+        </a>
+        <a class="robot-opt" href="rouleur.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg></span>
+          <span><b>Robot 4 · The Roller</b><small>It drives and avoids obstacles by itself</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Robot 5 · Mystery</b><small>Unlocks after mission 4</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapters">
+      <a href="#comprendre">How it works</a>
+      <a href="#courses">Shopping list</a>
+      <a href="#montage">Building</a>
+    </nav>
+    <nav class="lang" aria-label="Language"><a href="../plateau.html" lang="fr" hreflang="fr" title="Français" aria-label="Français"><svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg></a><a href="plateau.html" lang="en" hreflang="en" title="English" aria-label="English" aria-current="true"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="ukT"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#FFFFFF" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#ukT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#FFFFFF" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg></a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="../assets/banner.mp4?v=2" poster="../assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili building a robot in her workshop"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot no. 2 · Plate mission · Expert level</span>
+        <h1>The Balancer 2</h1>
+        <p class="lead">The Balancer's big brother: a steel ball balanced on a plate that tilts in every direction, thanks to three motors working as a team.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#comprendre">Let's start!</a>
+          <a class="btn btn-ghost" href="#courses">The shopping list</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><span>Difficulty</span><b class="stars">★★★★</b></div>
+      <div><span>Time</span><b>5 afternoons + printing</b></div>
+      <div><span>Budget</span><b>≈ 80 €</b></div>
+      <div><span>You'll learn</span><b>2 PIDs, 3 motors, geometry</b></div>
+    </div>
+  </div>
+
+  <!-- ===================== COMPRENDRE ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>How does it work?</h2><p>The same idea as the Balancer 1… but in every direction!</p></div>
+      </div>
+
+      <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Expert level</span><p>This is the hardest robot in the workshop. Build <strong>the Balancer 1</strong> first: it teaches you PID with just one direction. Here we do the same, but twice at once!</p></div></div>
+
+      <div class="lili"><img src="../assets/lili-coucou.webp" alt="Lili waving"><div class="bubble"><span class="tag">Hi!</span><p>Remember the Balancer? The ball could only roll left or right. Here, the ball can go off <strong>in every direction</strong>! So the plate must tilt forward, backward, left, right… all at the same time. To do that, you need <strong>three motors working as a team</strong>.</p></div></div>
+
+      <!-- À quoi doit-il ressembler ? -->
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">The finished robot</span><h3>What should it look like?</h3><p>Here is your Balancer 2 once it's finished, seen at an angle. Keep this picture in front of you while you build: each number shows you where a part goes.</p></div>
+        <a class="look-pic" href="../assets/look-plateau.svg" target="_blank" rel="noopener" title="Open the picture full size"><img src="../assets/look-plateau.svg" alt="The finished Balancer 2: round base with three servo motors, arms, links and ball joints holding a touchscreen with a steel ball on it, and the Arduino next to it" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Tap the picture to see it bigger.</p>
+        <ol class="look-key">
+          <li><span><b>The touchscreen</b>The eyes. Stuck on the printed holder, it feels where the ball presses.</span></li>
+          <li><span><b>The steel ball</b>30 mm across. Heavy enough for the screen to feel it.</span></li>
+          <li><span><b>The 3 servo motors</b>The muscles. One in each wall of the base, shaft facing forward.</span></li>
+          <li><span><b>The aluminium arms</b>Clamped on the motor shafts, level when the plate is flat.</span></li>
+          <li><span><b>The links</b>The little printed legs. At the bottom, an elbow that pivots on the arm.</span></li>
+          <li><span><b>The ball joints</b>At the top of the links. They turn every way, like your shoulder.</span></li>
+          <li><span><b>The base</b>3D-printed, with its three walls at 120° from each other.</span></li>
+          <li><span><b>The plate holder</b>3D-printed. The ball joints screw underneath, the screen sticks on top.</span></li>
+          <li><span><b>The Arduino and the breadboard</b>The brain, next to the robot and plugged in with USB.</span></li>
+          <li><span><b>The 5 V power supply</b>It powers the three motors, through the breadboard.</span></li>
+        </ol>
+      </figure>
+
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="5" y="12" width="38" height="24" rx="3"/><circle cx="20" cy="24" r="5"/><path d="M30 20l6 8"/></svg>
+          <span class="role">The eyes</span><h3>The touchscreen</h3>
+          <p>Two sheets that conduct electricity, one on top of the other. Where the ball presses, they touch: the Arduino measures where, left to right and top to bottom.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="10" y="10" width="28" height="28" rx="4"/><path d="M18 4v6M30 4v6M18 38v6M30 38v6M4 18h6M4 30h6M38 18h6M38 30h6"/></svg>
+          <span class="role">The brain</span><h3>The Arduino</h3>
+          <p>The same one as the Balancer 1! But now it runs two PIDs: one for the length of the plate, one for the width.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6"/></svg>
+          <span class="role">The muscles</span><h3>The 3 servo motors</h3>
+          <p>MG996Rs, much stronger than the Balancer 1's. Each one lifts or lowers one corner of the plate.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M8 40h12l6-14"/><circle cx="26" cy="26" r="3"/><path d="M26 26l8-18"/><circle cx="34" cy="8" r="4"/></svg>
+          <span class="role">The legs</span><h3>Arms, links and ball joints</h3>
+          <p>Each motor turns an arm. The arm pushes a link, and the link pushes the plate through a ball joint.</p>
+        </div>
+      </div>
+      <p class="loop-line">The screen feels the ball → the brain runs 2 PIDs → the 3 motors tilt the plate… 50 times a second!</p>
+
+      <div class="lili ask"><img src="../assets/lili-explique.webp" alt="Lili explaining with a tablet"><div class="bubble"><span class="tag">Let me explain</span><p>How do three motors tilt a plate? First the brain decides <strong>how much to tilt</strong>, lengthwise and widthwise. Then for each corner it works out <strong>how far it must go up or down</strong>. Finally, with a triangle (the arm, the link, and the distance between them), it finds <strong>each arm's angle</strong>. That's geometry: the maths is already written in the program!</p></div></div>
+
+      <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Why a steel ball?</span><p>The touchscreen feels pressure. A ping-pong ball weighs barely 3 grams: it wouldn't even notice it! A 30 mm steel ball weighs over 100 grams, and that it feels very well.</p></div></div>
+
+      <!-- Simulateur -->
+      <div class="sim">
+        <canvas id="simCanvas" width="640" height="320" aria-label="Simulation of the plate seen from above"></canvas>
+        <div class="sim-ctrl">
+          <h3>Play with the two brains</h3>
+          <div class="slider">
+            <label for="kp">Kp · Push <output id="kpOut">0.08</output></label>
+            <input type="range" id="kp" min="0" max="0.3" step="0.01" value="0.08">
+            <small>Degrees of tilt for each millimetre away.</small>
+          </div>
+          <div class="slider">
+            <label for="kd">Kd · Dampen <output id="kdOut">0.010</output></label>
+            <input type="range" id="kd" min="0" max="0.12" step="0.005" value="0.01">
+            <small>The brake that stops the ball circling around.</small>
+          </div>
+          <div class="row">
+            <button class="btn btn-green" id="simDrop" type="button">Drop the ball</button>
+            <button class="btn btn-soft" id="simPush" type="button">Flick!</button>
+            <button class="btn btn-soft" id="simCircle" type="button" aria-pressed="false">Go round in a circle</button>
+          </div>
+          <p class="sim-msg" id="simMsg">With so little D, the ball goes round and never calms down. Raise Kd little by little… And try Kd = 0 to see!</p>
+          <small>These are the same numbers as in the big program. Circles A, B and C show whether each corner goes up (green) or down (orange). Click the plate to put the ball down.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COURSES ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>The shopping list</h2><p>Tick each thing once it's on your table. Lili remembers your ticks.</p></div>
+      </div>
+      <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
+      <div class="shop">
+        <div class="shop-group">
+          <h3><span class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>The electronics</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="uno"><span><b>Arduino Uno R3 board</b><small>The one from the Balancer 1! You can reuse it, with its USB cable.</small></span><span class="qty"><span>×1 · already have it</span><span class="store">Robot 1</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="servos"><span><b>3 MG996R servo motors</b><small>The muscles. They have to lift the whole plate, so we pick strong ones.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> MG996R with metal gears, 25-tooth shaft (25T)</span></span></span><span class="qty"><span>×3 · ≈ €20–30</span><a class="buy" href="https://www.amazon.com/s?k=MG996R+servo+pack" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="palonniers"><span><b>3 aluminium 25T servo arms</b><small>The motors' arms. They clamp onto the shaft with a small screw.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 25T (25 teeth), single arm with holes for M3 screws</span></span></span><span class="qty"><span>×3 · ≈ €8–12</span><a class="buy" href="https://www.amazon.com/s?k=aluminium+servo+arm+25T" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="ecran"><span><b>7-inch 4-wire resistive touch panel</b><small>The eyes. Just the touch panel, no display screen.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 4-wire resistive, about 165 × 100 mm, with its small 4-pin adapter board</span></span></span><span class="qty"><span>×1 · ≈ €15–20</span><a class="buy" href="https://www.amazon.com/s?k=7+inch+4+wire+resistive+touch+panel" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="alim"><span><b>5 V 3 A power supply + jack-to-screw-terminal adapter</b><small>The one from the Light-up Sign, if you already have it. The three motors need far more energy than the USB cable can give.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 5 V, at least 3 A (4 A is even better)</span></span></span><span class="qty"><span>×1 · ≈ €10</span><a class="buy" href="https://www.amazon.com/s?k=5V+4A+power+supply+DC+jack+terminal" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="condo"><span><b>1000 µF capacitor</b><small>A little energy tank: it helps when all three motors start at once.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 1000 µF, 16 V or more</span></span></span><span class="qty"><span>×1 · ≈ €1</span><a class="buy" href="https://www.amazon.com/s?k=1000uF+16V+capacitor" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="plaque"><span><b>Breadboard and jumper wires</b><small>The ones from the Balancer 1. You also need a few male-to-female wires for the screen.</small></span><span class="qty"><span>set · already have it</span><span class="store">Robot 1</span></span></label></li>
+          </ul>
+        </div>
+        <div class="shop-group">
+          <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>The mechanics</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="pla"><span><b>PLA filament</b><small>About 150 g for the three files to print. Any colour you like!</small></span><span class="qty"><span>≈ 150 g · ≈ €4</span><span class="store">3D printer</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="rotules"><span><b>M3 ball links (ball + socket)</b><small>The joints at the top of the links. They're sold for remote-control cars.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> M3 ball links with a screw-in ball stud (M3 thread)</span></span></span><span class="qty"><span>×3 · ≈ €8 a pack</span><a class="buy" href="https://www.amazon.com/s?k=M3+ball+link+RC" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="vis"><span><b>M3 screws and nuts assortment</b><small>You need: 12 M3 × 12 mm screws (motors), 3 M3 × 16 mm screws (elbows), 3 M3 × 10 mm screws (ball links), 15 M3 nuts, 3 lock nuts and 6 washers.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> M3 screws and nuts, including lock nuts (nylon insert)</span></span></span><span class="qty"><span>set · ≈ €10</span><a class="buy" href="https://www.amazon.com/s?k=M3+screw+nut+assortment+nylon+lock" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="bille"><span><b>30 mm steel ball</b><small>Heavy enough for the screen to feel it. It replaces the ping-pong ball.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> solid steel, 30 mm (25 to 35 mm works too)</span></span></span><span class="qty"><span>×1 · ≈ €5</span><a class="buy" href="https://www.amazon.com/s?k=30mm+steel+ball+bearing" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="scotch"><span><b>Strong double-sided tape</b><small>To stick the touchscreen onto its holder. You may already have some.</small></span><span class="qty"><span>roll</span><span class="store">At home</span></span></label></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">With a grown-up</span><p>The multimeter and wiring up the power supply are done <strong>with a grown-up</strong>. And never put your fingers under the plate while the motors are on: they're strong!</p></div></div>
+      <p class="total">Tools to get ready: a 3D printer, a Phillips screwdriver, a small spanner or flat pliers for the nuts, a ruler, a multimeter, and a computer with <strong>Arduino IDE</strong>. The budget counts the Arduino and breadboard already bought for the Balancer 1. Prices are a rough guide. The Amazon buttons open a search: pick a well-rated seller and compare with the “Check” line.</p>
+    </div>
+  </section>
+
+  <!-- ===================== MONTAGE ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Building it, step by step</h2><p>One step at a time. Click “Done!” when you've finished.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0</span><div class="bar"><i id="stepBar"></i></div></div>
+
+      <div class="steps">
+
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Print the parts</h3><small>6 to 8 hours of printing · the printer works on its own</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p><a class="btn btn-lime" href="../assets/plateau/en/balancer2-files.zip" download>Download the parts and programs</a></p>
+            <ol>
+              <li>Open the ZIP file. Inside: three parts to print (<code>.stl</code>) and the three programs (<code>.ino</code>).</li>
+              <li>Print <code>biellettes-x3.stl</code> first: it's small and quick. Slide an M3 nut into the slot at the end to check it fits.</li>
+              <li>Then <code>support-plateau.stl</code> and <code>socle.stl</code>, flat, with no supports. The base is 17.6 cm wide: it fits on an 18 cm printer bed.</li>
+              <li>Suggested settings: 0.2 mm layers, 3 perimeters, 25 % infill.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>While the printer works, play with the simulator above. Once you can tune Kp and Kd on screen, the real robot will be much easier!</p></div></div>
+          </div><img class="pose" src="../assets/lili-coucou.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>Get the links ready</h3><small>15 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>3 links</span><span>3 M3 nuts</span><span>3 ball studs</span></div>
+            <ol>
+              <li>Slide an M3 nut into the slot at the end of each link, lying flat.</li>
+              <li>Screw a ball stud into the small hole at the end: its thread goes through the nut. Hand-tight, don't force it.</li>
+              <li>The other end of the link, with the big round hole, will be the elbow.</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Stuck?</span><p>If the nut won't go in, the hole is a bit tight on your printer. Ask a grown-up to press it in with a warm soldering iron, or use a small file.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>The motors in the base</h3><small>30 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Base</span><span>3 MG996R servos</span><span>12 M3 × 12 screws + nuts</span><span>Screwdriver</span></div>
+            <ol>
+              <li>Slide each servo into the window of a wall from the front: <strong>shaft at the top</strong>, facing out of the wall.</li>
+              <li>All three servos must be mounted <strong>exactly the same way</strong>. Turn the base round: every wall should look identical.</li>
+              <li>Fix each servo with 4 M3 screws and their nuts behind the wall.</li>
+              <li>Put a label on each servo: <strong>A</strong>, <strong>B</strong> and <strong>C</strong>, going anticlockwise when you look from above.</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-reflexion.webp" alt=""><div class="bubble"><span class="tag">What do you think?</span><p>Why three motors, and not two or four? Hint: a three-legged stool never wobbles, even on an uneven floor.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>The wiring</h3><small>30 minutes · power supply unplugged!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>The motors take their energy from the 5 V power supply, not from the Arduino. The two long lines along the edge of the breadboard are the <strong>energy roads</strong>: <strong>+</strong> and <strong>−</strong>.</p>
+            <div class="wiring"><table>
+              <thead><tr><th>Part</th><th>Wire</th><th>Goes to…</th></tr></thead>
+              <tbody>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#F29A1F"></span>orange</td><td>Arduino pins 9, 10 and 11</td></tr>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#E04A3A"></span>red</td><td>+ line of the breadboard</td></tr>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#6B3E26"></span>brown</td><td>− line of the breadboard</td></tr>
+                <tr><td>5 V power supply</td><td>+ / −</td><td>+ and − lines of the breadboard</td></tr>
+                <tr><td>Capacitor</td><td>white stripe</td><td>− line (the other leg on the + line)</td></tr>
+                <tr><td>Arduino</td><td>GND</td><td>− line of the breadboard</td></tr>
+                <tr><td>Touchscreen</td><td>adapter wires 1, 2, 3, 4</td><td>A0, A1, A2, A3</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">The magic wire</span><p>The wire between the Arduino's GND and the − line is the one people forget most… and without it, the motors can't understand the orders! Everyone must share the same −.</p></div></div>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Which wire is X, which is Y?</span><p>With a grown-up, set the multimeter to Ω. Between wires 1 and 3 it should find a few hundred ohms, and the same between 2 and 4. If it finds something between 1 and 2 instead, swap wires 2 and 3 on the Arduino.</p></div></div>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Golden rule</span><p>Wire everything <strong>with the power supply unplugged</strong>. The capacitor has a direction: the white stripe always goes on −. Have a grown-up check everything before plugging back in.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>Arms in the middle</h3><small>20 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Plug in the 5 V supply, then the Arduino over USB. Upload this program:</li>
+            </ol>
+            <div class="code"><div class="code-name">test_motors.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="c">// Testing the plate's three muscles</span>
+<span class="k">#include</span> &lt;Servo.h&gt;
+
+<span class="k">const</span> <span class="k">int</span> PIN_SERVO[<span class="n">3</span>] = {<span class="n">9</span>, <span class="n">10</span>, <span class="n">11</span>};   <span class="c">// servos A, B, C</span>
+<span class="k">bool</span> JUST_CENTRE = <span class="k">true</span>;     <span class="c">// true = the arms go to the middle and stay still</span>
+
+Servo servo[<span class="n">3</span>];
+
+<span class="k">void</span> move(<span class="k">int</span> angle) {                 <span class="c">// angle: 0 = middle, + = one way, - = the other</span>
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].writeMicroseconds(<span class="n">1500</span> + angle * <span class="n">11.1</span>);
+}
+
+<span class="k">void</span> setup() {
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].attach(PIN_SERVO[i]);
+  move(<span class="n">0</span>);                             <span class="c">// 1500 microseconds = the middle</span>
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">if</span> (JUST_CENTRE) <span class="k">return</span>;             <span class="c">// stay still</span>
+  move(<span class="n">20</span>);   delay(<span class="n">1500</span>);             <span class="c">// all three arms one way…</span>
+  move(<span class="n">0</span>);    delay(<span class="n">1500</span>);
+  move(<span class="n">-20</span>);  delay(<span class="n">1500</span>);             <span class="c">// …then the other</span>
+  move(<span class="n">0</span>);    delay(<span class="n">1500</span>);
+}</code></pre></div>
+            <ol start="2">
+              <li>The three motors move a little, then stop: they are <strong>right in the middle</strong>.</li>
+              <li>Push an aluminium arm onto each shaft, <strong>perfectly level</strong> and pointing <strong>outwards</strong> from the base. Tighten its little screw.</li>
+              <li>Change <code>JUST_CENTRE</code> to <code>false</code> and upload. Watch the first movement: all three arms should <strong>go up</strong> together.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Going down?</span><p>No problem! Write it down: in the big program you'll set <code>DIRECTION = -1</code>. Since the three motors are mounted the same way, they always all do the same thing.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>The legs</h3><small>25 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>3 links</span><span>3 M3 × 16 screws</span><span>3 lock nuts</span><span>6 washers</span><span>Ruler</span></div>
+            <ol>
+              <li>Pick the hole on the aluminium arm that is about <strong>25 mm</strong> from the shaft. Measure the exact distance, from the centre of the shaft to the centre of the hole, and write it down: that's <code>ARM</code>.</li>
+              <li>Fix the elbow: M3 × 16 screw through the arm and the link's big hole, a washer on each side, then the lock nut. The link goes on the outer side, ball at the top.</li>
+              <li>Tighten just enough so nothing wobbles, but the link still <strong>swings freely</strong>.</li>
+              <li>Measure from the centre of the elbow to the centre of the ball: aim for <strong>70 mm</strong>. Screw the ball in or out so all three links are exactly the same length. Write it down: that's <code>LINK</code>.</li>
+            </ol>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Careful</span><p>If an elbow is too tight, the motor strains and gets hot. If it catches, loosen the nut a little quarter turn.</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="7">
+          <div class="step-head"><span class="num">7</span><div><h3>The plate</h3><small>30 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Plate holder</span><span>3 ball sockets</span><span>3 M3 × 10 screws</span><span>Touchscreen</span><span>Double-sided tape</span></div>
+            <ol>
+              <li><strong>Ball sockets first:</strong> put an M3 × 10 screw through each slot of the holder from the top (the head hides in the recess), and screw a ball socket onto it underneath.</li>
+              <li><strong>Then the screen:</strong> stick it onto the holder with double-sided tape, nicely centred. Its long side must point towards servo A, and its ribbon cable should come out towards the Arduino.</li>
+              <li>Lay the plate on the three links and press firmly on each ball joint: <strong>click!</strong> The sockets snap onto the balls.</li>
+              <li>Look from the side: each link should be straight up. If one leans, loosen its screw and slide the ball joint along the slot.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Did you know?</span><p>This three-legged mechanism is called a <strong>parallel robot</strong>. You find them in flight simulators, in robots that sort biscuits at top speed, and even in some 3D printers!</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="8">
+          <div class="step-head"><span class="num">8</span><div><h3>Calibrating the screen</h3><small>20 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Upload this program, then open <strong>Tools → Serial Monitor</strong> and pick <strong>115200 baud</strong>.</li>
+            </ol>
+            <div class="code"><div class="code-name">test_screen.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="c">// Testing the plate's eyes: the touchscreen</span>
+<span class="c">// The 4 touchscreen wires, in order: X+, Y+, X-, Y-</span>
+<span class="k">const</span> <span class="k">int</span> XP = A0;   <span class="c">// X+</span>
+<span class="k">const</span> <span class="k">int</span> YP = A1;   <span class="c">// Y+</span>
+<span class="k">const</span> <span class="k">int</span> XM = A2;   <span class="c">// X-</span>
+<span class="k">const</span> <span class="k">int</span> YM = A3;   <span class="c">// Y-</span>
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">115200</span>);
+}
+
+<span class="k">void</span> loop() {
+  <span class="c">// Is anything pressing on it?</span>
+  pinMode(YP, INPUT); pinMode(XM, INPUT);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  pinMode(XP, INPUT_PULLUP);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">bool</span> pressed = (digitalRead(XP) == LOW);
+  pinMode(XP, INPUT); pinMode(YM, INPUT);
+  <span class="k">if</span> (!pressed) {
+    Serial.println(<span class="n">"Nothing on the screen"</span>);
+    delay(<span class="n">200</span>);
+    <span class="k">return</span>;
+  }
+  <span class="c">// Measure X</span>
+  pinMode(XP, OUTPUT); digitalWrite(XP, HIGH);
+  pinMode(XM, OUTPUT); digitalWrite(XM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> rawX = analogRead(YP);
+  pinMode(XP, INPUT); pinMode(XM, INPUT);
+  <span class="c">// Measure Y</span>
+  pinMode(YP, OUTPUT); digitalWrite(YP, HIGH);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> rawY = analogRead(XM);
+  pinMode(YP, INPUT); pinMode(YM, INPUT);
+
+  Serial.print(<span class="n">"X = "</span>); Serial.print(rawX);
+  Serial.print(<span class="n">"   Y = "</span>); Serial.println(rawY);
+  delay(<span class="n">200</span>);
+}</code></pre></div>
+            <ol start="2">
+              <li>Put the ball right by the short edge <strong>on servo A's side</strong>: write down X, that's <code>X_MAX</code>. Then by the opposite short edge: that's <code>X_MIN</code>.</li>
+              <li>Same on the two long edges for <code>Y_MIN</code> and <code>Y_MAX</code> (<code>Y_MAX</code> on servo B's side).</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">X doesn't change?</span><p>If Y changes when you move the ball along the length, X and Y are swapped. With the power unplugged, swap wires A0 ↔ A1 and A2 ↔ A3.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="9">
+          <div class="step-head"><span class="num">9</span><div><h3>The Balancer 2's big program</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Here's the whole brain. Copy your measurements (<code>ARM</code>, <code>LINK</code>) and your calibration into the top of the program, then upload it and put the ball in the middle.</p>
+            <div class="code"><div class="code-name">plate.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="c">// ===========================================================</span>
+<span class="c">//  The Balancer 2 · The Plate — the big program</span>
+<span class="c">//  The eyes: the touchscreen. The muscles: 3 servo motors.</span>
+<span class="c">// ===========================================================</span>
+<span class="k">#include</span> &lt;Servo.h&gt;
+
+<span class="c">// ----- The wiring -----</span>
+<span class="c">// The 4 touchscreen wires, in order: X+, Y+, X-, Y-</span>
+<span class="k">const</span> <span class="k">int</span> XP = A0;   <span class="c">// X+</span>
+<span class="k">const</span> <span class="k">int</span> YP = A1;   <span class="c">// Y+</span>
+<span class="k">const</span> <span class="k">int</span> XM = A2;   <span class="c">// X-</span>
+<span class="k">const</span> <span class="k">int</span> YM = A3;   <span class="c">// Y-</span>
+<span class="c">// Servo motors A, B, C (anticlockwise, seen from above)</span>
+<span class="k">const</span> <span class="k">int</span> PIN_SERVO[<span class="n">3</span>] = {<span class="n">9</span>, <span class="n">10</span>, <span class="n">11</span>};
+
+<span class="c">// ----- Your calibration (step 8) -----</span>
+<span class="k">int</span> X_MIN = <span class="n">100</span>;  <span class="k">int</span> X_MAX = <span class="n">900</span>;   <span class="c">// raw values at the two short edges of the screen</span>
+<span class="k">int</span> Y_MIN = <span class="n">150</span>;  <span class="k">int</span> Y_MAX = <span class="n">870</span>;   <span class="c">// raw values at the two long edges</span>
+<span class="k">const</span> <span class="k">float</span> WIDTH  = <span class="n">154.0</span>;           <span class="c">// size of the touch area, in mm</span>
+<span class="k">const</span> <span class="k">float</span> HEIGHT = <span class="n">86.0</span>;
+
+<span class="c">// ----- Your measurements (step 6) -----</span>
+<span class="k">float</span> ARM  = <span class="n">25.0</span>;   <span class="c">// from the servo shaft to the elbow hole, in mm</span>
+<span class="k">float</span> LINK = <span class="n">70.0</span>;   <span class="c">// from the elbow hole to the centre of the ball joint, in mm</span>
+
+<span class="c">// ----- Lili's settings -----</span>
+<span class="k">int</span>   DIRECTION = <span class="n">1</span>;            <span class="c">// set to -1 if the arms go down when they should go up</span>
+<span class="k">int</span>   DIRECTION_X = <span class="n">1</span>;          <span class="c">// set to -1 if the ball runs away along the length</span>
+<span class="k">int</span>   DIRECTION_Y = <span class="n">1</span>;          <span class="c">// set to -1 if the ball runs away along the width</span>
+<span class="k">int</span>   TRIM[<span class="n">3</span>] = {<span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>};      <span class="c">// small corrections so the plate is perfectly flat</span>
+<span class="k">float</span> Kp = <span class="n">0.12</span>;   <span class="c">// P: Push      (degrees of tilt per mm away)</span>
+<span class="k">float</span> Ki = <span class="n">0.02</span>;   <span class="c">// I: Insist</span>
+<span class="k">float</span> Kd = <span class="n">0.05</span>;   <span class="c">// D: Dampen</span>
+<span class="k">const</span> <span class="k">float</span> MAX_TILT = <span class="n">10.0</span>;    <span class="c">// the plate never tilts more than 10 degrees</span>
+<span class="k">bool</span>  CIRCLE = <span class="k">false</span>;           <span class="c">// true = the ball goes round in a circle!</span>
+
+<span class="c">// ----- The robot's geometry (don't change it, it matches the 3D parts) -----</span>
+<span class="k">const</span> <span class="k">float</span> R_SERVO = <span class="n">55.0</span>;     <span class="c">// distance from the centre to the servo shafts</span>
+<span class="k">const</span> <span class="k">float</span> R_JOINT = <span class="n">80.0</span>;     <span class="c">// distance from the centre to the ball joints under the plate</span>
+<span class="k">const</span> <span class="k">float</span> LEG_ANGLE[<span class="n">3</span>] = {<span class="n">0</span>, <span class="n">120</span>, <span class="n">240</span>};
+
+Servo servo[<span class="n">3</span>];
+<span class="k">float</span> x = <span class="n">0</span>, y = <span class="n">0</span>;             <span class="c">// where the ball is (mm, 0 = in the middle)</span>
+<span class="k">float</span> xBefore = <span class="n">0</span>, yBefore = <span class="n">0</span>;
+<span class="k">float</span> vx = <span class="n">0</span>, vy = <span class="n">0</span>;           <span class="c">// its speed (mm per second)</span>
+<span class="k">float</span> sumX = <span class="n">0</span>, sumY = <span class="n">0</span>;
+<span class="k">float</span> restHeight;               <span class="c">// height of the ball joints when the plate is flat</span>
+<span class="k">unsigned</span> <span class="k">long</span> timeBefore = <span class="n">0</span>;
+<span class="k">int</span>   missing = <span class="n">0</span>;              <span class="c">// how many turns since the screen last felt the ball</span>
+
+<span class="c">// Reads the screen. Returns true if the ball is on it, and puts its position in x and y.</span>
+<span class="k">bool</span> readBall(<span class="k">float</span> &amp;bx, <span class="k">float</span> &amp;by) {
+  <span class="c">// 1. Is anything pressing on it?</span>
+  pinMode(YP, INPUT); pinMode(XM, INPUT);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  pinMode(XP, INPUT_PULLUP);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">bool</span> pressed = (digitalRead(XP) == LOW);
+  pinMode(XP, INPUT); pinMode(YM, INPUT);
+  <span class="k">if</span> (!pressed) <span class="k">return</span> <span class="k">false</span>;
+
+  <span class="c">// 2. Measure X: current flows from X+ to X-, we listen on Y+</span>
+  pinMode(XP, OUTPUT); digitalWrite(XP, HIGH);
+  pinMode(XM, OUTPUT); digitalWrite(XM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> rawX = (analogRead(YP) + analogRead(YP)) / <span class="n">2</span>;
+  pinMode(XP, INPUT); pinMode(XM, INPUT);
+
+  <span class="c">// 3. Measure Y: current flows from Y+ to Y-, we listen on X-</span>
+  pinMode(YP, OUTPUT); digitalWrite(YP, HIGH);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> rawY = (analogRead(XM) + analogRead(XM)) / <span class="n">2</span>;
+  pinMode(YP, INPUT); pinMode(YM, INPUT);
+
+  <span class="c">// 4. Turn the raw values into millimetres</span>
+  bx = (rawX - X_MIN) * WIDTH / (X_MAX - X_MIN) - WIDTH / <span class="n">2</span>;
+  by = (rawY - Y_MIN) * HEIGHT / (Y_MAX - Y_MIN) - HEIGHT / <span class="n">2</span>;
+  <span class="k">return</span> <span class="k">true</span>;
+}
+
+<span class="c">// Height of a ball joint -&gt; angle of the arm (the triangle trick: arm, link, and the distance between them).</span>
+<span class="k">float</span> armAngle(<span class="k">float</span> height) {
+  <span class="k">float</span> dx = R_JOINT - R_SERVO;                  <span class="c">// horizontal gap between shaft and ball joint</span>
+  <span class="k">float</span> d  = sqrt(dx * dx + height * height);    <span class="c">// distance shaft -&gt; ball joint</span>
+  <span class="k">float</span> c  = (ARM * ARM + d * d - LINK * LINK) / (<span class="n">2</span> * ARM * d);
+  c = constrain(c, <span class="n">-1.0</span>, <span class="n">1.0</span>);
+  <span class="k">return</span> degrees(atan2(height, dx) - acos(c));   <span class="c">// 0 = arm horizontal</span>
+}
+
+<span class="c">// Tilts the plate: tiltX and tiltY in degrees.</span>
+<span class="k">void</span> tilt(<span class="k">float</span> tiltX, <span class="k">float</span> tiltY) {
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) {
+    <span class="k">float</span> a  = radians(LEG_ANGLE[i]);
+    <span class="k">float</span> rx = R_JOINT * cos(a);
+    <span class="k">float</span> ry = R_JOINT * sin(a);
+    <span class="c">// how far this ball joint must go up or down</span>
+    <span class="k">float</span> dz = rx * tan(radians(tiltX)) + ry * tan(radians(tiltY));
+    <span class="k">float</span> angle = armAngle(restHeight + dz);
+    servo[i].writeMicroseconds(<span class="n">1500</span> + DIRECTION * angle * <span class="n">11.1</span> + TRIM[i]);
+  }
+}
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">115200</span>);
+  <span class="k">float</span> dx = R_JOINT - R_SERVO - ARM;
+  restHeight = sqrt(LINK * LINK - dx * dx);
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].attach(PIN_SERVO[i]);
+  tilt(<span class="n">0</span>, <span class="n">0</span>);                    <span class="c">// start nice and flat</span>
+  delay(<span class="n">1000</span>);
+  timeBefore = millis();
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">unsigned</span> <span class="k">long</span> now = millis();
+  <span class="k">if</span> (now - timeBefore &lt; <span class="n">20</span>) <span class="k">return</span>;            <span class="c">// 50 times a second</span>
+  <span class="k">float</span> dt = (now - timeBefore) / <span class="n">1000.0</span>;
+  timeBefore = now;
+
+  <span class="c">// 1. The eyes look</span>
+  <span class="k">float</span> nx, ny;
+  <span class="k">if</span> (!readBall(nx, ny)) {
+    missing++;
+    <span class="k">if</span> (missing &gt; <span class="n">10</span>) {                          <span class="c">// no more ball: go back to flat</span>
+      tilt(<span class="n">0</span>, <span class="n">0</span>);
+      sumX = sumY = <span class="n">0</span>; vx = vy = <span class="n">0</span>;
+    }
+    <span class="k">return</span>;
+  }
+  <span class="k">if</span> (missing &gt; <span class="n">10</span>) { x = xBefore = nx; y = yBefore = ny; }  <span class="c">// the ball is back: start again from zero</span>
+  missing = <span class="n">0</span>;
+  x = <span class="n">0.6</span> * x + <span class="n">0.4</span> * nx;                        <span class="c">// smooth out jumpy readings</span>
+  y = <span class="n">0.6</span> * y + <span class="n">0.4</span> * ny;
+
+  <span class="c">// 2. The brain calculates</span>
+  <span class="k">float</span> targetX = <span class="n">0</span>, targetY = <span class="n">0</span>;
+  <span class="k">if</span> (CIRCLE) {                                  <span class="c">// the target goes round the plate</span>
+    <span class="k">float</span> t = now / <span class="n">1000.0</span>;
+    targetX = <span class="n">35</span> * cos(t * <span class="n">1.5</span>);
+    targetY = <span class="n">20</span> * sin(t * <span class="n">1.5</span>);
+  }
+  vx = <span class="n">0.7</span> * vx + <span class="n">0.3</span> * (x - xBefore) / dt;
+  vy = <span class="n">0.7</span> * vy + <span class="n">0.3</span> * (y - yBefore) / dt;
+  xBefore = x; yBefore = y;
+  <span class="k">float</span> ex = x - targetX, ey = y - targetY;
+  sumX = constrain(sumX + ex * dt, <span class="n">-100</span>, <span class="n">100</span>);
+  sumY = constrain(sumY + ey * dt, <span class="n">-100</span>, <span class="n">100</span>);
+
+  <span class="k">float</span> tiltX = DIRECTION_X * (Kp * ex + Ki * sumX + Kd * vx);
+  <span class="k">float</span> tiltY = DIRECTION_Y * (Kp * ey + Ki * sumY + Kd * vy);
+  tiltX = constrain(tiltX, -MAX_TILT, MAX_TILT);
+  tiltY = constrain(tiltY, -MAX_TILT, MAX_TILT);
+
+  <span class="c">// 3. The muscles move</span>
+  tilt(tiltX, tiltY);
+
+  <span class="c">// For the Serial Plotter: the ball and the target</span>
+  Serial.print(x); Serial.print(<span class="n">" "</span>); Serial.print(y); Serial.print(<span class="n">" "</span>);
+  Serial.print(targetX); Serial.print(<span class="n">" "</span>); Serial.println(targetY);
+}</code></pre></div>
+            <ol>
+              <li>With no ball, the plate should stay flat. If it leans, correct it with <code>TRIM</code>: a few tens (for example 20 or −20) for the motor of the corner that's too high or too low.</li>
+              <li>Press gently with your finger near corner A: corner A should <strong>go up</strong>, to send the ball back to the middle. If it goes down, set <code>DIRECTION_X = -1</code>.</li>
+              <li>Do the same near corner B to check <code>DIRECTION_Y</code>.</li>
+            </ol>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">The ball runs away?</span><p>That's normal the first few times! One setting at a time: first the <code>DIRECTION</code> values, then the PID numbers in the next step.</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="10">
+          <div class="step-head"><span class="num">10</span><div><h3>Tuning, like a real engineer</h3><small>As long as it takes!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>Open <strong>Tools → Serial Plotter</strong>: you see four lines, the ball's X and Y position, and the target. Change <strong>one number at a time</strong>, upload, watch.</p>
+            <div class="tune">
+              <div><b>1. Just P</b><p>Set Ki = 0 and Kd = 0. Raise Kp until the ball circles around the middle without falling off.</p></div>
+              <div><b>2. Add D</b><p>Raise Kd little by little (0.02, 0.04…). The ball calms down. Too much D? The motors shake.</p></div>
+              <div><b>3. A pinch of I</b><p>If the ball always stops a little away from the middle, raise Ki very gently.</p></div>
+            </div>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">The big challenge</span><p>Once your ball holds steady in the middle, set <code>CIRCLE = true</code> and upload. The target starts going round… and the ball follows it all around the plate!</p></div></div>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">The Arduino keeps restarting?</span><p>The motors are asking for too much energy at once. Check the capacitor and the magic wire, and use a 4 A supply if yours is 3 A.</p></div></div>
+          </div><img class="pose" src="../assets/lili-reflexion.webp" alt=""></div>
+        </article>
+
+      </div>
+
+      <div class="finale">
+        <img src="../assets/lili-mission.webp" alt="Lili raising her arms, mission accomplished">
+        <div>
+          <span class="eyebrow">Mission accomplished</span>
+          <h2>Your plate holds the ball!</h2>
+          <p>You've built a parallel robot with two control loops at once. It's the same idea as the platforms that steady cameras, and as flight simulators.</p>
+          <ul>
+            <li><strong>Challenge 1:</strong> put the target in a corner (for example <code>targetX = 40</code>). Does the ball go there by itself?</li>
+            <li><strong>Challenge 2:</strong> with <code>CIRCLE = true</code>, make the circle bigger, or faster. How far can you go?</li>
+            <li><strong>Challenge 3:</strong> change the program so the target draws a square, or a figure of eight!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Lili's Workshop · Build tomorrow's robots today!</div></footer>
+<div class="toast" id="toast" role="status"><img src="../assets/lili-contente.webp" alt=""><span id="toastTxt">Well done!</span></div>
+
+<script>
+(function(){
+  const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* Robot menu */
+  const pb=document.getElementById("pickerBtn"),pm=document.getElementById("pickerMenu");
+  pb.addEventListener("click",e=>{e.stopPropagation();const o=pm.hidden;pm.hidden=!o;pb.setAttribute("aria-expanded",String(o));});
+  document.addEventListener("click",e=>{if(!pm.contains(e.target)){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  pm.querySelector(".is-current").addEventListener("click",()=>{pm.hidden=true;pb.setAttribute("aria-expanded","false");});
+
+  /* Video */
+  const v=document.getElementById("heroVideo"),vt=document.getElementById("vidToggle");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.pause();v.removeAttribute("autoplay");vt.textContent="▶ Play";}
+  vt.addEventListener("click",()=>{if(v.paused){v.play();vt.textContent="❚❚ Pause";}else{v.pause();vt.textContent="▶ Play";}});
+
+  /* Toast */
+  const toast=document.getElementById("toast"),tt=document.getElementById("toastTxt");let tid;
+  function say(msg){tt.textContent=msg;toast.classList.add("show");clearTimeout(tid);tid=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+  const shop=store.get("lili-r2p-shop")||{};
+  const boxes=[...document.querySelectorAll(".items input")];
+  function shopUpd(){const n=boxes.filter(b=>b.checked).length;document.getElementById("shopCount").textContent=n+" / "+boxes.length+" found";document.getElementById("shopBar").style.width=(100*n/boxes.length)+"%";return n;}
+  boxes.forEach(b=>{b.checked=!!shop[b.dataset.k];b.addEventListener("change",()=>{shop[b.dataset.k]=b.checked;store.set("lili-r2p-shop",shop);if(shopUpd()===boxes.length)say("Everything's here! Let's build!");});});
+  shopUpd();
+
+  /* Steps */
+  const done=store.get("lili-r2p-steps")||{};
+  const steps=[...document.querySelectorAll(".step")];
+  const cheers=["Well done!","Great work!","Keep it up!","You're a real engineer!","Another one done!"];
+  function stepUpd(){const n=steps.filter(s=>s.classList.contains("is-done")).length;document.getElementById("stepCount").textContent=n+" / "+steps.length+" steps";document.getElementById("stepBar").style.width=(100*n/steps.length)+"%";return n;}
+  steps.forEach(s=>{const k=s.dataset.step,btn=s.querySelector(".done-btn");
+    const set=on=>{s.classList.toggle("is-done",on);btn.textContent=on?"✓ Done":"Done!";btn.setAttribute("aria-pressed",String(on));};
+    set(!!done[k]);
+    btn.addEventListener("click",()=>{const on=!s.classList.contains("is-done");set(on);done[k]=on;store.set("lili-r2p-steps",done);const n=stepUpd();if(on)say(n===steps.length?"Mission accomplished!":cheers[n%cheers.length]);});
+  });
+  stepUpd();
+
+  /* Copy code */
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+    const pre=b.parentElement.querySelector("pre");const txt=pre.innerText;
+    const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500);};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{selectEl(pre);b.textContent="Ctrl+C";});}catch(e){selectEl(pre);b.textContent="Ctrl+C";}
+  }));
+  function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  /* Active menu */
+  const links=[...document.querySelectorAll(".navlinks a")];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["comprendre","courses","montage"].forEach(id=>io.observe(document.getElementById(id)));
+
+})();
+</script>
+<script src="../assets/plateau.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Robot 2 de l'atelier de Lili : une bille en acier en équilibre sur un plateau tactile, penché par trois servomoteurs.">
+<link rel="icon" href="assets/lili-avatar.webp" type="image/webp">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>L'Équilibriste 2 · L'atelier de Lili</title>
+<link rel="alternate" hreflang="en" href="en/plateau.html">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/atelier.css?v=2">
+
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/lili-avatar.webp" alt="">L'atelier de Lili</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">Robot 2 · L'Équilibriste 2<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt" href="index.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 1 · L'Équilibriste 1</b><small>Une balle de ping-pong en équilibre sur un rail</small></span>
+        </a>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>Robot 2 · L'Équilibriste 2</b><small>Une bille sur un plateau, 3 moteurs · niveau expert</small></span>
+        </a>
+        <a class="robot-opt" href="enseigne.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>Robot 3 · L'Enseigne lumineuse</b><small>Ton prénom en lettres imprimées en 3D qui s'allument</small></span>
+        </a>
+        <a class="robot-opt" href="rouleur.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg></span>
+          <span><b>Robot 4 · Le Rouleur</b><small>Il roule et contourne les obstacles tout seul</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Robot 5 · Mystère</b><small>Se débloque après la mission 4</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapitres">
+      <a href="#comprendre">Comment ça marche</a>
+      <a href="#courses">Les courses</a>
+      <a href="#montage">Le montage</a>
+    </nav>
+    <nav class="lang" aria-label="Langue"><a href="plateau.html" lang="fr" hreflang="fr" title="Français" aria-label="Français" aria-current="true"><svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg></a><a href="en/plateau.html" lang="en" hreflang="en" title="English" aria-label="English"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="ukT"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#FFFFFF" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#ukT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#FFFFFF" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg></a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="assets/banner.mp4?v=2" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot n°2 · Mission plateau · Niveau expert</span>
+        <h1>L'Équilibriste 2</h1>
+        <p class="lead">Le grand frère de l'Équilibriste : une bille en acier en équilibre sur un plateau qui penche dans toutes les directions, grâce à trois moteurs qui travaillent en équipe.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#comprendre">On commence !</a>
+          <a class="btn btn-ghost" href="#courses">La liste de courses</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><span>Difficulté</span><b class="stars">★★★★</b></div>
+      <div><span>Durée</span><b>5 après-midis + l'impression</b></div>
+      <div><span>Budget</span><b>≈ 80 €</b></div>
+      <div><span>Tu vas apprendre</span><b>2 PID, 3 moteurs, géométrie</b></div>
+    </div>
+  </div>
+
+  <!-- ===================== COMPRENDRE ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>Comment ça marche ?</h2><p>Le même principe que l'Équilibriste 1… mais dans toutes les directions !</p></div>
+      </div>
+
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Niveau expert</span><p>Ce robot est le plus difficile de l'atelier. Construis d'abord <strong>l'Équilibriste 1</strong> : tu y découvres le PID avec une seule direction. Ici, on fait pareil, mais deux fois en même temps !</p></div></div>
+
+      <div class="lili"><img src="assets/lili-coucou.webp" alt="Lili fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Tu te souviens de l'Équilibriste ? La balle ne pouvait rouler que vers la gauche ou vers la droite. Ici, la bille peut partir <strong>dans toutes les directions</strong> ! Le plateau doit donc pencher en avant, en arrière, à gauche, à droite… tout ça en même temps. Pour y arriver, il faut <strong>trois moteurs qui travaillent en équipe</strong>.</p></div></div>
+
+      <!-- À quoi doit-il ressembler ? -->
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton Équilibriste 2 une fois terminé, vu de trois quarts. Garde cette image sous les yeux pendant le montage : chaque numéro te montre où va une pièce.</p></div>
+        <a class="look-pic" href="assets/look-plateau.svg" target="_blank" rel="noopener" title="Ouvrir l'image en grand"><img src="assets/look-plateau.svg" alt="L'Équilibriste 2 terminé : socle rond avec trois servomoteurs, bras, biellettes et rotules qui portent un écran tactile, avec une bille en acier dessus, et l'Arduino à côté" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Touche l'image pour l'agrandir.</p>
+        <ol class="look-key">
+          <li><span><b>L'écran tactile</b>Les yeux. Collé sur le support imprimé, il sent où appuie la bille.</span></li>
+          <li><span><b>La bille en acier</b>30 mm de diamètre. Assez lourde pour que l'écran la sente.</span></li>
+          <li><span><b>Les 3 servomoteurs</b>Les muscles. Un dans chaque mur du socle, l'axe tourné vers l'avant.</span></li>
+          <li><span><b>Les bras en aluminium</b>Serrés sur l'axe des moteurs, à l'horizontale quand le plateau est à plat.</span></li>
+          <li><span><b>Les biellettes</b>Les petites jambes imprimées. En bas, un coude qui pivote sur le bras.</span></li>
+          <li><span><b>Les rotules</b>En haut des biellettes. Elles tournent dans tous les sens, comme ton épaule.</span></li>
+          <li><span><b>Le socle</b>Imprimé en 3D, avec ses trois murs à 120° l'un de l'autre.</span></li>
+          <li><span><b>Le support du plateau</b>Imprimé en 3D. Les rotules se vissent dessous, l'écran se colle dessus.</span></li>
+          <li><span><b>L'Arduino et la plaque d'essai</b>Le cerveau, posé à côté du robot et branché en USB.</span></li>
+          <li><span><b>L'alimentation 5 V</b>Elle donne l'énergie aux trois moteurs, par la plaque d'essai.</span></li>
+        </ol>
+      </figure>
+
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="5" y="12" width="38" height="24" rx="3"/><circle cx="20" cy="24" r="5"/><path d="M30 20l6 8"/></svg>
+          <span class="role">Les yeux</span><h3>L'écran tactile</h3>
+          <p>Deux feuilles qui conduisent l'électricité, l'une sur l'autre. Là où la bille appuie, elles se touchent : l'Arduino mesure où, de gauche à droite et de haut en bas.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="10" y="10" width="28" height="28" rx="4"/><path d="M18 4v6M30 4v6M18 38v6M30 38v6M4 18h6M4 30h6M38 18h6M38 30h6"/></svg>
+          <span class="role">Le cerveau</span><h3>L'Arduino</h3>
+          <p>Le même que pour l'Équilibriste 1 ! Mais il fait maintenant deux PID : un pour la longueur du plateau, un pour la largeur.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M24 4v8M24 36v8M4 24h8M36 24h8M10 10l6 6M32 32l6 6M38 10l-6 6M16 32l-6 6"/></svg>
+          <span class="role">Les muscles</span><h3>Les 3 servomoteurs</h3>
+          <p>Des MG996R, bien plus costauds que celui de l'Équilibriste 1. Chacun soulève ou abaisse un coin du plateau.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M8 40h12l6-14"/><circle cx="26" cy="26" r="3"/><path d="M26 26l8-18"/><circle cx="34" cy="8" r="4"/></svg>
+          <span class="role">Les jambes</span><h3>Bras, biellettes et rotules</h3>
+          <p>Chaque moteur tourne un bras. Le bras pousse une biellette, et la biellette pousse le plateau par une rotule.</p>
+        </div>
+      </div>
+      <p class="loop-line">L'écran sent la bille → le cerveau calcule 2 PID → les 3 moteurs penchent le plateau… et on recommence 50 fois par seconde !</p>
+
+      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Lili explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment trois moteurs font-ils pencher un plateau ? Le cerveau décide d'abord <strong>de combien pencher</strong>, en long et en large. Puis il calcule pour chaque coin <strong>de combien il doit monter ou descendre</strong>. Enfin, avec un triangle (le bras, la biellette, et la distance entre les deux), il trouve <strong>l'angle de chaque bras</strong>. C'est de la géométrie : les calculs sont déjà écrits dans le programme !</p></div></div>
+
+      <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une bille en acier ?</span><p>L'écran tactile sent les appuis. La balle de ping-pong pèse à peine 3 grammes : il ne la sentirait même pas ! Une bille en acier de 30 mm pèse plus de 100 grammes, et là, il la sent très bien.</p></div></div>
+
+      <!-- Simulateur -->
+      <div class="sim">
+        <canvas id="simCanvas" width="640" height="320" aria-label="Simulation du plateau vu de dessus"></canvas>
+        <div class="sim-ctrl">
+          <h3>Joue avec les deux cerveaux</h3>
+          <div class="slider">
+            <label for="kp">Kp · Pousse <output id="kpOut">0.08</output></label>
+            <input type="range" id="kp" min="0" max="0.3" step="0.01" value="0.08">
+            <small>Degrés de pente pour chaque millimètre d'écart.</small>
+          </div>
+          <div class="slider">
+            <label for="kd">Kd · Doucement <output id="kdOut">0.010</output></label>
+            <input type="range" id="kd" min="0" max="0.12" step="0.005" value="0.01">
+            <small>Le frein qui empêche la bille de tourner en rond.</small>
+          </div>
+          <div class="row">
+            <button class="btn btn-green" id="simDrop" type="button">Lâcher la bille</button>
+            <button class="btn btn-soft" id="simPush" type="button">Pichenette !</button>
+            <button class="btn btn-soft" id="simCircle" type="button" aria-pressed="false">Tourner en rond</button>
+          </div>
+          <p class="sim-msg" id="simMsg">Avec si peu de D, la bille tourne sans jamais se calmer. Monte Kd petit à petit… Et essaie Kd = 0 pour voir !</p>
+          <small>Ce sont les mêmes chiffres que dans le grand programme. Les ronds A, B et C montrent si chaque coin monte (vert) ou descend (orange). Clique sur le plateau pour poser la bille.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COURSES ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+      </div>
+      <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
+      <div class="shop">
+        <div class="shop-group">
+          <h3><span class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>L'électronique</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="uno"><span><b>Carte Arduino Uno R3</b><small>Celle de l'Équilibriste 1 ! Tu peux la réutiliser, avec son câble USB.</small></span><span class="qty"><span>×1 · déjà là</span><span class="store">Robot 1</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="servos"><span><b>3 servomoteurs MG996R</b><small>Les muscles. Ils doivent soulever tout le plateau, alors on prend des costauds.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> MG996R à pignons métal, axe à 25 dents (25T)</span></span></span><span class="qty"><span>×3 · ≈ 20–30 €</span><a class="buy" href="https://www.amazon.fr/s?k=servomoteur+MG996R+lot" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="palonniers"><span><b>3 palonniers en aluminium 25T</b><small>Les bras des moteurs. Ils se serrent sur l'axe avec une petite vis.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> 25T (25 dents), bras simple avec des trous pour vis M3</span></span></span><span class="qty"><span>×3 · ≈ 8–12 €</span><a class="buy" href="https://www.amazon.fr/s?k=palonnier+aluminium+25T+servo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="ecran"><span><b>Écran tactile résistif 7 pouces, 4 fils</b><small>Les yeux. Juste la plaque tactile, sans écran pour afficher des images.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> résistif 4 fils, environ 165 × 100 mm, avec sa petite carte adaptateur à 4 broches</span></span></span><span class="qty"><span>×1 · ≈ 15–20 €</span><a class="buy" href="https://www.amazon.fr/s?k=écran+tactile+résistif+7+pouces+4+fils" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="alim"><span><b>Alimentation 5 V 3 A + adaptateur jack-bornier</b><small>Celle de l'Enseigne lumineuse, si tu l'as déjà. Les trois moteurs ont besoin de bien plus d'énergie que ce que donne le câble USB.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> 5 V, au moins 3 A (4 A, c'est encore mieux)</span></span></span><span class="qty"><span>×1 · ≈ 10 €</span><a class="buy" href="https://www.amazon.fr/s?k=alimentation+5V+4A+jack+adaptateur+bornier" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="condo"><span><b>Condensateur 1000 µF</b><small>Un petit réservoir d'énergie : il aide quand les trois moteurs démarrent en même temps.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> 1000 µF, 16 V ou plus</span></span></span><span class="qty"><span>×1 · ≈ 1 €</span><a class="buy" href="https://www.amazon.fr/s?k=condensateur+1000uF+16V" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="plaque"><span><b>Plaque d'essai et fils de connexion</b><small>Ceux de l'Équilibriste 1. Il te faut aussi quelques fils mâle-femelle pour l'écran.</small></span><span class="qty"><span>lot · déjà là</span><span class="store">Robot 1</span></span></label></li>
+          </ul>
+        </div>
+        <div class="shop-group">
+          <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>La mécanique</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="pla"><span><b>Filament PLA</b><small>Environ 150 g pour les trois fichiers à imprimer. La couleur que tu veux !</small></span><span class="qty"><span>≈ 150 g · ≈ 4 €</span><span class="store">Imprimante 3D</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="rotules"><span><b>Rotules M3 (boule + embout)</b><small>Les articulations en haut des biellettes. On en trouve pour les voitures télécommandées.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> rotules M3 avec boule à visser (filetage M3)</span></span></span><span class="qty"><span>×3 · ≈ 8 € le lot</span><a class="buy" href="https://www.amazon.fr/s?k=rotule+M3+boule+modélisme" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="vis"><span><b>Assortiment de vis et écrous M3</b><small>Il te faut : 12 vis M3 × 12 mm (moteurs), 3 vis M3 × 16 mm (coudes), 3 vis M3 × 10 mm (rotules), 15 écrous M3, 3 écrous freins et 6 rondelles.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> vis et écrous M3, avec des écrous freins (« nylstop »)</span></span></span><span class="qty"><span>lot · ≈ 10 €</span><a class="buy" href="https://www.amazon.fr/s?k=assortiment+vis+écrous+M3+nylstop" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="bille"><span><b>Bille en acier Ø 30 mm</b><small>Assez lourde pour que l'écran la sente. Elle remplace la balle de ping-pong.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> acier plein, 30 mm (de 25 à 35 mm, ça marche aussi)</span></span></span><span class="qty"><span>×1 · ≈ 5 €</span><a class="buy" href="https://www.amazon.fr/s?k=bille+acier+30mm" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="scotch"><span><b>Scotch double face fort</b><small>Pour coller l'écran tactile sur son support. Tu en as peut-être déjà.</small></span><span class="qty"><span>lot</span><span class="store">Maison</span></span></label></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le multimètre et le branchement de l'alimentation, on les fait <strong>avec papa</strong>. Et on ne met jamais les doigts sous le plateau quand les moteurs sont allumés : ils sont costauds !</p></div></div>
+      <p class="total">Outils à préparer : imprimante 3D, tournevis cruciforme, petite clé ou pince plate pour les écrous, règle, multimètre, et un ordinateur avec <strong>Arduino IDE</strong>. Le budget compte l'Arduino et la plaque d'essai déjà achetés pour l'Équilibriste 1. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
+    </div>
+  </section>
+
+  <!-- ===================== MONTAGE ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Le montage, étape par étape</h2><p>Une étape à la fois. Clique sur « C'est fait ! » quand tu as terminé.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0</span><div class="bar"><i id="stepBar"></i></div></div>
+
+      <div class="steps">
+
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Imprime les pièces</h3><small>6 à 8 heures d'impression · l'imprimante travaille seule</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p><a class="btn btn-lime" href="assets/plateau/equilibriste2-fichiers.zip" download>Télécharger les pièces et les programmes</a></p>
+            <ol>
+              <li>Ouvre le fichier ZIP. Dedans : trois pièces à imprimer (<code>.stl</code>) et les trois programmes (<code>.ino</code>).</li>
+              <li>Imprime <code>biellettes-x3.stl</code> en premier : c'est petit et rapide. Glisse un écrou M3 dans la fente du bout pour vérifier qu'il rentre.</li>
+              <li>Puis <code>support-plateau.stl</code> et <code>socle.stl</code>, posés à plat, sans supports. Le socle fait 17,6 cm de large : il tient sur un plateau d'imprimante de 18 cm.</li>
+              <li>Réglages conseillés : couches de 0,2 mm, 3 contours, remplissage 25 %.</li>
+            </ol>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Pendant que l'imprimante travaille, joue avec le simulateur plus haut. Quand tu sauras régler Kp et Kd à l'écran, le vrai robot sera beaucoup plus facile !</p></div></div>
+          </div><img class="pose" src="assets/lili-coucou.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>Prépare les biellettes</h3><small>15 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>3 biellettes</span><span>3 écrous M3</span><span>3 boules de rotule</span></div>
+            <ol>
+              <li>Glisse un écrou M3 dans la fente au bout de chaque biellette, bien à plat.</li>
+              <li>Visse une boule de rotule dans le petit trou du bout : son filetage traverse l'écrou. Serre à la main, sans forcer.</li>
+              <li>L'autre bout de la biellette, avec le gros trou rond, sera le coude.</li>
+            </ol>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Ça coince ?</span><p>Si l'écrou ne rentre pas, le trou est un peu petit sur ton imprimante. Pose l'écrou sur la fente et appuie avec le fer à souder de papa, ou passe une petite lime.</p></div></div>
+          </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>Les moteurs dans le socle</h3><small>30 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Socle</span><span>3 servos MG996R</span><span>12 vis M3 × 12 + écrous</span><span>Tournevis</span></div>
+            <ol>
+              <li>Glisse chaque servo dans la fenêtre d'un mur, depuis l'avant : <strong>l'axe en haut</strong>, tourné vers l'extérieur du mur.</li>
+              <li>Les trois servos doivent être montés <strong>exactement de la même façon</strong>. Tourne le socle : chaque mur doit avoir l'air identique.</li>
+              <li>Fixe chaque servo avec 4 vis M3 et leurs écrous derrière le mur.</li>
+              <li>Colle une étiquette sur chaque servo : <strong>A</strong>, <strong>B</strong> et <strong>C</strong>, dans le sens inverse des aiguilles d'une montre quand tu regardes d'en haut.</li>
+            </ol>
+            <div class="lili ask"><img src="assets/lili-reflexion.webp" alt=""><div class="bubble"><span class="tag">À ton avis ?</span><p>Pourquoi trois moteurs, et pas deux ou quatre ? Indice : un tabouret à trois pieds ne boite jamais, même sur un sol pas plat.</p></div></div>
+          </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>Les branchements</h3><small>30 minutes · alimentation débranchée !</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p>Les moteurs prennent leur énergie dans l'alimentation 5 V, pas dans l'Arduino. Les deux longues lignes du bord de la plaque d'essai sont les <strong>routes de l'énergie</strong> : le <strong>+</strong> et le <strong>−</strong>.</p>
+            <div class="wiring"><table>
+              <thead><tr><th>Pièce</th><th>Fil</th><th>Va sur…</th></tr></thead>
+              <tbody>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#F29A1F"></span>orange</td><td>pins 9, 10 et 11 de l'Arduino</td></tr>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#E04A3A"></span>rouge</td><td>ligne + de la plaque</td></tr>
+                <tr><td>Servo A, B, C</td><td><span class="wire" style="background:#6B3E26"></span>marron</td><td>ligne − de la plaque</td></tr>
+                <tr><td>Alimentation 5 V</td><td>+ / −</td><td>lignes + et − de la plaque</td></tr>
+                <tr><td>Condensateur</td><td>bande blanche</td><td>ligne − (l'autre patte sur la ligne +)</td></tr>
+                <tr><td>Arduino</td><td>GND</td><td>ligne − de la plaque</td></tr>
+                <tr><td>Écran tactile</td><td>fils 1, 2, 3, 4 de l'adaptateur</td><td>A0, A1, A2, A3</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Le fil magique</span><p>Le fil entre le GND de l'Arduino et la ligne − est le plus oublié… et sans lui, les moteurs ne comprennent pas les ordres ! Tout le monde doit partager le même −.</p></div></div>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Quel fil est X, quel fil est Y ?</span><p>Avec papa, mets le multimètre sur Ω. Entre les fils 1 et 3, il doit trouver quelques centaines d'ohms, et pareil entre 2 et 4. S'il trouve plutôt quelque chose entre 1 et 2, échange les fils 2 et 3 sur l'Arduino.</p></div></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout <strong>alimentation débranchée</strong>. Le condensateur a un sens : la bande blanche va toujours sur le −. Fais tout vérifier par papa avant de rebrancher.</p></div></div>
+          </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>Les bras au milieu</h3><small>20 minutes · sur l'ordinateur</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Branche l'alimentation 5 V, puis l'Arduino en USB. Téléverse ce programme :</li>
+            </ol>
+            <div class="code"><div class="code-name">test_moteurs.ino</div><button class="copy" type="button">Copier</button><pre><code><span class="c">// Test des trois muscles du plateau</span>
+<span class="k">#include</span> &lt;Servo.h&gt;
+
+<span class="k">const</span> <span class="k">int</span> PIN_SERVO[<span class="n">3</span>] = {<span class="n">9</span>, <span class="n">10</span>, <span class="n">11</span>};   <span class="c">// servos A, B, C</span>
+<span class="k">bool</span> JUSTE_CENTRER = <span class="k">true</span>;   <span class="c">// true = les bras se mettent au milieu et ne bougent plus</span>
+
+Servo servo[<span class="n">3</span>];
+
+<span class="k">void</span> bouger(<span class="k">int</span> angle) {               <span class="c">// angle : 0 = milieu, + = un sens, - = l'autre</span>
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].writeMicroseconds(<span class="n">1500</span> + angle * <span class="n">11.1</span>);
+}
+
+<span class="k">void</span> setup() {
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].attach(PIN_SERVO[i]);
+  bouger(<span class="n">0</span>);                           <span class="c">// 1500 microsecondes = le milieu</span>
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">if</span> (JUSTE_CENTRER) <span class="k">return</span>;           <span class="c">// on ne bouge plus</span>
+  bouger(<span class="n">20</span>);   delay(<span class="n">1500</span>);           <span class="c">// les trois bras d'un côté…</span>
+  bouger(<span class="n">0</span>);    delay(<span class="n">1500</span>);
+  bouger(<span class="n">-20</span>);  delay(<span class="n">1500</span>);           <span class="c">// …puis de l'autre</span>
+  bouger(<span class="n">0</span>);    delay(<span class="n">1500</span>);
+}</code></pre></div>
+            <ol start="2">
+              <li>Les trois moteurs bougent un peu puis s'arrêtent : ils sont <strong>pile au milieu</strong>.</li>
+              <li>Enfonce un bras en aluminium sur chaque axe, <strong>bien à l'horizontale</strong> et tourné <strong>vers l'extérieur</strong> du socle. Serre sa petite vis.</li>
+              <li>Change <code>JUSTE_CENTRER</code> en <code>false</code> et téléverse. Regarde le premier mouvement : les trois bras doivent <strong>monter</strong> ensemble.</li>
+            </ol>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Ils descendent ?</span><p>Pas grave ! Note-le : dans le grand programme, tu mettras <code>SENS = -1</code>. Les trois moteurs étant montés pareil, ils font toujours tous la même chose.</p></div></div>
+          </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>Les jambes</h3><small>25 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>3 biellettes</span><span>3 vis M3 × 16</span><span>3 écrous freins</span><span>6 rondelles</span><span>Règle</span></div>
+            <ol>
+              <li>Choisis le trou du bras en aluminium qui est à environ <strong>25 mm</strong> de l'axe. Mesure la distance exacte, du centre de l'axe au centre du trou, et note-la : c'est <code>BRAS</code>.</li>
+              <li>Fixe le coude : vis M3 × 16 à travers le bras et le gros trou de la biellette, une rondelle de chaque côté, puis l'écrou frein. La biellette va du côté extérieur, rotule en haut.</li>
+              <li>Serre juste assez pour que rien ne bouge de travers, mais que la biellette <strong>pivote librement</strong>.</li>
+              <li>Mesure du centre du coude au centre de la boule : vise <strong>70 mm</strong>. Visse ou dévisse la boule pour que les trois biellettes aient exactement la même longueur. Note-la : c'est <code>BIELLETTE</code>.</li>
+            </ol>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Attention</span><p>Si un coude est trop serré, le moteur force et chauffe. Si tu sens qu'il accroche, desserre l'écrou d'un petit quart de tour.</p></div></div>
+          </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="7">
+          <div class="step-head"><span class="num">7</span><div><h3>Le plateau</h3><small>30 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <div class="need"><span>Support du plateau</span><span>3 embouts de rotule</span><span>3 vis M3 × 10</span><span>Écran tactile</span><span>Scotch double face</span></div>
+            <ol>
+              <li><strong>D'abord les rotules :</strong> passe une vis M3 × 10 dans chaque fente du support, depuis le dessus (la tête se cache dans le creux), et visse un embout de rotule dessous.</li>
+              <li><strong>Ensuite l'écran :</strong> colle-le sur le support avec le scotch double face, bien au centre. Son grand côté doit être dans la direction du servo A, et sa nappe de fils doit sortir vers l'Arduino.</li>
+              <li>Pose le plateau sur les trois biellettes et appuie fort sur chaque rotule : <strong>clic !</strong> Les embouts s'emboîtent sur les boules.</li>
+              <li>Regarde de côté : chaque biellette doit être bien droite. Si une penche, desserre sa vis et fais glisser la rotule dans la fente.</li>
+            </ol>
+            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Le savais-tu ?</span><p>Ce mécanisme à trois jambes s'appelle un <strong>robot parallèle</strong>. On en trouve dans les simulateurs de vol, dans les robots qui trient des gâteaux à toute vitesse, et même dans certaines imprimantes 3D !</p></div></div>
+          </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="8">
+          <div class="step-head"><span class="num">8</span><div><h3>La calibration de l'écran</h3><small>20 minutes · sur l'ordinateur</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Téléverse ce programme, puis ouvre <strong>Outils → Moniteur série</strong> et choisis <strong>115200 bauds</strong>.</li>
+            </ol>
+            <div class="code"><div class="code-name">test_ecran.ino</div><button class="copy" type="button">Copier</button><pre><code><span class="c">// Test des yeux du plateau : l'écran tactile</span>
+<span class="c">// Les 4 fils de l'écran tactile, dans l'ordre : X+, Y+, X-, Y-</span>
+<span class="k">const</span> <span class="k">int</span> XP = A0;   <span class="c">// X+</span>
+<span class="k">const</span> <span class="k">int</span> YP = A1;   <span class="c">// Y+</span>
+<span class="k">const</span> <span class="k">int</span> XM = A2;   <span class="c">// X-</span>
+<span class="k">const</span> <span class="k">int</span> YM = A3;   <span class="c">// Y-</span>
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">115200</span>);
+}
+
+<span class="k">void</span> loop() {
+  <span class="c">// Est-ce que quelque chose appuie ?</span>
+  pinMode(YP, INPUT); pinMode(XM, INPUT);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  pinMode(XP, INPUT_PULLUP);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">bool</span> appui = (digitalRead(XP) == LOW);
+  pinMode(XP, INPUT); pinMode(YM, INPUT);
+  <span class="k">if</span> (!appui) {
+    Serial.println(<span class="n">"Rien sur l'ecran"</span>);
+    delay(<span class="n">200</span>);
+    <span class="k">return</span>;
+  }
+  <span class="c">// Mesure X</span>
+  pinMode(XP, OUTPUT); digitalWrite(XP, HIGH);
+  pinMode(XM, OUTPUT); digitalWrite(XM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> brutX = analogRead(YP);
+  pinMode(XP, INPUT); pinMode(XM, INPUT);
+  <span class="c">// Mesure Y</span>
+  pinMode(YP, OUTPUT); digitalWrite(YP, HIGH);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> brutY = analogRead(XM);
+  pinMode(YP, INPUT); pinMode(YM, INPUT);
+
+  Serial.print(<span class="n">"X = "</span>); Serial.print(brutX);
+  Serial.print(<span class="n">"   Y = "</span>); Serial.println(brutY);
+  delay(<span class="n">200</span>);
+}</code></pre></div>
+            <ol start="2">
+              <li>Pose la bille tout près du bord court <strong>du côté du servo A</strong> : note la valeur de X, c'est <code>X_MAX</code>. Puis près du bord court opposé : c'est <code>X_MIN</code>.</li>
+              <li>Pareil sur les deux grands bords pour <code>Y_MIN</code> et <code>Y_MAX</code> (<code>Y_MAX</code> du côté du servo B).</li>
+            </ol>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">X ne bouge pas ?</span><p>Si c'est Y qui change quand tu déplaces la bille dans la longueur, X et Y sont échangés. Alimentation débranchée, échange les fils A0 ↔ A1 et A2 ↔ A3.</p></div></div>
+          </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="9">
+          <div class="step-head"><span class="num">9</span><div><h3>Le grand programme de l'Équilibriste 2</h3><small>20 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p>Voici le cerveau complet. Recopie tes mesures (<code>BRAS</code>, <code>BIELLETTE</code>) et ta calibration en haut du programme, puis téléverse-le et pose la bille au milieu.</p>
+            <div class="code"><div class="code-name">plateau.ino</div><button class="copy" type="button">Copier</button><pre><code><span class="c">// ===========================================================</span>
+<span class="c">//  L'Équilibriste 2 · Le plateau — le grand programme</span>
+<span class="c">//  Les yeux : l'écran tactile. Les muscles : 3 servomoteurs.</span>
+<span class="c">// ===========================================================</span>
+<span class="k">#include</span> &lt;Servo.h&gt;
+
+<span class="c">// ----- Les branchements -----</span>
+<span class="c">// Les 4 fils de l'écran tactile, dans l'ordre : X+, Y+, X-, Y-</span>
+<span class="k">const</span> <span class="k">int</span> XP = A0;   <span class="c">// X+</span>
+<span class="k">const</span> <span class="k">int</span> YP = A1;   <span class="c">// Y+</span>
+<span class="k">const</span> <span class="k">int</span> XM = A2;   <span class="c">// X-</span>
+<span class="k">const</span> <span class="k">int</span> YM = A3;   <span class="c">// Y-</span>
+<span class="c">// Les servomoteurs A, B, C (dans le sens inverse des aiguilles d'une montre, vus d'en haut)</span>
+<span class="k">const</span> <span class="k">int</span> PIN_SERVO[<span class="n">3</span>] = {<span class="n">9</span>, <span class="n">10</span>, <span class="n">11</span>};
+
+<span class="c">// ----- Ta calibration (étape 8) -----</span>
+<span class="k">int</span> X_MIN = <span class="n">100</span>;  <span class="k">int</span> X_MAX = <span class="n">900</span>;   <span class="c">// valeurs brutes aux deux bords courts de l'écran</span>
+<span class="k">int</span> Y_MIN = <span class="n">150</span>;  <span class="k">int</span> Y_MAX = <span class="n">870</span>;   <span class="c">// valeurs brutes aux deux bords longs</span>
+<span class="k">const</span> <span class="k">float</span> LARGEUR = <span class="n">154.0</span>;          <span class="c">// taille de la zone tactile, en mm</span>
+<span class="k">const</span> <span class="k">float</span> HAUTEUR = <span class="n">86.0</span>;
+
+<span class="c">// ----- Tes mesures (étape 6) -----</span>
+<span class="k">float</span> BRAS      = <span class="n">25.0</span>;  <span class="c">// de l'axe du servo au trou du coude, en mm</span>
+<span class="k">float</span> BIELLETTE = <span class="n">70.0</span>;  <span class="c">// du trou du coude au centre de la rotule, en mm</span>
+
+<span class="c">// ----- Les réglages de Lili -----</span>
+<span class="k">int</span>   SENS = <span class="n">1</span>;                 <span class="c">// mets -1 si les bras descendent quand ils devraient monter</span>
+<span class="k">int</span>   SENS_X = <span class="n">1</span>;               <span class="c">// mets -1 si la balle s'enfuit sur la longueur</span>
+<span class="k">int</span>   SENS_Y = <span class="n">1</span>;               <span class="c">// mets -1 si la balle s'enfuit sur la largeur</span>
+<span class="k">int</span>   REGLAGE[<span class="n">3</span>] = {<span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>};   <span class="c">// petites corrections pour que le plateau soit bien à plat</span>
+<span class="k">float</span> Kp = <span class="n">0.12</span>;   <span class="c">// P : Pousse     (degrés de pente par mm d'écart)</span>
+<span class="k">float</span> Ki = <span class="n">0.02</span>;   <span class="c">// I : Insiste</span>
+<span class="k">float</span> Kd = <span class="n">0.05</span>;   <span class="c">// D : Doucement</span>
+<span class="k">const</span> <span class="k">float</span> PENTE_MAX = <span class="n">10.0</span>;   <span class="c">// le plateau ne penche jamais plus de 10 degrés</span>
+<span class="k">bool</span>  CERCLE = <span class="k">false</span>;           <span class="c">// true = la balle tourne en rond !</span>
+
+<span class="c">// ----- La géométrie du robot (ne change pas, c'est celle des pièces 3D) -----</span>
+<span class="k">const</span> <span class="k">float</span> R_SERVO  = <span class="n">55.0</span>;    <span class="c">// distance du centre à l'axe des servos</span>
+<span class="k">const</span> <span class="k">float</span> R_ROTULE = <span class="n">80.0</span>;    <span class="c">// distance du centre aux rotules sous le plateau</span>
+<span class="k">const</span> <span class="k">float</span> ANGLE_JAMBE[<span class="n">3</span>] = {<span class="n">0</span>, <span class="n">120</span>, <span class="n">240</span>};
+
+Servo servo[<span class="n">3</span>];
+<span class="k">float</span> x = <span class="n">0</span>, y = <span class="n">0</span>;             <span class="c">// où est la balle (mm, 0 = au milieu)</span>
+<span class="k">float</span> xAvant = <span class="n">0</span>, yAvant = <span class="n">0</span>;
+<span class="k">float</span> vx = <span class="n">0</span>, vy = <span class="n">0</span>;           <span class="c">// sa vitesse (mm par seconde)</span>
+<span class="k">float</span> sommeX = <span class="n">0</span>, sommeY = <span class="n">0</span>;
+<span class="k">float</span> hauteurRepos;             <span class="c">// hauteur des rotules quand le plateau est à plat</span>
+<span class="k">unsigned</span> <span class="k">long</span> tempsAvant = <span class="n">0</span>;
+<span class="k">int</span>   absences = <span class="n">0</span>;             <span class="c">// depuis combien de tours l'écran ne sent plus la balle</span>
+
+<span class="c">// Lit l'écran. Rend true si la balle est posée, et met sa position dans x et y.</span>
+<span class="k">bool</span> lireBalle(<span class="k">float</span> &amp;bx, <span class="k">float</span> &amp;by) {
+  <span class="c">// 1. Y a-t-il quelque chose qui appuie ?</span>
+  pinMode(YP, INPUT); pinMode(XM, INPUT);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  pinMode(XP, INPUT_PULLUP);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">bool</span> appui = (digitalRead(XP) == LOW);
+  pinMode(XP, INPUT); pinMode(YM, INPUT);
+  <span class="k">if</span> (!appui) <span class="k">return</span> <span class="k">false</span>;
+
+  <span class="c">// 2. Mesure X : le courant passe de X+ à X-, on écoute sur Y+</span>
+  pinMode(XP, OUTPUT); digitalWrite(XP, HIGH);
+  pinMode(XM, OUTPUT); digitalWrite(XM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> brutX = (analogRead(YP) + analogRead(YP)) / <span class="n">2</span>;
+  pinMode(XP, INPUT); pinMode(XM, INPUT);
+
+  <span class="c">// 3. Mesure Y : le courant passe de Y+ à Y-, on écoute sur X-</span>
+  pinMode(YP, OUTPUT); digitalWrite(YP, HIGH);
+  pinMode(YM, OUTPUT); digitalWrite(YM, LOW);
+  delayMicroseconds(<span class="n">200</span>);
+  <span class="k">int</span> brutY = (analogRead(XM) + analogRead(XM)) / <span class="n">2</span>;
+  pinMode(YP, INPUT); pinMode(YM, INPUT);
+
+  <span class="c">// 4. On transforme les valeurs brutes en millimètres</span>
+  bx = (brutX - X_MIN) * LARGEUR / (X_MAX - X_MIN) - LARGEUR / <span class="n">2</span>;
+  by = (brutY - Y_MIN) * HAUTEUR / (Y_MAX - Y_MIN) - HAUTEUR / <span class="n">2</span>;
+  <span class="k">return</span> <span class="k">true</span>;
+}
+
+<span class="c">// La hauteur d'une rotule -&gt; l'angle du bras (le calcul du triangle : bras, biellette, et la distance entre les deux).</span>
+<span class="k">float</span> angleBras(<span class="k">float</span> hauteur) {
+  <span class="k">float</span> dx = R_ROTULE - R_SERVO;                 <span class="c">// écart horizontal entre l'axe et la rotule</span>
+  <span class="k">float</span> d  = sqrt(dx * dx + hauteur * hauteur);  <span class="c">// distance axe -&gt; rotule</span>
+  <span class="k">float</span> c  = (BRAS * BRAS + d * d - BIELLETTE * BIELLETTE) / (<span class="n">2</span> * BRAS * d);
+  c = constrain(c, <span class="n">-1.0</span>, <span class="n">1.0</span>);
+  <span class="k">return</span> degrees(atan2(hauteur, dx) - acos(c)); <span class="c">// 0 = bras à l'horizontale</span>
+}
+
+<span class="c">// Penche le plateau : penteX et penteY en degrés.</span>
+<span class="k">void</span> pencher(<span class="k">float</span> penteX, <span class="k">float</span> penteY) {
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) {
+    <span class="k">float</span> a  = radians(ANGLE_JAMBE[i]);
+    <span class="k">float</span> rx = R_ROTULE * cos(a);
+    <span class="k">float</span> ry = R_ROTULE * sin(a);
+    <span class="c">// de combien cette rotule doit monter ou descendre</span>
+    <span class="k">float</span> dz = rx * tan(radians(penteX)) + ry * tan(radians(penteY));
+    <span class="k">float</span> angle = angleBras(hauteurRepos + dz);
+    servo[i].writeMicroseconds(<span class="n">1500</span> + SENS * angle * <span class="n">11.1</span> + REGLAGE[i]);
+  }
+}
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">115200</span>);
+  <span class="k">float</span> dx = R_ROTULE - R_SERVO - BRAS;
+  hauteurRepos = sqrt(BIELLETTE * BIELLETTE - dx * dx);
+  <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">3</span>; i++) servo[i].attach(PIN_SERVO[i]);
+  pencher(<span class="n">0</span>, <span class="n">0</span>);                 <span class="c">// on commence bien à plat</span>
+  delay(<span class="n">1000</span>);
+  tempsAvant = millis();
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">unsigned</span> <span class="k">long</span> maintenant = millis();
+  <span class="k">if</span> (maintenant - tempsAvant &lt; <span class="n">20</span>) <span class="k">return</span>;     <span class="c">// 50 fois par seconde</span>
+  <span class="k">float</span> dt = (maintenant - tempsAvant) / <span class="n">1000.0</span>;
+  tempsAvant = maintenant;
+
+  <span class="c">// 1. Les yeux regardent</span>
+  <span class="k">float</span> nx, ny;
+  <span class="k">if</span> (!lireBalle(nx, ny)) {
+    absences++;
+    <span class="k">if</span> (absences &gt; <span class="n">10</span>) {                         <span class="c">// plus de balle : on se remet à plat</span>
+      pencher(<span class="n">0</span>, <span class="n">0</span>);
+      sommeX = sommeY = <span class="n">0</span>; vx = vy = <span class="n">0</span>;
+    }
+    <span class="k">return</span>;
+  }
+  <span class="k">if</span> (absences &gt; <span class="n">10</span>) { x = xAvant = nx; y = yAvant = ny; }  <span class="c">// la balle revient : on repart de zéro</span>
+  absences = <span class="n">0</span>;
+  x = <span class="n">0.6</span> * x + <span class="n">0.4</span> * nx;                       <span class="c">// on adoucit les mesures qui sautillent</span>
+  y = <span class="n">0.6</span> * y + <span class="n">0.4</span> * ny;
+
+  <span class="c">// 2. Le cerveau calcule</span>
+  <span class="k">float</span> cibleX = <span class="n">0</span>, cibleY = <span class="n">0</span>;
+  <span class="k">if</span> (CERCLE) {                                  <span class="c">// la cible fait le tour du plateau</span>
+    <span class="k">float</span> t = maintenant / <span class="n">1000.0</span>;
+    cibleX = <span class="n">35</span> * cos(t * <span class="n">1.5</span>);
+    cibleY = <span class="n">20</span> * sin(t * <span class="n">1.5</span>);
+  }
+  vx = <span class="n">0.7</span> * vx + <span class="n">0.3</span> * (x - xAvant) / dt;
+  vy = <span class="n">0.7</span> * vy + <span class="n">0.3</span> * (y - yAvant) / dt;
+  xAvant = x; yAvant = y;
+  <span class="k">float</span> ex = x - cibleX, ey = y - cibleY;
+  sommeX = constrain(sommeX + ex * dt, <span class="n">-100</span>, <span class="n">100</span>);
+  sommeY = constrain(sommeY + ey * dt, <span class="n">-100</span>, <span class="n">100</span>);
+
+  <span class="k">float</span> penteX = SENS_X * (Kp * ex + Ki * sommeX + Kd * vx);
+  <span class="k">float</span> penteY = SENS_Y * (Kp * ey + Ki * sommeY + Kd * vy);
+  penteX = constrain(penteX, -PENTE_MAX, PENTE_MAX);
+  penteY = constrain(penteY, -PENTE_MAX, PENTE_MAX);
+
+  <span class="c">// 3. Les muscles bougent</span>
+  pencher(penteX, penteY);
+
+  <span class="c">// Pour le Traceur série : la balle et la cible</span>
+  Serial.print(x); Serial.print(<span class="n">" "</span>); Serial.print(y); Serial.print(<span class="n">" "</span>);
+  Serial.print(cibleX); Serial.print(<span class="n">" "</span>); Serial.println(cibleY);
+}</code></pre></div>
+            <ol>
+              <li>Sans bille, le plateau doit rester bien à plat. S'il penche, corrige avec <code>REGLAGE</code> : quelques dizaines (par exemple 20 ou −20) pour le moteur du coin trop haut ou trop bas.</li>
+              <li>Appuie doucement avec ton doigt près du coin A : le coin A doit <strong>monter</strong>, pour renvoyer la bille vers le milieu. S'il descend, mets <code>SENS_X = -1</code>.</li>
+              <li>Fais pareil près du coin B pour vérifier <code>SENS_Y</code>.</li>
+            </ol>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">La bille s'enfuit ?</span><p>C'est normal les premières fois ! Un seul réglage à la fois : d'abord les <code>SENS</code>, puis les chiffres du PID à l'étape suivante.</p></div></div>
+          </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="10">
+          <div class="step-head"><span class="num">10</span><div><h3>Le réglage, comme une vraie ingénieure</h3><small>Autant de temps qu'il faut !</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p>Ouvre <strong>Outils → Traceur série</strong> : tu vois quatre lignes, la position de la bille en X et en Y, et la cible. Change <strong>un seul chiffre à la fois</strong>, téléverse, observe.</p>
+            <div class="tune">
+              <div><b>1. Seulement P</b><p>Mets Ki = 0 et Kd = 0. Monte Kp jusqu'à ce que la bille tourne autour du milieu sans tomber.</p></div>
+              <div><b>2. Ajoute D</b><p>Monte Kd petit à petit (0.02, 0.04…). La bille se calme. Trop de D ? Les moteurs tremblent.</p></div>
+              <div><b>3. Un soupçon de I</b><p>Si la bille s'arrête toujours un peu à côté du milieu, monte Ki très doucement.</p></div>
+            </div>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Le grand défi</span><p>Quand ta bille tient bien au milieu, mets <code>CERCLE = true</code> et téléverse. La cible se met à tourner… et la bille la suit tout autour du plateau !</p></div></div>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">L'Arduino redémarre tout seul ?</span><p>Les moteurs demandent trop d'énergie d'un coup. Vérifie le condensateur et le fil magique, et prends une alimentation de 4 A si tu as une 3 A.</p></div></div>
+          </div><img class="pose" src="assets/lili-reflexion.webp" alt=""></div>
+        </article>
+
+      </div>
+
+      <div class="finale">
+        <img src="assets/lili-mission.webp" alt="Lili lève les bras, mission accomplie">
+        <div>
+          <span class="eyebrow">Mission accomplie</span>
+          <h2>Ton plateau tient la bille !</h2>
+          <p>Tu as construit un robot parallèle avec deux asservissements en même temps. C'est le même principe que les plateformes qui stabilisent les caméras et que les simulateurs de vol.</p>
+          <ul>
+            <li><strong>Défi 1 :</strong> mets la cible dans un coin (par exemple <code>cibleX = 40</code>). La bille y va-t-elle toute seule ?</li>
+            <li><strong>Défi 2 :</strong> avec <code>CERCLE = true</code>, fais un cercle plus grand, ou plus rapide. Jusqu'où peux-tu aller ?</li>
+            <li><strong>Défi 3 :</strong> change le programme pour que la cible dessine un carré, ou un huit !</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">L'atelier de Lili · Construis aujourd'hui les robots de demain !</div></footer>
+<div class="toast" id="toast" role="status"><img src="assets/lili-contente.webp" alt=""><span id="toastTxt">Bravo !</span></div>
+
+<script>
+(function(){
+  const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* Menu robots */
+  const pb=document.getElementById("pickerBtn"),pm=document.getElementById("pickerMenu");
+  pb.addEventListener("click",e=>{e.stopPropagation();const o=pm.hidden;pm.hidden=!o;pb.setAttribute("aria-expanded",String(o));});
+  document.addEventListener("click",e=>{if(!pm.contains(e.target)){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  pm.querySelector(".is-current").addEventListener("click",()=>{pm.hidden=true;pb.setAttribute("aria-expanded","false");});
+
+  /* Vidéo */
+  const v=document.getElementById("heroVideo"),vt=document.getElementById("vidToggle");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.pause();v.removeAttribute("autoplay");vt.textContent="▶ Lecture";}
+  vt.addEventListener("click",()=>{if(v.paused){v.play();vt.textContent="❚❚ Pause";}else{v.pause();vt.textContent="▶ Lecture";}});
+
+  /* Toast */
+  const toast=document.getElementById("toast"),tt=document.getElementById("toastTxt");let tid;
+  function say(msg){tt.textContent=msg;toast.classList.add("show");clearTimeout(tid);tid=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+  /* Courses */
+  const shop=store.get("lili-r2p-shop")||{};
+  const boxes=[...document.querySelectorAll(".items input")];
+  function shopUpd(){const n=boxes.filter(b=>b.checked).length;document.getElementById("shopCount").textContent=n+" / "+boxes.length+" trouvés";document.getElementById("shopBar").style.width=(100*n/boxes.length)+"%";return n;}
+  boxes.forEach(b=>{b.checked=!!shop[b.dataset.k];b.addEventListener("change",()=>{shop[b.dataset.k]=b.checked;store.set("lili-r2p-shop",shop);if(shopUpd()===boxes.length)say("Tout est là ! On peut construire !");});});
+  shopUpd();
+
+  /* Étapes */
+  const done=store.get("lili-r2p-steps")||{};
+  const steps=[...document.querySelectorAll(".step")];
+  const cheers=["Bravo !","Super travail !","Continue comme ça !","Tu es une vraie ingénieure !","Encore une de faite !"];
+  function stepUpd(){const n=steps.filter(s=>s.classList.contains("is-done")).length;document.getElementById("stepCount").textContent=n+" / "+steps.length+" étapes";document.getElementById("stepBar").style.width=(100*n/steps.length)+"%";return n;}
+  steps.forEach(s=>{const k=s.dataset.step,btn=s.querySelector(".done-btn");
+    const set=on=>{s.classList.toggle("is-done",on);btn.textContent=on?"✓ Fait":"C'est fait !";btn.setAttribute("aria-pressed",String(on));};
+    set(!!done[k]);
+    btn.addEventListener("click",()=>{const on=!s.classList.contains("is-done");set(on);done[k]=on;store.set("lili-r2p-steps",done);const n=stepUpd();if(on)say(n===steps.length?"Mission accomplie !":cheers[n%cheers.length]);});
+  });
+  stepUpd();
+
+  /* Copier le code */
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+    const pre=b.parentElement.querySelector("pre");const txt=pre.innerText;
+    const ok=()=>{b.textContent="Copié !";setTimeout(()=>b.textContent="Copier",1500);};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{selectEl(pre);b.textContent="Ctrl+C";});}catch(e){selectEl(pre);b.textContent="Ctrl+C";}
+  }));
+  function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  /* Menu actif */
+  const links=[...document.querySelectorAll(".navlinks a")];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["comprendre","courses","montage"].forEach(id=>io.observe(document.getElementById(id)));
+
+})();
+</script>
+<script src="assets/plateau.js?v=1"></script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+L'Équilibriste 2 · Le plateau — les fichiers de l'atelier de Lili
+https://lilirobot.com/plateau.html
+
+PIÈCES À IMPRIMER (PLA, couches 0,2 mm, 3 contours, remplissage 25 %, sans supports)
+  socle.stl            1 fois — à plat, les murs vers le haut (176 mm de large)
+  support-plateau.stl  1 fois — à plat
+  biellettes-x3.stl    1 fois — contient les 3 biellettes, à plat
+
+PROGRAMMES ARDUINO
+  test_moteurs.ino     étape 5 : met les trois bras au milieu
+  test_ecran.ino       étape 8 : lit l'écran tactile pour la calibration
+  plateau.ino          étape 9 : le grand programme
+
+The same files work for the English page: https://lilirobot.com/en/plateau.html
