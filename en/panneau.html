@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Light-up Sign 2 · Lili's Workshop</title>
+<meta name="description" content="Version 2 of the Light-up Sign, from Lili's Workshop: an LED panel that scrolls your messages and says hello when someone comes by.">
+<link rel="icon" href="../assets/lili-avatar.webp" type="image/webp">
+<link rel="alternate" hreflang="fr" href="../panneau.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../assets/atelier.css?v=5">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="../assets/lili-avatar.webp" alt="">Lili's Workshop</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">The Light-up Sign · Version 2<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt" href="index.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>The Balancer · Version 1</b><small>A ping-pong ball balanced on a rail</small></span>
+        </a>
+        <a class="robot-opt" href="plateau.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>The Balancer · Version 2</b><small>A ball on a plate, 3 motors · expert level</small></span>
+        </a>
+        <a class="robot-opt" href="enseigne.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>The Light-up Sign · Version 1</b><small>Your name in 3D-printed letters that glow</small></span>
+        </a>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>The Light-up Sign · Version 2</b><small>Your messages scrolling · very easy</small></span>
+        </a>
+        <a class="robot-opt" href="rouleur.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg></span>
+          <span><b>The Roller</b><small>It drives and avoids obstacles by itself</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Mystery</b><small>Unlocks once you've finished the Roller</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapters">
+      <a href="#comprendre">How it works</a>
+      <a href="#courses">Shopping list</a>
+      <a href="#montage">Building</a>
+    </nav>
+    <nav class="lang" aria-label="Language"><a href="../panneau.html" lang="fr" hreflang="fr" title="Français" aria-label="Français"><svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg></a><a href="panneau.html" lang="en" hreflang="en" title="English" aria-label="English" aria-current="true"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="ukT"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#FFFFFF" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#ukT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#FFFFFF" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg></a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="../assets/banner.mp4?v=4" poster="../assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili building a robot in her workshop"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot no. 2 · Version 2 · Very easy level</span>
+        <h1>The Light-up Sign 2</h1>
+        <p class="lead">A panel of lights that scrolls your messages, and wakes up to say “Hello! Welcome to…” when someone comes by.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#atelier">Write your messages</a>
+          <a class="btn btn-ghost" href="#courses">The shopping list</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><span>Difficulty</span><b class="stars">★☆☆☆</b></div>
+      <div><span>Time</span><b>1 afternoon (+ the case)</b></div>
+      <div><span>Budget</span><b>≈ 25 €</b></div>
+      <div><span>You'll learn</span><b>Sensor, text, loops</b></div>
+    </div>
+  </div>
+
+  <!-- ===================== L'ATELIER DES MESSAGES ===================== -->
+  <section class="pstudio" id="atelier">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">The message workshop</span>
+        <h2>Write what will scroll</h2>
+        <p class="lead">Everything you write here shows up on the panel, with the same letters as the real one. And Lili gets the program ready for you, further down, in step 5.</p>
+        <div class="led-box">
+          <canvas id="ledView" width="660" height="180" aria-label="LED panel preview"></canvas>
+          <div class="led-under"><span class="led-pir" aria-hidden="true"></span><p class="led-state" id="pState" role="status"></p></div>
+        </div>
+        <button class="btn btn-lime btn-visit" id="pVisit" type="button">Someone's coming!</button>
+      </div>
+      <div class="ppanel">
+        <div class="pfield"><label for="pName">Your name</label><input id="pName" type="text" maxlength="16" autocomplete="off" spellcheck="false"></div>
+        <div class="pfield"><label for="pWelcome">The welcome message</label><input id="pWelcome" type="text" maxlength="60" autocomplete="off"><small>It scrolls first, as soon as someone comes by.</small></div>
+        <div class="pfield"><label for="pMessages">The other messages</label><textarea id="pMessages" maxlength="400"></textarea><small>One message per line, 6 at most. Accents work (é, è, à, ç…). Emojis don't.</small></div>
+        <div class="pfield"><label for="pSpeed">Speed <output id="pSpeedOut"></output></label><input id="pSpeed" type="range" min="15" max="100" step="5"><small>The time between two steps: smaller = faster.</small></div>
+        <div class="pfield"><label for="pLight">Brightness <output id="pLightOut"></output></label><input id="pLight" type="range" min="0" max="15" step="1"><small>From 0 (soft) to 15 (very bright). 4 is good for a bedroom.</small></div>
+        <div class="pfield"><label for="pStay">Stays on <output id="pStayOut"></output></label><input id="pStay" type="range" min="5" max="120" step="5"><small>After the last visitor, before it goes to sleep.</small></div>
+        <label class="pcheck"><input type="checkbox" id="pAlways"><span>Always on<small>The panel scrolls all the time, even when nobody's there.</small></span></label>
+        <div class="pfield"><span class="lbl">Your panel's colour</span><div class="pswatches" id="pColors"><button type="button" data-c="red" style="background:#FF5A4A" aria-label="Red" title="Red" aria-pressed="false"></button><button type="button" data-c="green" style="background:#5BE05B" aria-label="Green" title="Green" aria-pressed="false"></button><button type="button" data-c="blue" style="background:#4AA8FF" aria-label="Blue" title="Blue" aria-pressed="false"></button><button type="button" data-c="yellow" style="background:#FFC83A" aria-label="Yellow" title="Yellow" aria-pressed="false"></button><button type="button" data-c="white" style="background:#E8F0FF" aria-label="White" title="White" aria-pressed="false"></button></div><small>Pick it when you buy it: each panel has only one colour.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COMPRENDRE ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>How does it work?</h2><p>A sign that knows when you arrive is already a little robot!</p></div>
+      </div>
+
+      <div class="lili"><img src="../assets/lili-coucou.webp" alt="Lili waving"><div class="bubble"><span class="tag">Hi!</span><p>This time, no need to print letters: the panel is made of <strong>256 tiny lights</strong>. By switching on the right ones it can draw any word… and slide it along like the news ticker at a train station. And when someone comes to your door, it wakes up to say hello!</p></div></div>
+
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">The finished robot</span><h3>What should it look like?</h3><p>Here's your sign hanging by the door. The LED panel is at the top, the sensor underneath, and everything else is hidden in the case.</p></div>
+        <a class="look-pic" href="../assets/look-panneau.svg" target="_blank" rel="noopener" title="Open the picture full size"><img src="../assets/look-panneau.svg" alt="The finished sign: a green case with the LED panel at the top, the white sensor dome underneath, and a USB cable to a charger" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Tap the picture to see it bigger.</p>
+        <ol class="look-key">
+          <li><span><b>The LED panel</b>4 squares of 8 × 8 lights, 256 dots in all. You see it through the window of the case.</span></li>
+          <li><span><b>The motion sensor</b>Its little white dome feels the warmth of people walking by.</span></li>
+          <li><span><b>The case</b>3D-printed or made of wood. It hides the wires and hangs on the wall.</span></li>
+          <li><span><b>The Arduino Nano</b>The brain, hidden inside the case.</span></li>
+          <li><span><b>The USB cable and charger</b>An old phone charger is enough to power everything.</span></li>
+        </ol>
+      </figure>
+
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M8 24a16 16 0 0132 0M14 24a10 10 0 0120 0"/></svg>
+          <span class="role">The eyes</span><h3>The motion sensor</h3>
+          <p>It feels the warmth of your body when you move in front of it. Its white dome is a lens that looks in every direction.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="12" y="8" width="24" height="32" rx="3"/><path d="M18 2v6M30 2v6M18 40v6M30 40v6"/></svg>
+          <span class="role">The brain</span><h3>The Arduino Nano</h3>
+          <p>It keeps your messages in memory and decides when to wake up, what to write, and when to go back to sleep.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="currentColor"><g opacity=".9"><circle cx="9" cy="14" r="3"/><circle cx="19" cy="14" r="3"/><circle cx="29" cy="14" r="3"/><circle cx="39" cy="14" r="3"/><circle cx="9" cy="24" r="3"/><circle cx="29" cy="24" r="3"/><circle cx="9" cy="34" r="3"/><circle cx="19" cy="34" r="3"/><circle cx="29" cy="34" r="3"/><circle cx="39" cy="34" r="3"/></g></svg>
+          <span class="role">The mouth</span><h3>The LED panel</h3>
+          <p>256 lights in 32 columns and 8 rows. A little chip, the MAX7219, switches them on very fast, row after row.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="4" y="12" width="40" height="24" rx="4"/><rect x="9" y="16" width="30" height="8" rx="1"/><circle cx="24" cy="30" r="3"/></svg>
+          <span class="role">The body</span><h3>The case</h3>
+          <p>A box with a window for the panel and a round hole for the sensor. 3D-print it or build it from wood.</p>
+        </div>
+      </div>
+      <p class="loop-line">The sensor feels someone → the brain wakes the panel → the messages scroll… then everything sleeps when nobody's left.</p>
+
+      <div class="lili ask"><img src="../assets/lili-explique.webp" alt="Lili explaining with a tablet"><div class="bubble"><span class="tag">Let me explain</span><p>How can a letter move? In fact, nothing moves! The panel draws the letter, then draws it again <strong>one column further left</strong>, again and again, dozens of times a second. Your eyes think it's sliding. It's the same trick as a cartoon!</p></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== COURSES ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>The shopping list</h2><p>Tick each thing once it's on your table. Lili remembers your ticks.</p></div>
+      </div>
+      <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
+      <div class="shop">
+        <div class="shop-group">
+          <h3><span class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>The electronics</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="nano"><span><b>Arduino Nano (or compatible)</b><small>The brain. It's small, so it fits in the case. If you built the Sign 1, you can reuse its one.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> ATmega328P, pins already soldered</span></span></span><span class="qty"><span>×1 · ≈ €6–20</span><a class="buy" href="https://www.amazon.com/s?k=Arduino+Nano+ATmega328P+soldered+headers" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="matrice"><span><b>MAX7219 “4-in-1” LED panel</b><small>The mouth. The 4 squares of lights come already assembled on one board.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 4-in-1 module already assembled (32 × 8 dots), in the colour you like</span></span></span><span class="qty"><span>×1 · ≈ €8–12</span><a class="buy" href="https://www.amazon.com/s?k=MAX7219+4+in+1+dot+matrix+32x8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="pir"><span><b>HC-SR501 motion sensor</b><small>The eyes. They often come in packs of 3 or 5.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> HC-SR501 with its white dome and its 2 little orange dials</span></span></span><span class="qty"><span>×1 · ≈ €3</span><a class="buy" href="https://www.amazon.com/s?k=HC-SR501+PIR+motion+sensor" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="fils"><span><b>Female-to-female jumper wires</b><small>8 wires are enough. No breadboard needed: everything plugs straight in.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> female-female Dupont wires, 10 to 20 cm</span></span></span><span class="qty"><span>×8 · ≈ €4 a pack</span><a class="buy" href="https://www.amazon.com/s?k=dupont+jumper+wires+female+female" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="usb"><span><b>USB cable + phone charger</b><small>An old phone charger does the job nicely. The cable needs the right plug for your Nano.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Check:</b> 5 V charger (1 A is enough), mini-USB or USB-C cable to match your Nano</span></span></span><span class="qty"><span>×1 · often already have it</span><span class="store">At home</span></span></label></li>
+          </ul>
+        </div>
+        <div class="shop-group">
+          <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>The case (pick A or B)</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="pla"><span><b>A · PLA filament</b><small>About 80 g for the case and its lid. You choose the colour!</small></span><span class="qty"><span>≈ 80 g · ≈ €2</span><span class="store">3D printer</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="bois"><span><b>B · 5 mm plywood + wooden strip</b><small>2 boards of 18 × 8 cm and 50 cm of 10 × 35 mm strip. The plan is in step 2.</small></span><span class="qty"><span>set · ≈ €6</span><span class="store">DIY store</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="colle"><span><b>Hot glue, double-sided tape</b><small>To hold the panel, the sensor and the Arduino inside the case.</small></span><span class="qty"><span>set</span><span class="store">At home</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="vis"><span><b>2 screws and wall plugs</b><small>To hang the case on the wall, by the door.</small></span><span class="qty"><span>×2</span><span class="store">At home</span></span></label></li>
+          </ul>
+        </div>
+      </div>
+      <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">With a grown-up</span><p>The hot glue gun and, for the wooden case, the saw and the drill: those are used <strong>with a grown-up</strong>. You do the marking, holding and checking!</p></div></div>
+      <p class="total">Tools to get ready: a hot glue gun, a screwdriver, and a computer with <strong>Arduino IDE</strong>. For the wooden case: a jigsaw, a drill with a 24 mm wood bit, sandpaper. Prices are a rough guide. The Amazon buttons open a search: pick a well-rated seller and compare with the “Check” line.</p>
+    </div>
+  </section>
+
+  <!-- ===================== MONTAGE ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Building it, step by step</h2><p>One step at a time. Click “Done!” when you've finished.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0</span><div class="bar"><i id="stepBar"></i></div></div>
+      <div class="steps">
+
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Get your messages ready</h3><small>10 minutes · at the top of the page</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Go back up to <a href="#atelier">the message workshop</a> and type your name: the welcome message fills itself in.</li>
+              <li>Add your other messages, one per line: a joke, “Knock before you come in”, your bedroom weather…</li>
+              <li>Click <strong>Someone's coming!</strong> to watch your panel wake up and scroll everything.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Lili remembers your messages in this browser. You can come back and change them any time: the program in step 5 updates itself.</p></div></div>
+          </div><img class="pose" src="../assets/lili-coucou.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>The case</h3><small>2 to 3 hours of printing, or 1 hour of woodwork with a grown-up</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <div class="opt"><h4>Option A · 3D-printed</h4>
+              <p><a class="btn btn-lime" href="../assets/panneau/en/sign2-files.zip" download>Download the case and the programs</a></p>
+              <ol>
+                <li>Print <code>boitier.stl</code> lying on its front (the window against the bed), with no supports. It's 17.2 cm wide.</li>
+                <li>Print <code>couvercle.stl</code> flat, rim facing up.</li>
+                <li>Suggested settings: 0.2 mm layers, 3 perimeters, 15 % infill.</li>
+              </ol>
+            </div>
+            <div class="opt"><h4>Option B · Wooden</h4>
+              <ol>
+                <li>Cut <strong>two boards</strong> of plywood, 180 × 80 mm: the front and the back.</li>
+                <li>On the front, mark the <strong>window</strong>: 127 × 31 mm, centred, 12 mm from the top edge. With a grown-up: drill a hole in each corner, then cut it out with the jigsaw.</li>
+                <li>Drill the <strong>sensor hole</strong> (24 mm bit), centred, 24 mm from the bottom edge.</li>
+                <li>Cut the 10 × 35 mm strip: <strong>2 pieces of 180 mm</strong> (top and bottom) and <strong>2 of 60 mm</strong> (sides). Glue them as a frame behind the front.</li>
+                <li>Cut a 12 mm notch in the bottom piece for the USB cable. The back will screw on with 4 small screws, so you can open it again.</li>
+              </ol>
+            </div>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Why is the window a bit small?</span><p>It's 1 mm smaller than the panel. That way the panel rests behind it and can't fall through… but every dot stays visible!</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>The wiring</h3><small>20 minutes · USB cable unplugged!</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>No breadboard this time: each wire goes straight from one pin to another. The panel has pins <strong>on both ends</strong>: the Arduino goes on the end marked <strong>DIN</strong>.</p>
+            <div class="wiring"><table>
+              <thead><tr><th>Part</th><th>Pin</th><th>Goes to…</th></tr></thead>
+              <tbody>
+                <tr><td>Panel (DIN end)</td><td>VCC</td><td>Arduino 5V</td></tr>
+                <tr><td>Panel (DIN end)</td><td>GND</td><td>Arduino GND</td></tr>
+                <tr><td>Panel (DIN end)</td><td>DIN</td><td>D11</td></tr>
+                <tr><td>Panel (DIN end)</td><td>CS</td><td>D10</td></tr>
+                <tr><td>Panel (DIN end)</td><td>CLK</td><td>D13</td></tr>
+                <tr><td>Sensor</td><td>VCC</td><td>Panel VCC, DOUT end</td></tr>
+                <tr><td>Sensor</td><td>GND</td><td>Panel GND, DOUT end</td></tr>
+                <tr><td>Sensor</td><td>OUT</td><td>D2</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Lili's trick</span><p>The Arduino Nano has only one 5V pin. But the panel passes the energy through to its other end! So the sensor takes its VCC and GND <strong>from the panel's output pins</strong>.</p></div></div>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">The two orange dials</span><p>On the sensor, turn the <strong>“Time”</strong> dial all the way left (the program keeps time itself), and leave the <strong>“Sensitivity”</strong> dial in the middle. If there's a little yellow jumper, put it on <strong>H</strong>.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>The first test</h3><small>15 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>In Arduino IDE, open <strong>Tools → Manage Libraries</strong>, search for <strong>MD_Parola</strong> and click Install. Agree to install <strong>MD_MAX72XX</strong> too.</li>
+              <li>Pick the <strong>Arduino Nano</strong> board, plug in the USB cable, and upload this little program:</li>
+            </ol>
+            <div class="code"><div class="code-name">test_panel.ino</div><button class="copy" type="button">Copy</button><pre><code><span class="c">// Test: does the LED sign work?</span>
+<span class="k">#include</span> &lt;MD_Parola.h&gt;
+<span class="k">#include</span> &lt;MD_MAX72xx.h&gt;
+<span class="k">#include</span> &lt;SPI.h&gt;
+
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW  <span class="c">// jumbled letters? try GENERIC_HW</span>
+MD_Parola sign = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span class="n">4</span>);   <span class="c">// CS on D10, 4 modules</span>
+
+<span class="k">void</span> setup() {
+  sign.begin();
+  sign.setIntensity(<span class="n">2</span>);          <span class="c">// soft light for the test</span>
+  sign.displayText(<span class="n">"Hello!"</span>, PA_CENTER, <span class="n">50</span>, <span class="n">1000</span>, PA_SCROLL_LEFT, PA_SCROLL_LEFT);
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">if</span> (sign.displayAnimate()) sign.displayReset();   <span class="c">// start again, forever</span>
+}</code></pre></div>
+            <ol start="3">
+              <li>“Hello!” should scroll from right to left.</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Won't upload?</span><p>Lots of “compatible” Nanos want a different setting: <strong>Tools → Processor → ATmega328P (Old Bootloader)</strong>, then try again.</p></div></div>
+            <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Jumbled or backwards letters?</span><p>There are several kinds of panels. Replace <code>FC16_HW</code> with <code>GENERIC_HW</code> (or <code>ICSTATION_HW</code>, or <code>PAROLA_HW</code>) until it reads properly. Write down the one that works!</p></div></div>
+          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>Your sign's big program</h3><small>10 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <p>This program was written for <strong id="codeName">you</strong>, with your messages from the workshop. If you had to change <code>FC16_HW</code> in step 4, change it here too. The green comments explain each part.</p>
+            <div class="code-actions"><button class="btn btn-green" id="codeDl" type="button">Download the .ino file</button></div>
+            <div class="code"><div class="code-name">welcome_sign.ino</div><button class="copy" type="button">Copy</button><pre><code id="codeOut"></code></pre></div>
+            <ol>
+              <li>Upload it. At first the panel stays dark: that's normal, nobody has come by!</li>
+              <li>Wait <strong>one minute</strong>: the sensor needs to wake up too when it's switched on.</li>
+              <li>Wave your hand in front of the white dome… Hello!</li>
+            </ol>
+            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">It switches on by itself?</span><p>The sensor feels warmth: a radiator or the sun can fool it. Point it somewhere else, or turn the “Sensitivity” dial down a little.</p></div></div>
+          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>Close the case and hang your sign</h3><small>20 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Check everything works <strong>before</strong> you glue!</li>
+              <li>Put the panel behind the window, lights facing forward, with the DIN end on the same side as the Arduino. With a grown-up, put 4 dots of hot glue on the edges of the board.</li>
+              <li>Slide the sensor dome into the round hole, and glue its board the same way.</li>
+              <li>Stick the Arduino to the bottom with double-sided tape, its USB socket facing the notch.</li>
+              <li>Close the lid, put two screws in the wall 10 cm apart, and hang your sign at face height, near the door.</li>
+            </ol>
+            <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Where to hang it?</span><p>The sensor sees up to about 5 metres. Point it to where people come in, not at your bed, or it'll say hello every time you turn over at night!</p></div></div>
+          </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
+        </article>
+
+      </div>
+
+      <div class="finale">
+        <img src="../assets/lili-mission.webp" alt="Lili raising her arms, mission accomplished">
+        <div>
+          <span class="eyebrow">Mission accomplished</span>
+          <h2>Your sign says hello!</h2>
+          <p>You've built something that senses, decides and talks. The signs in train stations and shops work exactly like this.</p>
+          <ul>
+            <li><strong>Challenge 1:</strong> make a special message for a birthday, and switch to it on the day.</li>
+            <li><strong>Challenge 2:</strong> find the fastest speed you can still read.</li>
+            <li><strong>Challenge 3:</strong> in the program, replace <code>PA_SCROLL_LEFT</code> with <code>PA_SCROLL_UP</code> or <code>PA_SCROLL_DOWN</code>. What happens?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">Lili's Workshop · Build tomorrow's robots today!</div></footer>
+<div class="toast" id="toast" role="status"><img src="../assets/lili-contente.webp" alt=""><span id="toastTxt">Well done!</span></div>
+
+<script>
+(function(){
+  const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* Robot menu */
+  const pb=document.getElementById("pickerBtn"),pm=document.getElementById("pickerMenu");
+  pb.addEventListener("click",e=>{e.stopPropagation();const o=pm.hidden;pm.hidden=!o;pb.setAttribute("aria-expanded",String(o));});
+  document.addEventListener("click",e=>{if(!pm.contains(e.target)){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  pm.querySelector(".is-current").addEventListener("click",()=>{pm.hidden=true;pb.setAttribute("aria-expanded","false");});
+
+  /* Video */
+  const v=document.getElementById("heroVideo"),vt=document.getElementById("vidToggle");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.pause();v.removeAttribute("autoplay");vt.textContent="▶ Play";}
+  vt.addEventListener("click",()=>{if(v.paused){v.play();vt.textContent="❚❚ Pause";}else{v.pause();vt.textContent="▶ Play";}});
+
+  /* Toast */
+  const toast=document.getElementById("toast"),tt=document.getElementById("toastTxt");let tid;
+  function say(msg){tt.textContent=msg;toast.classList.add("show");clearTimeout(tid);tid=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+  const shop=store.get("lili-r2b-shop")||{};
+  const boxes=[...document.querySelectorAll(".items input")];
+  function shopUpd(){const n=boxes.filter(b=>b.checked).length;document.getElementById("shopCount").textContent=n+" / "+boxes.length+" found";document.getElementById("shopBar").style.width=(100*n/boxes.length)+"%";return n;}
+  boxes.forEach(b=>{b.checked=!!shop[b.dataset.k];b.addEventListener("change",()=>{shop[b.dataset.k]=b.checked;store.set("lili-r2b-shop",shop);if(shopUpd()===boxes.length)say("Everything's here! Let's build!");});});
+  shopUpd();
+
+  /* Steps */
+  const done=store.get("lili-r2b-steps")||{};
+  const steps=[...document.querySelectorAll(".step")];
+  const cheers=["Well done!","Great work!","Keep it up!","You're a real engineer!","Another one done!"];
+  function stepUpd(){const n=steps.filter(s=>s.classList.contains("is-done")).length;document.getElementById("stepCount").textContent=n+" / "+steps.length+" steps";document.getElementById("stepBar").style.width=(100*n/steps.length)+"%";return n;}
+  steps.forEach(s=>{const k=s.dataset.step,btn=s.querySelector(".done-btn");
+    const set=on=>{s.classList.toggle("is-done",on);btn.textContent=on?"✓ Done":"Done!";btn.setAttribute("aria-pressed",String(on));};
+    set(!!done[k]);
+    btn.addEventListener("click",()=>{const on=!s.classList.contains("is-done");set(on);done[k]=on;store.set("lili-r2b-steps",done);const n=stepUpd();if(on)say(n===steps.length?"Mission accomplished!":cheers[n%cheers.length]);});
+  });
+  stepUpd();
+
+  /* Copy code */
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+    const pre=b.parentElement.querySelector("pre");const txt=pre.innerText;
+    const ok=()=>{b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",1500);};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{selectEl(pre);b.textContent="Ctrl+C";});}catch(e){selectEl(pre);b.textContent="Ctrl+C";}
+  }));
+  function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  /* Active menu */
+  const links=[...document.querySelectorAll(".navlinks a")];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["comprendre","courses","montage"].forEach(id=>io.observe(document.getElementById(id)));
+
+})();
+</script>
+<script src="../assets/panneau-code.js?v=1"></script>
+<script src="../assets/panneau.js?v=1"></script>
+<script src="../assets/banner.js?v=2"></script>
+<script src="../assets/menu.js?v=2"></script>
+</body>
+</html>

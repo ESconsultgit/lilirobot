@@ -272,6 +272,7 @@ footer{padding-block:30px;color:var(--ink-soft);font-size:.9rem;text-align:cente
 .pm-chip,.pm-lvl{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:800;line-height:1;border-radius:999px;padding:4px 8px;background:var(--surface-2);color:var(--ink-soft);white-space:nowrap}
 .pm-lvl{letter-spacing:.02em}
 .pm-lvl span{letter-spacing:0}
+.lvl-1{background:#DDF3F0;color:#1E6B60}
 .lvl-2{background:var(--lime-soft);color:var(--green-deep)}
 .lvl-3{background:var(--sun-soft);color:#8A6500}
 .lvl-4{background:var(--warn-soft);color:var(--warn)}
@@ -289,3 +290,37 @@ footer{padding-block:30px;color:var(--ink-soft);font-size:.9rem;text-align:cente
 .hero.is-compact .hero-text .wrap{gap:8px}
 @keyframes heroIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 html{overflow-anchor:none}   /* la bannière se replie sans faire sauter la page vers le haut */
+
+/* ---------- Enseigne V2 : l'atelier des messages ---------- */
+.pstudio{background:radial-gradient(120% 90% at 70% 30%,#24502A 0%,#122A12 70%);color:#EAF5DE;padding-block:34px 40px}
+.pstudio .wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start}
+.pstudio h2{color:#fff}
+.pstudio .eyebrow{color:#C6E87F}
+.pstudio p.lead{color:#D5E9C4;font-weight:600;margin-top:6px}
+.led-box{background:#8CC63F;border-radius:22px;padding:18px;box-shadow:0 18px 40px rgba(0,0,0,.35);margin-top:16px}
+.led-box canvas{display:block;width:100%;height:auto;aspect-ratio:33/9;border-radius:6px;background:#0E120E}
+.led-under{display:flex;align-items:center;gap:14px;margin-top:14px}
+.led-pir{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff,#D9DCD3);box-shadow:0 0 0 4px #2B2F2C;flex:none}
+.led-state{font-weight:700;color:#163514;font-size:.95rem;line-height:1.35}
+.pstudio .btn-visit{margin-top:14px}
+.ppanel{display:grid;gap:16px;background:#183618;border:2px solid #2E5A2A;border-radius:20px;padding:18px}
+.pfield{display:grid;gap:6px}
+.pfield>label,.pfield>.lbl{font-weight:800;font-size:.95rem;display:flex;justify-content:space-between;gap:10px;color:#EAF5DE}
+.pfield output{font-family:var(--font-mono);color:#C6E87F}
+.pfield small{color:#A9C79A;font-size:.85rem;line-height:1.35}
+.pfield input[type=text],.pfield textarea{font:inherit;font-weight:700;color:#163514;background:#F4FAEC;border:2px solid #8CC63F;border-radius:12px;padding:9px 12px;width:100%}
+.pfield textarea{min-height:84px;resize:vertical;font-weight:600}
+.pfield input[type=range]{accent-color:#8CC63F;width:100%}
+.pcheck{display:flex;gap:10px;align-items:flex-start;font-weight:700;cursor:pointer}
+.pcheck input{width:20px;height:20px;accent-color:#8CC63F;margin-top:2px}
+.pcheck small{display:block;font-weight:600;color:#A9C79A}
+.pswatches{display:flex;gap:8px;flex-wrap:wrap}
+.pswatches button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25)}
+.pswatches button[aria-pressed="true"]{border-color:#fff;transform:scale(1.12)}
+.code-actions{display:flex;gap:8px;flex-wrap:wrap;margin-block:10px}
+.opt{border:2px solid var(--line);border-radius:16px;padding:14px 16px;margin-block:12px;background:var(--surface)}
+.opt h4{font-family:var(--font-display);font-size:1.15rem;color:var(--green-deep);margin-bottom:8px}
+@media (max-width:900px){.pstudio .wrap{grid-template-columns:1fr}}
+
+:root[data-theme="dark"] .lvl-1{background:#1C3A36;color:#9FE3D8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lvl-1{background:#1C3A36;color:#9FE3D8}}

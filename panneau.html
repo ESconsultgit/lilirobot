@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Version 2 de l'Enseigne lumineuse, dans l'atelier de Lili : un panneau LED qui fait défiler tes messages et dit bonjour quand quelqu'un arrive.">
+<link rel="icon" href="assets/lili-avatar.webp" type="image/webp">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>L'Enseigne lumineuse 2 · L'atelier de Lili</title>
+<link rel="alternate" hreflang="en" href="en/panneau.html">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/atelier.css?v=5">
+
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/lili-avatar.webp" alt="">L'atelier de Lili</a>
+    <div class="picker">
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">L'Enseigne lumineuse · Version 2<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      </button>
+      <div class="picker-menu" id="pickerMenu" hidden>
+        <a class="robot-opt" href="index.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>L'Équilibriste · Version 1</b><small>Une balle de ping-pong en équilibre sur un rail</small></span>
+        </a>
+        <a class="robot-opt" href="plateau.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
+          <span><b>L'Équilibriste · Version 2</b><small>Une bille sur un plateau, 3 moteurs · niveau expert</small></span>
+        </a>
+        <a class="robot-opt" href="enseigne.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>L'Enseigne lumineuse · Version 1</b><small>Ton prénom en lettres imprimées en 3D qui s'allument</small></span>
+        </a>
+        <a class="robot-opt is-current" href="#top">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
+          <span><b>L'Enseigne lumineuse · Version 2</b><small>Tes messages qui défilent · très facile</small></span>
+        </a>
+        <a class="robot-opt" href="rouleur.html">
+          <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg></span>
+          <span><b>Le Rouleur</b><small>Il roule et contourne les obstacles tout seul</small></span>
+        </a>
+        <span class="robot-opt locked" aria-disabled="true">
+          <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
+          <span><b>Mystère</b><small>Se débloque quand tu as fini le Rouleur</small></span>
+        </span>
+      </div>
+    </div>
+    <nav class="navlinks" aria-label="Chapitres">
+      <a href="#comprendre">Comment ça marche</a>
+      <a href="#courses">Les courses</a>
+      <a href="#montage">Le montage</a>
+    </nav>
+    <nav class="lang" aria-label="Langue"><a href="panneau.html" lang="fr" hreflang="fr" title="Français" aria-label="Français" aria-current="true"><svg viewBox="0 0 3 2" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#FFFFFF"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg></a><a href="en/panneau.html" lang="en" hreflang="en" title="English" aria-label="English"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><clipPath id="ukT"><path d="M30,15h30v15zv15h-30zh-30v-15zv-15h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0L60,30M60,0L0,30" stroke="#FFFFFF" stroke-width="6"/><path d="M0,0L60,30M60,0L0,30" clip-path="url(#ukT)" stroke="#C8102E" stroke-width="4"/><path d="M30,0v30M0,15h60" stroke="#FFFFFF" stroke-width="10"/><path d="M30,0v30M0,15h60" stroke="#C8102E" stroke-width="6"/></svg></a></nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
+    <div class="hero-text">
+      <div class="wrap">
+        <span class="eyebrow">Robot n°2 · Version 2 · Niveau très facile</span>
+        <h1>L'Enseigne lumineuse 2</h1>
+        <p class="lead">Un panneau de lumières qui fait défiler tes messages, et qui se réveille pour dire « Bonjour ! Bienvenue chez… » quand quelqu'un arrive.</p>
+        <div class="hero-cta">
+          <a class="btn btn-lime" href="#atelier">Écris tes messages</a>
+          <a class="btn btn-ghost" href="#courses">La liste de courses</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <div><span>Difficulté</span><b class="stars">★☆☆☆</b></div>
+      <div><span>Durée</span><b>1 après-midi (+ le boîtier)</b></div>
+      <div><span>Budget</span><b>≈ 25 €</b></div>
+      <div><span>Tu vas apprendre</span><b>Capteur, texte, boucles</b></div>
+    </div>
+  </div>
+
+  <!-- ===================== L'ATELIER DES MESSAGES ===================== -->
+  <section class="pstudio" id="atelier">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">L'atelier des messages</span>
+        <h2>Écris ce qui va défiler</h2>
+        <p class="lead">Tout ce que tu écris ici s'affiche sur le panneau, avec les mêmes lettres que le vrai. Et Lili prépare le programme pour toi, plus bas, à l'étape 5.</p>
+        <div class="led-box">
+          <canvas id="ledView" width="660" height="180" aria-label="Aperçu du panneau LED"></canvas>
+          <div class="led-under"><span class="led-pir" aria-hidden="true"></span><p class="led-state" id="pState" role="status"></p></div>
+        </div>
+        <button class="btn btn-lime btn-visit" id="pVisit" type="button">Quelqu'un arrive !</button>
+      </div>
+      <div class="ppanel">
+        <div class="pfield"><label for="pName">Ton prénom</label><input id="pName" type="text" maxlength="16" autocomplete="off" spellcheck="false"></div>
+        <div class="pfield"><label for="pWelcome">Le message de bienvenue</label><input id="pWelcome" type="text" maxlength="60" autocomplete="off"><small>Il défile en premier, dès que quelqu'un arrive.</small></div>
+        <div class="pfield"><label for="pMessages">Les autres messages</label><textarea id="pMessages" maxlength="400"></textarea><small>Un message par ligne, 6 au maximum. Les accents marchent (é, è, à, ç…). Les émojis, non.</small></div>
+        <div class="pfield"><label for="pSpeed">Vitesse <output id="pSpeedOut"></output></label><input id="pSpeed" type="range" min="15" max="100" step="5"><small>Le temps entre deux pas : plus petit = plus rapide.</small></div>
+        <div class="pfield"><label for="pLight">Lumière <output id="pLightOut"></output></label><input id="pLight" type="range" min="0" max="15" step="1"><small>De 0 (doux) à 15 (très fort). 4, c'est bien pour une chambre.</small></div>
+        <div class="pfield"><label for="pStay">Reste allumé <output id="pStayOut"></output></label><input id="pStay" type="range" min="5" max="120" step="5"><small>Après le dernier passage, avant de s'endormir.</small></div>
+        <label class="pcheck"><input type="checkbox" id="pAlways"><span>Toujours allumé<small>Le panneau défile tout le temps, même sans personne.</small></span></label>
+        <div class="pfield"><span class="lbl">La couleur de ton panneau</span><div class="pswatches" id="pColors"><button type="button" data-c="red" style="background:#FF5A4A" aria-label="Rouge" title="Rouge" aria-pressed="false"></button><button type="button" data-c="green" style="background:#5BE05B" aria-label="Vert" title="Vert" aria-pressed="false"></button><button type="button" data-c="blue" style="background:#4AA8FF" aria-label="Bleu" title="Bleu" aria-pressed="false"></button><button type="button" data-c="yellow" style="background:#FFC83A" aria-label="Jaune" title="Jaune" aria-pressed="false"></button><button type="button" data-c="white" style="background:#E8F0FF" aria-label="Blanc" title="Blanc" aria-pressed="false"></button></div><small>Choisis-la au moment de l'acheter : chaque panneau n'a qu'une couleur.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COMPRENDRE ===================== -->
+  <section class="chap" id="comprendre">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0012 3z"/></svg></div>
+        <div><h2>Comment ça marche ?</h2><p>Un panneau qui sait quand tu arrives, c'est déjà un petit robot !</p></div>
+      </div>
+
+      <div class="lili"><img src="assets/lili-coucou.webp" alt="Lili fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Cette fois, pas besoin d'imprimer des lettres : le panneau est fait de <strong>256 petites lumières</strong>. En allumant les bonnes, il dessine n'importe quel mot… et il le fait glisser comme un journal lumineux dans une gare. Et quand quelqu'un arrive devant ta porte, il se réveille pour lui dire bonjour !</p></div></div>
+
+      <figure class="look" id="apercu">
+        <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton enseigne accrochée près de la porte. Le panneau LED est en haut, le détecteur en dessous, et tout le reste est caché dans le boîtier.</p></div>
+        <a class="look-pic" href="assets/look-panneau.svg" target="_blank" rel="noopener" title="Ouvrir l'image en grand"><img src="assets/look-panneau.svg" alt="L'enseigne terminée : un boîtier vert avec le panneau LED en haut, le dôme blanc du détecteur en dessous, et un câble USB vers un chargeur" width="800" height="470" loading="lazy"></a>
+        <p class="look-zoom">Touche l'image pour l'agrandir.</p>
+        <ol class="look-key">
+          <li><span><b>Le panneau LED</b>4 carrés de 8 × 8 lumières, soit 256 points. Il se voit à travers la fenêtre du boîtier.</span></li>
+          <li><span><b>Le détecteur de présence</b>Son petit dôme blanc sent la chaleur des gens qui passent devant.</span></li>
+          <li><span><b>Le boîtier</b>Imprimé en 3D ou fabriqué en bois. Il cache les fils et s'accroche au mur.</span></li>
+          <li><span><b>L'Arduino Nano</b>Le cerveau, caché à l'intérieur du boîtier.</span></li>
+          <li><span><b>Le câble USB et le chargeur</b>Un vieux chargeur de téléphone suffit pour tout alimenter.</span></li>
+        </ol>
+      </figure>
+
+      <div class="how">
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="24" cy="24" r="6"/><path d="M8 24a16 16 0 0132 0M14 24a10 10 0 0120 0"/></svg>
+          <span class="role">Les yeux</span><h3>Le détecteur de présence</h3>
+          <p>Il sent la chaleur de ton corps quand tu bouges devant lui. Son dôme blanc est une loupe qui regarde dans toutes les directions.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="12" y="8" width="24" height="32" rx="3"/><path d="M18 2v6M30 2v6M18 40v6M30 40v6"/></svg>
+          <span class="role">Le cerveau</span><h3>L'Arduino Nano</h3>
+          <p>Il garde tes messages en mémoire et décide quand se réveiller, quoi écrire, et quand se rendormir.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="currentColor"><g opacity=".9"><circle cx="9" cy="14" r="3"/><circle cx="19" cy="14" r="3"/><circle cx="29" cy="14" r="3"/><circle cx="39" cy="14" r="3"/><circle cx="9" cy="24" r="3"/><circle cx="29" cy="24" r="3"/><circle cx="9" cy="34" r="3"/><circle cx="19" cy="34" r="3"/><circle cx="29" cy="34" r="3"/><circle cx="39" cy="34" r="3"/></g></svg>
+          <span class="role">La bouche</span><h3>Le panneau LED</h3>
+          <p>256 lumières rangées en 32 colonnes et 8 lignes. Une petite puce, la MAX7219, les allume très vite, ligne après ligne.</p>
+        </div>
+        <div class="how-card">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="4" y="12" width="40" height="24" rx="4"/><rect x="9" y="16" width="30" height="8" rx="1"/><circle cx="24" cy="30" r="3"/></svg>
+          <span class="role">Le corps</span><h3>Le boîtier</h3>
+          <p>Une boîte avec une fenêtre pour le panneau et un trou rond pour le détecteur. À imprimer en 3D ou à fabriquer en bois.</p>
+        </div>
+      </div>
+      <p class="loop-line">Le détecteur sent quelqu'un → le cerveau réveille le panneau → les messages défilent… puis tout s'endort quand il n'y a plus personne.</p>
+
+      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Lili explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment une lettre peut-elle avancer ? En vrai, rien ne bouge ! Le panneau dessine la lettre, puis la redessine <strong>une colonne plus à gauche</strong>, encore et encore, des dizaines de fois par seconde. Tes yeux croient qu'elle glisse. C'est le même truc qu'un dessin animé !</p></div></div>
+    </div>
+  </section>
+
+  <!-- ===================== COURSES ===================== -->
+  <section class="chap chap-alt" id="courses">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+      </div>
+      <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
+      <div class="shop">
+        <div class="shop-group">
+          <h3><span class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span>L'électronique</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="nano"><span><b>Arduino Nano (ou compatible)</b><small>Le cerveau. Petit, il tient dans le boîtier. Si tu as fait l'Enseigne 1, tu peux réutiliser le sien.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> ATmega328P, broches déjà soudées</span></span></span><span class="qty"><span>×1 · ≈ 6–20 €</span><a class="buy" href="https://www.amazon.fr/s?k=Arduino+Nano+ATmega328P+broches+soudées" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="matrice"><span><b>Panneau LED MAX7219 « 4 en 1 »</b><small>La bouche. Les 4 carrés de lumières sont déjà assemblés sur une seule carte.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> module 4 en 1 déjà assemblé (32 × 8 points), dans la couleur que tu veux</span></span></span><span class="qty"><span>×1 · ≈ 8–12 €</span><a class="buy" href="https://www.amazon.fr/s?k=MAX7219+matrice+LED+4+en+1+32x8" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="pir"><span><b>Détecteur de présence HC-SR501</b><small>Les yeux. On en trouve souvent par lot de 3 ou 5.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> HC-SR501 avec son dôme blanc et ses 2 petits boutons orange</span></span></span><span class="qty"><span>×1 · ≈ 3 €</span><a class="buy" href="https://www.amazon.fr/s?k=HC-SR501+détecteur+mouvement+PIR" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="fils"><span><b>Fils femelle-femelle</b><small>8 fils suffisent. Pas besoin de plaque d'essai : tout se branche directement.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> câbles Dupont femelle-femelle, 10 à 20 cm</span></span></span><span class="qty"><span>×8 · ≈ 4 € le lot</span><a class="buy" href="https://www.amazon.fr/s?k=câbles+dupont+femelle+femelle" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg>Amazon</a></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="usb"><span><b>Câble USB + chargeur de téléphone</b><small>Un vieux chargeur de téléphone fait très bien l'affaire. Le câble doit avoir la bonne prise pour ton Nano.</small><span class="spec"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Vérifie :</b> chargeur 5 V (1 A suffit), câble mini-USB ou USB-C selon ton Nano</span></span></span><span class="qty"><span>×1 · souvent déjà là</span><span class="store">Maison</span></span></label></li>
+          </ul>
+        </div>
+        <div class="shop-group">
+          <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>Le boîtier (choisis A ou B)</h3>
+          <ul class="items">
+            <li><label class="item"><input type="checkbox" data-k="pla"><span><b>A · Filament PLA</b><small>Environ 80 g pour le boîtier et son couvercle. Tu choisis la couleur !</small></span><span class="qty"><span>≈ 80 g · ≈ 2 €</span><span class="store">Imprimante 3D</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="bois"><span><b>B · Contreplaqué 5 mm + baguette</b><small>2 plaques de 18 × 8 cm et 50 cm de baguette de 10 × 35 mm. Le plan est à l'étape 2.</small></span><span class="qty"><span>lot · ≈ 6 €</span><span class="store">Bricolage</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="colle"><span><b>Colle chaude, scotch double face</b><small>Pour tenir le panneau, le détecteur et l'Arduino dans le boîtier.</small></span><span class="qty"><span>lot</span><span class="store">Maison</span></span></label></li>
+            <li><label class="item"><input type="checkbox" data-k="vis"><span><b>2 vis et chevilles</b><small>Pour accrocher le boîtier au mur, près de la porte.</small></span><span class="qty"><span>×2</span><span class="store">Maison</span></span></label></li>
+          </ul>
+        </div>
+      </div>
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le pistolet à colle chaude et, pour le boîtier en bois, la scie et la perceuse : on les utilise <strong>avec papa</strong>. Toi, tu traces, tu tiens et tu vérifies !</p></div></div>
+      <p class="total">Outils à préparer : pistolet à colle chaude, tournevis, et un ordinateur avec <strong>Arduino IDE</strong>. Pour le boîtier en bois : scie sauteuse, perceuse avec une mèche à bois de 24 mm, papier de verre. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
+    </div>
+  </section>
+
+  <!-- ===================== MONTAGE ===================== -->
+  <section class="chap" id="montage">
+    <div class="wrap">
+      <div class="chap-head">
+        <div class="hex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="10" rx="2"/><path d="M12 8V4M9 3h6M9 13h.01M15 13h.01M3 13h2M19 13h2"/></svg></div>
+        <div><h2>Le montage, étape par étape</h2><p>Une étape à la fois. Clique sur « C'est fait ! » quand tu as terminé.</p></div>
+      </div>
+      <div class="progress"><span id="stepCount">0 / 0</span><div class="bar"><i id="stepBar"></i></div></div>
+      <div class="steps">
+
+        <article class="step" data-step="1">
+          <div class="step-head"><span class="num">1</span><div><h3>Prépare tes messages</h3><small>10 minutes · tout en haut de la page</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Remonte à <a href="#atelier">l'atelier des messages</a> et écris ton prénom : le message de bienvenue se remplit tout seul.</li>
+              <li>Ajoute tes autres messages, un par ligne : une blague, « Frappe avant d'entrer », la météo de ta chambre…</li>
+              <li>Clique sur <strong>Quelqu'un arrive !</strong> pour voir ton panneau se réveiller et tout faire défiler.</li>
+            </ol>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Lili garde tes messages en mémoire dans ce navigateur. Tu peux revenir les changer quand tu veux : le programme de l'étape 5 se met à jour tout seul.</p></div></div>
+          </div><img class="pose" src="assets/lili-coucou.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="2">
+          <div class="step-head"><span class="num">2</span><div><h3>Le boîtier</h3><small>2 à 3 heures d'impression, ou 1 heure de bricolage avec un adulte</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <div class="opt"><h4>Option A · Imprimé en 3D</h4>
+              <p><a class="btn btn-lime" href="assets/panneau/enseigne2-fichiers.zip" download>Télécharger le boîtier et les programmes</a></p>
+              <ol>
+                <li>Imprime <code>boitier.stl</code> posé sur sa face avant (la fenêtre contre le plateau), sans supports. Il fait 17,2 cm de large.</li>
+                <li>Imprime <code>couvercle.stl</code> à plat, le rebord vers le haut.</li>
+                <li>Réglages conseillés : couches de 0,2 mm, 3 contours, remplissage 15 %.</li>
+              </ol>
+            </div>
+            <div class="opt"><h4>Option B · En bois</h4>
+              <ol>
+                <li>Coupe <strong>deux plaques</strong> de contreplaqué de 180 × 80 mm : la face avant et le dos.</li>
+                <li>Sur la face avant, trace la <strong>fenêtre</strong> : 127 × 31 mm, centrée, à 12 mm du bord du haut. Avec papa : perce un trou dans chaque coin, puis découpe à la scie sauteuse.</li>
+                <li>Perce le <strong>trou du détecteur</strong> (mèche de 24 mm), centré, à 24 mm du bord du bas.</li>
+                <li>Coupe la baguette de 10 × 35 mm : <strong>2 morceaux de 180 mm</strong> (haut et bas) et <strong>2 de 60 mm</strong> (côtés). Colle-les en cadre derrière la face avant.</li>
+                <li>Fais une encoche de 12 mm dans le morceau du bas pour le câble USB. Le dos se vissera avec 4 petites vis, pour pouvoir le rouvrir.</li>
+              </ol>
+            </div>
+            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une fenêtre un peu petite ?</span><p>Elle mesure 1 mm de moins que le panneau. Comme ça, le panneau s'appuie derrière et ne peut pas passer à travers… mais tous les points restent bien visibles !</p></div></div>
+          </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="3">
+          <div class="step-head"><span class="num">3</span><div><h3>Les branchements</h3><small>20 minutes · câble USB débranché !</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p>Pas de plaque d'essai cette fois : chaque fil va directement d'une broche à l'autre. Le panneau a des broches <strong>des deux côtés</strong> : on branche l'Arduino sur le côté marqué <strong>DIN</strong>.</p>
+            <div class="wiring"><table>
+              <thead><tr><th>Pièce</th><th>Broche</th><th>Va sur…</th></tr></thead>
+              <tbody>
+                <tr><td>Panneau (côté DIN)</td><td>VCC</td><td>5V de l'Arduino</td></tr>
+                <tr><td>Panneau (côté DIN)</td><td>GND</td><td>GND de l'Arduino</td></tr>
+                <tr><td>Panneau (côté DIN)</td><td>DIN</td><td>D11</td></tr>
+                <tr><td>Panneau (côté DIN)</td><td>CS</td><td>D10</td></tr>
+                <tr><td>Panneau (côté DIN)</td><td>CLK</td><td>D13</td></tr>
+                <tr><td>Détecteur</td><td>VCC</td><td>VCC du panneau, côté DOUT</td></tr>
+                <tr><td>Détecteur</td><td>GND</td><td>GND du panneau, côté DOUT</td></tr>
+                <tr><td>Détecteur</td><td>OUT</td><td>D2</td></tr>
+              </tbody>
+            </table></div>
+            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">L'astuce de Lili</span><p>L'Arduino Nano n'a qu'une seule broche 5V. Mais le panneau laisse passer l'énergie de l'autre côté ! Le détecteur prend donc son VCC et son GND <strong>sur les broches de sortie du panneau</strong>.</p></div></div>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Les deux boutons orange</span><p>Sur le détecteur, tourne le bouton <strong>« Time »</strong> à fond vers la gauche (le programme compte lui-même le temps), et laisse le bouton <strong>« Sensitivity »</strong> au milieu. S'il y a un petit cavalier jaune, mets-le sur <strong>H</strong>.</p></div></div>
+          </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="4">
+          <div class="step-head"><span class="num">4</span><div><h3>Le premier test</h3><small>15 minutes · sur l'ordinateur</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Dans Arduino IDE, ouvre <strong>Outils → Gérer les bibliothèques</strong>, cherche <strong>MD_Parola</strong> et clique sur Installer. Accepte d'installer aussi <strong>MD_MAX72XX</strong>.</li>
+              <li>Choisis la carte <strong>Arduino Nano</strong>, branche le câble USB, et téléverse ce petit programme :</li>
+            </ol>
+            <div class="code"><div class="code-name">test_panneau.ino</div><button class="copy" type="button">Copier</button><pre><code><span class="c">// Test : est-ce que le panneau LED marche ?</span>
+<span class="k">#include</span> &lt;MD_Parola.h&gt;
+<span class="k">#include</span> &lt;MD_MAX72xx.h&gt;
+<span class="k">#include</span> &lt;SPI.h&gt;
+
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW  <span class="c">// lettres mélangées ? essaie GENERIC_HW</span>
+MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span class="n">4</span>);   <span class="c">// CS sur D10, 4 modules</span>
+
+<span class="k">void</span> setup() {
+  panneau.begin();
+  panneau.setIntensity(<span class="n">2</span>);       <span class="c">// lumière douce pour le test</span>
+  panneau.displayText(<span class="n">"Coucou !"</span>, PA_CENTER, <span class="n">50</span>, <span class="n">1000</span>, PA_SCROLL_LEFT, PA_SCROLL_LEFT);
+}
+
+<span class="k">void</span> loop() {
+  <span class="k">if</span> (panneau.displayAnimate()) panneau.displayReset();   <span class="c">// on recommence, sans fin</span>
+}</code></pre></div>
+            <ol start="3">
+              <li>« Coucou ! » doit défiler de droite à gauche.</li>
+            </ol>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Ça ne se téléverse pas ?</span><p>Beaucoup de Nano « compatibles » veulent un autre réglage : <strong>Outils → Processeur → ATmega328P (Old Bootloader)</strong>, puis réessaie.</p></div></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Lettres mélangées ou à l'envers ?</span><p>Il existe plusieurs sortes de panneaux. Remplace <code>FC16_HW</code> par <code>GENERIC_HW</code> (ou <code>ICSTATION_HW</code>, ou <code>PAROLA_HW</code>) jusqu'à ce que ce soit lisible. Note celui qui marche !</p></div></div>
+          </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="5">
+          <div class="step-head"><span class="num">5</span><div><h3>Le grand programme de ton enseigne</h3><small>10 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <p>Ce programme a été écrit pour <strong id="codeName">toi</strong>, avec tes messages de l'atelier. Si tu as dû changer <code>FC16_HW</code> à l'étape 4, change-le aussi ici. Les commentaires en vert expliquent chaque partie.</p>
+            <div class="code-actions"><button class="btn btn-green" id="codeDl" type="button">Télécharger le fichier .ino</button></div>
+            <div class="code"><div class="code-name">enseigne_bienvenue.ino</div><button class="copy" type="button">Copier</button><pre><code id="codeOut"></code></pre></div>
+            <ol>
+              <li>Téléverse-le. Au début, le panneau reste éteint : c'est normal, personne n'est passé !</li>
+              <li>Attends <strong>une minute</strong> : le détecteur a besoin de se réveiller lui aussi quand on l'allume.</li>
+              <li>Passe la main devant le dôme blanc… Bonjour !</li>
+            </ol>
+            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Il s'allume tout seul ?</span><p>Le détecteur sent la chaleur : un radiateur ou le soleil peuvent le tromper. Tourne-le ailleurs, ou baisse un peu le bouton « Sensitivity ».</p></div></div>
+          </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
+        </article>
+        <article class="step" data-step="6">
+          <div class="step-head"><span class="num">6</span><div><h3>Ferme le boîtier et accroche ton enseigne</h3><small>20 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
+          <div class="step-body"><div>
+            <ol>
+              <li>Vérifie que tout marche <strong>avant</strong> de coller !</li>
+              <li>Pose le panneau derrière la fenêtre, les lumières vers l'avant, le côté DIN du même côté que l'Arduino. Avec papa, mets 4 points de colle chaude sur les bords de la carte.</li>
+              <li>Glisse le dôme du détecteur dans le trou rond, et colle sa carte de la même façon.</li>
+              <li>Colle l'Arduino au fond avec du scotch double face, la prise USB en face de l'encoche.</li>
+              <li>Ferme le couvercle, visse deux vis dans le mur à 10 cm l'une de l'autre, et accroche ton enseigne à hauteur de visage, près de la porte.</li>
+            </ol>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Où l'accrocher ?</span><p>Le détecteur voit jusqu'à 5 mètres environ. Tourne-le vers l'endroit où les gens arrivent, pas vers ton lit, sinon il te dira bonjour chaque fois que tu te retournes la nuit !</p></div></div>
+          </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
+        </article>
+
+      </div>
+
+      <div class="finale">
+        <img src="assets/lili-mission.webp" alt="Lili lève les bras, mission accomplie">
+        <div>
+          <span class="eyebrow">Mission accomplie</span>
+          <h2>Ton enseigne dit bonjour !</h2>
+          <p>Tu as fabriqué un objet qui sent, décide et parle. Les panneaux des gares et des magasins marchent exactement comme ça.</p>
+          <ul>
+            <li><strong>Défi 1 :</strong> prépare un message spécial pour un anniversaire, et change-le le jour J.</li>
+            <li><strong>Défi 2 :</strong> trouve la vitesse la plus rapide qu'on arrive encore à lire.</li>
+            <li><strong>Défi 3 :</strong> dans le programme, remplace <code>PA_SCROLL_LEFT</code> par <code>PA_SCROLL_UP</code> ou <code>PA_SCROLL_DOWN</code>. Que se passe-t-il ?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">L'atelier de Lili · Construis aujourd'hui les robots de demain !</div></footer>
+<div class="toast" id="toast" role="status"><img src="assets/lili-contente.webp" alt=""><span id="toastTxt">Bravo !</span></div>
+
+<script>
+(function(){
+  const store={get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+  /* Menu robots */
+  const pb=document.getElementById("pickerBtn"),pm=document.getElementById("pickerMenu");
+  pb.addEventListener("click",e=>{e.stopPropagation();const o=pm.hidden;pm.hidden=!o;pb.setAttribute("aria-expanded",String(o));});
+  document.addEventListener("click",e=>{if(!pm.contains(e.target)){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  pm.querySelector(".is-current").addEventListener("click",()=>{pm.hidden=true;pb.setAttribute("aria-expanded","false");});
+
+  /* Vidéo */
+  const v=document.getElementById("heroVideo"),vt=document.getElementById("vidToggle");
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){v.pause();v.removeAttribute("autoplay");vt.textContent="▶ Lecture";}
+  vt.addEventListener("click",()=>{if(v.paused){v.play();vt.textContent="❚❚ Pause";}else{v.pause();vt.textContent="▶ Lecture";}});
+
+  /* Toast */
+  const toast=document.getElementById("toast"),tt=document.getElementById("toastTxt");let tid;
+  function say(msg){tt.textContent=msg;toast.classList.add("show");clearTimeout(tid);tid=setTimeout(()=>toast.classList.remove("show"),2200);}
+
+  /* Courses */
+  const shop=store.get("lili-r2b-shop")||{};
+  const boxes=[...document.querySelectorAll(".items input")];
+  function shopUpd(){const n=boxes.filter(b=>b.checked).length;document.getElementById("shopCount").textContent=n+" / "+boxes.length+" trouvés";document.getElementById("shopBar").style.width=(100*n/boxes.length)+"%";return n;}
+  boxes.forEach(b=>{b.checked=!!shop[b.dataset.k];b.addEventListener("change",()=>{shop[b.dataset.k]=b.checked;store.set("lili-r2b-shop",shop);if(shopUpd()===boxes.length)say("Tout est là ! On peut construire !");});});
+  shopUpd();
+
+  /* Étapes */
+  const done=store.get("lili-r2b-steps")||{};
+  const steps=[...document.querySelectorAll(".step")];
+  const cheers=["Bravo !","Super travail !","Continue comme ça !","Tu es une vraie ingénieure !","Encore une de faite !"];
+  function stepUpd(){const n=steps.filter(s=>s.classList.contains("is-done")).length;document.getElementById("stepCount").textContent=n+" / "+steps.length+" étapes";document.getElementById("stepBar").style.width=(100*n/steps.length)+"%";return n;}
+  steps.forEach(s=>{const k=s.dataset.step,btn=s.querySelector(".done-btn");
+    const set=on=>{s.classList.toggle("is-done",on);btn.textContent=on?"✓ Fait":"C'est fait !";btn.setAttribute("aria-pressed",String(on));};
+    set(!!done[k]);
+    btn.addEventListener("click",()=>{const on=!s.classList.contains("is-done");set(on);done[k]=on;store.set("lili-r2b-steps",done);const n=stepUpd();if(on)say(n===steps.length?"Mission accomplie !":cheers[n%cheers.length]);});
+  });
+  stepUpd();
+
+  /* Copier le code */
+  document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+    const pre=b.parentElement.querySelector("pre");const txt=pre.innerText;
+    const ok=()=>{b.textContent="Copié !";setTimeout(()=>b.textContent="Copier",1500);};
+    try{navigator.clipboard.writeText(txt).then(ok,()=>{selectEl(pre);b.textContent="Ctrl+C";});}catch(e){selectEl(pre);b.textContent="Ctrl+C";}
+  }));
+  function selectEl(el){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);}
+
+  /* Menu actif */
+  const links=[...document.querySelectorAll(".navlinks a")];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id));}}),{rootMargin:"-45% 0px -50% 0px"});
+  ["comprendre","courses","montage"].forEach(id=>io.observe(document.getElementById(id)));
+
+})();
+</script>
+<script src="assets/panneau-code.js?v=1"></script>
+<script src="assets/panneau.js?v=1"></script>
+
+<script src="assets/banner.js?v=2"></script>
+<script src="assets/menu.js?v=2"></script>
+</body>
+</html>

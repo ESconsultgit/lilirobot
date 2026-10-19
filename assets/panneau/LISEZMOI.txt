@@ -1,0 +1,19 @@
+L'Enseigne lumineuse 2 · Le panneau défilant — les fichiers de l'atelier de Lili
+https://lilirobot.com/panneau.html
+
+Astuce : sur la page, écris tes messages dans « L'atelier des messages » ;
+le programme se fabrique tout seul avec TES messages (bouton « Télécharger le fichier .ino »).
+
+BOÎTIER IMPRIMÉ (PLA, couches 0,2 mm, 3 contours, remplissage 15 %, sans supports)
+  boitier.stl     posé sur sa face avant (la fenêtre contre le plateau) — 172 x 80 x 38 mm
+  couvercle.stl   à plat, le rebord vers le haut
+
+BOÎTIER EN BOIS (contreplaqué 5 mm + baguette 10 x 35 mm)
+  2 plaques 180 x 80 mm (avant et dos)
+  fenêtre : 127 x 31 mm, centrée, à 12 mm du bord du haut
+  trou du détecteur : Ø 24 mm, centré, à 24 mm du bord du bas
+  baguette : 2 x 180 mm (haut et bas) + 2 x 60 mm (côtés), encoche de 12 mm en bas pour le câble
+
+PROGRAMMES ARDUINO (bibliothèque MD_Parola, à installer dans Arduino IDE)
+  test_panneau.ino         étape 4 : « Coucou ! » défile
+  enseigne_bienvenue.ino   étape 5 : le grand programme (messages d'exemple)

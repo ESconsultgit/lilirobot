@@ -10,6 +10,7 @@
   const PLATE='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg>';
   const SIGN='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg>';
   const CAR='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg>';
+  const SCROLL='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><rect x="3" y="12" width="42" height="18" rx="4" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="7" y="15" width="34" height="11" rx="1.5" fill="#141A14"/><g fill="#FF5A4A"><circle cx="11" cy="18" r="1.3"/><circle cx="11" cy="21" r="1.3"/><circle cx="11" cy="24" r="1.3"/><circle cx="14" cy="24" r="1.3"/><circle cx="20" cy="18" r="1.3"/><circle cx="20" cy="21" r="1.3"/><circle cx="20" cy="24" r="1.3"/><circle cx="26" cy="21" r="1.3"/><circle cx="29" cy="18" r="1.3"/><circle cx="29" cy="24" r="1.3"/><circle cx="35" cy="21" r="1.3"/></g><circle cx="24" cy="36" r="4" fill="#F4F4F0" stroke="#1F4D1D" stroke-width="2"/></svg>';
   const LOCK='<svg viewBox="0 0 48 48" width="34" aria-hidden="true"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg>';
   const PRINTER='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>';
   const CLOCK='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
@@ -19,19 +20,20 @@
     {name:L("L'Équilibriste","The Balancer"),desc:L("Garder une balle en équilibre, tout seul","Keeping a ball balanced, all by itself"),icon:RAIL,versions:[
       {href:"index.html",title:L("Version 1 · Le rail","Version 1 · The rail"),desc:L("Une balle de ping-pong sur un rail, 1 moteur","A ping-pong ball on a rail, 1 motor"),lvl:2,eur:45,time:L("3 après-midis","3 afternoons"),print:false,icon:RAIL},
       {href:"plateau.html",title:L("Version 2 · Le plateau","Version 2 · The plate"),desc:L("Une bille sur un plateau, 3 moteurs","A ball on a plate, 3 motors"),lvl:4,eur:80,time:L("5 après-midis","5 afternoons"),print:true,icon:PLATE}]},
-    {name:L("L'Enseigne lumineuse","The Light-up Sign"),desc:L("Ton prénom en lettres 3D qui s'allument","Your name in 3D letters that light up"),icon:SIGN,versions:[
-      {href:"enseigne.html",lvl:3,eur:70,time:L("2 après-midis","2 afternoons"),print:true}]},
+    {name:L("L'Enseigne lumineuse","The Light-up Sign"),desc:L("Des lumières qui écrivent ton prénom","Lights that spell out your name"),icon:SIGN,versions:[
+      {href:"enseigne.html",title:L("Version 1 · Les lettres 3D","Version 1 · The 3D letters"),desc:L("Ton prénom en lettres imprimées qui s'allument","Your name in printed letters that light up"),lvl:3,eur:70,time:L("2 après-midis","2 afternoons"),print:true,icon:SIGN},
+      {href:"panneau.html",title:L("Version 2 · Le panneau défilant","Version 2 · The scrolling sign"),desc:L("Tes messages qui défilent, et bonjour quand quelqu'un arrive","Your messages scrolling, and hello when someone comes by"),lvl:1,eur:25,time:L("1 après-midi","1 afternoon"),print:false,printOpt:true,icon:SCROLL}]},
     {name:L("Le Rouleur","The Roller"),desc:L("Il roule et contourne les obstacles tout seul","It drives and avoids obstacles by itself"),icon:CAR,versions:[
       {href:"rouleur.html",lvl:3,eur:50,time:L("2 après-midis","2 afternoons"),print:false}]}
   ];
-  const LVL={2:L("Facile","Easy"),3:L("Moyen","Medium"),4:L("Expert","Expert")};
+  const LVL={1:L("Très facile","Very easy"),2:L("Facile","Easy"),3:L("Moyen","Medium"),4:L("Expert","Expert")};
   const stars=n=>"★".repeat(n)+"☆".repeat(4-n);
   const price=e=>EN?"≈ €"+e:"≈ "+e+" €";
 
   function meta(v){
     return `<span class="pm-meta"><span class="pm-lvl lvl-${v.lvl}" title="${L("Difficulté","Difficulty")}"><span aria-hidden="true">${stars(v.lvl)}</span> ${LVL[v.lvl]}</span>`+
       `<span class="pm-chip">${price(v.eur)}</span><span class="pm-chip">${CLOCK}${v.time}</span>`+
-      (v.print?`<span class="pm-chip pm-print">${PRINTER}${L("Imprimante 3D","3D printer")}</span>`:"")+`</span>`;
+      (v.print?`<span class="pm-chip pm-print">${PRINTER}${L("Imprimante 3D","3D printer")}</span>`:v.printOpt?`<span class="pm-chip pm-print">${PRINTER}${L("Impression 3D ou bois","3D print or wood")}</span>`:"")+`</span>`;
   }
   function link(v,inner,cls){
     const cur=v.href===here;
@@ -53,7 +55,7 @@
   pm.innerHTML=
     `<div class="pm-head"><b>${L("Choisis ton robot","Pick your robot")}</b><button type="button" class="pm-reset" hidden>${L("Tout afficher","Show all")}</button></div>`+
     `<div class="pm-filters">`+
-      `<div class="pm-row" role="group" aria-label="${L("Niveau","Level")}"><span class="pm-lab">${L("Niveau","Level")}</span>${btn("lvl",2,LVL[2])}${btn("lvl",3,LVL[3])}${btn("lvl",4,LVL[4])}</div>`+
+      `<div class="pm-row" role="group" aria-label="${L("Niveau","Level")}"><span class="pm-lab">${L("Niveau","Level")}</span>${btn("lvl",1,LVL[1])}${btn("lvl",2,LVL[2])}${btn("lvl",3,LVL[3])}${btn("lvl",4,LVL[4])}</div>`+
       `<div class="pm-row" role="group" aria-label="Budget"><span class="pm-lab">Budget</span>${btn("eur",50,EN?"up to €50":"jusqu'à 50 €")}${btn("eur",80,EN?"up to €80":"jusqu'à 80 €")}</div>`+
       `<div class="pm-row"><span class="pm-lab">${L("Matériel","Kit")}</span>${btn("noprint",1,PRINTER+L("Sans imprimante 3D","No 3D printer"))}</div>`+
     `</div>`+
