@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="assets/atelier.css?v=2">
+<link rel="stylesheet" href="assets/atelier.css?v=3">
 
 </head>
 <body>
@@ -19,28 +19,28 @@
   <div class="wrap">
     <a class="brand" href="#top"><img src="assets/lili-avatar.webp" alt="">L'atelier de Lili</a>
     <div class="picker">
-      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">Robot 1 · L'Équilibriste 1<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+      <button class="picker-btn" id="pickerBtn" aria-expanded="false" aria-controls="pickerMenu">L'Équilibriste · Version 1<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
       </button>
       <div class="picker-menu" id="pickerMenu" hidden>
         <a class="robot-opt is-current" href="#top">
           <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="16" r="7" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><rect x="4" y="25" width="40" height="5" rx="2.5" fill="#8CC63F" transform="rotate(-8 24 27)"/><path d="M24 30v12M16 42h16" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
-          <span><b>Robot 1 · L'Équilibriste 1</b><small>Une balle de ping-pong en équilibre sur un rail</small></span>
+          <span><b>L'Équilibriste · Version 1</b><small>Une balle de ping-pong en équilibre sur un rail</small></span>
         </a>
         <a class="robot-opt" href="plateau.html">
           <span class="ico"><svg viewBox="0 0 48 48" width="40"><circle cx="24" cy="10" r="5" fill="#F4F4F0" stroke="#2F6E2B" stroke-width="2"/><ellipse cx="24" cy="19" rx="19" ry="4.5" fill="#8CC63F" stroke="#2F6E2B" stroke-width="2" transform="rotate(-6 24 19)"/><path d="M11 23l-3 17M24 24v16M37 21l3 19M5 41h38" stroke="#2F6E2B" stroke-width="3" stroke-linecap="round"/></svg></span>
-          <span><b>Robot 2 · L'Équilibriste 2</b><small>Une bille sur un plateau, 3 moteurs · niveau expert</small></span>
+          <span><b>L'Équilibriste · Version 2</b><small>Une bille sur un plateau, 3 moteurs · niveau expert</small></span>
         </a>
         <a class="robot-opt" href="enseigne.html">
           <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="4" y="12" width="40" height="24" rx="5" fill="#1F4D1D"/><text x="24" y="30" text-anchor="middle" font-family="Baloo 2, sans-serif" font-weight="800" font-size="15" fill="#C6E87F">ABC</text></svg></span>
-          <span><b>Robot 3 · L'Enseigne lumineuse</b><small>Ton prénom en lettres imprimées en 3D qui s'allument</small></span>
+          <span><b>L'Enseigne lumineuse</b><small>Ton prénom en lettres imprimées en 3D qui s'allument</small></span>
         </a>
         <a class="robot-opt" href="rouleur.html">
           <span class="ico"><svg viewBox="0 0 48 48" width="40"><rect x="8" y="16" width="32" height="16" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2"/><rect x="18" y="9" width="12" height="7" rx="2" fill="#3D7DD8"/><circle cx="14" cy="34" r="6" fill="#1F4D1D"/><circle cx="34" cy="34" r="6" fill="#1F4D1D"/></svg></span>
-          <span><b>Robot 4 · Le Rouleur</b><small>Il roule et contourne les obstacles tout seul</small></span>
+          <span><b>Le Rouleur</b><small>Il roule et contourne les obstacles tout seul</small></span>
         </a>
         <span class="robot-opt locked" aria-disabled="true">
           <span class="ico"><svg viewBox="0 0 48 48" width="34"><rect x="10" y="20" width="28" height="22" rx="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 20v-6a8 8 0 0116 0v6" fill="none" stroke="currentColor" stroke-width="3"/></svg></span>
-          <span><b>Robot 5 · Mystère</b><small>Se débloque après la mission 4</small></span>
+          <span><b>Mystère</b><small>Se débloque quand tu as fini le Rouleur</small></span>
         </span>
       </div>
     </div>
@@ -59,7 +59,7 @@
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
-        <span class="eyebrow">Robot n°1 · Mission équilibre</span>
+        <span class="eyebrow">Robot n°1 · Version 1 · Mission équilibre</span>
         <h1>L'Équilibriste 1</h1>
         <p class="lead">Construis avec Lili un robot qui garde une balle de ping-pong en équilibre sur un rail, tout seul.</p>
         <div class="hero-cta">
@@ -618,5 +618,6 @@ Servo moteur;
 </script>
 
 <script src="assets/banner.js?v=1"></script>
+<script src="assets/menu.js?v=1"></script>
 </body>
 </html>
