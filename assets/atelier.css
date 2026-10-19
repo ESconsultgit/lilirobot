@@ -280,3 +280,12 @@ footer{padding-block:30px;color:var(--ink-soft);font-size:.9rem;text-align:cente
 .pm-fam .robot-opt.locked{padding:8px 10px}
 :root[data-theme="dark"] .lvl-3{color:var(--sun)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lvl-3{color:var(--sun)}}
+
+/* Bannière repliée dès qu'on fait défiler la page */
+.hero.is-compact video,.hero.is-compact .vid-toggle{display:none}
+.hero.is-compact::after{display:none}
+.hero.is-compact .hero-text{position:static;padding-block:22px 60px;animation:heroIn .25s ease-out}
+.hero.is-compact h1{font-size:clamp(2rem,4.5vw,3rem)}
+.hero.is-compact .hero-text .wrap{gap:8px}
+@keyframes heroIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+html{overflow-anchor:none}   /* la bannière se replie sans faire sauter la page vers le haut */
