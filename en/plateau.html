@@ -93,6 +93,7 @@
       <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Expert level</span><p>This is the hardest robot in the workshop. Build <strong>the Balancer 1</strong> first: it teaches you PID with just one direction. Here we do the same, but twice at once!</p></div></div>
 
       <div class="lili"><img src="../assets/lili-coucou.webp" alt="Lili waving"><div class="bubble"><span class="tag">Hi!</span><p>Remember the Balancer? The ball could only roll left or right. Here, the ball can go off <strong>in every direction</strong>! So the plate must tilt forward, backward, left, right… all at the same time. To do that, you need <strong>three motors working as a team</strong>.</p></div></div>
+      <div class="lili rose"><img src="../assets/rose-petite.webp" alt="Rose, Lili's little sister"><div class="bubble"><span class="tag">And I'm Rose!</span><p>I'm Lili's little sister. Since I'm smaller, I ask lots of questions… and sometimes I make mistakes! When you see a <strong>pink bubble</strong>, that's me talking.</p></div></div>
 
       <!-- À quoi doit-il ressembler ? -->
       <figure class="look" id="apercu">
@@ -228,7 +229,7 @@
               <li>Suggested settings: 0.2 mm layers, 3 perimeters, 25 % infill.</li>
             </ol>
             <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>While the printer works, play with the simulator above. Once you can tune Kp and Kd on screen, the real robot will be much easier!</p></div></div>
-          </div><img class="pose" src="../assets/lili-coucou.webp" alt=""></div>
+          </div><img class="pose" src="../assets/duo-equipe.webp" alt=""></div>
         </article>
         <article class="step" data-step="2">
           <div class="step-head"><span class="num">2</span><div><h3>Get the links ready</h3><small>15 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -239,8 +240,8 @@
               <li>Screw a ball stud into the small hole at the end: its thread goes through the nut. Hand-tight, don't force it.</li>
               <li>The other end of the link, with the big round hole, will be the elbow.</li>
             </ol>
-            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Stuck?</span><p>If the nut won't go in, the hole is a bit tight on your printer. Ask a grown-up to press it in with a warm soldering iron, or use a small file.</p></div></div>
-          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+            <div class="lili ask rose"><img src="../assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Stuck?</span><p>If the nut won't go in, the hole is a bit tight on your printer. Ask a grown-up to press it in with a warm soldering iron, or use a small file.</p></div></div>
+          </div><img class="pose" src="../assets/duo-oups.webp" alt=""></div>
         </article>
         <article class="step" data-step="3">
           <div class="step-head"><span class="num">3</span><div><h3>The motors in the base</h3><small>30 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -271,7 +272,7 @@
                 <tr><td>Touchscreen</td><td>adapter wires 1, 2, 3, 4</td><td>A0, A1, A2, A3</td></tr>
               </tbody>
             </table></div>
-            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">The magic wire</span><p>The wire between the Arduino's GND and the − line is the one people forget most… and without it, the motors can't understand the orders! Everyone must share the same −.</p></div></div>
+            <div class="lili tip rose"><img src="../assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">The magic wire</span><p>The wire between the Arduino's GND and the − line is the one people forget most… and without it, the motors can't understand the orders! Everyone must share the same −.</p></div></div>
             <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Which wire is X, which is Y?</span><p>With a grown-up, set the multimeter to Ω. Between wires 1 and 3 it should find a few hundred ohms, and the same between 2 and 4. If it finds something between 1 and 2 instead, swap wires 2 and 3 on the Arduino.</p></div></div>
             <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Golden rule</span><p>Wire everything <strong>with the power supply unplugged</strong>. The capacitor has a direction: the white stripe always goes on −. Have a grown-up check everything before plugging back in.</p></div></div>
           </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
@@ -312,7 +313,7 @@ Servo servo[<span class="n">3</span>];
               <li>Change <code>JUST_CENTRE</code> to <code>false</code> and upload. Watch the first movement: all three arms should <strong>go up</strong> together.</li>
             </ol>
             <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Going down?</span><p>No problem! Write it down: in the big program you'll set <code>DIRECTION = -1</code>. Since the three motors are mounted the same way, they always all do the same thing.</p></div></div>
-          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+          </div><img class="pose" src="../assets/rose-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="6">
           <div class="step-head"><span class="num">6</span><div><h3>The legs</h3><small>25 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -337,7 +338,7 @@ Servo servo[<span class="n">3</span>];
               <li>Lay the plate on the three links and press firmly on each ball joint: <strong>click!</strong> The sockets snap onto the balls.</li>
               <li>Look from the side: each link should be straight up. If one leans, loosen its screw and slide the ball joint along the slot.</li>
             </ol>
-            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Did you know?</span><p>This three-legged mechanism is called a <strong>parallel robot</strong>. You find them in flight simulators, in robots that sort biscuits at top speed, and even in some 3D printers!</p></div></div>
+            <div class="lili tip rose"><img src="../assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Did you know?</span><p>This three-legged mechanism is called a <strong>parallel robot</strong>. You find them in flight simulators, in robots that sort biscuits at top speed, and even in some 3D printers!</p></div></div>
           </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="8">
@@ -391,7 +392,7 @@ Servo servo[<span class="n">3</span>];
               <li>Put the ball right by the short edge <strong>on servo A's side</strong>: write down X, that's <code>X_MAX</code>. Then by the opposite short edge: that's <code>X_MIN</code>.</li>
               <li>Same on the two long edges for <code>Y_MIN</code> and <code>Y_MAX</code> (<code>Y_MAX</code> on servo B's side).</li>
             </ol>
-            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">X doesn't change?</span><p>If Y changes when you move the ball along the length, X and Y are swapped. With the power unplugged, swap wires A0 ↔ A1 and A2 ↔ A3.</p></div></div>
+            <div class="lili ask rose"><img src="../assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">X doesn't change?</span><p>If Y changes when you move the ball along the length, X and Y are swapped. With the power unplugged, swap wires A0 ↔ A1 and A2 ↔ A3.</p></div></div>
           </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="9">
@@ -583,7 +584,7 @@ Servo servo[<span class="n">3</span>];
       </div>
 
       <div class="finale">
-        <img src="../assets/lili-mission.webp" alt="Lili raising her arms, mission accomplished">
+        <img src="../assets/rose-mission.webp" alt="Rose raising her arms, mission accomplished">
         <div>
           <span class="eyebrow">Mission accomplished</span>
           <h2>Your plate holds the ball!</h2>

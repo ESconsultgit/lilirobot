@@ -119,6 +119,7 @@
       </div>
 
       <div class="lili"><img src="assets/lili-coucou.webp" alt="Lili fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Cette fois, pas besoin d'imprimer des lettres : le panneau est fait de <strong>256 petites lumières</strong>. En allumant les bonnes, il dessine n'importe quel mot… et il le fait glisser comme un journal lumineux dans une gare. Et quand quelqu'un arrive devant ta porte, il se réveille pour lui dire bonjour !</p></div></div>
+      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
 
       <figure class="look" id="apercu">
         <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton enseigne accrochée près de la porte. Le panneau LED est en haut, le détecteur en dessous, et tout le reste est caché dans le boîtier.</p></div>
@@ -214,7 +215,7 @@
               <li>Clique sur <strong>Quelqu'un arrive !</strong> pour voir ton panneau se réveiller et tout faire défiler.</li>
             </ol>
             <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Lili garde tes messages en mémoire dans ce navigateur. Tu peux revenir les changer quand tu veux : le programme de l'étape 5 se met à jour tout seul.</p></div></div>
-          </div><img class="pose" src="assets/lili-coucou.webp" alt=""></div>
+          </div><img class="pose" src="assets/duo-equipe.webp" alt=""></div>
         </article>
         <article class="step" data-step="2">
           <div class="step-head"><span class="num">2</span><div><h3>Le boîtier</h3><small>2 à 3 heures d'impression, ou 1 heure de bricolage avec un adulte</small></div><button class="done-btn" type="button">C'est fait !</button></div>
@@ -236,7 +237,7 @@
                 <li>Fais une encoche de 12 mm dans le morceau du bas pour le câble USB. Le dos se vissera avec 4 petites vis, pour pouvoir le rouvrir.</li>
               </ol>
             </div>
-            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une fenêtre un peu petite ?</span><p>Elle mesure 1 mm de moins que le panneau. Comme ça, le panneau s'appuie derrière et ne peut pas passer à travers… mais tous les points restent bien visibles !</p></div></div>
+            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une fenêtre un peu petite ?</span><p>Elle mesure 1 mm de moins que le panneau. Comme ça, le panneau s'appuie derrière et ne peut pas passer à travers… mais tous les points restent bien visibles !</p></div></div>
           </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="3">
@@ -257,8 +258,8 @@
               </tbody>
             </table></div>
             <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">L'astuce de Lili</span><p>L'Arduino Nano n'a qu'une seule broche 5V. Mais le panneau laisse passer l'énergie de l'autre côté ! Le détecteur prend donc son VCC et son GND <strong>sur les broches de sortie du panneau</strong>.</p></div></div>
-            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Les deux boutons orange</span><p>Sur le détecteur, tourne le bouton <strong>« Time »</strong> à fond vers la gauche (le programme compte lui-même le temps), et laisse le bouton <strong>« Sensitivity »</strong> au milieu. S'il y a un petit cavalier jaune, mets-le sur <strong>H</strong>.</p></div></div>
-          </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
+            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Les deux boutons orange</span><p>Sur le détecteur, tourne le bouton <strong>« Time »</strong> à fond vers la gauche (le programme compte lui-même le temps), et laisse le bouton <strong>« Sensitivity »</strong> au milieu. S'il y a un petit cavalier jaune, mets-le sur <strong>H</strong>.</p></div></div>
+          </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
         <article class="step" data-step="4">
           <div class="step-head"><span class="num">4</span><div><h3>Le premier test</h3><small>15 minutes · sur l'ordinateur</small></div><button class="done-btn" type="button">C'est fait !</button></div>
@@ -289,7 +290,7 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
             </ol>
             <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Ça ne se téléverse pas ?</span><p>Beaucoup de Nano « compatibles » veulent un autre réglage : <strong>Outils → Processeur → ATmega328P (Old Bootloader)</strong>, puis réessaie.</p></div></div>
             <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Lettres mélangées ou à l'envers ?</span><p>Il existe plusieurs sortes de panneaux. Remplace <code>FC16_HW</code> par <code>GENERIC_HW</code> (ou <code>ICSTATION_HW</code>, ou <code>PAROLA_HW</code>) jusqu'à ce que ce soit lisible. Note celui qui marche !</p></div></div>
-          </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
+          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="5">
           <div class="step-head"><span class="num">5</span><div><h3>Le grand programme de ton enseigne</h3><small>10 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
@@ -302,7 +303,7 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
               <li>Attends <strong>une minute</strong> : le détecteur a besoin de se réveiller lui aussi quand on l'allume.</li>
               <li>Passe la main devant le dôme blanc… Bonjour !</li>
             </ol>
-            <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Il s'allume tout seul ?</span><p>Le détecteur sent la chaleur : un radiateur ou le soleil peuvent le tromper. Tourne-le ailleurs, ou baisse un peu le bouton « Sensitivity ».</p></div></div>
+            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Il s'allume tout seul ?</span><p>Le détecteur sent la chaleur : un radiateur ou le soleil peuvent le tromper. Tourne-le ailleurs, ou baisse un peu le bouton « Sensitivity ».</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="6">
@@ -322,7 +323,7 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
       </div>
 
       <div class="finale">
-        <img src="assets/lili-mission.webp" alt="Lili lève les bras, mission accomplie">
+        <img src="assets/duo-victoire.webp" alt="Lili et Rose se tapent dans la main">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton enseigne dit bonjour !</h2>

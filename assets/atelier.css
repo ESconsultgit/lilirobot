@@ -4,6 +4,7 @@
   --ink:#1D351B; --ink-soft:#4C5E49; --line:#CFE2B8;
   --green:#2F6E2B; --green-deep:#1F4D1D; --lime:#8CC63F; --lime-soft:#D7EDB9;
   --warn:#C9531E; --warn-soft:#FBE3D3; --sun:#F2C230; --sun-soft:#FCF1C7;
+  --pink:#C2367A; --pink-soft:#FBE1EE;
   --code-bg:#1E2B1D; --code-ink:#E3F2D3; --code-com:#9DC27A; --code-key:#C6E87F; --code-str:#F2C230;
   --font-display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
   --font-body:"Nunito","Segoe UI",system-ui,sans-serif;
@@ -17,6 +18,7 @@
   --ink:#E4F1D9; --ink-soft:#A9BEA2; --line:#2F462C;
   --green:#9BD35A; --green-deep:#C4E99A; --lime:#8CC63F; --lime-soft:#2A4222;
   --warn:#F08A5D; --warn-soft:#3A2419; --sun:#F2C230; --sun-soft:#3A3217;
+  --pink:#F38DBE; --pink-soft:#3D1F2E;
   --code-bg:#0B120B; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -24,6 +26,7 @@
   --ink:#E4F1D9; --ink-soft:#A9BEA2; --line:#2F462C;
   --green:#9BD35A; --green-deep:#C4E99A; --lime:#8CC63F; --lime-soft:#2A4222;
   --warn:#F08A5D; --warn-soft:#3A2419; --sun:#F2C230; --sun-soft:#3A3217;
+  --pink:#F38DBE; --pink-soft:#3D1F2E;
   --code-bg:#0B120B; color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -109,7 +112,10 @@ section.chap{padding-block:clamp(48px,8vw,88px)}
 .lili.ask .bubble{background:var(--surface-2)} .lili.ask .bubble::before{border-right-color:var(--surface-2)}
 :root[data-theme="dark"] .lili.tip .tag{color:var(--sun)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lili.tip .tag{color:var(--sun)}}
-@media (max-width:520px){.lili{grid-template-columns:72px 1fr}.lili img{width:72px}}
+/* Rose, la petite sœur de Lili : bulles roses, un peu plus petite */
+.lili.rose .bubble{background:var(--pink-soft)} .lili.rose .bubble::before{border-right-color:var(--pink-soft)} :root:root:root .lili.rose .tag{color:var(--pink)}
+.lili.rose img{width:94px;justify-self:center}
+@media (max-width:520px){.lili{grid-template-columns:72px 1fr}.lili img{width:72px}.lili.rose img{width:62px}}
 
 /* Comment ça marche */
 .how{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}

@@ -117,6 +117,7 @@
       </div>
 
       <div class="lili"><img src="../assets/lili-coucou.webp" alt="Lili waving"><div class="bubble"><span class="tag">Hi!</span><p>This time, no need to print letters: the panel is made of <strong>256 tiny lights</strong>. By switching on the right ones it can draw any word… and slide it along like the news ticker at a train station. And when someone comes to your door, it wakes up to say hello!</p></div></div>
+      <div class="lili rose"><img src="../assets/rose-petite.webp" alt="Rose, Lili's little sister"><div class="bubble"><span class="tag">And I'm Rose!</span><p>I'm Lili's little sister. Since I'm smaller, I ask lots of questions… and sometimes I make mistakes! When you see a <strong>pink bubble</strong>, that's me talking.</p></div></div>
 
       <figure class="look" id="apercu">
         <div class="look-head"><span class="role">The finished robot</span><h3>What should it look like?</h3><p>Here's your sign hanging by the door. The LED panel is at the top, the sensor underneath, and everything else is hidden in the case.</p></div>
@@ -212,7 +213,7 @@
               <li>Click <strong>Someone's coming!</strong> to watch your panel wake up and scroll everything.</li>
             </ol>
             <div class="lili tip"><img src="../assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Tip</span><p>Lili remembers your messages in this browser. You can come back and change them any time: the program in step 5 updates itself.</p></div></div>
-          </div><img class="pose" src="../assets/lili-coucou.webp" alt=""></div>
+          </div><img class="pose" src="../assets/duo-equipe.webp" alt=""></div>
         </article>
         <article class="step" data-step="2">
           <div class="step-head"><span class="num">2</span><div><h3>The case</h3><small>2 to 3 hours of printing, or 1 hour of woodwork with a grown-up</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -234,7 +235,7 @@
                 <li>Cut a 12 mm notch in the bottom piece for the USB cable. The back will screw on with 4 small screws, so you can open it again.</li>
               </ol>
             </div>
-            <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Why is the window a bit small?</span><p>It's 1 mm smaller than the panel. That way the panel rests behind it and can't fall through… but every dot stays visible!</p></div></div>
+            <div class="lili tip rose"><img src="../assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Why is the window a bit small?</span><p>It's 1 mm smaller than the panel. That way the panel rests behind it and can't fall through… but every dot stays visible!</p></div></div>
           </div><img class="pose" src="../assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="3">
@@ -255,8 +256,8 @@
               </tbody>
             </table></div>
             <div class="lili tip"><img src="../assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">Lili's trick</span><p>The Arduino Nano has only one 5V pin. But the panel passes the energy through to its other end! So the sensor takes its VCC and GND <strong>from the panel's output pins</strong>.</p></div></div>
-            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">The two orange dials</span><p>On the sensor, turn the <strong>“Time”</strong> dial all the way left (the program keeps time itself), and leave the <strong>“Sensitivity”</strong> dial in the middle. If there's a little yellow jumper, put it on <strong>H</strong>.</p></div></div>
-          </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
+            <div class="lili ask rose"><img src="../assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">The two orange dials</span><p>On the sensor, turn the <strong>“Time”</strong> dial all the way left (the program keeps time itself), and leave the <strong>“Sensitivity”</strong> dial in the middle. If there's a little yellow jumper, put it on <strong>H</strong>.</p></div></div>
+          </div><img class="pose" src="../assets/duo-oups.webp" alt=""></div>
         </article>
         <article class="step" data-step="4">
           <div class="step-head"><span class="num">4</span><div><h3>The first test</h3><small>15 minutes · on the computer</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -287,7 +288,7 @@ MD_Parola sign = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span class
             </ol>
             <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Won't upload?</span><p>Lots of “compatible” Nanos want a different setting: <strong>Tools → Processor → ATmega328P (Old Bootloader)</strong>, then try again.</p></div></div>
             <div class="lili warn"><img src="../assets/lili-pas-contente.webp" alt="Lili with her arms crossed"><div class="bubble"><span class="tag">Jumbled or backwards letters?</span><p>There are several kinds of panels. Replace <code>FC16_HW</code> with <code>GENERIC_HW</code> (or <code>ICSTATION_HW</code>, or <code>PAROLA_HW</code>) until it reads properly. Write down the one that works!</p></div></div>
-          </div><img class="pose" src="../assets/lili-concentree.webp" alt=""></div>
+          </div><img class="pose" src="../assets/rose-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="5">
           <div class="step-head"><span class="num">5</span><div><h3>Your sign's big program</h3><small>10 minutes</small></div><button class="done-btn" type="button">Done!</button></div>
@@ -300,7 +301,7 @@ MD_Parola sign = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span class
               <li>Wait <strong>one minute</strong>: the sensor needs to wake up too when it's switched on.</li>
               <li>Wave your hand in front of the white dome… Hello!</li>
             </ol>
-            <div class="lili ask"><img src="../assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">It switches on by itself?</span><p>The sensor feels warmth: a radiator or the sun can fool it. Point it somewhere else, or turn the “Sensitivity” dial down a little.</p></div></div>
+            <div class="lili ask rose"><img src="../assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">It switches on by itself?</span><p>The sensor feels warmth: a radiator or the sun can fool it. Point it somewhere else, or turn the “Sensitivity” dial down a little.</p></div></div>
           </div><img class="pose" src="../assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="6">
@@ -320,7 +321,7 @@ MD_Parola sign = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span class
       </div>
 
       <div class="finale">
-        <img src="../assets/lili-mission.webp" alt="Lili raising her arms, mission accomplished">
+        <img src="../assets/duo-victoire.webp" alt="Lili and Rose high-five">
         <div>
           <span class="eyebrow">Mission accomplished</span>
           <h2>Your sign says hello!</h2>
