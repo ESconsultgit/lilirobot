@@ -71,7 +71,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
 
 <main id="top">
   <div class="hero">
-    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot roulant dans son atelier"></video>
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Ellie construit un robot roulant dans son atelier"></video>
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
@@ -103,10 +103,10 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
         <div><h2>Comment ça marche ?</h2><p>Un robot qui décide tout seul où aller. Enfin un vrai explorateur !</p></div>
       </div>
       <div class="lili">
-        <img src="assets/lili-coucou.webp" alt="Lili fait coucou">
+        <img src="assets/lili-coucou.webp" alt="Ellie fait coucou">
         <div class="bubble"><span class="tag">Coucou !</span><p>Tu as déjà vu un robot aspirateur ? Il fonce, s'arrête juste avant le canapé, réfléchit et repart ailleurs. Le Rouleur fait pareil : il <strong>regarde devant lui</strong>, et s'il y a un obstacle, il <strong>tourne la tête à gauche et à droite</strong> pour choisir le chemin le plus libre.</p></div>
       </div>
-      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
+      <div class="lili livia"><img src="assets/livia-petite.webp" alt="Livia, la petite sœur d'Ellie"><div class="bubble"><span class="tag">Et moi, c'est Livia !</span><p>Je suis la petite sœur d'Ellie. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle. Et tu sais pourquoi l'atelier s'appelle LILI ? El<strong>LI</strong>e + <strong>LI</strong>via = <strong>LILI</strong> !</p></div></div>
       <!-- À quoi doit-il ressembler ? -->
       <figure class="look" id="apercu">
         <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton Rouleur une fois terminé, vu de trois quarts avant. L'avant, c'est le côté de la tête : c'est par là qu'il roule.</p></div>
@@ -148,7 +148,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
       </div>
       <p class="loop-line">SI la route est libre → j'avance. SINON → je recule, je regarde, je tourne… et je repars !</p>
       <div class="lili ask">
-        <img src="assets/lili-explique.webp" alt="Lili explique avec une tablette">
+        <img src="assets/lili-explique.webp" alt="Ellie explique avec une tablette">
         <div class="bubble"><span class="tag">J'explique</span><p>L'Arduino est trop faible pour faire tourner les moteurs tout seul. Alors il donne des ordres au <strong>L298N</strong>, le chef des muscles, qui prend l'énergie dans les piles. C'est comme un capitaine qui donne des ordres aux rameurs !</p></div>
       </div>
 
@@ -189,7 +189,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
         </div>
       </div>
       <div class="lili tip">
-        <img src="assets/lili-idee.webp" alt="Lili a une idée">
+        <img src="assets/lili-idee.webp" alt="Ellie a une idée">
         <div class="bubble"><span class="tag">Expérience</span><p>Mets <strong>DISTANCE_STOP</strong> à 5 cm et regarde combien de chocs il y a. Puis essaie 30 cm. Ces trois réglages sont exactement les mêmes que dans le vrai programme : trouve les meilleurs ici avant de les essayer en vrai !</p></div>
       </div>
     </div>
@@ -200,7 +200,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
     <div class="wrap">
       <div class="chap-head">
         <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
-        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Ellie garde tes coches en mémoire.</p></div>
       </div>
       <div class="progress"><span id="shopCount">0 / 0 trouvés</span><div class="bar"><i id="shopBar"></i></div></div>
       <div class="shop">
@@ -211,11 +211,11 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
         <div class="shop-group">
           <h3><span class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg></span>Les petites choses</h3>
           <ul class="items" id="shopOther"></ul>
-          <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Beaucoup de kits châssis sont livrés avec un boîtier de 4 piles. Prends quand même celui de 6 piles : le L298N « mange » un peu d'énergie, et avec 4 piles le Rouleur serait tout mou.</p></div></div>
+          <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Beaucoup de kits châssis sont livrés avec un boîtier de 4 piles. Prends quand même celui de 6 piles : le L298N « mange » un peu d'énergie, et avec 4 piles le Rouleur serait tout mou.</p></div></div>
         </div>
       </div>
       <div class="lili warn">
-        <img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés">
+        <img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés">
         <div class="bubble"><span class="tag">Attention aux moteurs</span><p>Vérifie que les fils sont <strong>déjà soudés</strong> sur les moteurs jaunes. Sinon, il faudra demander à papa de les souder avant de commencer.</p></div>
       </div>
       <p class="total">Outils : tournevis cruciforme, petite pince, pistolet à colle chaude, ordinateur avec Arduino IDE. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
@@ -257,7 +257,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
               <li>Colle la mini plaque d'essai à l'avant, à côté de l'endroit où ira la tête.</li>
             </ol>
             <div class="lili ask"><img src="assets/lili-reflexion.webp" alt=""><div class="bubble"><span class="tag">À ton avis ?</span><p>Pourquoi mettre les piles près des roues, et pas tout devant ? Indice : essaie de pousser un caddie très chargé à l'avant.</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
 
         <article class="step" data-step="3">
@@ -280,7 +280,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
               </tbody>
             </table></div>
             <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout avec l'interrupteur des piles sur <strong>OFF</strong>. Et quand le câble USB est branché à l'ordinateur, l'interrupteur reste aussi sur OFF. Fais vérifier par papa avant d'allumer.</p></div></div>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Le fil magique</span><p>Le fil entre le GND du L298N et le GND de l'Arduino est le plus oublié… et sans lui, rien ne marche ! Les deux doivent parler la même « langue électrique ».</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Le fil magique</span><p>Le fil entre le GND du L298N et le GND de l'Arduino est le plus oublié… et sans lui, rien ne marche ! Les deux doivent parler la même « langue électrique ».</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
 
@@ -296,7 +296,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
             <ol start="4">
               <li>Les deux roues doivent tourner vers l'avant, puis vers l'arrière, puis le Rouleur tourne à gauche.</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Une roue tourne à l'envers ?</span><p>C'est très courant ! Interrupteur sur OFF, puis échange les deux fils de ce moteur sur le L298N (OUT1 avec OUT2, ou OUT3 avec OUT4).</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Une roue tourne à l'envers ?</span><p>C'est très courant ! Interrupteur sur OFF, puis échange les deux fils de ce moteur sur le L298N (OUT1 avec OUT2, ou OUT3 avec OUT4).</p></div></div>
           </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
 
@@ -341,7 +341,7 @@ body{margin:0} img{max-width:100%} [hidden]{display:none!important}
       </div>
 
       <div class="finale">
-        <img src="assets/lili-aventure.webp" alt="Lili prête pour l'aventure">
+        <img src="assets/lili-aventure.webp" alt="Ellie prête pour l'aventure">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton Rouleur explore tout seul !</h2>

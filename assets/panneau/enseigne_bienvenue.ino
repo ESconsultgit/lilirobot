@@ -13,14 +13,14 @@ const int PIN_CS       = 10;  // DIN va sur D11 et CLK sur D13
 const int PIN_PRESENCE = 2;   // la patte OUT du détecteur
 
 // ----- Tes messages -----
-const char *BIENVENUE = "Bonjour ! Bienvenue chez Lili";
+const char *BIENVENUE = "Bonjour ! Bienvenue chez Ellie";
 const char *MESSAGES[] = {
   "Bonne journée !",
   "À bientôt !"
 };
 const int NB_MESSAGES = 2;   // combien de messages il y a au-dessus
 
-// ----- Les réglages de Lili -----
+// ----- Les réglages d'Ellie -----
 int  VITESSE      = 40;     // plus petit = plus rapide
 int  LUMIERE      = 4;      // de 0 (doux) à 15 (très fort)
 long RESTE_ALLUME = 20;     // secondes allumé après le dernier passage

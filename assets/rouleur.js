@@ -134,7 +134,7 @@ const int ENB = 6, IN3 = 7, IN4 = 8;   // right motor
 const int PIN_TRIG = 12, PIN_ECHO = 11;
 const int PIN_HEAD = 10;
 
-// ----- Lili's settings (the same as in the simulator!) -----
+// ----- Ellie's settings (the same as in the simulator!) -----
 int SPEED = 170;          // 0 = stopped, 255 = full speed
 int STOP_DISTANCE = 20;   // in cm: closer than this, we stop
 int BACKUP_TIME = 300;    // in milliseconds
@@ -274,7 +274,7 @@ const int ENB = 6, IN3 = 7, IN4 = 8;   // moteur droit
 const int PIN_TRIG = 12, PIN_ECHO = 11;
 const int PIN_TETE = 10;
 
-// ----- Les réglages de Lili (les mêmes que dans le simulateur !) -----
+// ----- Les réglages d'Ellie (les mêmes que dans le simulateur !) -----
 int VITESSE = 170;         // 0 = arrêt, 255 = à fond
 int DISTANCE_STOP = 20;    // en cm : plus près que ça, on s'arrête
 int TEMPS_RECUL = 300;     // en millisecondes

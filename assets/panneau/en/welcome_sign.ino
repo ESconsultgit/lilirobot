@@ -13,14 +13,14 @@ const int PIN_CS        = 10;  // DIN goes to D11 and CLK to D13
 const int PIN_PRESENCE  = 2;   // the sensor's OUT pin
 
 // ----- Your messages -----
-const char *WELCOME = "Hello! Welcome to Lili's";
+const char *WELCOME = "Hello! Welcome to Ellie's";
 const char *MESSAGES[] = {
   "Have a nice day!",
   "See you soon!"
 };
 const int NUM_MESSAGES = 2;   // how many messages there are above
 
-// ----- Lili's settings -----
+// ----- Ellie's settings -----
 int  SPEED       = 40;     // smaller = faster
 int  BRIGHTNESS  = 4;      // from 0 (soft) to 15 (very bright)
 long STAY_ON     = 20;     // seconds it stays on after the last visitor

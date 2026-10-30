@@ -1,4 +1,4 @@
-/* Générateur de lettres lumineuses pour l'enseigne de Lili.
+/* Générateur de lettres lumineuses pour l'enseigne d'Ellie.
    Dépend de : ClipperLib (clipper-lib), earcut, et d'une police opentype.js.
    Coordonnées en millimètres, axe Y vers le haut. */
 (function (root) {
@@ -105,7 +105,7 @@
   };
   Mesh.prototype.toSTL = function (name) {
     const n = this.t.length / 9, buf = new ArrayBuffer(84 + n * 50), dv = new DataView(buf);
-    const head = ("Atelier de Lili - " + name).slice(0, 79);
+    const head = ("Atelier d'Ellie - " + name).slice(0, 79);
     for (let i = 0; i < head.length; i++) dv.setUint8(i, head.charCodeAt(i) & 0x7f);
     dv.setUint32(80, n, true);
     let o = 84; const t = this.t;

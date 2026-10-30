@@ -27,7 +27,7 @@ ${list}
 };
 const int NB_MESSAGES = ${n};   // combien de messages il y a au-dessus
 
-// ----- Les réglages de Lili -----
+// ----- Les réglages d'Ellie -----
 int  VITESSE      = ${c.speed};     // plus petit = plus rapide
 int  LUMIERE      = ${c.light};      // de 0 (doux) à 15 (très fort)
 long RESTE_ALLUME = ${c.stay};     // secondes allumé après le dernier passage
@@ -117,7 +117,7 @@ ${list}
 };
 const int NUM_MESSAGES = ${n};   // how many messages there are above
 
-// ----- Lili's settings -----
+// ----- Ellie's settings -----
 int  SPEED       = ${c.speed};     // smaller = faster
 int  BRIGHTNESS  = ${c.light};      // from 0 (soft) to 15 (very bright)
 long STAY_ON     = ${c.stay};     // seconds it stays on after the last visitor

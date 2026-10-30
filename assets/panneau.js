@@ -8,7 +8,7 @@
   const cv=$("ledView"); if(!cv)return;
   const ctx=cv.getContext("2d");
   const KEY="lili-panneau";
-  const DEF={name:"Lili",welcome:L("Bonjour ! Bienvenue chez Lili","Hello! Welcome to Lili's"),welcomeEdited:false,messages:L("Bonne journée !\nÀ bientôt !","Have a nice day!\nSee you soon!"),speed:40,light:4,stay:20,always:false,color:"red"};
+  const DEF={name:"Ellie",welcome:L("Bonjour ! Bienvenue chez Ellie","Hello! Welcome to Ellie's"),welcomeEdited:false,messages:L("Bonne journée !\nÀ bientôt !","Have a nice day!\nSee you soon!"),speed:40,light:4,stay:20,always:false,color:"red"};
   let C=Object.assign({},DEF);
   try{Object.assign(C,JSON.parse(localStorage.getItem(KEY)||"{}"));}catch(e){}
   const COLORS={red:["#FF5A4A","#FFB0A6","#3A2020"],green:["#5BE05B","#C8FFC8","#1E3320"],blue:["#4AA8FF","#BFE2FF","#1C2838"],yellow:["#FFC83A","#FFE9A8","#3A3218"],white:["#E8F0FF","#FFFFFF","#2C3036"]};
@@ -19,7 +19,7 @@
   f.name.value=C.name; f.welcome.value=C.welcome; f.messages.value=C.messages; f.speed.value=C.speed; f.light.value=C.light; f.stay.value=C.stay; f.always.checked=!!C.always;
   function outs(){$("pSpeedOut").textContent=C.speed+" ms";$("pLightOut").textContent=C.light;$("pStayOut").textContent=C.stay+" s";}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(C));}catch(e){}}
-  f.name.addEventListener("input",()=>{C.name=f.name.value.trim()||"Lili";if(!C.welcomeEdited){C.welcome=welcomeOf(C.name);f.welcome.value=C.welcome;}changed();});
+  f.name.addEventListener("input",()=>{C.name=f.name.value.trim()||"Ellie";if(!C.welcomeEdited){C.welcome=welcomeOf(C.name);f.welcome.value=C.welcome;}changed();});
   f.welcome.addEventListener("input",()=>{C.welcome=f.welcome.value;C.welcomeEdited=true;changed();});
   f.messages.addEventListener("input",()=>{C.messages=f.messages.value;changed();});
   f.speed.addEventListener("input",()=>{C.speed=+f.speed.value;changed();});

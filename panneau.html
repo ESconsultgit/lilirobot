@@ -60,7 +60,7 @@
 
 <main id="top">
   <div class="hero">
-    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Ellie construit un robot dans son atelier"></video>
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
@@ -90,7 +90,7 @@
       <div>
         <span class="eyebrow">L'atelier des messages</span>
         <h2>Écris ce qui va défiler</h2>
-        <p class="lead">Tout ce que tu écris ici s'affiche sur le panneau, avec les mêmes lettres que le vrai. Et Lili prépare le programme pour toi, plus bas, à l'étape 5.</p>
+        <p class="lead">Tout ce que tu écris ici s'affiche sur le panneau, avec les mêmes lettres que le vrai. Et Ellie prépare le programme pour toi, plus bas, à l'étape 5.</p>
         <div class="led-box">
           <canvas id="ledView" width="660" height="180" aria-label="Aperçu du panneau LED"></canvas>
           <div class="led-under"><span class="led-pir" aria-hidden="true"></span><p class="led-state" id="pState" role="status"></p></div>
@@ -118,8 +118,8 @@
         <div><h2>Comment ça marche ?</h2><p>Un panneau qui sait quand tu arrives, c'est déjà un petit robot !</p></div>
       </div>
 
-      <div class="lili"><img src="assets/lili-coucou.webp" alt="Lili fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Cette fois, pas besoin d'imprimer des lettres : le panneau est fait de <strong>256 petites lumières</strong>. En allumant les bonnes, il dessine n'importe quel mot… et il le fait glisser comme un journal lumineux dans une gare. Et quand quelqu'un arrive devant ta porte, il se réveille pour lui dire bonjour !</p></div></div>
-      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
+      <div class="lili"><img src="assets/lili-coucou.webp" alt="Ellie fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Cette fois, pas besoin d'imprimer des lettres : le panneau est fait de <strong>256 petites lumières</strong>. En allumant les bonnes, il dessine n'importe quel mot… et il le fait glisser comme un journal lumineux dans une gare. Et quand quelqu'un arrive devant ta porte, il se réveille pour lui dire bonjour !</p></div></div>
+      <div class="lili livia"><img src="assets/livia-petite.webp" alt="Livia, la petite sœur d'Ellie"><div class="bubble"><span class="tag">Et moi, c'est Livia !</span><p>Je suis la petite sœur d'Ellie. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle. Et tu sais pourquoi l'atelier s'appelle LILI ? El<strong>LI</strong>e + <strong>LI</strong>via = <strong>LILI</strong> !</p></div></div>
 
       <figure class="look" id="apercu">
         <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton enseigne accrochée près de la porte. Le panneau LED est en haut, le détecteur en dessous, et tout le reste est caché dans le boîtier.</p></div>
@@ -158,7 +158,7 @@
       </div>
       <p class="loop-line">Le détecteur sent quelqu'un → le cerveau réveille le panneau → les messages défilent… puis tout s'endort quand il n'y a plus personne.</p>
 
-      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Lili explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment une lettre peut-elle avancer ? En vrai, rien ne bouge ! Le panneau dessine la lettre, puis la redessine <strong>une colonne plus à gauche</strong>, encore et encore, des dizaines de fois par seconde. Tes yeux croient qu'elle glisse. C'est le même truc qu'un dessin animé !</p></div></div>
+      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Ellie explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment une lettre peut-elle avancer ? En vrai, rien ne bouge ! Le panneau dessine la lettre, puis la redessine <strong>une colonne plus à gauche</strong>, encore et encore, des dizaines de fois par seconde. Tes yeux croient qu'elle glisse. C'est le même truc qu'un dessin animé !</p></div></div>
     </div>
   </section>
 
@@ -167,7 +167,7 @@
     <div class="wrap">
       <div class="chap-head">
         <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
-        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Ellie garde tes coches en mémoire.</p></div>
       </div>
       <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
       <div class="shop">
@@ -191,7 +191,7 @@
           </ul>
         </div>
       </div>
-      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le pistolet à colle chaude et, pour le boîtier en bois, la scie et la perceuse : on les utilise <strong>avec papa</strong>. Toi, tu traces, tu tiens et tu vérifies !</p></div></div>
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le pistolet à colle chaude et, pour le boîtier en bois, la scie et la perceuse : on les utilise <strong>avec papa</strong>. Toi, tu traces, tu tiens et tu vérifies !</p></div></div>
       <p class="total">Outils à préparer : pistolet à colle chaude, tournevis, et un ordinateur avec <strong>Arduino IDE</strong>. Pour le boîtier en bois : scie sauteuse, perceuse avec une mèche à bois de 24 mm, papier de verre. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
     </div>
   </section>
@@ -214,7 +214,7 @@
               <li>Ajoute tes autres messages, un par ligne : une blague, « Frappe avant d'entrer », la météo de ta chambre…</li>
               <li>Clique sur <strong>Quelqu'un arrive !</strong> pour voir ton panneau se réveiller et tout faire défiler.</li>
             </ol>
-            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Lili garde tes messages en mémoire dans ce navigateur. Tu peux revenir les changer quand tu veux : le programme de l'étape 5 se met à jour tout seul.</p></div></div>
+            <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Ellie garde tes messages en mémoire dans ce navigateur. Tu peux revenir les changer quand tu veux : le programme de l'étape 5 se met à jour tout seul.</p></div></div>
           </div><img class="pose" src="assets/duo-equipe.webp" alt=""></div>
         </article>
         <article class="step" data-step="2">
@@ -237,7 +237,7 @@
                 <li>Fais une encoche de 12 mm dans le morceau du bas pour le câble USB. Le dos se vissera avec 4 petites vis, pour pouvoir le rouvrir.</li>
               </ol>
             </div>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une fenêtre un peu petite ?</span><p>Elle mesure 1 mm de moins que le panneau. Comme ça, le panneau s'appuie derrière et ne peut pas passer à travers… mais tous les points restent bien visibles !</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une fenêtre un peu petite ?</span><p>Elle mesure 1 mm de moins que le panneau. Comme ça, le panneau s'appuie derrière et ne peut pas passer à travers… mais tous les points restent bien visibles !</p></div></div>
           </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="3">
@@ -257,8 +257,8 @@
                 <tr><td>Détecteur</td><td>OUT</td><td>D2</td></tr>
               </tbody>
             </table></div>
-            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">L'astuce de Lili</span><p>L'Arduino Nano n'a qu'une seule broche 5V. Mais le panneau laisse passer l'énergie de l'autre côté ! Le détecteur prend donc son VCC et son GND <strong>sur les broches de sortie du panneau</strong>.</p></div></div>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Les deux boutons orange</span><p>Sur le détecteur, tourne le bouton <strong>« Time »</strong> à fond vers la gauche (le programme compte lui-même le temps), et laisse le bouton <strong>« Sensitivity »</strong> au milieu. S'il y a un petit cavalier jaune, mets-le sur <strong>H</strong>.</p></div></div>
+            <div class="lili tip"><img src="assets/lili-mon-idee.webp" alt=""><div class="bubble"><span class="tag">L'astuce d'Ellie</span><p>L'Arduino Nano n'a qu'une seule broche 5V. Mais le panneau laisse passer l'énergie de l'autre côté ! Le détecteur prend donc son VCC et son GND <strong>sur les broches de sortie du panneau</strong>.</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Les deux boutons orange</span><p>Sur le détecteur, tourne le bouton <strong>« Time »</strong> à fond vers la gauche (le programme compte lui-même le temps), et laisse le bouton <strong>« Sensitivity »</strong> au milieu. S'il y a un petit cavalier jaune, mets-le sur <strong>H</strong>.</p></div></div>
           </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
         <article class="step" data-step="4">
@@ -289,8 +289,8 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
               <li>« Coucou ! » doit défiler de droite à gauche.</li>
             </ol>
             <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Ça ne se téléverse pas ?</span><p>Beaucoup de Nano « compatibles » veulent un autre réglage : <strong>Outils → Processeur → ATmega328P (Old Bootloader)</strong>, puis réessaie.</p></div></div>
-            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Lettres mélangées ou à l'envers ?</span><p>Il existe plusieurs sortes de panneaux. Remplace <code>FC16_HW</code> par <code>GENERIC_HW</code> (ou <code>ICSTATION_HW</code>, ou <code>PAROLA_HW</code>) jusqu'à ce que ce soit lisible. Note celui qui marche !</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Lettres mélangées ou à l'envers ?</span><p>Il existe plusieurs sortes de panneaux. Remplace <code>FC16_HW</code> par <code>GENERIC_HW</code> (ou <code>ICSTATION_HW</code>, ou <code>PAROLA_HW</code>) jusqu'à ce que ce soit lisible. Note celui qui marche !</p></div></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="5">
           <div class="step-head"><span class="num">5</span><div><h3>Le grand programme de ton enseigne</h3><small>10 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
@@ -303,7 +303,7 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
               <li>Attends <strong>une minute</strong> : le détecteur a besoin de se réveiller lui aussi quand on l'allume.</li>
               <li>Passe la main devant le dôme blanc… Bonjour !</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Il s'allume tout seul ?</span><p>Le détecteur sent la chaleur : un radiateur ou le soleil peuvent le tromper. Tourne-le ailleurs, ou baisse un peu le bouton « Sensitivity ».</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Il s'allume tout seul ?</span><p>Le détecteur sent la chaleur : un radiateur ou le soleil peuvent le tromper. Tourne-le ailleurs, ou baisse un peu le bouton « Sensitivity ».</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="6">
@@ -323,7 +323,7 @@ MD_Parola panneau = MD_Parola(HARDWARE_TYPE, <span class="n">10</span>, <span cl
       </div>
 
       <div class="finale">
-        <img src="assets/duo-victoire.webp" alt="Lili et Rose se tapent dans la main">
+        <img src="assets/duo-victoire.webp" alt="Ellie et Livia se tapent dans la main">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton enseigne dit bonjour !</h2>

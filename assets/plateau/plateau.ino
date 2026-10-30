@@ -23,7 +23,7 @@ const float HAUTEUR = 86.0;
 float BRAS      = 25.0;  // de l'axe du servo au trou du coude, en mm
 float BIELLETTE = 70.0;  // du trou du coude au centre de la rotule, en mm
 
-// ----- Les réglages de Lili -----
+// ----- Les réglages d'Ellie -----
 int   SENS = 1;                 // mets -1 si les bras descendent quand ils devraient monter
 int   SENS_X = 1;               // mets -1 si la balle s'enfuit sur la longueur
 int   SENS_Y = 1;               // mets -1 si la balle s'enfuit sur la largeur

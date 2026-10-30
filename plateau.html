@@ -60,7 +60,7 @@
 
 <main id="top">
   <div class="hero">
-    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Ellie construit un robot dans son atelier"></video>
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
@@ -92,10 +92,10 @@
         <div><h2>Comment ça marche ?</h2><p>Le même principe que l'Équilibriste 1… mais dans toutes les directions !</p></div>
       </div>
 
-      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Niveau expert</span><p>Ce robot est le plus difficile de l'atelier. Construis d'abord <strong>l'Équilibriste 1</strong> : tu y découvres le PID avec une seule direction. Ici, on fait pareil, mais deux fois en même temps !</p></div></div>
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Niveau expert</span><p>Ce robot est le plus difficile de l'atelier. Construis d'abord <strong>l'Équilibriste 1</strong> : tu y découvres le PID avec une seule direction. Ici, on fait pareil, mais deux fois en même temps !</p></div></div>
 
-      <div class="lili"><img src="assets/lili-coucou.webp" alt="Lili fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Tu te souviens de l'Équilibriste ? La balle ne pouvait rouler que vers la gauche ou vers la droite. Ici, la bille peut partir <strong>dans toutes les directions</strong> ! Le plateau doit donc pencher en avant, en arrière, à gauche, à droite… tout ça en même temps. Pour y arriver, il faut <strong>trois moteurs qui travaillent en équipe</strong>.</p></div></div>
-      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
+      <div class="lili"><img src="assets/lili-coucou.webp" alt="Ellie fait coucou"><div class="bubble"><span class="tag">Coucou !</span><p>Tu te souviens de l'Équilibriste ? La balle ne pouvait rouler que vers la gauche ou vers la droite. Ici, la bille peut partir <strong>dans toutes les directions</strong> ! Le plateau doit donc pencher en avant, en arrière, à gauche, à droite… tout ça en même temps. Pour y arriver, il faut <strong>trois moteurs qui travaillent en équipe</strong>.</p></div></div>
+      <div class="lili livia"><img src="assets/livia-petite.webp" alt="Livia, la petite sœur d'Ellie"><div class="bubble"><span class="tag">Et moi, c'est Livia !</span><p>Je suis la petite sœur d'Ellie. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle. Et tu sais pourquoi l'atelier s'appelle LILI ? El<strong>LI</strong>e + <strong>LI</strong>via = <strong>LILI</strong> !</p></div></div>
 
       <!-- À quoi doit-il ressembler ? -->
       <figure class="look" id="apercu">
@@ -140,7 +140,7 @@
       </div>
       <p class="loop-line">L'écran sent la bille → le cerveau calcule 2 PID → les 3 moteurs penchent le plateau… et on recommence 50 fois par seconde !</p>
 
-      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Lili explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment trois moteurs font-ils pencher un plateau ? Le cerveau décide d'abord <strong>de combien pencher</strong>, en long et en large. Puis il calcule pour chaque coin <strong>de combien il doit monter ou descendre</strong>. Enfin, avec un triangle (le bras, la biellette, et la distance entre les deux), il trouve <strong>l'angle de chaque bras</strong>. C'est de la géométrie : les calculs sont déjà écrits dans le programme !</p></div></div>
+      <div class="lili ask"><img src="assets/lili-explique.webp" alt="Ellie explique avec une tablette"><div class="bubble"><span class="tag">J'explique</span><p>Comment trois moteurs font-ils pencher un plateau ? Le cerveau décide d'abord <strong>de combien pencher</strong>, en long et en large. Puis il calcule pour chaque coin <strong>de combien il doit monter ou descendre</strong>. Enfin, avec un triangle (le bras, la biellette, et la distance entre les deux), il trouve <strong>l'angle de chaque bras</strong>. C'est de la géométrie : les calculs sont déjà écrits dans le programme !</p></div></div>
 
       <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Pourquoi une bille en acier ?</span><p>L'écran tactile sent les appuis. La balle de ping-pong pèse à peine 3 grammes : il ne la sentirait même pas ! Une bille en acier de 30 mm pèse plus de 100 grammes, et là, il la sent très bien.</p></div></div>
 
@@ -176,7 +176,7 @@
     <div class="wrap">
       <div class="chap-head">
         <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
-        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Ellie garde tes coches en mémoire.</p></div>
       </div>
       <div class="progress"><span id="shopCount">0 / 0</span><div class="bar"><i id="shopBar"></i></div></div>
       <div class="shop">
@@ -204,7 +204,7 @@
         </div>
       </div>
 
-      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le multimètre et le branchement de l'alimentation, on les fait <strong>avec papa</strong>. Et on ne met jamais les doigts sous le plateau quand les moteurs sont allumés : ils sont costauds !</p></div></div>
+      <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Avec un adulte</span><p>Le multimètre et le branchement de l'alimentation, on les fait <strong>avec papa</strong>. Et on ne met jamais les doigts sous le plateau quand les moteurs sont allumés : ils sont costauds !</p></div></div>
       <p class="total">Outils à préparer : imprimante 3D, tournevis cruciforme, petite clé ou pince plate pour les écrous, règle, multimètre, et un ordinateur avec <strong>Arduino IDE</strong>. Le budget compte l'Arduino et la plaque d'essai déjà achetés pour l'Équilibriste 1. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
     </div>
   </section>
@@ -242,7 +242,7 @@
               <li>Visse une boule de rotule dans le petit trou du bout : son filetage traverse l'écrou. Serre à la main, sans forcer.</li>
               <li>L'autre bout de la biellette, avec le gros trou rond, sera le coude.</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Ça coince ?</span><p>Si l'écrou ne rentre pas, le trou est un peu petit sur ton imprimante. Pose l'écrou sur la fente et appuie avec le fer à souder de papa, ou passe une petite lime.</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Ça coince ?</span><p>Si l'écrou ne rentre pas, le trou est un peu petit sur ton imprimante. Pose l'écrou sur la fente et appuie avec le fer à souder de papa, ou passe une petite lime.</p></div></div>
           </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
         <article class="step" data-step="3">
@@ -274,9 +274,9 @@
                 <tr><td>Écran tactile</td><td>fils 1, 2, 3, 4 de l'adaptateur</td><td>A0, A1, A2, A3</td></tr>
               </tbody>
             </table></div>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Le fil magique</span><p>Le fil entre le GND de l'Arduino et la ligne − est le plus oublié… et sans lui, les moteurs ne comprennent pas les ordres ! Tout le monde doit partager le même −.</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Le fil magique</span><p>Le fil entre le GND de l'Arduino et la ligne − est le plus oublié… et sans lui, les moteurs ne comprennent pas les ordres ! Tout le monde doit partager le même −.</p></div></div>
             <div class="lili ask"><img src="assets/lili-perplexe.webp" alt=""><div class="bubble"><span class="tag">Quel fil est X, quel fil est Y ?</span><p>Avec papa, mets le multimètre sur Ω. Entre les fils 1 et 3, il doit trouver quelques centaines d'ohms, et pareil entre 2 et 4. S'il trouve plutôt quelque chose entre 1 et 2, échange les fils 2 et 3 sur l'Arduino.</p></div></div>
-            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout <strong>alimentation débranchée</strong>. Le condensateur a un sens : la bande blanche va toujours sur le −. Fais tout vérifier par papa avant de rebrancher.</p></div></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout <strong>alimentation débranchée</strong>. Le condensateur a un sens : la bande blanche va toujours sur le −. Fais tout vérifier par papa avant de rebrancher.</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="5">
@@ -315,7 +315,7 @@ Servo servo[<span class="n">3</span>];
               <li>Change <code>JUSTE_CENTRER</code> en <code>false</code> et téléverse. Regarde le premier mouvement : les trois bras doivent <strong>monter</strong> ensemble.</li>
             </ol>
             <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Ils descendent ?</span><p>Pas grave ! Note-le : dans le grand programme, tu mettras <code>SENS = -1</code>. Les trois moteurs étant montés pareil, ils font toujours tous la même chose.</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="6">
           <div class="step-head"><span class="num">6</span><div><h3>Les jambes</h3><small>25 minutes</small></div><button class="done-btn" type="button">C'est fait !</button></div>
@@ -327,7 +327,7 @@ Servo servo[<span class="n">3</span>];
               <li>Serre juste assez pour que rien ne bouge de travers, mais que la biellette <strong>pivote librement</strong>.</li>
               <li>Mesure du centre du coude au centre de la boule : vise <strong>70 mm</strong>. Visse ou dévisse la boule pour que les trois biellettes aient exactement la même longueur. Note-la : c'est <code>BIELLETTE</code>.</li>
             </ol>
-            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">Attention</span><p>Si un coude est trop serré, le moteur force et chauffe. Si tu sens qu'il accroche, desserre l'écrou d'un petit quart de tour.</p></div></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">Attention</span><p>Si un coude est trop serré, le moteur force et chauffe. Si tu sens qu'il accroche, desserre l'écrou d'un petit quart de tour.</p></div></div>
           </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="7">
@@ -340,7 +340,7 @@ Servo servo[<span class="n">3</span>];
               <li>Pose le plateau sur les trois biellettes et appuie fort sur chaque rotule : <strong>clic !</strong> Les embouts s'emboîtent sur les boules.</li>
               <li>Regarde de côté : chaque biellette doit être bien droite. Si une penche, desserre sa vis et fais glisser la rotule dans la fente.</li>
             </ol>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Le savais-tu ?</span><p>Ce mécanisme à trois jambes s'appelle un <strong>robot parallèle</strong>. On en trouve dans les simulateurs de vol, dans les robots qui trient des gâteaux à toute vitesse, et même dans certaines imprimantes 3D !</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Le savais-tu ?</span><p>Ce mécanisme à trois jambes s'appelle un <strong>robot parallèle</strong>. On en trouve dans les simulateurs de vol, dans les robots qui trient des gâteaux à toute vitesse, et même dans certaines imprimantes 3D !</p></div></div>
           </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
         </article>
         <article class="step" data-step="8">
@@ -394,7 +394,7 @@ Servo servo[<span class="n">3</span>];
               <li>Pose la bille tout près du bord court <strong>du côté du servo A</strong> : note la valeur de X, c'est <code>X_MAX</code>. Puis près du bord court opposé : c'est <code>X_MIN</code>.</li>
               <li>Pareil sur les deux grands bords pour <code>Y_MIN</code> et <code>Y_MAX</code> (<code>Y_MAX</code> du côté du servo B).</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">X ne bouge pas ?</span><p>Si c'est Y qui change quand tu déplaces la bille dans la longueur, X et Y sont échangés. Alimentation débranchée, échange les fils A0 ↔ A1 et A2 ↔ A3.</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">X ne bouge pas ?</span><p>Si c'est Y qui change quand tu déplaces la bille dans la longueur, X et Y sont échangés. Alimentation débranchée, échange les fils A0 ↔ A1 et A2 ↔ A3.</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
         <article class="step" data-step="9">
@@ -426,7 +426,7 @@ Servo servo[<span class="n">3</span>];
 <span class="k">float</span> BRAS      = <span class="n">25.0</span>;  <span class="c">// de l'axe du servo au trou du coude, en mm</span>
 <span class="k">float</span> BIELLETTE = <span class="n">70.0</span>;  <span class="c">// du trou du coude au centre de la rotule, en mm</span>
 
-<span class="c">// ----- Les réglages de Lili -----</span>
+<span class="c">// ----- Les réglages d'Ellie -----</span>
 <span class="k">int</span>   SENS = <span class="n">1</span>;                 <span class="c">// mets -1 si les bras descendent quand ils devraient monter</span>
 <span class="k">int</span>   SENS_X = <span class="n">1</span>;               <span class="c">// mets -1 si la balle s'enfuit sur la longueur</span>
 <span class="k">int</span>   SENS_Y = <span class="n">1</span>;               <span class="c">// mets -1 si la balle s'enfuit sur la largeur</span>
@@ -566,7 +566,7 @@ Servo servo[<span class="n">3</span>];
               <li>Appuie doucement avec ton doigt près du coin A : le coin A doit <strong>monter</strong>, pour renvoyer la bille vers le milieu. S'il descend, mets <code>SENS_X = -1</code>.</li>
               <li>Fais pareil près du coin B pour vérifier <code>SENS_Y</code>.</li>
             </ol>
-            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés"><div class="bubble"><span class="tag">La bille s'enfuit ?</span><p>C'est normal les premières fois ! Un seul réglage à la fois : d'abord les <code>SENS</code>, puis les chiffres du PID à l'étape suivante.</p></div></div>
+            <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés"><div class="bubble"><span class="tag">La bille s'enfuit ?</span><p>C'est normal les premières fois ! Un seul réglage à la fois : d'abord les <code>SENS</code>, puis les chiffres du PID à l'étape suivante.</p></div></div>
           </div><img class="pose" src="assets/lili-concentree.webp" alt=""></div>
         </article>
         <article class="step" data-step="10">
@@ -586,7 +586,7 @@ Servo servo[<span class="n">3</span>];
       </div>
 
       <div class="finale">
-        <img src="assets/rose-mission.webp" alt="Rose lève les bras, mission accomplie">
+        <img src="assets/livia-mission.webp" alt="Livia lève les bras, mission accomplie">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton plateau tient la bille !</h2>

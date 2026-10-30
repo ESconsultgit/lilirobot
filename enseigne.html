@@ -126,7 +126,7 @@ img{max-width:100%}
 
 <main id="top">
   <div class="hero">
-    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Ellie construit un robot dans son atelier"></video>
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
@@ -147,11 +147,11 @@ img{max-width:100%}
       <div>
         <span class="eyebrow">L'atelier 3D</span>
         <h2 class="studio-title">Écris ton prénom</h2>
-        <p class="lead">Lili dessine tes lettres en 3D, calcule les lumières et prépare le programme.</p>
+        <p class="lead">Ellie dessine tes lettres en 3D, calcule les lumières et prépare le programme.</p>
         <div class="panel">
           <div class="field">
             <label for="nameInput">Ton prénom</label>
-            <input id="nameInput" type="text" maxlength="10" autocomplete="off" spellcheck="false" value="Lili">
+            <input id="nameInput" type="text" maxlength="10" autocomplete="off" spellcheck="false" value="Ellie">
             <small>10 lettres maximum. Les accents marchent aussi (é, è, ç…).</small>
           </div>
           <div class="field">
@@ -199,7 +199,7 @@ img{max-width:100%}
         </div>
         <div class="canvas-wrap">
         <canvas id="view" aria-label="Aperçu 3D de ton enseigne"></canvas>
-        <div class="loading" id="loading">Lili prépare l'atelier 3D…</div>
+        <div class="loading" id="loading">Ellie prépare l'atelier 3D…</div>
         <span class="stage-hint">Fais tourner avec la souris ou le doigt</span>
         </div>
         <div class="stats">
@@ -225,10 +225,10 @@ img{max-width:100%}
         <div><h2>Comment ça marche ?</h2><p>Une enseigne qui sait quand tu arrives, c'est déjà un petit robot !</p></div>
       </div>
       <div class="lili">
-        <img src="assets/lili-coucou.webp" alt="Lili fait coucou">
+        <img src="assets/lili-coucou.webp" alt="Ellie fait coucou">
         <div class="bubble"><span class="tag">Coucou !</span><p>Chaque lettre est une petite boîte imprimée en 3D. Dedans, on colle des <strong>pixels</strong> : des lumières qui peuvent prendre toutes les couleurs. Devant, une façade blanche fait briller la lettre en entier, comme une lanterne.</p></div>
       </div>
-      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
+      <div class="lili livia"><img src="assets/livia-petite.webp" alt="Livia, la petite sœur d'Ellie"><div class="bubble"><span class="tag">Et moi, c'est Livia !</span><p>Je suis la petite sœur d'Ellie. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle. Et tu sais pourquoi l'atelier s'appelle LILI ? El<strong>LI</strong>e + <strong>LI</strong>via = <strong>LILI</strong> !</p></div></div>
       <!-- À quoi doit-il ressembler ? -->
       <figure class="look" id="apercu">
         <div class="look-head"><span class="role">Le robot fini</span><h3>À quoi doit-il ressembler ?</h3><p>Voilà ton enseigne accrochée au mur, ici avec le prénom LILI. La dernière lettre est montrée ouverte pour que tu voies ce qu'il y a dedans. Ton enseigne à toi aura ton prénom !</p></div>
@@ -269,12 +269,12 @@ img{max-width:100%}
         </div>
       </div>
       <p class="loop-line">Le détecteur sent → le cerveau choisit les couleurs → les pixels brillent… et on recommence !</p>
-      <div class="lili tip rose mic-only">
-        <img src="assets/rose-idee.webp" alt="">
+      <div class="lili tip livia mic-only">
+        <img src="assets/livia-idee.webp" alt="">
         <div class="bubble"><span class="tag">Les oreilles</span><p>Avec le micro, ton enseigne entend ! Frappe <strong>deux fois dans tes mains</strong> pour l'éteindre ou la rallumer. En mode <strong>Musique</strong>, les lettres brillent plus fort quand le son monte et changent de couleur à chaque « boum ».</p></div>
       </div>
       <div class="lili ask">
-        <img src="assets/lili-explique.webp" alt="Lili explique">
+        <img src="assets/lili-explique.webp" alt="Ellie explique">
         <div class="bubble"><span class="tag">J'explique</span><p>Les pixels sont reliés en file indienne, comme des wagons. L'Arduino envoie une longue liste de couleurs au premier pixel : il garde la première couleur pour lui et passe le reste au suivant. C'est pour ça que l'ordre des pixels est si important !</p></div>
       </div>
     </div>
@@ -290,7 +290,7 @@ img{max-width:100%}
       <div class="progress"><span id="shopCount">0 / 0 trouvés</span><div class="bar"><i id="shopBar"></i></div></div>
       <div class="shop" id="shop"></div>
       <div class="lili warn">
-        <img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés">
+        <img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés">
         <div class="bubble"><span class="tag">Attention au voltage</span><p>Ta guirlande doit être en <strong>5 V</strong>, comme l'alimentation. Une guirlande 12 V ne marchera pas, et une alimentation 12 V grillerait tes pixels !</p></div>
       </div>
       <p class="total">Outils : imprimante 3D, pistolet à colle chaude, perceuse avec un foret de 14 mm (avec un adulte), tournevis, ordinateur avec Arduino IDE. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
@@ -317,7 +317,7 @@ img{max-width:100%}
               <li>Réglages conseillés : couches de 0,2 mm, 3 contours (« périmètres »), remplissage 15 %.</li>
             </ol>
             <div class="lili tip"><img src="assets/lili-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Imprime d'abord une seule lettre pour tester. Si tout va bien, lance les autres. Et écris au crayon le numéro de chaque lettre à l'intérieur !</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
 
         <article class="step" data-step="2">
@@ -347,7 +347,7 @@ img{max-width:100%}
               <li>Colle chaque pixel <strong>couché</strong> à sa place avec une goutte de colle chaude, la tête tournée vers le milieu de la lettre.</li>
               <li>Ressors par le même trou et continue vers la lettre suivante.</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Un pixel en trop ?</span><p>Si les lettres sont loin les unes des autres, un pixel peut rester caché derrière la planche. Ce n'est pas grave ! Tu le retrouveras à l'étape 5.</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Un pixel en trop ?</span><p>Si les lettres sont loin les unes des autres, un pixel peut rester caché derrière la planche. Ce n'est pas grave ! Tu le retrouveras à l'étape 5.</p></div></div>
           </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
 
@@ -369,7 +369,7 @@ img{max-width:100%}
               </tbody>
             </table></div>
             <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">Règle d'or</span><p>On branche tout <strong>alimentation débranchée</strong>. Le condensateur a un sens : la bande sur son côté va toujours sur le −. Fais vérifier par papa avant de rebrancher.</p></div></div>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Les couleurs des fils</span><p>Les couleurs changent selon les guirlandes. Lis plutôt ce qui est écrit sur le petit circuit du premier pixel : 5V, DIN, GND.</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Les couleurs des fils</span><p>Les couleurs changent selon les guirlandes. Lis plutôt ce qui est écrit sur le petit circuit du premier pixel : 5V, DIN, GND.</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
 
@@ -411,13 +411,13 @@ img{max-width:100%}
               <li>Fixe l'Arduino et la plaque d'essai derrière la planche avec du scotch double face.</li>
               <li>Visse deux crochets et accroche ton enseigne au mur !</li>
             </ol>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Laisse le bouton accessible sur le côté de la planche pour changer d'animation sans tout décrocher.</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Laisse le bouton accessible sur le côté de la planche pour changer d'animation sans tout décrocher.</p></div></div>
           </div><img class="pose" src="assets/lili-construit.webp" alt=""></div>
         </article>
       </div>
 
       <div class="finale">
-        <img src="assets/rose-aventure.webp" alt="Rose prête pour l'aventure">
+        <img src="assets/livia-aventure.webp" alt="Livia prête pour l'aventure">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton prénom brille au mur !</h2>

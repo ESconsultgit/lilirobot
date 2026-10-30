@@ -15,7 +15,7 @@
   const COLORS = [
     { n: tr("Rose", "Pink"), h: 224, css: "#F06AB0" }, { n: tr("Violet", "Purple"), h: 192, css: "#9B5FD0" },
     { n: tr("Bleu", "Blue"), h: 160, css: "#3D7DD8" }, { n: "Turquoise", h: 128, css: "#2EC4C4" },
-    { n: tr("Vert Lili", "Lili green"), h: 88, css: "#8CC63F" }, { n: tr("Jaune", "Yellow"), h: 64, css: "#F2C230" },
+    { n: tr("Vert Ellie", "Ellie green"), h: 88, css: "#8CC63F" }, { n: tr("Jaune", "Yellow"), h: 64, css: "#F2C230" },
     { n: "Orange", h: 32, css: "#F29A1F" }, { n: tr("Rouge", "Red"), h: 0, css: "#E04A3A" }
   ];
   // Roue FastLED « rainbow » → degrés
@@ -28,7 +28,7 @@
 
   /* ---------- État ---------- */
   const saved = store.get("lili-r2-config") || {};
-  const state = Object.assign({ name: "Lili", mode: "upper", height: 140, depth: 25, color: 4, bed: 220, pir: true, mic: true, anim: 0 }, saved);
+  const state = Object.assign({ name: "Ellie", mode: "upper", height: 140, depth: 25, color: 4, bed: 220, pir: true, mic: true, anim: 0 }, saved);
   if (!state.mic && state.anim === 4) state.anim = 0;
   const text = () => { const t = state.name.trim().replace(/\s+/g, " ").slice(0, 10); return state.mode === "upper" ? t.toLocaleUpperCase(EN ? "en" : "fr") : t; };
   const save = () => store.set("lili-r2-config", state);
@@ -94,7 +94,7 @@
     if (!t.replace(/\s/g, "")) { sign = null; renderAll(); return; }
     buildError = "";
     try { sign = EnseigneGeo.build(font, { text: t, height: state.height, depth: state.depth }); }
-    catch (e) { console.error(e); sign = null; buildError = tr("Oups, Lili n'a pas réussi à dessiner ces lettres (", "Oops, Lili couldn't draw these letters (") + (e && e.message || e) + ")."; }
+    catch (e) { console.error(e); sign = null; buildError = tr("Oups, Ellie n'a pas réussi à dessiner ces lettres (", "Oops, Ellie couldn't draw these letters (") + (e && e.message || e) + ")."; }
     table = sign ? sign.letters.map(l => ({ ch: l.ch, start: l.start + 1, count: l.count })) : [];
     renderAll();
   }
@@ -153,7 +153,7 @@
     if (group) { scene.remove(group); group.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); }); }
     group = new THREE.Group(); pixMeshes = []; lidMats = [];
     $("loading").hidden = true;
-    if (!sign) { $("loading").hidden = false; $("loading").textContent = buildError || (font ? tr("Écris ton prénom !", "Type your name!") : tr("Lili prépare l'atelier 3D…", "Lili is setting up the 3D workshop…")); return; }
+    if (!sign) { $("loading").hidden = false; $("loading").textContent = buildError || (font ? tr("Écris ton prénom !", "Type your name!") : tr("Ellie prépare l'atelier 3D…", "Ellie is setting up the 3D workshop…")); return; }
     const o = sign.opts, T = o.plate + o.depth;
     const bodyMat = new THREE.MeshStandardMaterial({ color: 0x6FB43F, roughness: 0.55, metalness: 0.05 });
     const pixGeo = new THREE.CylinderGeometry(6, 6, 14, 16); pixGeo.rotateZ(Math.PI / 2);
@@ -689,7 +689,7 @@ ${mic ? `
   if (window.claude && window.claude.use) window.claude.use("downloads").then(d => downloads = d).catch(() => downloads = null);
   $("dlBtn").addEventListener("click", async () => {
     if (!sign || !window.JSZip) return;
-    const btn = $("dlBtn"); btn.disabled = true; btn.textContent = tr("Lili prépare ton ZIP…", "Lili is packing your ZIP…");
+    const btn = $("dlBtn"); btn.disabled = true; btn.textContent = tr("Ellie prépare ton ZIP…", "Ellie is packing your ZIP…");
     try {
       const zip = new JSZip(), base = fileBase(), dir = zip.folder(base);
       EnseigneGeo.parts(sign, EN ? { body: "body", lid: "front", piece: "piece" } : null).forEach(p => dir.file(p.name, p.mesh.toSTL(p.name)));
@@ -750,6 +750,6 @@ ${mic ? `
   const threeOk = initThree();
   fetch(BASE + "assets/fonts/baloo-2-latin-800-normal.woff").then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
     .then(buf => { font = opentype.parse(buf); rebuild(); })
-    .catch(e => { console.error(e); $("loading").hidden = false; $("loading").textContent = tr("Impossible de charger la police de Lili.", "Couldn't load Lili's font."); });
+    .catch(e => { console.error(e); $("loading").hidden = false; $("loading").textContent = tr("Impossible de charger la police d'Ellie.", "Couldn't load Ellie's font."); });
   if (!threeOk) $("loading").hidden = false;
 })();

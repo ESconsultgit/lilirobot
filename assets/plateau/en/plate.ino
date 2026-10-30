@@ -23,7 +23,7 @@ const float HEIGHT = 86.0;
 float ARM  = 25.0;   // from the servo shaft to the elbow hole, in mm
 float LINK = 70.0;   // from the elbow hole to the centre of the ball joint, in mm
 
-// ----- Lili's settings -----
+// ----- Ellie's settings -----
 int   DIRECTION = 1;            // set to -1 if the arms go down when they should go up
 int   DIRECTION_X = 1;          // set to -1 if the ball runs away along the length
 int   DIRECTION_Y = 1;          // set to -1 if the ball runs away along the width

@@ -59,13 +59,13 @@
 
 <main id="top">
   <div class="hero">
-    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Lili construit un robot dans son atelier"></video>
+    <video id="heroVideo" src="assets/banner.mp4?v=4" poster="assets/banner-poster.jpg" autoplay muted loop playsinline aria-label="Ellie construit un robot dans son atelier"></video>
     <button class="vid-toggle" id="vidToggle" type="button">❚❚ Pause</button>
     <div class="hero-text">
       <div class="wrap">
         <span class="eyebrow">Robot n°1 · Version 1 · Mission équilibre</span>
         <h1>L'Équilibriste 1</h1>
-        <p class="lead">Construis avec Lili un robot qui garde une balle de ping-pong en équilibre sur un rail, tout seul.</p>
+        <p class="lead">Construis avec Ellie un robot qui garde une balle de ping-pong en équilibre sur un rail, tout seul.</p>
         <div class="hero-cta">
           <a class="btn btn-lime" href="#comprendre">On commence !</a>
           <a class="btn btn-ghost" href="#courses">La liste de courses</a>
@@ -92,10 +92,10 @@
       </div>
 
       <div class="lili">
-        <img src="assets/lili-coucou.webp" alt="Lili fait coucou">
-        <div class="bubble"><span class="tag">Coucou !</span><p>Moi c'est Lili ! Tu as déjà essayé de faire tenir une balle sur une règle ? Dès qu'elle penche un peu, la balle roule et tombe. Notre robot va faire ce que tes mains font sans y penser : <strong>regarder la balle et pencher la règle juste ce qu'il faut</strong>.</p></div>
+        <img src="assets/lili-coucou.webp" alt="Ellie fait coucou">
+        <div class="bubble"><span class="tag">Coucou !</span><p>Moi c'est Ellie ! Tu as déjà essayé de faire tenir une balle sur une règle ? Dès qu'elle penche un peu, la balle roule et tombe. Notre robot va faire ce que tes mains font sans y penser : <strong>regarder la balle et pencher la règle juste ce qu'il faut</strong>.</p></div>
       </div>
-      <div class="lili rose"><img src="assets/rose-petite.webp" alt="Rose, la petite sœur de Lili"><div class="bubble"><span class="tag">Et moi, c'est Rose !</span><p>Je suis la petite sœur de Lili. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle.</p></div></div>
+      <div class="lili livia"><img src="assets/livia-petite.webp" alt="Livia, la petite sœur d'Ellie"><div class="bubble"><span class="tag">Et moi, c'est Livia !</span><p>Je suis la petite sœur d'Ellie. Comme je suis plus petite, je pose plein de questions… et parfois je fais des bêtises ! Quand tu vois une <strong>bulle rose</strong>, c'est moi qui te parle. Et tu sais pourquoi l'atelier s'appelle LILI ? El<strong>LI</strong>e + <strong>LI</strong>via = <strong>LILI</strong> !</p></div></div>
 
       <!-- À quoi doit-il ressembler ? -->
       <figure class="look" id="apercu">
@@ -138,7 +138,7 @@
       <p class="loop-line">Les yeux regardent → le cerveau calcule → le muscle bouge… et on recommence 25 fois par seconde !</p>
 
       <div class="lili ask">
-        <img src="assets/lili-explique.webp" alt="Lili explique avec une tablette">
+        <img src="assets/lili-explique.webp" alt="Ellie explique avec une tablette">
         <div class="bubble"><span class="tag">J'explique</span><p>Le secret du cerveau, c'est une recette en 3 ingrédients appelée <strong>PID</strong>. <strong>P</strong> comme « Pousse » : plus la balle est loin du milieu, plus on penche. <strong>D</strong> comme « Doucement » : si la balle arrive vite, on freine avant qu'elle dépasse. <strong>I</strong> comme « Insiste » : si la balle reste toujours un peu à côté, on corrige petit à petit.</p></div>
       </div>
 
@@ -172,7 +172,7 @@
     <div class="wrap">
       <div class="chap-head">
         <div class="hex lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 002 1.6h7.7a2 2 0 002-1.5L21 8H6"/><circle cx="10" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/></svg></div>
-        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Lili garde tes coches en mémoire.</p></div>
+        <div><h2>La liste de courses</h2><p>Coche chaque chose quand elle est sur ta table. Ellie garde tes coches en mémoire.</p></div>
       </div>
 
       <div class="progress"><span id="shopCount">0 / 0 trouvés</span><div class="bar"><i id="shopBar"></i></div></div>
@@ -204,7 +204,7 @@
       </div>
 
       <div class="lili warn">
-        <img src="assets/lili-pas-contente.webp" alt="Lili les bras croisés">
+        <img src="assets/lili-pas-contente.webp" alt="Ellie les bras croisés">
         <div class="bubble"><span class="tag">Avec un adulte</span><p>La scie, la perceuse et le pistolet à colle chaude, on les utilise <strong>avec papa</strong>, jamais seule. Moi aussi je demande de l'aide pour ça !</p></div>
       </div>
       <p class="total">Outils à préparer : règle, crayon, tournevis cruciforme, petite scie, pistolet à colle chaude, et un ordinateur avec le logiciel gratuit <strong>Arduino IDE</strong>. Les prix sont indicatifs. Les boutons Amazon ouvrent une recherche : choisis un vendeur bien noté et compare avec la ligne « Vérifie ».</p>
@@ -262,8 +262,8 @@
               <li>Quand l'écart est bon, colle les baguettes et tiens-les avec du scotch pendant le séchage.</li>
               <li>Colle un petit morceau de carton au bout droit : c'est une butée pour que la balle ne s'envole pas.</li>
             </ol>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Trace deux lignes au crayon sur la latte avant de coller. Les baguettes resteront bien droites.</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Astuce</span><p>Trace deux lignes au crayon sur la latte avant de coller. Les baguettes resteront bien droites.</p></div></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
 
         <!-- 4 -->
@@ -373,7 +373,7 @@ Servo moteur;
               <li>Accroche un bout dans le trou extérieur du palonnier, l'autre dans le piton.</li>
               <li>Déplace le support jusqu'à ce que le rail soit <strong>bien à plat</strong>. Vérifie avec une balle : elle ne doit pas rouler. Maintenant tu peux coller le support.</li>
             </ol>
-            <div class="lili ask rose"><img src="assets/rose-pensive.webp" alt=""><div class="bubble"><span class="tag">Ça coince ?</span><p>Si le rail est trop haut ou trop bas, change la longueur de la tige plutôt que de forcer sur le moteur.</p></div></div>
+            <div class="lili ask livia"><img src="assets/livia-pensive.webp" alt=""><div class="bubble"><span class="tag">Ça coince ?</span><p>Si le rail est trop haut ou trop bas, change la longueur de la tige plutôt que de forcer sur le moteur.</p></div></div>
           </div><img class="pose" src="assets/duo-oups.webp" alt=""></div>
         </article>
 
@@ -409,7 +409,7 @@ Servo moteur;
             <ol start="4">
               <li>Fais rouler la balle doucement avec ton doigt. Les chiffres changent ? Bravo, ton robot voit !</li>
             </ol>
-            <div class="lili tip rose"><img src="assets/rose-idee.webp" alt=""><div class="bubble"><span class="tag">Le savais-tu ?</span><p>Le son fait 343 mètres par seconde. On divise par 2 parce que le son fait l'aller jusqu'à la balle <em>et</em> le retour.</p></div></div>
+            <div class="lili tip livia"><img src="assets/livia-idee.webp" alt=""><div class="bubble"><span class="tag">Le savais-tu ?</span><p>Le son fait 343 mètres par seconde. On divise par 2 parce que le son fait l'aller jusqu'à la balle <em>et</em> le retour.</p></div></div>
           </div><img class="pose" src="assets/lili-explique.webp" alt=""></div>
         </article>
 
@@ -425,7 +425,7 @@ Servo moteur;
 <span class="k">const int</span> PIN_TRIG  = <span class="n">8</span>;
 <span class="k">const int</span> PIN_ECHO  = <span class="n">7</span>;
 
-<span class="c">// ----- Les réglages de Lili -----</span>
+<span class="c">// ----- Les réglages d'Ellie -----</span>
 <span class="k">float</span> CIBLE      = <span class="n">18.0</span>;  <span class="c">// où la balle doit s'arrêter (cm depuis le capteur)</span>
 <span class="k">int</span>   ANGLE_PLAT = <span class="n">90</span>;    <span class="c">// angle du moteur quand le rail est à plat</span>
 <span class="k">int</span>   SENS       = <span class="n">1</span>;     <span class="c">// mets -1 si la balle s'enfuit au lieu de revenir</span>
@@ -486,7 +486,7 @@ Servo moteur;
   delay(<span class="n">40</span>);
 }</code></pre></div>
             <div class="lili warn"><img src="assets/lili-pas-contente.webp" alt=""><div class="bubble"><span class="tag">La balle s'enfuit ?</span><p>Pas de panique, c'est normal la première fois ! Le moteur est peut-être monté à l'envers. Change <code>SENS = 1</code> en <code>SENS = -1</code> et téléverse à nouveau.</p></div></div>
-          </div><img class="pose" src="assets/rose-concentree.webp" alt=""></div>
+          </div><img class="pose" src="assets/livia-concentree.webp" alt=""></div>
         </article>
 
         <!-- 10 -->
@@ -506,7 +506,7 @@ Servo moteur;
       </div>
 
       <div class="finale">
-        <img src="assets/lili-mission.webp" alt="Lili lève les bras, mission accomplie">
+        <img src="assets/lili-mission.webp" alt="Ellie lève les bras, mission accomplie">
         <div>
           <span class="eyebrow">Mission accomplie</span>
           <h2>Ton Équilibriste tient la balle !</h2>
