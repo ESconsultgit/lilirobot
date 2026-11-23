@@ -57,8 +57,32 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .s-b .band{top:0;left:0;right:0;height:26%}.s-t .band{bottom:0;left:0;right:0;height:26%}
 .s-l .band{right:0;top:0;bottom:0;width:22%;flex-direction:column}.s-r .band{left:0;top:0;bottom:0;width:22%;flex-direction:column}
 .s-b{padding-top:26%}.s-t{padding-bottom:26%}.s-l{padding-right:22%}.s-r{padding-left:22%}
-.cell.owned::after{content:"";position:absolute;inset:0;border:calc(var(--u)*.08) solid var(--oc);border-radius:3px;pointer-events:none}
-.cell.mort .emo{opacity:.35}.cell.mort::before{content:"💤";position:absolute;font-size:calc(var(--u)*.3);right:2px;bottom:2px}
+.cell.owned{background:color-mix(in srgb,var(--oc) 22%,#fff)}
+.cell.owned::after{content:"";position:absolute;inset:0;border:calc(var(--u)*.07) solid var(--oc);border-radius:3px;pointer-events:none}
+.cell .ob{position:absolute;display:none;background:var(--oc);align-items:center;justify-content:center;font-size:calc(var(--u)*.27);line-height:1;z-index:1;pointer-events:none}
+.cell.owned .ob{display:flex}
+.s-b .ob{bottom:0;left:0;right:0;height:24%}.s-t .ob{top:0;left:0;right:0;height:24%}
+.s-l .ob{left:0;top:0;bottom:0;width:22%}.s-r .ob{right:0;top:0;bottom:0;width:22%}
+.s-b.owned{padding-bottom:24%}.s-t.owned{padding-top:24%}.s-l.owned{padding-left:22%}.s-r.owned{padding-right:22%}
+.cell.mort .emo{opacity:.35}.cell.mort::before{content:"💤";position:absolute;font-size:calc(var(--u)*.3);left:50%;top:50%;transform:translate(-50%,-50%);z-index:1}
+/* Scène du loyer */
+.rent{text-align:center}
+.rent .rh{display:flex;align-items:center;justify-content:center;gap:10px;background:color-mix(in srgb,var(--gc) 22%,#fff);border:3px solid var(--gc);border-radius:14px;padding:6px 10px}
+.rent .rh .e{font-size:38px;line-height:1}.rent .rh b{display:block;font-family:'Baloo 2';font-size:19px;line-height:1.1;text-align:left}
+.rent .rh small{display:block;font-weight:700;color:#555;text-align:left}
+.rflow{display:flex;align-items:center;gap:6px;margin:12px 0 6px}
+.rp{flex:0 0 96px;display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:800;line-height:1.1}
+.rp .pawn{width:54px;height:54px;font-size:32px;animation:none;transform:none}
+.rp small{font-family:'Baloo 2';font-size:14px;color:#555;white-space:nowrap}
+.rp small i{font-style:normal}
+.rcoins{flex:1;position:relative;height:60px}
+.rcoins .ramt{position:absolute;left:0;right:0;top:-4px;font-family:'Baloo 2';font-size:24px;color:var(--red)}
+.rcoins .arr{position:absolute;left:0;right:0;bottom:0;font-size:24px;color:#bbb}
+.rcoins .cn{position:absolute;bottom:22px;left:0;width:24px;height:24px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe680,#f5b400);border:2px solid #e19a00;
+  color:#c2007a;font:800 13px/20px 'Baloo 2';opacity:0;animation:coin 1.5s ease-in-out infinite}
+.rcoins .cn:nth-child(2){animation-delay:.5s}.rcoins .cn:nth-child(3){animation-delay:1s}
+@keyframes coin{0%{left:0;opacity:0;transform:translateY(0)}15%{opacity:1}50%{transform:translateY(-14px)}85%{opacity:1}100%{left:calc(100% - 24px);opacity:0;transform:translateY(0)}}
+.rwhy{font-size:16px;margin:4px 0 0}
 .cell.hl{animation:hl .9s ease}
 @keyframes hl{0%,100%{background:#FFFDF6}40%{background:#FFF0A0}}
 .center{grid-column:2/11;grid-row:2/11;background:linear-gradient(135deg,#E3F3CC,#FCE3F0);border-radius:4px;display:flex;flex-direction:column;
@@ -291,7 +315,7 @@ const SURPRISE=[
 ];
 
 const PAWNS=['🦄','🐱','🐶','🦖','🐸','🐼','🦊','🐰','🐙','🚀','🍦','🌟'];
-const COLORS=['#C2367A','#2F6E2B','#2E5BD8','#F59A23','#7A4BD8','#16A3A3'];
+const COLORS=['#D6246E','#7A3FD8','#0E9BB0','#FF7A00','#E0B000','#4C5A70'];
 const BOTNAMES=['Robot Pépite','Robot Bidule','Robot Zigzag','Robot Patate'];
 
 /* ---------- État ---------- */
@@ -493,10 +517,10 @@ async function land(){
       return; }
     if(st.o===G.cur){ msg(`${p.name} est chez soi : ${sq.name} 🏡`); G.mult=null; return; }
     if(st.m){ msg(`${sq.name} est en pause 💤 : pas de loyer !`); G.mult=null; return; }
-    const r=rentOf(i,G.mult); G.mult=null; const o=G.players[st.o];
-    log(`${p.name} paie ${r} L$ de loyer à ${o.name} (${sq.short})`); msg(`${p.name} paie ${r} L$ à ${o.name} ${o.pawn}`);
+    const why=rentWhy(i,G.mult), r=rentOf(i,G.mult); G.mult=null; const o=G.players[st.o];
+    log(`${p.name} paie ${r} L$ de loyer à ${o.name} (${sq.short}, ${why})`); msg(`${p.name} est chez ${o.name} ${o.pawn} : loyer ${r} L$`);
     render();
-    if(!p.bot) tip('rent','livia-pensive',`<b>${esc(sq.name)}</b> appartient à ${esc(o.name)} : il faut payer un <b>loyer</b>. Plus il y a de cabanes, plus c'est cher !`);
+    await rentScene(G.cur,st.o,i,r,why);
     await charge(G.cur,st.o,r); return;
   }
   G.mult=null;
@@ -511,6 +535,32 @@ async function land(){
     case 'jail': msg(`${p.name} passe juste dire bonjour dans la chambre en désordre 👋`); break;
     case 'go': msg(`${p.name} est sur la case Départ 🚩`); break;
   }
+}
+function rentWhy(i,mult){
+  const sq=BOARD[i], st=G.own[i];
+  if(sq.t==='street'){
+    if(st.h===5) return 'avec un château 🏰';
+    if(st.h>0) return `avec ${st.h} cabane${st.h>1?'s':''} ${'🛖'.repeat(st.h)}`;
+    return ownsGroup(st.o,sq.g)?`toute la couleur ${GROUPS[sq.g].n} ⭐ : loyer doublé`:'sans cabane';
+  }
+  if(sq.t==='rail'){ const n=countType(st.o,'rail'); return `${n} gare${n>1?'s':''}`+(mult&&mult.rail?', et la carte Chance double le loyer':''); }
+  const k=mult&&mult.util?mult.util:(countType(st.o,'util')===2?10:4);
+  return `les dés font ${G.dice[0]+G.dice[1]}, × ${k}`;
+}
+function rentScene(pi,oi,i,r,why){
+  const p=G.players[pi], o=G.players[oi], sq=BOARD[i], can=p.money>=r, watchOnly=p.bot;
+  const gc=sq.g?GROUPS[sq.g].c:sq.t==='rail'?'#4a4a4a':'#16A3A3';
+  hl(i);
+  return modal({title:`${p.pawn} ${esc(p.name)} est chez ${esc(o.name)} !`,html:`<div class="rent" style="--gc:${gc}">
+    <div class="rh"><span class="e">${sq.emo}</span><div><b>${esc(sq.name)}</b><small>appartient à ${o.pawn} ${esc(o.name)}</small></div></div>
+    <div class="rflow">
+      <div class="rp"><span class="pawn" style="--pc:${p.color}">${p.pawn}</span>${esc(p.name)}<small>${p.money.toLocaleString('fr-FR')} → <i class="${can?'':'neg'}">${(p.money-r).toLocaleString('fr-FR')}</i></small></div>
+      <div class="rcoins"><span class="cn">L</span><span class="cn">L</span><span class="cn">L</span><b class="ramt">${r} L$</b><span class="arr">➜</span></div>
+      <div class="rp"><span class="pawn" style="--pc:${o.color}">${o.pawn}</span>${esc(o.name)}<small>${o.money.toLocaleString('fr-FR')} → <i>${(o.money+r).toLocaleString('fr-FR')}</i></small></div>
+    </div>
+    <p class="rwhy">Quand on s'arrête chez quelqu'un, on lui paie un <b>loyer</b> : ici <b>${r} L$</b> (${esc(why)}).</p>
+    ${can?'':`<p class="neg"><b>Oh non, ${esc(p.name)} n'a pas assez de LiliDollars !</b></p>`}</div>`,
+    buttons:[{l:watchOnly?'OK':can?`💸 Je paie ${r} L$`:'😬 Trouver de l\'argent',v:1,c:'b-pink'}],auto:watchOnly?3500:0});
 }
 async function drawCard(kind){
   const p=cur(), deck=G.decks[kind], ci=deck.shift(), card=(kind==='chance'?CHANCE:SURPRISE)[ci], a=card.a;
@@ -704,7 +754,7 @@ function buildBoard(){
       (sq.t==='street'?`<div class="band" style="background:${GROUPS[sq.g].c}"></div>`:'')+
       `<span class="emo">${sq.emo}</span><span class="nm">${esc(sq.short)}</span>`+
       (sq.price?`<span class="pr">${sq.price} L$</span>`:sq.amt?`<span class="pr">${sq.amt} L$</span>`:'')+
-      `<div class="pawns" id="pw${i}"></div></div>`;
+      (BUYABLE(sq.t)?`<span class="ob" id="ob${i}"></span>`:'')+`<div class="pawns" id="pw${i}"></div></div>`;
   });
   h+=`<div class="center"><div class="logo">Monopo<b>Lili</b></div>
     <button class="diceBtn" id="diceBtn" onclick="rollDice()" aria-label="Lancer les dés"><div class="die on3" id="d0">${'<i></i>'.repeat(9)}</div><div class="die on4" id="d1">${'<i></i>'.repeat(9)}</div></button>
@@ -730,7 +780,7 @@ function renderBoard(){
     const c=document.getElementById('c'+i); if(!c) return; const st=G.own[i];
     if(st){
       c.classList.toggle('owned',st.o>=0); c.classList.toggle('mort',!!st.m);
-      if(st.o>=0) c.style.setProperty('--oc',G.players[st.o].color);
+      if(st.o>=0){ c.style.setProperty('--oc',G.players[st.o].color); const ob=document.getElementById('ob'+i); if(ob) ob.textContent=G.players[st.o].pawn; }
       if(sq.t==='street'){ const band=c.querySelector('.band'); band.textContent=st.h===5?'🏰':'🛖'.repeat(st.h); }
     }
   });
@@ -990,6 +1040,7 @@ function hasSave(){ try{ const g=JSON.parse(localStorage.getItem(SAVE_KEY)||'nul
 function loadGame(){
   G=JSON.parse(localStorage.getItem(SAVE_KEY));
   if(G.phase==='moving') G.phase='end';
+  G.players.forEach((p,i)=>p.color=COLORS[i]); // couleurs bien visibles sur le plateau (v5)
   buildBoard(); render();
 }
 
