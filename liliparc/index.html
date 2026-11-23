@@ -209,6 +209,15 @@ let visitors=[], floats=[], confetti=[];
 let view=0, speed=1, modalOpen=false, soundOn=true, spawnAcc=0, animT=0;
 const runtime = Array.from({length:16},()=>({queue:[],timer:0}));
 
+// Aide dégressive : beaucoup de conseils les 3 premiers jours, puis de plus en plus rares
+const helpLevel=()=>S.dayNum<=3?2:S.dayNum<=10?1:0;   // 2 = début, 1 = milieu, 0 = elles se débrouillent
+function canToast(k){
+  S.tipLog=S.tipLog||{};
+  const lvl=helpLevel(), max=[1,1,3][lvl];
+  if((day.tipToasts||0)>=max) return false;
+  const gap=k==='red'?1:({gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
+  return S.dayNum-(S.tipLog[k]??-99)>=gap;
+}
 function newGame(name){
   S = {name:name||'Lili Parc', seen:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0};
@@ -723,13 +732,14 @@ function endDay(){
 }
 function showReport(r){
   let lesson='';
-  if(r.refGate>r.entries*0.4 && r.refGate>3) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
-  else if(r.refPrice>4) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
-  else if(r.queueFull>5) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
+  const hl=helpLevel();
+  if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
+  else if(r.refPrice>[20,10,4][hl]) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
+  else if(r.queueFull>[15,10,5][hl]) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
   else if(r.profit<0) lesson=`⚠️ Aujourd'hui tu as dépensé plus que ce que tu as gagné. L'entretien coûte cher : il faut que tes attractions rapportent plus qu'elles ne coûtent !`;
-  else if(S.money>300 && S.bank===0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
+  else if(S.money>300 && S.bank===0 && hl>0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
   else if(r.interest>0) lesson=`🐷 Ta tirelire t'a rapporté <b>${fmt(r.interest)} L$</b> cette nuit, sans rien faire ! C'est ça, faire fructifier son argent.`;
-  else lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
+  else if(hl===2) lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
   openModal(`
     <h2>🌙 Fin du jour ${r.dayNum}</h2>
     <p>${r.entries} visiteurs sont venus · ${r.rides} tours d'attraction</p>
@@ -795,11 +805,11 @@ function build(i,id){
   const d=DEF[id]; if(S.money<d.cost||S.plots[i]) return;
   S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,};
   tada(); save(); closeModal();
-  if(id!=='huit') toast('duo-victoire',`${d.em} ${d.name} construit !`,`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`);
+  if(id!=='huit' && helpLevel()>0) toast('duo-victoire',`${d.em} ${d.name} construit !`,helpLevel()===2?`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`:`Bravo !`);
   const r=plotRect(i); for(let k=0;k<40;k++) confetti.push(mkConf(r.x+r.w/2,r.y+r.h/2));
   if(id==='huit' && !S.won){ S.won=true; save(); setTimeout(victory,600); }
 }
-function upgrade(i){ const p=S.plots[i], c=upCost(p); if(S.money<c||p.lvl>=3) return; S.money-=c; p.lvl++; tada(); save(); openPlot(i); toast('lili-contente','Niveau '+p.lvl+' !',`${DEF[p.id].name} est plus rapide et plus amusant !`); }
+function upgrade(i){ const p=S.plots[i], c=upCost(p); if(S.money<c||p.lvl>=3) return; S.money-=c; p.lvl++; tada(); save(); openPlot(i); }
 function setPrice(i,dlt){ const p=S.plots[i]; p.price=Math.max(0,Math.min(60,p.price+dlt)); blip(dlt>0?700:500,0.05); openPlot(i); }
 function openTicket(){
   const m=mood(S.entrance,entranceFair());
@@ -880,20 +890,20 @@ function getTip(){
   const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
   if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
   if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
-  if(day.refGate>5 && day.refGate>day.entries*0.4) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
-  if(day.refPrice>6) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
-  if(day.queueFull>6) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
+  if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
+  if(day.refPrice>[25,14,6][helpLevel()]) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
+  if(day.queueFull>[20,12,6][helpLevel()]) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
   const nextD=DEFS.find(d=>!built.includes(d.id));
   if(!freePlots().length && S.zones<NZ) return T('full','lili-idee',`Ta fête est pleine ! Achète le <b>Grand Parc</b> (${fmt(ZONE_COST)} L$) avec le panneau 🔒 Agrandir à droite.`);
   if(nextD && S.money>=nextD.cost && freePlots().length) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre${S.zones>1&&!freePlots().some(i=>zoneOf(i)===view)?' (dans l\'autre zone)':''}.`);
-  if(S.money>500 && S.bank<S.money) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
+  if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
 const TIP_TITLES={full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
   for(const d of DEFS){
     if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
-    if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
+    if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); if(DEFS.indexOf(d)>=6){ save(); break; } toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
   }
 }
 function updateHUD(){
@@ -984,7 +994,7 @@ function frame(now){
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
     tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
-      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k]){ day.shown[tp.k]=1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
+      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
   }
