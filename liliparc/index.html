@@ -932,7 +932,7 @@ $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(view?0:1); else openZoneBuy(); 
 $('tipBtn').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
 $('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
-[0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); });
+[0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); syncWake(); });
 
 // ================== APPLICATION (téléphone / tablette) ==================
 let installEvt=null;
@@ -945,6 +945,22 @@ if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostn
 const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
 function tryLandscape(){ try{ if(isStandalone()&&screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }
 document.addEventListener('click',tryLandscape,{once:true});
+
+// Garder l'écran allumé pendant que le jeu tourne (pas en pause, pas pendant une fenêtre)
+let wakeLock=null, wakeBusy=false;
+async function syncWake(){
+  const want=!!S && speed>0 && !modalOpen && document.visibilityState==='visible';
+  if(wakeBusy || !('wakeLock' in navigator) || want===!!wakeLock) return;
+  wakeBusy=true;
+  try{
+    if(want){ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{ wakeLock=null; }); }
+    else { const wl=wakeLock; wakeLock=null; await wl.release(); }
+  }catch(e){ wakeLock=null; }
+  wakeBusy=false;
+}
+document.addEventListener('visibilitychange',syncWake);
+document.addEventListener('click',syncWake);
+document.addEventListener('touchend',syncWake);
 
 // ================== BOUCLE ==================
 let last=performance.now(), tipT=0;
@@ -962,7 +978,7 @@ function frame(now){
     const dusk=Math.max(0,(S.time/DAY-0.75)/0.25); if(dusk>0){ g.fillStyle=`rgba(40,20,90,${dusk*0.28})`; g.fillRect(0,0,W,H); }
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
-    tipT-=dt; if(tipT<=0){ tipT=1; const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
+    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
       if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k]){ day.shown[tp.k]=1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
