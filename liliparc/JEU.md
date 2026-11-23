@@ -257,4 +257,4 @@ Constantes en haut du script de `index.html` :
 - **PR #7** — niveaux de jeu, propreté, personnel, espaces verts, santé du parc, météo, badges, 3 méga-attractions.
 - **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueuses, cette documentation.
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
-- **PR #10** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
+- **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
