@@ -146,3 +146,4 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 ## Historique des versions
 
 - **v1** — première version : plateau de 40 cases aux noms rigolos, 2 dés et doubles, cartes Chance et Surprise de Lili, cabanes et châteaux, pause (hypothèque), échanges, robots, chambre en désordre, faillite, parties à tours limités, panier du pique-nique, sauvegarde, application hors connexion, conseils d'Ellie et Livia.
+- **v2** — nouveau logo de l'application : Ellie et Livia sur un plateau de Monopoly, avec deux dés et une pièce de LiliDollar.
