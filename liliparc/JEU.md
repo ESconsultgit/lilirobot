@@ -244,7 +244,7 @@ Constantes en haut du script de `index.html` :
 - `DEFS` (attractions), `EVENTS`, `BADGES`, `SVC` et `STAFF` (services), `WEATHER`.
 - **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW` + son image pixel `px/<id>.png`.
 - **Préparer des images pixel** : `liliparc/outils/decouper_planches.py` découpe une planche (dessins en rangées sur fond uni, légendes dessous) en sprites prêts à l'emploi.
-- **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`).
+- **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`), avec `icon:APP("/<jeu>/icon-192.png")` pour afficher le logo de l'application.
 - **Après chaque modification** : incrémenter `VERSION` dans `liliparc/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
 - Sauvegardes : `lilipark-profiles` (liste des joueuses), `lilipark-<id>` (partie de chaque joueuse). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueuse 1 ».
 

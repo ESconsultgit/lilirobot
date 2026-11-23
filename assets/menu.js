@@ -97,20 +97,19 @@
   const EN=document.documentElement.lang==="en";
   const L=(fr,en)=>EN?en:fr;
 
-  const WHEEL='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><path d="M24 22L13 44M24 22l11 22" stroke="#1F4D1D" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="22" r="16" fill="none" stroke="#C2367A" stroke-width="3"/><g stroke="#8CC63F" stroke-width="2"><path d="M24 6v32M8 22h32M12.7 10.7l22.6 22.6M35.3 10.7L12.7 33.3"/></g><g fill="#F2C230" stroke="#1F4D1D" stroke-width="1.2"><rect x="21" y="3" width="6" height="5" rx="1.5"/><rect x="37" y="19" width="6" height="5" rx="1.5"/><rect x="5" y="19" width="6" height="5" rx="1.5"/><rect x="21" y="35" width="6" height="5" rx="1.5"/></g><circle cx="24" cy="22" r="3" fill="#C2367A"/></svg>';
-  const DICE='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><rect x="5" y="10" width="22" height="22" rx="5" fill="#fff" stroke="#1F4D1D" stroke-width="2.4" transform="rotate(-12 16 21)"/><g fill="#C2367A" transform="rotate(-12 16 21)"><circle cx="11" cy="15" r="2.2"/><circle cx="16" cy="21" r="2.2"/><circle cx="21" cy="27" r="2.2"/></g><rect x="21" y="18" width="22" height="22" rx="5" fill="#8CC63F" stroke="#1F4D1D" stroke-width="2.4" transform="rotate(10 32 29)"/><g fill="#fff" transform="rotate(10 32 29)"><circle cx="27" cy="24" r="2.2"/><circle cx="37" cy="24" r="2.2"/><circle cx="27" cy="34" r="2.2"/><circle cx="37" cy="34" r="2.2"/></g></svg>';
   const SOON='<svg viewBox="0 0 48 48" width="34" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 14v11l7 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
 
+  const APP=src=>`<img src="${src}" width="60" height="60" alt="" style="border-radius:14px;box-shadow:0 2px 6px rgba(31,77,29,.25)">`;
   const JEUX=[
-    {href:"/liliparc/",name:"Lili Parc",desc:L("Construis ta fête foraine et fais fructifier tes LiliDollars !","Build your own fun fair and grow your LiliDollars! (in French)"),icon:WHEEL},
-    {href:"/monopolili/",name:"MonopoLili",desc:L("Le Monopoly de Lili : achète la Cité des Peluches Péteuses !","Lili's Monopoly: buy the Farty Plushie City! (in French)"),icon:DICE}
+    {href:"/liliparc/",name:"Lili Parc",desc:L("Construis ta fête foraine et fais fructifier tes LiliDollars !","Build your own fun fair and grow your LiliDollars! (in French)"),icon:APP("/liliparc/icon-192.png")},
+    {href:"/monopolili/",name:"MonopoLili",desc:L("Le Monopoly de Lili : achète la Cité des Peluches Péteuses !","Lili's Monopoly: buy the Farty Plushie City! (in French)"),icon:APP("/monopolili/icon-192-v2.png")}
   ];
 
   const st=document.createElement("style");
   st.textContent=".fun-dock{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70}"+
     ".fun-btn{background:var(--pink)!important;border-color:var(--pink)!important;color:#fff!important;font-size:1.05rem!important;padding:10px 18px!important;box-shadow:0 6px 18px rgba(194,54,122,.35)}"+
     ".fun-btn svg{transform:rotate(180deg)}.fun-btn[aria-expanded=\"true\"] svg{transform:none}"+
-    ".fun-menu{top:auto!important;bottom:calc(100% + 10px);width:min(360px,calc(100vw - 32px))}.fun-menu .pm-head b{color:var(--pink)}.fun-menu .robot-opt b{color:var(--pink)}"+
+    ".fun-menu{top:auto!important;bottom:calc(100% + 10px);width:min(360px,calc(100vw - 32px))}.fun-menu .pm-head b{color:var(--pink)}.fun-menu .robot-opt b{color:var(--pink)}.fun-menu .robot-opt{grid-template-columns:60px 1fr;gap:12px}.fun-menu .robot-opt .ico{width:60px;height:60px}"+
     "@media print{.fun-dock{display:none}}";
   document.head.appendChild(st);
 
