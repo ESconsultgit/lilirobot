@@ -15,6 +15,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 - [L'argent](#largent)
 - [Les attractions](#les-attractions)
 - [Les méga-attractions bonus](#les-méga-attractions-bonus)
+- [Le plan du parc](#le-plan-du-parc)
 - [Agrandir, démolir](#agrandir-démolir)
 - [Entretien](#entretien)
 - [Sécurité, secours, propreté, espaces verts](#sécurité-secours-propreté-espaces-verts)
@@ -109,6 +110,14 @@ Débloquées par les **badges** (3, 6 puis 9 badges ; montants ÷8 au niveau 1),
 | 🌈 | **Toboggan Arc-en-ciel** | 3 | 48 000 | 10 | 880 | 9 |
 | 🐉 | **Dragon Volant** | 6 | 120 000 | 14 | 1 600 | 12 |
 | 🤖 | **Lili-Robot Géant** | 9 | 240 000 | 18 | 2 240 | 16 |
+
+## Le plan du parc
+
+- Chaque zone a une **grande rue qui serpente**, une **place ronde avec fontaine** au milieu, une rue qui la **croise** (vers le **kiosque à musique** en haut et un **jardin** en bas dans la zone 1 ; vers la **statue de Lili** et un jardin fleuri dans le Grand Parc), et une **petite allée** qui mène à chaque attraction. Arbres, buissons, fleurs, fanions et réverbères décorent le parc.
+- Les visiteurs **suivent les rues** (chacun garde sa droite), font la queue dans l'allée de l'attraction, et vont parfois se promener vers le kiosque ou le jardin.
+- Les postes de **sécurité** et de **secours** s'installent dans le jardin du bas de la zone 1.
+- Bouton **🔭 Tout voir** : vue d'ensemble des deux zones sur un seul écran, avec l'enseigne « Lili Parc », le parking et la forêt autour. On peut y cliquer sur une attraction, ou ailleurs dans une zone pour zoomer dessus (**🔍 Zoomer** pour revenir). Tant que le Grand Parc n'est pas acheté, il apparaît « à vendre ».
+- Les terrains font 82 % de leur taille d'avant pour laisser la place aux rues ; la vitesse des visiteurs a été ajustée pour garder le même rythme de jeu.
 
 ## Agrandir, démolir
 
@@ -223,6 +232,7 @@ Bouton **🏅**. Chaque badge a son image (médaille dessinée pour Lili Parc, `
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
 - **Dessins** : attractions dessinées en vectoriel et animées (le mode pixel art a été retiré).
+- **Net partout** : le jeu est dessiné à la taille réelle de l'écran et selon sa densité de pixels (jusqu'à ×3) ; sur grand écran, il s'agrandit (jusqu'à 1 900 pixels de large) tant que tout tient en hauteur.
 
 ## Transférer une partie sur un autre téléphone
 
@@ -241,6 +251,7 @@ Constantes en haut du script de `index.html` :
 - `GROUP` et `MUL` : visiteurs par personnage et multiplicateur des montants ; 8 aux niveaux 2-3, 1 au niveau 1 (`applyScale()`). Prix de base dans `DEFS` (niveau 1).
 - `DAY = 60` s par journée, `MAXQ = 6` groupes par file, `BANK_RATE = 0.05`, `ZONE_COST = 12 000`.
 - `DEFS` (attractions), `EVENTS`, `BADGES`, `SVC` et `STAFF` (services), `WEATHER`.
+- **Plan du parc** : `COLS`, `ROWY` (position des terrains), `mainY()` (forme de la grande rue), `buildStreets()` (graphe des rues suivi par les visiteurs), `OVS` (zoom de la vue d'ensemble).
 - **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW`.
 - **Ajouter un badge** : une ligne dans `BADGES` + son image ronde `badges/<id>.webp` (à ajouter aussi dans `SHELL` de `sw.js`).
 - **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`).
@@ -261,3 +272,4 @@ Constantes en haut du script de `index.html` :
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
 - **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
+- **PR #17** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
