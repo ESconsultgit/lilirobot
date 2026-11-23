@@ -195,8 +195,11 @@ const DEFS = [
   {id:'pirate',   name:'Bateau pirate',         em:'🏴‍☠️', cost:3000, fair:8,  interval:0.9, ride:5,   maint:85,  fun:5,  desc:"À l'abordage ! Le bateau se balance très haut."},
   {id:'roue',     name:'Grande roue',           em:'🎡', cost:4000,  fair:8,  interval:0.9, ride:5,   maint:100, fun:5,  desc:"Tout là-haut, on voit toute la fête !"},
   {id:'chaises',  name:'Chaises volantes',      em:'🪂', cost:7000,  fair:9,  interval:0.8, ride:5,   maint:120, fun:6,  desc:"On vole en rond, les pieds dans le vide !"},
+  {id:'cirque',   name:'Grand chapiteau',       em:'🎪', cost:8500,  fair:10, interval:0.8, ride:5,   maint:140, fun:6,  desc:"Jongleurs, acrobates et clowns sous le grand chapiteau !"},
   {id:'fantome',  name:'Train fantôme',         em:'👻', cost:10000, fair:10, interval:0.8, ride:5,   maint:150, fun:6,  desc:"Hou hou… même pas peur !"},
+  {id:'riviere',  name:'Rivière sauvage',       em:'🛶', cost:14000, fair:12, interval:0.7, ride:5,   maint:190, fun:7,  desc:"En bateau sur la rivière… et SPLASH dans la grande descente !"},
   {id:'chute',    name:'Tour de chute',         em:'🗼', cost:18000, fair:13, interval:0.7, ride:4,   maint:220, fun:8,  desc:"On monte tout doucement… et AAAAH ça tombe !"},
+  {id:'pendule',  name:'Pendule géant',         em:'🌀', cost:28000, fair:14, interval:0.6, ride:5,   maint:270, fun:10, desc:"Le grand bras se balance jusqu'au ciel en tournant sur lui-même !"},
   {id:'huit',     name:'Grand Huit Galactique', em:'🎢', cost:40000, fair:15, interval:0.6, ride:6,   maint:320, fun:12, desc:"L'attraction à sensation la plus folle de l'univers !"},
 ];
 const DEF = Object.fromEntries(DEFS.map(d=>[d.id,d]));
@@ -304,11 +307,11 @@ function canToast(k){
   S.tipLog=S.tipLog||{};
   const lvl=helpLevel(), max=[1,1,3][lvl];
   if((day.tipToasts||0)>=max) return false;
-  const gap=k==='red'?1:({gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
+  const gap=k==='red'?1:({demolish:[8,4,1],gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
   return S.dayNum-(S.tipLog[k]??-99)>=gap;
 }
 function newGame(name){
-  S = {name:name||'Lili Parc', seen:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
+  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0};
   resetDay();
 }
@@ -668,7 +671,56 @@ function dChute(w,h,t,lvl){
   rr(cx-46,y,92,10,4); g.fillStyle='#f59e0b'; g.fill(); g.fillStyle='#b45309'; g.fillRect(cx-46,y+7,92,3);
   if(ph>0.62&&ph<0.78){ g.font='700 16px "Baloo 2"'; g.fillStyle='#ef4444'; g.textAlign='left'; g.fillText('AAAAH !',cx+22,Math.min(y,120)-8); }
 }
-const DRAW={canards:dCanards,barbe:dBarbe,churros:dChurros,chamboule:dChamboule,trampo:dTrampo,carrousel:dCarrousel,train:dTrain,tasses:dTasses,autos:dAutos,chateau:dChateau,pirate:dPirate,roue:dRoue,chaises:dChaises,fantome:dFantome,chute:dChute,huit:dHuit};
+function dCirque(w,h,t,lvl){
+  const cx=112;
+  g.strokeStyle='#8b5a2b'; g.lineWidth=1.5;
+  [[18,40],[206,40]].forEach(([x,y])=>{ g.beginPath(); g.moveTo(cx,14); g.lineTo(x,y+40); g.stroke(); });
+  for(let i=0;i<10;i++){ const x0=22+i*18.1; g.fillStyle=i%2?'#fff':'#dc2626'; g.beginPath(); g.moveTo(x0,76); g.lineTo(x0+18.1,76); g.lineTo(x0+18.1,158); g.lineTo(x0,158); g.fill(); }
+  for(let i=0;i<10;i++){ g.beginPath(); g.moveTo(cx,14); g.lineTo(22+i*18.1,78); g.lineTo(22+(i+1)*18.1,78); g.closePath(); g.fillStyle=i%2?'#fff':'#dc2626'; g.fill(); }
+  for(let i=0;i<10;i++) circ(31+i*18.1,79,9,i%2?'#dc2626':'#facc15');
+  g.strokeStyle='#555'; g.lineWidth=2; g.beginPath(); g.moveTo(cx,14); g.lineTo(cx,0); g.stroke();
+  g.fillStyle='#2563eb'; g.beginPath(); g.moveTo(cx,0); g.lineTo(cx+16,4+Math.sin(t*5)*2); g.lineTo(cx,9); g.fill();
+  g.beginPath(); g.moveTo(cx-20,158); g.lineTo(cx-20,118); g.quadraticCurveTo(cx,96,cx+20,118); g.lineTo(cx+20,158); g.fillStyle='#1e1b4b'; g.fill();
+  for(let i=0;i<8;i++) circ(30+i*23,94,2.4,Math.floor(t*5+i)%2?'#ffd23f':'#fff8c4');
+  // jongleur
+  const jx=cx+48, jy=140; kid(jx,jy-22,'#ef4444'); rr(jx-6,jy-16,12,14,4); g.fillStyle='#7c3aed'; g.fill();
+  for(let b=0;b<2+lvl;b++){ const a=t*5+b*Math.PI*2/(2+lvl); circ(jx+Math.cos(a)*10,jy-40+Math.sin(a)*8,3.5,['#ef4444','#facc15','#22c55e','#3b82f6','#ec4899'][b]); }
+}
+function dRiviere(w,h,t,lvl){
+  const P=[[14,42],[80,42],[94,48],[150,138],[160,144],[214,144]];
+  g.fillStyle='#8b5a2b'; for(let x=14;x<=80;x+=22) g.fillRect(x,46,6,118);
+  g.fillStyle='#a16207'; g.fillRect(8,36,80,8);
+  g.lineCap='round'; g.strokeStyle='#64748b'; g.lineWidth=20; g.beginPath(); P.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); g.stroke();
+  g.strokeStyle='#38bdf8'; g.lineWidth=13; g.stroke();
+  g.strokeStyle='rgba(255,255,255,.7)'; g.lineWidth=2; g.setLineDash([6,8]); g.lineDashOffset=-t*40; g.stroke(); g.setLineDash([]); g.lineCap='butt';
+  g.beginPath(); g.ellipse(190,150,34,12,0,0,Math.PI*2); g.fillStyle='#0ea5e9'; g.fill();
+  // longueurs du parcours
+  const seg=[]; let L=0; for(let i=1;i<P.length;i++){ const d=Math.hypot(P[i][0]-P[i-1][0],P[i][1]-P[i-1][1]); seg.push(d); L+=d; }
+  const at=dd=>{ for(let i=0;i<seg.length;i++){ if(dd<=seg[i]){ const q=dd/seg[i]; return [P[i][0]+(P[i+1][0]-P[i][0])*q, P[i][1]+(P[i+1][1]-P[i][1])*q, i]; } dd-=seg[i]; } return [P[P.length-1][0],P[P.length-1][1],seg.length-1]; };
+  for(let b=0;b<1+Math.min(2,lvl-1)+1;b++){
+    const ph=((t*0.22+b*0.33)%1); const eased=ph<0.35?ph/0.35*0.33:ph<0.55?0.33+(ph-0.35)/0.2*0.4:0.73+(ph-0.55)/0.45*0.27;
+    const [x,y,i]=at(eased*L);
+    rr(x-13,y-9,26,10,5); g.fillStyle='#92400e'; g.fill(); g.fillStyle='#b45309'; g.fillRect(x-11,y-8,22,3);
+    kid(x-5,y-13,'#3f2a14'); kid(x+5,y-13,'#f5d06b');
+    if(i===2 && eased>0.6){ for(let k=0;k<8;k++){ const a=-Math.PI*(0.15+k*0.1); circ(x+Math.cos(a)*16,y-4+Math.sin(a)*14,2.6,'rgba(186,230,253,.95)'); } }
+  }
+  const sp=(t*1.2)%1; for(let k=0;k<6;k++){ const a=-Math.PI*(0.1+k*0.16); circ(158+Math.cos(a)*sp*26,146+Math.sin(a)*sp*20,2.2,`rgba(255,255,255,${1-sp})`); }
+}
+function dPendule(w,h,t,lvl){
+  const px=112, py=16, L=98, amp=0.65+0.13*lvl, a=Math.sin(t*0.9)*amp;
+  g.strokeStyle='#334155'; g.lineWidth=7; g.beginPath(); g.moveTo(px-58,166); g.lineTo(px,py); g.lineTo(px+58,166); g.stroke();
+  g.strokeStyle='#64748b'; g.lineWidth=3; g.beginPath(); g.moveTo(px-30,92); g.lineTo(px+30,92); g.stroke();
+  const ex=px+Math.sin(a)*L, ey=py+Math.cos(a)*L;
+  g.strokeStyle='#C2367A'; g.lineWidth=8; g.beginPath(); g.moveTo(px,py); g.lineTo(ex,ey); g.stroke();
+  g.save(); g.translate(ex,ey); g.rotate(a);
+  g.beginPath(); g.ellipse(0,6,30,10,0,0,Math.PI*2); g.fillStyle='#7c3aed'; g.fill();
+  const n=8; for(let k=0;k<n;k++){ const b=t*2.2+k*Math.PI*2/n, sx=Math.cos(b)*26, sy=6+Math.sin(b)*8; if(Math.sin(b)<0) continue; kid(sx,sy-4,['#3f2a14','#f5d06b','#111','#c97b2a'][k%4]); circ(sx,sy+3,3,['#ef4444','#facc15','#22c55e','#38bdf8'][k%4]); }
+  g.beginPath(); g.ellipse(0,9,30,5,0,0,Math.PI); g.fillStyle='#5b21b6'; g.fill();
+  g.restore();
+  circ(px,py,7,'#facc15'); circ(px,py,3,'#334155');
+  for(let i=0;i<6;i++) circ(px-50+i*20,162,2.4,Math.floor(t*6+i)%2?'#ffd23f':'#fff');
+}
+const DRAW={cirque:dCirque,riviere:dRiviere,pendule:dPendule,canards:dCanards,barbe:dBarbe,churros:dChurros,chamboule:dChamboule,trampo:dTrampo,carrousel:dCarrousel,train:dTrain,tasses:dTasses,autos:dAutos,chateau:dChateau,pirate:dPirate,roue:dRoue,chaises:dChaises,fantome:dFantome,chute:dChute,huit:dHuit};
 
 let hoverPlot=-1;
 function drawPlot(i){
@@ -757,7 +809,7 @@ function arrive(v){
     const will=fairOf(p)*rnd(0.7,1.7)*v.gen;
     v.visited.add(i);
     if(p.price>will){ say(v,'Trop cher ! 😕',true); day.refPrice++; day.sad+=0.5; chooseNext(v); return; }
-    if(runtime[i].queue.length>=MAXQ){ say(v,"Trop d'attente…",true); day.queueFull++; day.sad+=0.5; chooseNext(v); return; }
+    if(runtime[i].queue.length>=MAXQ){ say(v,"Trop d'attente…",true); day.queueFull++; day.sad+=day.event?0.15:0.5; chooseNext(v); return; }
     v.mode='queue'; runtime[i].queue.push(v); return;
   }
   if(v.mode==='exit'||v.mode==='leave'){ v.dead=true; }
@@ -779,7 +831,7 @@ function step(dt){
     const evv=day.event?EV[day.event]:null;
     const rate=Math.min(2.6,0.35+0.09*totalFun())*(0.5+S.stars/5)*(evv?evv.vis:1);
     spawnAcc+=rate*dt;
-    while(spawnAcc>=1){ spawnAcc--; if(visitors.length<(evv?320:170)) spawnVisitor(); }
+    while(spawnAcc>=1){ spawnAcc--; if(visitors.length<(evv?Math.min(520,170*evv.vis):170)) spawnVisitor(); }
   }
   // service des attractions
   S.plots.forEach((p,i)=>{ if(!p) return; const rt=runtime[i]; rt.timer-=dt;
@@ -894,11 +946,28 @@ function openPlot(i){
     ${canUp?`<p>⬆️ <b>Améliorer au niveau ${p.lvl+1}</b> : plus rapide, plus amusant, et les visiteurs acceptent de payer un peu plus cher. Mais l'entretien coûtera aussi plus cher !</p>
       <div class="row"><button class="ok" ${S.money<uc?'disabled':''} onclick="upgrade(${i})">Améliorer pour ${fmt(uc)} L$</button>${S.money<uc?`<span class="small">Il te manque ${fmt(uc-S.money)} L$</span>`:''}</div>`
       :`<p>🌟 Niveau maximum atteint, bravo !</p>`}
-    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`, m.c==='m3'||m.c==='m2'?'livia-pensive':'lili-explique');
+    <div class="right"><button onclick="askDemolish(${i})">🧨 Démolir</button><button class="main" onclick="closeModal()">OK</button></div>`, m.c==='m3'||m.c==='m2'?'livia-pensive':'lili-explique');
+}
+const resaleOf=p=>Math.round(DEF[p.id].cost*0.25);
+function askDemolish(i){
+  const p=S.plots[i], d=DEF[p.id], back=resaleOf(p);
+  openModal(`<h2>🧨 Démolir ${d.em} ${d.name} ?</h2>
+    <p>Le terrain sera libre pour construire une autre attraction.</p>
+    <p>On revend le matériel : tu récupères <b>${fmt(back)} L$</b> (elle avait coûté ${fmt(d.cost)} L$). Ses améliorations sont perdues.</p>
+    <p class="small">💡 Regarde d'abord combien elle rapporte chaque jour par rapport à son entretien !</p>
+    <div class="right"><button onclick="openPlot(${i})">Non, je la garde</button><button class="main" onclick="demolish(${i})">Oui, démolir</button></div>`,'lili-perplexe');
+}
+function demolish(i){
+  const p=S.plots[i]; if(!p) return; const back=resaleOf(p);
+  S.money+=back; S.plots[i]=null;
+  const q=runtime[i].queue; runtime[i].queue=[]; runtime[i].timer=0; q.forEach(v=>{ say(v,'Oh, c\'est fermé !',true); chooseNext(v); });
+  blip(180,0.25,'sawtooth',0.05); setTimeout(()=>blip(120,0.3,'sawtooth',0.05),120);
+  const r=plotRect(i); for(let k=0;k<30;k++) confetti.push(mkConf(r.x+r.w/2,r.y+r.h/2));
+  save(); openPlot(i);
 }
 function build(i,id){
   const d=DEF[id]; if(S.money<d.cost||S.plots[i]) return;
-  S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,};
+  S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,}; S.ever=S.ever||[]; if(!S.ever.includes(id)) S.ever.push(id);
   tada(); save(); closeModal();
   if(id!=='huit' && helpLevel()>0) toast('duo-victoire',`${d.em} ${d.name} construit !`,helpLevel()===2?`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`:`Bravo !`);
   const r=plotRect(i); for(let k=0;k<40;k++) confetti.push(mkConf(r.x+r.w/2,r.y+r.h/2));
@@ -955,8 +1024,8 @@ const RULES=`<ul class="rules">
   <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
   <li>🔧 Chaque soir, tu paies l'<b>entretien</b> de tes attractions.</li>
   <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
-  <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin.</li>
-  <li>🎢 Le but : construire les 16 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li></ul>`;
+  <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin. Et quand tout est plein, <b>démolis</b> une attraction pour en mettre une meilleure.</li>
+  <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li></ul>`;
 function showRules(){ openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
 function startScreen(force){
   const saved=load();
@@ -970,7 +1039,7 @@ function startScreen(force){
   }
   $('box').dataset.lock='1';
 }
-function continueGame(){ S=load(); S.seen=S.seen||['canards']; S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
+function continueGame(){ S=load(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
@@ -988,13 +1057,14 @@ function getTip(){
   if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
   if(day.refPrice>[25,14,6][helpLevel()]) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
   if(day.queueFull>[20,12,6][helpLevel()]) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
-  const nextD=DEFS.find(d=>!built.includes(d.id));
+  const nextD=DEFS.find(d=>!(S.ever||[]).includes(d.id));
+  if(!freePlots().length && S.zones>=NZ && nextD && S.money>=nextD.cost) return T('demolish','lili-idee',`Plus aucun terrain libre ! Pour construire <b>${nextD.em} ${nextD.name}</b>, il faut <b>démolir</b> une attraction (clique dessus, puis 🧨). Choisis celle qui rapporte le moins !`);
   if(!freePlots().length && S.zones<NZ) return T('full','lili-idee',`Ta fête est pleine ! Achète le <b>Grand Parc</b> (${fmt(ZONE_COST)} L$) avec le panneau 🔒 Agrandir à droite.`);
   if(nextD && S.money>=nextD.cost && freePlots().length) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre${S.zones>1&&!freePlots().some(i=>zoneOf(i)===view)?' (dans l\'autre zone)':''}.`);
   if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
-const TIP_TITLES={full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
+const TIP_TITLES={demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
   for(const d of DEFS){
     if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
@@ -1009,10 +1079,10 @@ function updateHUD(){
   $('visCount').textContent=visitors.filter(v=>v.mode!=='leave').length;
   $('zoneBtn').innerHTML=S.zones>1?(view?'⬅️<span class="lbl"> Zone 1</span>':'➡️<span class="lbl"> Zone 2</span>'):'🗺️<span class="lbl"> Agrandir</span>';
   $('dayFill').style.width=(S.time/DAY*100)+'%';
-  const built=S.plots.filter(Boolean).map(p=>p.id), nextD=DEFS.find(d=>!built.includes(d.id));
+  const ever=S.ever||[], nextD=DEFS.find(d=>!ever.includes(d.id));
   let pct, mini;
   if(nextD){ const have=S.money+S.bank; pct=Math.max(0,Math.min(100,have/nextD.cost*100)); $('goalTxt').innerHTML=`🎯 Prochain objectif : <b>${nextD.em} ${nextD.name}</b> (${fmt(have)} / ${fmt(nextD.cost)} L$)`; mini=`🎯 ${nextD.em} ${fmt(nextD.cost)}`; }
-  else { const lv=S.plots.reduce((a,p)=>a+(p?p.lvl:0),0); pct=lv/48*100; $('goalTxt').innerHTML='🏆 Toutes les attractions sont construites ! Améliore-les au niveau ★★★.'; mini='🏆 ★★★'; }
+  else { const lv=S.plots.reduce((a,p)=>a+(p?p.lvl:0),0); pct=lv/48*100; $('goalTxt').innerHTML='🏆 Tu as construit toutes les attractions ! Garde les meilleures et améliore-les au niveau ★★★.'; mini='🏆 ★★★'; }
   $('goalFill').style.width=pct+'%'; $('goalMiniFill').style.width=pct+'%'; $('goalMiniTxt').textContent=mini;
 }
 
