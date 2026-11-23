@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lili Parc</title>
+<link rel="icon" href="img/lili-avatar.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--pink:#C2367A;--violet:#2F6E2B;--yellow:#F2C230;--green:#2F6E2B;--lime:#8CC63F;--red:#C9531E;--ink:#1D351B}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(#F2F7EA,#FBE1EE);color:var(--ink);min-height:100vh}
+.wrap{max-width:1120px;margin:0 auto;padding:10px}
+.top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;flex:1 1 240px;color:var(--violet);line-height:1;display:flex;align-items:center;gap:8px}
+.title img{width:52px;height:52px;object-fit:contain}
+h2,button,.price,.pill{font-family:'Baloo 2',sans-serif}
+.title small{display:block;font-size:14px;color:var(--pink);font-weight:600}
+.pill{background:#fff;border-radius:999px;padding:6px 14px;font-weight:600;box-shadow:0 3px 0 rgba(45,27,78,.15);display:flex;align-items:center;gap:6px;font-size:17px;white-space:nowrap}
+.coin{display:inline-flex;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffe680,#f5b400);color:#c2007a;font-weight:700;font-size:13px;align-items:center;justify-content:center;border:2px solid #e19a00;flex:none}
+.money{font-size:21px}
+.neg{color:var(--red)}
+button{font-family:inherit;font-weight:600;border:none;border-radius:14px;padding:8px 14px;font-size:16px;cursor:pointer;background:#fff;color:var(--ink);box-shadow:0 3px 0 rgba(45,27,78,.2);transition:transform .08s}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(45,27,78,.2)}
+button.main{background:var(--pink);color:#fff}
+button.ok{background:var(--green);color:#fff}
+button.sel{background:var(--violet);color:#fff}
+button:disabled{opacity:.45;cursor:not-allowed}
+.speed{display:flex;gap:4px}
+.speed button{padding:6px 10px}
+.stage{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 6px 0 rgba(45,27,78,.18);background:#7fd36b}
+canvas{display:block;width:100%;height:auto;touch-action:manipulation}
+.bottom{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tip{flex:2 1 320px;background:#fff;border-radius:16px;padding:10px 14px;font-size:16px;display:flex;gap:10px;align-items:center;box-shadow:0 3px 0 rgba(45,27,78,.12)}
+.tip .face{width:70px;height:70px;object-fit:contain;flex:none}
+#tip{background:#E4F1D3;border-radius:14px;padding:8px 12px;position:relative}
+#tip.pinkb{background:#FBE1EE}
+.goal{flex:1 1 260px;background:#fff;border-radius:16px;padding:10px 14px;box-shadow:0 3px 0 rgba(45,27,78,.12)}
+.bar{height:14px;background:#f0e8ff;border-radius:99px;overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--lime),var(--pink));width:0;transition:width .3s}
+.daybar{height:8px;background:rgba(255,255,255,.6)}
+.daybar>i{display:block;height:100%;background:var(--yellow);width:0}
+.modal{position:fixed;inset:0;background:rgba(45,27,78,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:10}
+.modal.show{display:flex}
+.box{background:#fff;border-radius:22px;max-width:580px;width:100%;max-height:92vh;overflow:auto;padding:20px 22px;box-shadow:0 10px 0 rgba(45,27,78,.25);animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.box .hero{float:right;width:120px;max-height:140px;object-fit:contain;margin:0 0 6px 12px}
+.box h2{margin:0 0 6px;color:var(--violet);font-size:26px}
+.box p{margin:6px 0;font-size:17px;line-height:1.35}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.price{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700}
+.price button{font-size:24px;width:48px;height:48px;padding:0}
+.mood{font-size:17px;padding:6px 12px;border-radius:12px;font-weight:600}
+.m0{background:#dcfce7;color:#166534}.m1{background:#e0f2fe;color:#075985}.m2{background:#fef3c7;color:#92400e}.m3{background:#fee2e2;color:#991b1b}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:10px}
+.card{border:3px solid #f0e8ff;border-radius:16px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:4px}
+.card .em{font-size:38px}
+.card b{font-size:16px}
+.card .c{font-weight:700;display:flex;gap:4px;justify-content:center;align-items:center}
+.card .miss{font-size:13px;color:#a05}
+.card.done{opacity:.4}
+table.rep{width:100%;border-collapse:collapse;font-size:17px;margin:8px 0}
+table.rep td{padding:6px 4px;border-bottom:1px dashed #e5dcf7}
+table.rep td:last-child{text-align:right;font-weight:600}
+.plus{color:var(--green)}.minus{color:var(--red)}
+.big{font-size:22px;font-weight:700}
+input[type=text]{font-family:inherit;font-size:20px;padding:10px 12px;border-radius:12px;border:3px solid #e5dcf7;width:100%}
+.small{font-size:14px;color:#7a6a99}
+ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
+#toasts{position:fixed;right:12px;bottom:12px;display:flex;flex-direction:column;gap:10px;z-index:20;max-width:min(420px,calc(100vw - 24px))}
+.toast{display:flex;align-items:flex-end;gap:6px;cursor:pointer;animation:slide .35s ease-out}
+.toast img{width:92px;height:100px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.15))}
+.toast .bub{background:#fff;border:3px solid var(--lime);border-radius:18px 18px 18px 4px;padding:10px 14px;font-size:15px;box-shadow:0 4px 0 rgba(29,53,27,.15)}
+.toast.pinkb .bub{border-color:var(--pink);background:#FFF5FA}
+.toast .bub b.t{display:block;font-family:'Baloo 2',sans-serif;font-size:18px;color:var(--violet)}
+.toast.pinkb .bub b.t{color:var(--pink)}
+.toast.out{opacity:0;transform:translateX(40px);transition:.4s}
+@keyframes slide{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}
+.right{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="title"><img src="img/lili-avatar.webp" alt=""><span id="parkName">Lili Parc<small>Jour 1</small></span></div>
+    <div class="pill money" title="Ton porte-monnaie"><span class="coin">L</span><span id="money">0</span></div>
+    <div class="pill" title="Ta tirelire" style="cursor:pointer" id="bankPill">🐷 <span id="bankAmt">0</span></div>
+    <div class="pill" title="Note des visiteurs" id="stars">★★★☆☆</div>
+    <div class="pill" title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></div>
+    <div class="speed">
+      <button id="spd0" title="Pause">⏸</button>
+      <button id="spd1" class="sel" title="Vitesse normale">▶</button>
+      <button id="spd2" title="Rapide">⏩</button>
+    </div>
+    <button id="ticketBtn">🎟️ Billet d'entrée</button>
+    <button id="soundBtn" title="Son">🔊</button>
+    <button id="menuBtn" title="Menu">⚙️</button>
+  </div>
+  <div class="stage">
+    <div class="daybar"><i id="dayFill"></i></div>
+    <canvas id="cv"></canvas>
+  </div>
+  <div class="bottom">
+    <div class="tip"><img class="face" id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div></div>
+    <div class="goal"><div id="goalTxt">Objectif</div><div class="bar"><i id="goalFill"></i></div></div>
+  </div>
+</div>
+<div id="toasts"></div>
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+
+<script>
+// ================== DONNÉES ==================
+const DEFS = [
+  {id:'canards',  name:'Pêche aux canards',     em:'🦆', cost:50,    fair:2,  interval:2.0, ride:2.5, maint:3,   fun:1,  desc:"Attrape un canard et gagne un petit cadeau !"},
+  {id:'barbe',    name:'Barbe à papa',          em:'🍭', cost:80,    fair:3,  interval:2.2, ride:1.5, maint:5,   fun:1,  desc:"Un gros nuage rose tout sucré."},
+  {id:'chamboule',name:'Chamboule-tout',        em:'🥫', cost:250,   fair:4,  interval:2.2, ride:2,   maint:10,  fun:2,  desc:"Fais tomber toutes les boîtes avec une balle !"},
+  {id:'carrousel',name:'Carrousel',             em:'🎠', cost:600,   fair:5,  interval:1.2, ride:4,   maint:25,  fun:3,  desc:"Les chevaux de bois qui tournent en musique."},
+  {id:'autos',    name:'Autos tamponneuses',    em:'🚗', cost:1500,  fair:7,  interval:1.0, ride:4,   maint:50,  fun:4,  desc:"Bim ! Bam ! Boum ! On se rentre dedans."},
+  {id:'roue',     name:'Grande roue',           em:'🎡', cost:3500,  fair:8,  interval:0.9, ride:5,   maint:90,  fun:5,  desc:"Tout là-haut, on voit toute la fête !"},
+  {id:'fantome',  name:'Train fantôme',         em:'👻', cost:6000,  fair:10, interval:0.8, ride:5,   maint:140, fun:6,  desc:"Hou hou… même pas peur !"},
+  {id:'huit',     name:'Grand Huit Galactique', em:'🎢', cost:12000, fair:15, interval:0.6, ride:6,   maint:250, fun:10, desc:"L'attraction à sensation la plus folle de l'univers !"},
+];
+const DEF = Object.fromEntries(DEFS.map(d=>[d.id,d]));
+const W=1040, H=560, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
+
+// ================== ÉTAT ==================
+let S; // état sauvegardé
+let day;  // stats du jour
+let visitors=[], floats=[], confetti=[];
+let speed=1, modalOpen=false, soundOn=true, spawnAcc=0, animT=0;
+const runtime = Array.from({length:8},()=>({queue:[],timer:0}));
+
+function newGame(name){
+  S = {name:name||'Lili Parc', seen:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
+       plots:[{id:'canards',lvl:1,price:2},null,null,null,null,null,null,null], totalEarned:0};
+  resetDay();
+}
+function resetDay(){ day={shown:{},entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
+function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const s=localStorage.getItem(SAVE_KEY); return s?JSON.parse(s):null; }catch(e){ return null; } }
+
+// ================== OUTILS ==================
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const fmt=n=>Math.floor(n).toLocaleString('fr-FR');
+const coin='<span class="coin">L</span>';
+const L$=n=>`<b>${fmt(n)}</b> ${coin}`;
+const lvlMul=(p,k)=>1+k*(p.lvl-1);
+const fairOf=p=>Math.round(DEF[p.id].fair*lvlMul(p,0.2)*10)/10;
+const funOf=p=>DEF[p.id].fun*lvlMul(p,0.5);
+const maintOf=p=>Math.round(DEF[p.id].maint*lvlMul(p,0.5));
+const intervalOf=p=>DEF[p.id].interval/lvlMul(p,0.4);
+const upCost=p=>Math.round(DEF[p.id].cost*0.75*p.lvl);
+const totalFun=()=>S.plots.reduce((a,p)=>a+(p?funOf(p):0),0);
+const entranceFair=()=>Math.round((1+totalFun()*0.4)*10)/10;
+function mood(price,fair){
+  const r=price/fair;
+  if(r<=0.8) return {t:'pas cher du tout',e:'😊',c:'m0'};
+  if(r<=1.15) return {t:'le juste prix',e:'🙂',c:'m1'};
+  if(r<=1.5) return {t:'un peu cher',e:'😕',c:'m2'};
+  return {t:'beaucoup trop cher',e:'😡',c:'m3'};
+}
+
+// ================== SON ==================
+let actx=null, lastBlip=0;
+function blip(f=880,d=0.08,type='triangle',v=0.06){
+  if(!soundOn) return;
+  try{
+    if(!actx) actx=new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), gn=actx.createGain();
+    o.type=type; o.frequency.value=f; gn.gain.value=v;
+    gn.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime+d);
+    o.connect(gn); gn.connect(actx.destination); o.start(); o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+function coinSound(){ const n=performance.now(); if(n-lastBlip<130) return; lastBlip=n; blip(1250,0.07); setTimeout(()=>blip(1650,0.09),60); }
+function tada(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>blip(f,0.25,'triangle',0.08),i*120)); }
+
+// ================== GÉOMÉTRIE ==================
+const PATH_TOP=232, PATH_BOT=328, PATH_MID=280;
+function plotRect(i){ const col=i%4,row=Math.floor(i/4); return {x:60+col*245,y:row?336:14,w:225,h:210,row}; }
+function door(i){ const r=plotRect(i); return {x:r.x+r.w/2, y:r.row?PATH_BOT+2:PATH_TOP-2, dir:r.row?-1:1}; }
+
+// ================== CANVAS ==================
+const cv=document.getElementById('cv'), g=cv.getContext('2d');
+function sizeCanvas(){ const dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; g.setTransform(dpr,0,0,dpr,0,0); }
+sizeCanvas();
+function rr(x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+function circ(x,y,r,col){ g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fillStyle=col; g.fill(); }
+function awning(x,y,w,h,c1,c2,n){
+  const sw=w/n;
+  for(let i=0;i<n;i++){ g.fillStyle=i%2?c2:c1; g.fillRect(x+i*sw,y,sw+0.5,h); }
+  for(let i=0;i<n;i++){ g.beginPath(); g.arc(x+i*sw+sw/2,y+h,sw/2,0,Math.PI); g.fillStyle=i%2?c2:c1; g.fill(); }
+}
+const flowers=[]; for(let i=0;i<140;i++) flowers.push([rnd(0,W),rnd(0,H),['#fff','#ffd23f','#ff8ac2','#b9a5ff'][i%4]]);
+
+function drawBackground(){
+  const gr=g.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#8fdc74'); gr.addColorStop(1,'#6cc45a');
+  g.fillStyle=gr; g.fillRect(0,0,W,H);
+  for(const f of flowers){ if(f[1]>PATH_TOP-4&&f[1]<PATH_BOT+4) continue; circ(f[0],f[1],2,f[2]); }
+  // allée
+  g.fillStyle='#f3dfb5'; g.fillRect(0,PATH_TOP,W,PATH_BOT-PATH_TOP);
+  g.fillStyle='#e6cb95'; for(let x=0;x<W;x+=40){ for(let y=PATH_TOP+12;y<PATH_BOT;y+=28){ circ(x+((y/28)%2)*20,y,3,'#e6cb95'); } }
+  g.fillStyle='#d9b77a'; g.fillRect(0,PATH_TOP,W,4); g.fillRect(0,PATH_BOT-4,W,4);
+  // guirlandes de fanions
+  const cols=['#ff5fa2','#ffd23f','#7b4cff','#38bdf8','#22b573'];
+  for(const yy of [PATH_TOP+6,PATH_BOT-6]){
+    g.strokeStyle='#8a6a3b'; g.lineWidth=1; g.beginPath();
+    for(let x=60;x<=W;x+=4){ const y=yy+Math.sin((x-60)/245*Math.PI*2-Math.PI/2)*0+ (yy<PATH_MID?6:-6)*Math.abs(Math.sin((x-60)/245*Math.PI)); x===60?g.moveTo(x,y):g.lineTo(x,y);} g.stroke();
+    let k=0; for(let x=70;x<W;x+=22){ const y=yy+(yy<PATH_MID?6:-6)*Math.abs(Math.sin((x-60)/245*Math.PI)); g.fillStyle=cols[k++%5]; g.beginPath(); g.moveTo(x-6,y); g.lineTo(x+6,y); g.lineTo(x,y+(yy<PATH_MID?11:-11)); g.closePath(); g.fill(); }
+  }
+}
+function drawGate(){
+  // arche d'entrée
+  g.fillStyle='#2F6E2B'; g.fillRect(6,PATH_TOP-40,12,PATH_BOT-PATH_TOP+60); g.fillRect(42,PATH_TOP-40,12,PATH_BOT-PATH_TOP+60);
+  g.save(); g.translate(30,PATH_MID); g.rotate(-Math.PI/2);
+  rr(-80,-16,160,32,10); g.fillStyle='#C2367A'; g.fill(); g.strokeStyle='#fff'; g.lineWidth=3; g.stroke();
+  g.fillStyle='#fff'; g.font='700 18px \"Baloo 2\"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('ENTRÉE '+fmt(S.entrance)+' L$',0,1);
+  g.restore();
+  for(let i=0;i<6;i++){ const on=Math.floor(animT*3+i)%2; circ(12,PATH_TOP-30+i*30,3,on?'#ffd23f':'#fff3b0'); circ(48,PATH_TOP-30+i*30,3,on?'#fff3b0':'#ffd23f'); }
+}
+
+// ---------- Attractions (dessin) ----------
+function dCanards(w,h,t,lvl){
+  g.fillStyle='#c2410c'; g.fillRect(14,30,6,110); g.fillRect(w-20,30,6,110);
+  awning(8,14,w-16,26,'#ef4444','#fff',9);
+  g.beginPath(); g.ellipse(w/2,115,92,42,0,0,Math.PI*2); g.fillStyle='#ff9ec7'; g.fill();
+  g.beginPath(); g.ellipse(w/2,113,82,34,0,0,Math.PI*2); g.fillStyle='#4cc3ff'; g.fill();
+  g.strokeStyle='rgba(255,255,255,.6)'; g.lineWidth=2; for(let i=0;i<3;i++){ g.beginPath(); g.ellipse(w/2,113,30+i*18,10+i*7,0,t+i,t+i+1.2); g.stroke(); }
+  const n=5+lvl*2;
+  for(let k=0;k<n;k++){ const a=t*0.7+k*Math.PI*2/n, x=w/2+Math.cos(a)*64, y=113+Math.sin(a)*24, s=Math.cos(a)>0?1:-1;
+    g.beginPath(); g.ellipse(x,y,9,6,0,0,Math.PI*2); g.fillStyle='#ffd23f'; g.fill(); circ(x+5*s,y-6,5,'#ffd23f'); circ(x+6*s,y-7,1.3,'#222');
+    g.fillStyle='#f97316'; g.beginPath(); g.moveTo(x+9*s,y-6); g.lineTo(x+14*s,y-5); g.lineTo(x+9*s,y-4); g.fill(); }
+  // peluches suspendues
+  ['#a78bfa','#f472b6','#34d399','#60a5fa'].forEach((c,i)=>{ const x=40+i*48, y=52+Math.sin(t*2+i)*2; g.strokeStyle='#555'; g.lineWidth=1; g.beginPath(); g.moveTo(x,40); g.lineTo(x,y-8); g.stroke(); circ(x,y,8,c); circ(x-5,y-7,3,c); circ(x+5,y-7,3,c); circ(x-2,y-1,1.2,'#222'); circ(x+2,y-1,1.2,'#222'); });
+}
+function dBarbe(w,h,t,lvl){
+  rr(40,70,130,85,10); g.fillStyle='#fff'; g.fill();
+  for(let i=0;i<6;i++){ g.fillStyle=i%2?'#ffd1e6':'#fff'; g.fillRect(44+i*21,110,21,42); }
+  rr(40,100,130,12,4); g.fillStyle='#ff5fa2'; g.fill();
+  awning(30,46,150,24,'#ff5fa2','#fff',7);
+  // machine
+  g.beginPath(); g.ellipse(105,98,26,9,0,0,Math.PI*2); g.fillStyle='#cbd5e1'; g.fill();
+  g.strokeStyle='#ff8ac2'; g.lineWidth=2; for(let i=0;i<3;i++){ g.beginPath(); g.ellipse(105,94,18-i*5,6-i*1.5,0,t*4+i,t*4+i+3); g.stroke(); }
+  // énorme barbe à papa enseigne
+  const bx=192, by=50+Math.sin(t*2)*3;
+  g.strokeStyle='#e8d6a8'; g.lineWidth=4; g.beginPath(); g.moveTo(bx,by+20); g.lineTo(bx-4,150); g.stroke();
+  [[0,0,20],[-14,6,13],[14,6,13],[-8,-12,12],[9,-12,12],[0,12,13]].forEach(([dx,dy,r],i)=>circ(bx+dx,by+dy,r,i%2?'#ffb3d6':'#ff8ac2'));
+  circ(bx-6,by-6,5,'rgba(255,255,255,.6)');
+  for(let i=0;i<lvl;i++){ const x=55+i*26; g.strokeStyle='#e8d6a8'; g.lineWidth=2; g.beginPath(); g.moveTo(x,95); g.lineTo(x,80); g.stroke(); circ(x,74,9,'#c4b5fd'); }
+}
+function dChamboule(w,h,t,lvl){
+  g.fillStyle='#1d4ed8'; g.fillRect(16,40,8,110); g.fillRect(w-24,40,8,110);
+  awning(10,22,w-20,26,'#3b82f6','#ffd23f',9);
+  rr(16,120,w-32,30,6); g.fillStyle='#fbbf24'; g.fill();
+  g.fillStyle='#fde68a'; g.fillRect(30,60,w-60,62);
+  const cols=['#ef4444','#22c55e','#3b82f6','#f97316','#a855f7','#ec4899'];
+  const phase=(t*0.6)%1; const hit=phase>0.55&&phase<0.9;
+  let k=0; const rows=[4,3,2,1];
+  rows.forEach((n,r)=>{ for(let i=0;i<n;i++){ let x=w/2-(n*22)/2+i*22, y=104-r*20;
+    if(hit && r>=2){ const q=(phase-0.55)/0.35; x+= (i-0.5)*q*30; y+= q*q*40; }
+    g.fillStyle=cols[k++%6]; rr(x+2,y,18,19,3); g.fill(); g.fillStyle='rgba(255,255,255,.7)'; g.fillRect(x+4,y+6,14,4); } });
+  if(phase<0.55){ const q=phase/0.55; const x=30+q*(w/2-30), y=150-Math.sin(q*Math.PI)*70; circ(x,y,6,'#fff'); circ(x-2,y-2,2,'#f87171'); }
+}
+function dCarrousel(w,h,t,lvl){
+  const cx=w/2, n=8, sp=0.8+lvl*0.2;
+  g.beginPath(); g.ellipse(cx,148,95,18,0,0,Math.PI*2); g.fillStyle='#a16207'; g.fill();
+  g.beginPath(); g.ellipse(cx,143,95,18,0,0,Math.PI*2); g.fillStyle='#fcd34d'; g.fill();
+  g.fillStyle='#fef3c7'; g.fillRect(cx-6,50,12,95);
+  const horses=[]; for(let k=0;k<n;k++){ const a=t*sp+k*Math.PI*2/n; horses.push({a,d:Math.sin(a),k}); }
+  horses.sort((p,q)=>p.d-q.d);
+  for(const hs of horses){ const x=cx+Math.cos(hs.a)*78, sc=0.75+0.25*(hs.d+1)/2, y=108+Math.sin(t*3+hs.k)*7;
+    g.strokeStyle='#d4a017'; g.lineWidth=3; g.beginPath(); g.moveTo(x,58); g.lineTo(x,140); g.stroke();
+    const col=['#fff','#fbcfe8','#ddd6fe','#bae6fd'][hs.k%4], dir=-Math.sin(hs.a)>0?1:-1;
+    g.save(); g.translate(x,y); g.scale(sc*dir,sc);
+    g.beginPath(); g.ellipse(0,0,15,8,0,0,Math.PI*2); g.fillStyle=col; g.fill();
+    g.beginPath(); g.ellipse(13,-9,5,9,0.5,0,Math.PI*2); g.fill();
+    g.fillStyle='#f472b6'; g.fillRect(-14,-3,4,10); g.fillRect(8,-3,4,10); g.fillRect(-6,4,3,10); g.fillRect(4,4,3,10);
+    circ(15,-12,1.5,'#222'); g.restore(); }
+  // toit
+  const segs=12; for(let i=0;i<segs;i++){ g.beginPath(); g.moveTo(cx,8); g.lineTo(cx-100+i*200/segs,58); g.lineTo(cx-100+(i+1)*200/segs,58); g.closePath(); g.fillStyle=i%2?'#ef4444':'#fff'; g.fill(); }
+  for(let i=0;i<10;i++){ circ(cx-90+i*20,60,10,i%2?'#ef4444':'#fff'); }
+  for(let i=0;i<10;i++){ circ(cx-90+i*20,64,2.5,Math.floor(t*4+i)%2?'#ffd23f':'#fff8c4'); }
+  g.strokeStyle='#555'; g.lineWidth=2; g.beginPath(); g.moveTo(cx,8); g.lineTo(cx,-4); g.stroke();
+  g.fillStyle='#7b4cff'; g.beginPath(); g.moveTo(cx,-4); g.lineTo(cx+14,0+Math.sin(t*5)*2); g.lineTo(cx,5); g.fill();
+}
+function dAutos(w,h,t,lvl){
+  rr(10,36,w-20,124,14); g.fillStyle='#fbbf24'; g.fill();
+  rr(18,44,w-36,108,10); g.fillStyle='#64748b'; g.fill();
+  g.strokeStyle='rgba(255,255,255,.12)'; g.lineWidth=1; for(let x=30;x<w-20;x+=20){ g.beginPath(); g.moveTo(x,44); g.lineTo(x,152); g.stroke(); }
+  for(let i=0;i<12;i++){ g.fillStyle=i%2?'#ef4444':'#fff'; g.fillRect(10+i*(w-20)/12,30,(w-20)/12,8); }
+  const n=3+lvl, cols=['#ef4444','#22c55e','#3b82f6','#a855f7','#f97316','#ec4899'];
+  for(let k=0;k<n;k++){ const x=w/2+Math.sin(t*(0.9+k*0.13)+k*2)*(w/2-45), y=98+Math.sin(t*(1.3+k*0.07)+k)*34;
+    const a=Math.cos(t*(0.9+k*0.13)+k*2)>0?0:Math.PI;
+    g.save(); g.translate(x,y); g.rotate(a+Math.sin(t*3+k)*0.2);
+    rr(-16,-11,32,22,8); g.fillStyle='#111'; g.fill(); rr(-14,-9,28,18,7); g.fillStyle=cols[k%6]; g.fill();
+    circ(-3,0,5,'#fcd9b8'); g.strokeStyle='#999'; g.lineWidth=2; g.beginPath(); g.moveTo(-10,0); g.lineTo(-10,-22); g.stroke(); g.restore();
+    if(Math.floor(t*6+k)%3===0) circ(x-10,y-24,3,'#fef08a'); }
+}
+function dRoue(w,h,t,lvl){
+  const cx=w/2, cy=82, R=70, n=10, a0=t*0.35;
+  g.strokeStyle='#6d28d9'; g.lineWidth=7; g.beginPath(); g.moveTo(cx-55,168); g.lineTo(cx,cy); g.lineTo(cx+55,168); g.stroke();
+  g.strokeStyle='#a78bfa'; g.lineWidth=2; for(let i=0;i<n;i++){ const a=a0+i*Math.PI*2/n; g.beginPath(); g.moveTo(cx,cy); g.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R); g.stroke(); }
+  g.lineWidth=5; g.strokeStyle='#ff5fa2'; g.beginPath(); g.arc(cx,cy,R,0,Math.PI*2); g.stroke();
+  g.lineWidth=2; g.strokeStyle='#ffd1e6'; g.beginPath(); g.arc(cx,cy,R-10,0,Math.PI*2); g.stroke();
+  for(let i=0;i<20;i++){ const a=-a0*0+i*Math.PI/10+a0; circ(cx+Math.cos(a)*R,cy+Math.sin(a)*R,2.4,Math.floor(t*5+i)%2?'#ffd23f':'#fff'); }
+  const cols=['#ef4444','#22c55e','#3b82f6','#f59e0b','#a855f7'];
+  for(let i=0;i<n;i++){ const a=a0+i*Math.PI*2/n, x=cx+Math.cos(a)*R, y=cy+Math.sin(a)*R;
+    g.strokeStyle='#444'; g.lineWidth=1.5; g.beginPath(); g.moveTo(x,y); g.lineTo(x,y+7); g.stroke();
+    rr(x-8,y+6,16,12,4); g.fillStyle=cols[i%5]; g.fill(); g.fillStyle='rgba(255,255,255,.7)'; g.fillRect(x-6,y+8,12,4); }
+  circ(cx,cy,8,'#ffd23f'); circ(cx,cy,3,'#6d28d9');
+}
+function dFantome(w,h,t,lvl){
+  g.fillStyle='#3b2161'; g.fillRect(28,62,w-56,98);
+  g.beginPath(); g.moveTo(18,64); g.lineTo(w/2,14); g.lineTo(w-18,64); g.closePath(); g.fillStyle='#24123f'; g.fill();
+  g.fillStyle='#24123f'; g.fillRect(w-70,24,14,30);
+  for(let i=0;i<3;i++){ const fl=0.6+0.4*Math.sin(t*7+i*2); g.fillStyle=`rgba(255,214,63,${fl})`; rr(44+i*52,78,26,24,4); g.fill(); g.strokeStyle='#24123f'; g.lineWidth=2; g.beginPath(); g.moveTo(57+i*52,78); g.lineTo(57+i*52,102); g.stroke(); }
+  g.beginPath(); g.moveTo(w/2-22,160); g.lineTo(w/2-22,126); g.arc(w/2,126,22,Math.PI,0); g.lineTo(w/2+22,160); g.fillStyle='#000'; g.fill();
+  g.fillStyle='#9ca3af'; g.fillRect(10,156,w-20,4);
+  const tx=((t*40)%(w+40))-20; for(let c=0;c<2;c++){ const x=tx-c*26; if(x>-20&&x<w+10){ rr(x-11,142,22,14,4); g.fillStyle=c?'#22c55e':'#ef4444'; g.fill(); circ(x,138,5,'#fcd9b8'); } }
+  // fantôme
+  const gx=w/2+Math.sin(t*1.2)*60, gy=34+Math.sin(t*2.3)*6;
+  g.globalAlpha=0.92; g.beginPath(); g.arc(gx,gy,13,Math.PI,0); g.lineTo(gx+13,gy+16);
+  for(let i=0;i<4;i++){ g.quadraticCurveTo(gx+13-i*6.5-3.25,gy+(i%2?12:20),gx+13-(i+1)*6.5,gy+16); }
+  g.closePath(); g.fillStyle='#fff'; g.fill(); g.globalAlpha=1;
+  circ(gx-4,gy-2,2,'#222'); circ(gx+4,gy-2,2,'#222'); g.beginPath(); g.ellipse(gx,gy+5,2.5,3.5,0,0,Math.PI*2); g.fillStyle='#222'; g.fill();
+  // chauves-souris
+  for(let i=0;i<lvl;i++){ const bx=40+i*70+Math.sin(t*2+i)*10, by=20+Math.cos(t*3+i)*6, f=Math.sin(t*12+i)*5; g.fillStyle='#111'; g.beginPath(); g.moveTo(bx,by); g.lineTo(bx-10,by-4-f); g.lineTo(bx-4,by+2); g.lineTo(bx,by+4); g.lineTo(bx+4,by+2); g.lineTo(bx+10,by-4-f); g.closePath(); g.fill(); }
+  // citrouille
+  circ(w-34,150,9,'#f97316'); g.fillStyle='#000'; g.fillRect(w-38,147,3,3); g.fillRect(w-33,147,3,3);
+}
+const TRACK=(()=>{ const p=[];
+  for(let i=0;i<=10;i++) p.push([8+i*2.2,150]);
+  for(let i=1;i<=34;i++){ const s=i/34; p.push([30+s*20,150-s*135]); }
+  const P=[[50,15],[78,3],[70,150],[108,150]]; for(let i=1;i<=30;i++){ const s=i/30,u=1-s; p.push([u*u*u*P[0][0]+3*u*u*s*P[1][0]+3*u*s*s*P[2][0]+s*s*s*P[3][0], u*u*u*P[0][1]+3*u*u*s*P[1][1]+3*u*s*s*P[2][1]+s*s*s*P[3][1]]); }
+  for(let i=1;i<=6;i++) p.push([108+i*5.3,150]);
+  for(let i=1;i<=50;i++){ const a=Math.PI/2-i/50*Math.PI*2; p.push([140+48*Math.cos(a),102+48*Math.sin(a)]); }
+  for(let i=1;i<=18;i++) p.push([140+i*4.4,150]);
+  return p; })();
+function dHuit(w,h,t,lvl){
+  // étoiles scintillantes
+  for(let i=0;i<10;i++){ const x=(i*53)%w, y=(i*37)%60+4, s=1+Math.abs(Math.sin(t*3+i))*2; circ(x,y,s,'#fff7ae'); }
+  g.strokeStyle='#94a3b8'; g.lineWidth=2;
+  TRACK.forEach((p,i)=>{ if(i%6===0&&p[1]<146){ g.beginPath(); g.moveTo(p[0],p[1]+3); g.lineTo(p[0],166); g.stroke(); } });
+  const path=()=>{ g.beginPath(); TRACK.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1])); };
+  path(); g.strokeStyle='#7b4cff'; g.lineWidth=7; g.stroke();
+  path(); g.strokeStyle='#ff5fa2'; g.lineWidth=3; g.stroke();
+  path(); g.setLineDash([2,6]); g.strokeStyle='#fff'; g.lineWidth=1.5; g.stroke(); g.setLineDash([]);
+  // gare
+  g.fillStyle='#fde68a'; g.fillRect(2,138,36,14); g.fillStyle='#7b4cff'; g.beginPath(); g.moveTo(-2,138); g.lineTo(20,122); g.lineTo(42,138); g.fill();
+  // wagons
+  const L=TRACK.length, cyc=6.5/(1+0.15*(lvl-1)), s=(t%cyc)/cyc;
+  let idx = s<0.3 ? Math.floor(s/0.3*44) : 44+Math.floor((s-0.3)/0.7*(L-45));
+  const cols=['#ef4444','#ffd23f','#22c55e'];
+  for(let c=0;c<3;c++){ const j=Math.max(0,Math.min(L-1,idx-c*4)), p=TRACK[j], q=TRACK[Math.min(L-1,j+1)];
+    const a=Math.atan2(q[1]-p[1],q[0]-p[0]);
+    g.save(); g.translate(p[0],p[1]); g.rotate(a); rr(-7,-10,14,9,3); g.fillStyle=cols[c]; g.fill();
+    circ(0,-13,3.5,'#fcd9b8'); g.strokeStyle='#fcd9b8'; g.lineWidth=1.5; g.beginPath(); g.moveTo(-3,-14); g.lineTo(-5,-20); g.moveTo(3,-14); g.lineTo(5,-20); g.stroke(); g.restore(); }
+  // fusée déco
+  const rx=205, ry=40+Math.sin(t*2)*4;
+  g.fillStyle='#e5e7eb'; g.beginPath(); g.ellipse(rx,ry,7,16,0,0,Math.PI*2); g.fill();
+  g.fillStyle='#ef4444'; g.beginPath(); g.moveTo(rx-7,ry-6); g.lineTo(rx,ry-22); g.lineTo(rx+7,ry-6); g.fill();
+  circ(rx,ry-2,3,'#38bdf8'); g.fillStyle=Math.floor(t*10)%2?'#f97316':'#ffd23f'; g.beginPath(); g.moveTo(rx-5,ry+14); g.lineTo(rx,ry+26); g.lineTo(rx+5,ry+14); g.fill();
+}
+const DRAW={canards:dCanards,barbe:dBarbe,chamboule:dChamboule,carrousel:dCarrousel,autos:dAutos,roue:dRoue,fantome:dFantome,huit:dHuit};
+
+let hoverPlot=-1;
+function drawPlot(i){
+  const r=plotRect(i), p=S.plots[i];
+  const signY=r.row? r.y+2 : r.y+r.h-30, areaY=r.row? r.y+36 : r.y+4;
+  rr(r.x,r.y,r.w,r.h,16); g.fillStyle= p? 'rgba(255,255,255,.18)' : 'rgba(146,97,48,.35)'; g.fill();
+  if(hoverPlot===i){ g.strokeStyle='#fff'; g.lineWidth=4; g.stroke(); }
+  if(!p){
+    g.setLineDash([8,6]); rr(r.x+6,r.y+6,r.w-12,r.h-12,12); g.strokeStyle='rgba(255,255,255,.7)'; g.lineWidth=3; g.stroke(); g.setLineDash([]);
+    const pulse=1+Math.sin(animT*3)*0.06; g.save(); g.translate(r.x+r.w/2,r.y+r.h/2-10); g.scale(pulse,pulse);
+    circ(0,0,30,'#fff'); g.fillStyle='#ff5fa2'; g.fillRect(-4,-16,8,32); g.fillRect(-16,-4,32,8); g.restore();
+    g.fillStyle='#fff'; g.font='600 17px \"Baloo 2\"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('Terrain libre',r.x+r.w/2,r.y+r.h/2+38);
+    return;
+  }
+  g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,animT,p.lvl); g.restore();
+  // panneau
+  rr(r.x+12,signY,r.w-24,28,8); g.fillStyle='#8b5a2b'; g.fill(); rr(r.x+15,signY+3,r.w-30,22,6); g.fillStyle='#fff6e0'; g.fill();
+  g.fillStyle='#4a2a10'; g.font='600 13px \"Baloo 2\"'; g.textAlign='left'; g.textBaseline='middle';
+  g.fillText(DEF[p.id].name,r.x+22,signY+14);
+  g.textAlign='right'; g.fillStyle='#c2007a'; g.font='700 14px \"Baloo 2\"'; g.fillText(fmt(p.price)+' L$',r.x+r.w-21,signY+14);
+  // niveau
+  for(let k=0;k<3;k++){ g.fillStyle=k<p.lvl?'#ffd23f':'rgba(255,255,255,.5)'; star(r.x+r.w-48+k*16, r.row? r.y+r.h-14 : r.y+14, 7); }
+}
+function star(x,y,R){ g.beginPath(); for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr2=i%2?R*0.45:R; g.lineTo(x+Math.cos(a)*rr2,y+Math.sin(a)*rr2);} g.closePath(); g.fill(); g.strokeStyle='rgba(0,0,0,.25)'; g.lineWidth=1; g.stroke(); }
+
+// ---------- Visiteurs ----------
+const SKIN=['#fcd9b8','#f1c27d','#c68642','#8d5524','#ffe0bd'];
+const CLOTH=['#ef4444','#3b82f6','#22c55e','#a855f7','#f97316','#ec4899','#14b8a6','#facc15'];
+function drawVisitor(v){
+  if(v.hidden) return;
+  const moving=v.moving, bob=moving?Math.abs(Math.sin(v.phase))*2:0, x=v.x, y=v.y-bob, s=v.size;
+  g.beginPath(); g.ellipse(v.x,v.y+9*s,6*s,2.5*s,0,0,Math.PI*2); g.fillStyle='rgba(0,0,0,.18)'; g.fill();
+  g.strokeStyle='#334155'; g.lineWidth=2*s; const lg=moving?Math.sin(v.phase)*3:0;
+  g.beginPath(); g.moveTo(x-2*s,y+3*s); g.lineTo(x-2*s+lg,y+9*s); g.moveTo(x+2*s,y+3*s); g.lineTo(x+2*s-lg,y+9*s); g.stroke();
+  rr(x-5*s,y-5*s,10*s,10*s,4*s); g.fillStyle=v.cloth; g.fill();
+  circ(x,y-10*s,5.5*s,v.skin);
+  g.beginPath(); g.arc(x,y-11*s,5.8*s,Math.PI,0); g.fillStyle=v.hair; g.fill();
+  if(v.balloon){ const bx=x+8*s, by=y-30*s+Math.sin(animT*2+v.seed)*2; g.strokeStyle='#666'; g.lineWidth=1; g.beginPath(); g.moveTo(x+4*s,y-2*s); g.lineTo(bx,by+7); g.stroke();
+    g.beginPath(); g.ellipse(bx,by,6,7.5,0,0,Math.PI*2); g.fillStyle=v.balloon; g.fill(); circ(bx-2,by-3,1.6,'rgba(255,255,255,.7)'); }
+  if(v.bubble && v.bubble.t>0){
+    g.font='600 13px \"Baloo 2\"'; const tw=g.measureText(v.bubble.txt).width+14, by=y-28*s-(v.balloon?14:0);
+    g.globalAlpha=Math.min(1,v.bubble.t*2);
+    rr(x-tw/2,by-12,tw,22,9); g.fillStyle=v.bubble.bad?'#fee2e2':'#fff'; g.fill(); g.strokeStyle=v.bubble.bad?'#ef4444':'#7b4cff'; g.lineWidth=1.5; g.stroke();
+    g.fillStyle=v.bubble.bad?'#991b1b':'#2d1b4e'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(v.bubble.txt,x,by-1); g.globalAlpha=1;
+  }
+}
+function say(v,txt,bad){ v.bubble={txt,t:1.8,bad:!!bad}; }
+function floatTxt(x,y,txt,col){ floats.push({x:x+rnd(-18,18),y:y+rnd(-6,6),txt,col:col||'#c2007a',t:1.2}); }
+
+function spawnVisitor(){
+  const lane=PATH_MID+rnd(-20,20);
+  const v={x:-15,y:lane,lane,wp:[[44,lane]],mode:'gate',hidden:false,moving:true,phase:rnd(0,6),seed:rnd(0,9),
+    speed:rnd(55,80),size:rnd(0.85,1.15),cloth:CLOTH[Math.floor(rnd(0,8))],skin:SKIN[Math.floor(rnd(0,5))],
+    hair:['#3f2a14','#111','#c97b2a','#f5d06b','#6b3e1e'][Math.floor(rnd(0,5))],
+    money:Math.round(10+rnd(0,25)+totalFun()*2), wishes:Math.floor(rnd(2,6)), gen:rnd(0.8,1.3),
+    visited:new Set(), rides:0, balloon:null, target:-1};
+  visitors.push(v);
+}
+function chooseNext(v){
+  const opts=[];
+  S.plots.forEach((p,i)=>{ if(p && !v.visited.has(i) && p.price<=v.money) opts.push(i); });
+  if(v.wishes<=0 || !opts.length){ goExit(v); return; }
+  let tot=0; const ws=opts.map(i=>{ const w=funOf(S.plots[i])+0.5; tot+=w; return w; });
+  let r=Math.random()*tot, pick=opts[0]; for(let k=0;k<opts.length;k++){ r-=ws[k]; if(r<=0){ pick=opts[k]; break; } }
+  const d=door(pick); v.target=pick; v.mode='plot';
+  v.wp=[[v.x,v.lane],[d.x+rnd(-6,6),v.lane],[d.x,d.y+d.dir*(10+runtime[pick].queue.length*11)]];
+}
+function goExit(v){ v.mode='exit'; v.wp=[[v.x,v.lane],[W+30,v.lane]]; }
+function arrive(v){
+  if(v.mode==='gate'){
+    const will=entranceFair()*rnd(0.7,1.6)*v.gen;
+    if(S.entrance>will){ say(v,'Trop cher ! 😕',true); day.refGate++; day.sad+=1; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+    if(S.entrance>0){ earn(S.entrance,'entry'); floatTxt(50,v.y-20,'+'+fmt(S.entrance)); v.money-=S.entrance; }
+    day.entries++; chooseNext(v); return;
+  }
+  if(v.mode==='plot'){
+    const i=v.target, p=S.plots[i];
+    if(!p){ chooseNext(v); return; }
+    const will=fairOf(p)*rnd(0.7,1.7)*v.gen;
+    v.visited.add(i);
+    if(p.price>will){ say(v,'Trop cher ! 😕',true); day.refPrice++; day.sad+=0.5; chooseNext(v); return; }
+    if(runtime[i].queue.length>=MAXQ){ say(v,"Trop d'attente…",true); day.queueFull++; day.sad+=0.5; chooseNext(v); return; }
+    v.mode='queue'; runtime[i].queue.push(v); return;
+  }
+  if(v.mode==='exit'||v.mode==='leave'){ v.dead=true; }
+}
+function earn(n,kind,plotIdx){
+  S.money+=n; S.totalEarned+=n;
+  if(kind==='entry') day.entryRev+=n; else { day.rideRev+=n; day.earned[plotIdx]=(day.earned[plotIdx]||0)+n; }
+  coinSound();
+}
+const YAY=['Youpi ! 🎉','Trop bien !','Encore !','Wouhou !','Génial !','J\'adore ! 💖'];
+const BALLOONS=['#ff5fa2','#38bdf8','#ffd23f','#a78bfa','#34d399'];
+
+// ================== SIMULATION ==================
+function step(dt){
+  S.time+=dt;
+  // apparition
+  if(S.time<DAY-6){
+    const rate=(0.35+0.09*totalFun())*(0.5+S.stars/5);
+    spawnAcc+=rate*dt;
+    while(spawnAcc>=1){ spawnAcc--; if(visitors.length<95) spawnVisitor(); }
+  }
+  // service des attractions
+  S.plots.forEach((p,i)=>{ if(!p) return; const rt=runtime[i]; rt.timer-=dt;
+    if(rt.queue.length && rt.timer<=0){
+      const v=rt.queue.shift();
+      if(v.money>=p.price){ v.money-=p.price; if(p.price>0){ earn(p.price,'ride',i); const d=door(i); floatTxt(d.x,d.y-d.dir*30,'+'+fmt(p.price)); }
+        day.rides++; v.hidden=true; v.mode='ride'; v.rideT=DEF[p.id].ride; rt.timer=intervalOf(p); }
+      else { say(v,'Plus de sous…',true); chooseNext(v); }
+    } });
+  // visiteurs
+  for(const v of visitors){
+    if(v.bubble) v.bubble.t-=dt;
+    if(v.mode==='ride'){ v.rideT-=dt; if(v.rideT<=0){ const d=door(v.target); v.hidden=false; v.x=d.x+rnd(-12,12); v.y=d.y+d.dir*6;
+        v.rides++; v.wishes--; day.happy+=1; say(v,YAY[Math.floor(rnd(0,YAY.length))]); if(v.rides>=2&&!v.balloon) v.balloon=BALLOONS[Math.floor(rnd(0,5))]; chooseNext(v); } continue; }
+    if(v.mode==='queue'){ const i=v.target, k=runtime[i].queue.indexOf(v), d=door(i);
+      const tx=d.x+(k%2?5:-5), ty=d.y+d.dir*(10+k*11); moveTo(v,tx,ty,dt); continue; }
+    if(v.wp.length){ const [tx,ty]=v.wp[0]; if(moveTo(v,tx,ty,dt)) { v.wp.shift(); if(!v.wp.length) arrive(v); } }
+  }
+  visitors=visitors.filter(v=>!v.dead);
+  if(S.time>=DAY) endDay();
+}
+function moveTo(v,tx,ty,dt){
+  const dx=tx-v.x, dy=ty-v.y, d=Math.hypot(dx,dy), st=v.speed*dt;
+  if(d<=st||d<0.5){ v.x=tx; v.y=ty; v.moving=false; return true; }
+  v.x+=dx/d*st; v.y+=dy/d*st; v.moving=true; v.phase+=dt*12; return false;
+}
+
+// ================== FIN DE JOURNÉE ==================
+function endDay(){
+  const maint=S.plots.reduce((a,p)=>a+(p?maintOf(p):0),0);
+  const interest=Math.floor(S.bank*BANK_RATE);
+  const startStars=S.stars;
+  S.money-=maint; S.bank+=interest;
+  const tot=day.happy+day.sad, ratio=tot?day.happy/tot:0.6;
+  S.stars=Math.max(1,Math.min(5,S.stars*0.6+(1+4*ratio)*0.4));
+  const income=day.entryRev+day.rideRev, profit=income-maint;
+  const rep={...day, maint, interest, income, profit, dayNum:S.dayNum, starsUp:S.stars-startStars};
+  visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); floats=[];
+  S.dayNum++; S.time=0; spawnAcc=0;
+  save(); showReport(rep); resetDay();
+}
+function showReport(r){
+  let lesson='';
+  if(r.refGate>r.entries*0.4 && r.refGate>3) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
+  else if(r.refPrice>4) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
+  else if(r.queueFull>5) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
+  else if(r.profit<0) lesson=`⚠️ Aujourd'hui tu as dépensé plus que ce que tu as gagné. L'entretien coûte cher : il faut que tes attractions rapportent plus qu'elles ne coûtent !`;
+  else if(S.money>300 && S.bank===0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
+  else if(r.interest>0) lesson=`🐷 Ta tirelire t'a rapporté <b>${fmt(r.interest)} L$</b> cette nuit, sans rien faire ! C'est ça, faire fructifier son argent.`;
+  else lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
+  openModal(`
+    <h2>🌙 Fin du jour ${r.dayNum}</h2>
+    <p>${r.entries} visiteurs sont venus · ${r.rides} tours d'attraction</p>
+    <table class="rep">
+      <tr><td>🎟️ Billets d'entrée</td><td class="plus">+ ${fmt(r.entryRev)} L$</td></tr>
+      <tr><td>🎠 Attractions</td><td class="plus">+ ${fmt(r.rideRev)} L$</td></tr>
+      <tr><td>🔧 Entretien des attractions</td><td class="minus">− ${fmt(r.maint)} L$</td></tr>
+      <tr><td class="big">Bénéfice du jour</td><td class="big ${r.profit>=0?'plus':'minus'}">${r.profit>=0?'+ ':'− '}${fmt(Math.abs(r.profit))} L$</td></tr>
+      <tr><td>🐷 Intérêts de la tirelire</td><td class="plus">+ ${fmt(r.interest)} L$</td></tr>
+    </table>
+    <p>${lesson}</p>
+    <p class="small">Note des visiteurs : ${starsTxt(S.stars)} ${r.starsUp>0.05?'(en hausse 📈)':r.starsUp<-0.05?'(en baisse 📉)':''}</p>
+    <div class="right"><button class="main" onclick="closeModal()">☀️ Jour suivant</button></div>`, r.profit<0?'duo-oups':(r.profit>0&&r.interest>0?'lili-mission':'lili-contente'));
+  tada();
+}
+
+// ================== INTERFACE ==================
+const $=id=>document.getElementById(id);
+function openModal(html,img){ $('box').innerHTML=(img?`<img class="hero" src="img/${img}.webp" alt="">`:'')+html; $('modal').classList.add('show'); modalOpen=true; }
+const LIVIA=n=>n.startsWith('livia');
+function toast(img,title,txt){
+  const box=$('toasts'); while(box.children.length>=3) box.firstChild.remove();
+  const el=document.createElement('div'); el.className='toast'+(LIVIA(img)?' pinkb':'');
+  el.innerHTML=`<img src="img/${img}.webp" alt=""><div class="bub"><b class="t">${title}</b>${txt}</div>`;
+  const kill=()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),400); };
+  el.onclick=kill; setTimeout(kill,7000); box.appendChild(el); blip(988,0.12,'sine',0.07); setTimeout(()=>blip(1319,0.15,'sine',0.07),110);
+}
+function closeModal(){ $('modal').classList.remove('show'); modalOpen=false; save(); }
+$('modal').addEventListener('click',e=>{ if(e.target.id==='modal' && !$('box').dataset.lock) closeModal(); });
+function starsTxt(s){ const n=Math.round(s); return '★'.repeat(n)+'☆'.repeat(5-n); }
+
+function openPlot(i){
+  const p=S.plots[i];
+  if(!p){
+    const built=new Set(S.plots.filter(Boolean).map(p=>p.id));
+    const cards=DEFS.map(d=>{ const has=built.has(d.id), miss=d.cost-S.money;
+      return `<div class="card ${has?'done':''}"><div class="em">${d.em}</div><b>${d.name}</b>
+        <div class="c">${fmt(d.cost)} ${coin}</div>
+        ${has?'<div class="small">Déjà construit ✔️</div>': miss>0?`<div class="miss">Il te manque ${fmt(miss)} L$</div>`:'<div class="small">Tu peux l\'acheter !</div>'}
+        <button class="ok" ${has||miss>0?'disabled':''} onclick="build(${i},'${d.id}')">Construire</button></div>`; }).join('');
+    openModal(`<h2>🏗️ Que veux-tu construire ?</h2><p>Tu as ${L$(S.money)} dans ton porte-monnaie.</p><div class="cards">${cards}</div>
+      <div class="right"><button onclick="closeModal()">Fermer</button></div>`,'duo-equipe');
+    return;
+  }
+  const d=DEF[p.id], m=mood(p.price,fairOf(p)), earned=day.earned[i]||0;
+  const canUp=p.lvl<3, uc=upCost(p);
+  openModal(`<h2>${d.em} ${d.name}</h2><p>${d.desc}</p>
+    <p class="small">Niveau ${'★'.repeat(p.lvl)}${'☆'.repeat(3-p.lvl)}</p>
+    <p><b>Prix d'un tour :</b></p>
+    <div class="row"><div class="price"><button onclick="setPrice(${i},-1)">−</button><span>${fmt(p.price)} ${coin}</span><button onclick="setPrice(${i},1)">+</button></div>
+      <div class="mood ${m.c}">${m.e} Les visiteurs trouvent ça ${m.t}</div></div>
+    <table class="rep">
+      <tr><td>💰 Gagné aujourd'hui</td><td class="plus">${fmt(earned)} L$</td></tr>
+      <tr><td>🔧 Entretien chaque soir</td><td class="minus">${fmt(maintOf(p))} L$</td></tr>
+      <tr><td>👥 File d'attente</td><td>${runtime[i].queue.length} / ${MAXQ}</td></tr>
+    </table>
+    ${canUp?`<p>⬆️ <b>Améliorer au niveau ${p.lvl+1}</b> : plus rapide, plus amusant, et les visiteurs acceptent de payer un peu plus cher. Mais l'entretien coûtera aussi plus cher !</p>
+      <div class="row"><button class="ok" ${S.money<uc?'disabled':''} onclick="upgrade(${i})">Améliorer pour ${fmt(uc)} L$</button>${S.money<uc?`<span class="small">Il te manque ${fmt(uc-S.money)} L$</span>`:''}</div>`
+      :`<p>🌟 Niveau maximum atteint, bravo !</p>`}
+    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`, m.c==='m3'||m.c==='m2'?'livia-pensive':'lili-explique');
+}
+function build(i,id){
+  const d=DEF[id]; if(S.money<d.cost||S.plots[i]) return;
+  S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,};
+  tada(); save(); closeModal();
+  if(id!=='huit') toast('duo-victoire',`${d.em} ${d.name} construit !`,`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`);
+  const r=plotRect(i); for(let k=0;k<40;k++) confetti.push(mkConf(r.x+r.w/2,r.y+r.h/2));
+  if(id==='huit' && !S.won){ S.won=true; save(); setTimeout(victory,600); }
+}
+function upgrade(i){ const p=S.plots[i], c=upCost(p); if(S.money<c||p.lvl>=3) return; S.money-=c; p.lvl++; tada(); save(); openPlot(i); toast('lili-contente','Niveau '+p.lvl+' !',`${DEF[p.id].name} est plus rapide et plus amusant !`); }
+function setPrice(i,dlt){ const p=S.plots[i]; p.price=Math.max(0,Math.min(60,p.price+dlt)); blip(dlt>0?700:500,0.05); openPlot(i); }
+function openTicket(){
+  const m=mood(S.entrance,entranceFair());
+  openModal(`<h2>🎟️ Billet d'entrée</h2>
+    <p>Chaque visiteur paie ce prix pour entrer dans ta fête foraine.</p>
+    <div class="row"><div class="price"><button onclick="setEntrance(-1)">−</button><span>${fmt(S.entrance)} ${coin}</span><button onclick="setEntrance(1)">+</button></div>
+    <div class="mood ${m.c}">${m.e} Les visiteurs trouvent ça ${m.t}</div></div>
+    <p>💡 Plus ta fête a d'attractions, plus les visiteurs acceptent de payer cher pour entrer. Aujourd'hui : ${day.entries} entrées, ${day.refGate} demi-tours.</p>
+    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`, m.c==='m3'?'livia-pensive':'lili-explique');
+}
+function setEntrance(d){ S.entrance=Math.max(0,Math.min(80,S.entrance+d)); blip(d>0?700:500,0.05); openTicket(); }
+function openBank(){
+  const next=Math.floor(S.bank*BANK_RATE);
+  const btn=(label,fn,dis)=>`<button ${dis?'disabled':''} onclick="${fn}">${label}</button>`;
+  openModal(`<h2>🐷 Ma tirelire magique</h2>
+    <p>Les LiliDollars rangés dans la tirelire <b>grandissent tout seuls</b> : chaque nuit, elle te donne <b>5 %</b> en plus.</p>
+    <p class="small">Exemple : avec 100 L$ dedans, tu gagnes 5 L$ chaque nuit, sans rien faire !</p>
+    <table class="rep">
+      <tr><td>👛 Porte-monnaie</td><td>${fmt(S.money)} L$</td></tr>
+      <tr><td>🐷 Tirelire</td><td>${fmt(S.bank)} L$</td></tr>
+      <tr><td>✨ Cette nuit, elle va te rapporter</td><td class="plus">+ ${fmt(next)} L$</td></tr>
+    </table>
+    <p><b>Mettre dans la tirelire :</b></p>
+    <div class="row">${btn('10',"bank(10)",S.money<10)}${btn('100',"bank(100)",S.money<100)}${btn('1 000',"bank(1000)",S.money<1000)}${btn('Tout',"bank(S.money)",S.money<1)}</div>
+    <p><b>Reprendre de la tirelire :</b></p>
+    <div class="row">${btn('10',"bank(-10)",S.bank<10)}${btn('100',"bank(-100)",S.bank<100)}${btn('1 000',"bank(-1000)",S.bank<1000)}${btn('Tout',"bank(-S.bank)",S.bank<1)}</div>
+    <p class="small">⚠️ L'argent dans la tirelire ne peut pas servir à construire : il faut d'abord le reprendre.</p>
+    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`,'livia-idee');
+}
+function bank(n){ n=Math.floor(n); if(n>0&&S.money>=n){S.money-=n;S.bank+=n;} else if(n<0&&S.bank>=-n){S.bank+=n;S.money-=n;} else return; coinSound(); openBank(); }
+function openMenu(){
+  openModal(`<h2>⚙️ Menu</h2>
+    <p><b>Nom de ta fête foraine :</b></p><input type="text" id="nm" maxlength="32" value="${S.name.replace(/"/g,'&quot;')}">
+    <div class="row"><button class="ok" onclick="S.name=document.getElementById('nm').value.trim()||S.name;closeModal()">Enregistrer</button></div>
+    <p class="small">Ta partie est sauvegardée automatiquement dans ce navigateur à la fin de chaque journée.</p>
+    <div class="row"><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div>`,'lili-explique');
+}
+function confirmReset(){ openModal(`<h2>🔄 Nouvelle partie ?</h2><p>Ta fête foraine actuelle sera effacée. Tu es sûr·e ?</p>
+  <div class="right"><button onclick="closeModal()">Non, je garde</button><button class="main" onclick="startScreen(true)">Oui, recommencer</button></div>`,'lili-perplexe'); }
+const RULES=`<ul class="rules">
+  <li>🎪 Tu commences avec une <b>pêche aux canards</b> et <b>100 LiliDollars</b>.</li>
+  <li>🏗️ Clique sur un <b>terrain libre</b> pour construire une attraction (la barbe à papa, c'est un bon début !).</li>
+  <li>💰 Clique sur une attraction pour changer son <b>prix</b>. Trop cher ? Les visiteurs repartent. Pas assez cher ? Tu gagnes moins.</li>
+  <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
+  <li>🔧 Chaque soir, tu paies l'<b>entretien</b> de tes attractions.</li>
+  <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
+  <li>🎢 Le but : construire le <b>Grand Huit Galactique</b> à 12 000 L$ !</li></ul>`;
+function showRules(){ openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
+function startScreen(force){
+  const saved=load();
+  if(saved && !force){
+    openModal(`<h2>🎪 Re-bonjour !</h2><p>On continue <b>${saved.name}</b> ? Tu en es au jour ${saved.dayNum} avec ${fmt(saved.money)} L$.</p>
+      <div class="right"><button onclick="startScreen(true)">Nouvelle partie</button><button class="main" onclick="continueGame()">▶ Continuer</button></div>`,'lili-coucou');
+  } else {
+    openModal(`<h2>🎪 Bienvenue à Lili Parc !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
+      <input type="text" id="nm0" maxlength="32" value="Lili Parc">${RULES}
+      <div class="right"><button class="main" onclick="newGame(document.getElementById('nm0').value.trim());visitors=[];save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
+  }
+  $('box').dataset.lock='1';
+}
+function continueGame(){ S=load(); S.seen=S.seen||['canards']; resetDay(); S.time=0; closeModal(); }
+function victory(){
+  for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
+  tada(); setTimeout(tada,500);
+  openModal(`<h2>🎢 BRAVO ! 🎉</h2><p style="font-size:20px">Le <b>Grand Huit Galactique</b> est construit ! ${S.name} est devenue la plus grande fête foraine du pays !</p>
+    <p>Tu es parti·e d'une petite pêche aux canards et de 100 LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
+    <p class="small">Tu peux continuer à jouer pour améliorer toutes tes attractions au niveau ★★★.</p>
+    <div class="right"><button class="main" onclick="closeModal()">Continuer à jouer</button></div>`,'duo-victoire');
+}
+function mkConf(x,y){ return {x,y,vx:rnd(-120,120),vy:rnd(-260,-60),c:BALLOONS[Math.floor(rnd(0,5))],r:rnd(0,6),t:2.5}; }
+
+function getTip(){
+  const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
+  if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
+  if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
+  if(day.refGate>5 && day.refGate>day.entries*0.4) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
+  if(day.refPrice>6) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
+  if(day.queueFull>6) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
+  const nextD=DEFS.find(d=>!built.includes(d.id));
+  if(nextD && S.money>=nextD.cost && S.plots.includes(null)) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre.`);
+  if(S.money>500 && S.bank<S.money) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
+  return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
+}
+const TIP_TITLES={red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
+function checkUnlocks(){
+  for(const d of DEFS){
+    if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
+    if(S.money>=d.cost){ S.seen.push(d.id); toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
+  }
+}
+function updateHUD(){
+  $('parkName').innerHTML=`Lili Parc<small>${S.name!=='Lili Parc'?S.name.replace(/</g,'&lt;')+' · ':''}Jour ${S.dayNum}</small>`;
+  $('money').textContent=fmt(S.money); $('money').classList.toggle('neg',S.money<0);
+  $('bankAmt').textContent=fmt(S.bank)+' L$';
+  $('stars').textContent=starsTxt(S.stars);
+  $('visCount').textContent=visitors.filter(v=>v.mode!=='leave').length;
+  $('dayFill').style.width=(S.time/DAY*100)+'%';
+  const built=S.plots.filter(Boolean).map(p=>p.id), nextD=DEFS.find(d=>!built.includes(d.id));
+  if(nextD){ const have=S.money+S.bank; $('goalTxt').innerHTML=`🎯 Prochain objectif : <b>${nextD.em} ${nextD.name}</b> (${fmt(have)} / ${fmt(nextD.cost)} L$)`; $('goalFill').style.width=Math.max(0,Math.min(100,have/nextD.cost*100))+'%'; }
+  else { $('goalTxt').innerHTML='🏆 Toutes les attractions sont construites ! Améliore-les au niveau ★★★.'; const lv=S.plots.reduce((a,p)=>a+(p?p.lvl:0),0); $('goalFill').style.width=(lv/24*100)+'%'; }
+}
+
+// ================== ÉVÉNEMENTS ==================
+function canvasPos(e){ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]; }
+function hitPlot(x,y){ for(let i=0;i<8;i++){ const r=plotRect(i); if(x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h) return i; } return -1; }
+cv.addEventListener('click',e=>{ if(modalOpen) return; const [x,y]=canvasPos(e); blip(900,0.04);
+  if(x<60 && y>PATH_TOP-50 && y<PATH_BOT+50){ openTicket(); return; }
+  const i=hitPlot(x,y); if(i>=0) openPlot(i); });
+cv.addEventListener('mousemove',e=>{ const [x,y]=canvasPos(e); hoverPlot=hitPlot(x,y); cv.style.cursor=(hoverPlot>=0||(x<60&&y>PATH_TOP-50&&y<PATH_BOT+50))?'pointer':'default'; });
+cv.addEventListener('mouseleave',()=>hoverPlot=-1);
+$('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
+$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
+[0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); });
+
+// ================== BOUCLE ==================
+let last=performance.now(), tipT=0;
+function frame(now){
+  const dt=Math.min(0.05,(now-last)/1000); last=now; animT+=dt;
+  if(S && !modalOpen && speed>0){ const sd=dt*speed; const n=Math.ceil(sd/0.05); for(let k=0;k<n;k++) step(sd/n); }
+  if(S){
+    drawBackground();
+    for(let i=0;i<8;i++) drawPlot(i);
+    drawGate();
+    visitors.slice().sort((a,b)=>a.y-b.y).forEach(drawVisitor);
+    for(const f of floats){ f.t-=dt; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
+    floats=floats.filter(f=>f.t>0);
+    // crépuscule
+    const dusk=Math.max(0,(S.time/DAY-0.75)/0.25); if(dusk>0){ g.fillStyle=`rgba(40,20,90,${dusk*0.28})`; g.fillRect(0,0,W,H); }
+    for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
+    confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
+    tipT-=dt; if(tipT<=0){ tipT=1; const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
+      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k]){ day.shown[tp.k]=1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
+      updateHUD(); }
+    else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
+  }
+  requestAnimationFrame(frame);
+}
+newGame(); // état par défaut le temps de l'écran d'accueil
+startScreen(false);
+document.fonts && document.fonts.ready.then(()=>{});
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
