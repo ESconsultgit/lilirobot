@@ -13,7 +13,7 @@
 <title>Lili Parc</title>
 <link rel="icon" href="img/lili-avatar.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#C2367A;--violet:#2F6E2B;--yellow:#F2C230;--green:#2F6E2B;--lime:#8CC63F;--red:#C9531E;--ink:#1D351B}
 *{box-sizing:border-box}
@@ -131,7 +131,8 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
   table.rep{font-size:13px;margin:4px 0}table.rep td{padding:2px 4px}.big{font-size:16px}
   .row{margin:5px 0;gap:6px}.price{font-size:17px;gap:6px}.price button{width:36px;height:36px;font-size:20px}.mood{font-size:12.5px;padding:4px 8px}
   .box button{padding:5px 10px;font-size:14px}.right{margin-top:6px}
-  .cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:6px}
+  .cards{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin-top:4px}
+  .card.locked{display:none}
   .card{display:grid;grid-template-columns:26px minmax(0,1fr) auto;column-gap:6px;align-items:center;text-align:left;padding:4px 6px;border-width:2px}
   .card.done{display:none}.card .em{grid-column:1;grid-row:1/3;font-size:21px}.card b{grid-column:2;grid-row:1;font-size:12.5px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .card .c{grid-column:2;grid-row:2;justify-content:flex-start;font-size:12px}.card .c .coin{width:14px;height:14px;font-size:9px}.card .miss,.card .small{display:none}.card button{grid-column:3;grid-row:1/3;padding:4px 7px;font-size:12px}
@@ -165,6 +166,25 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
 .badge.off{filter:grayscale(1);opacity:.55;background:#fff;border-color:#e5e7eb}
 .card.locked{opacity:.6}.card.mega{border-color:#F2C230;background:#FCF1C7}
 @media (max-height:560px) and (orientation:landscape){ .box .desc{display:none} .bgrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px} .badge b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px!important} .bgrid+p{margin:2px 0!important} .badge small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:9.5px!important;line-height:1.15!important}.badge{padding:3px 5px;grid-template-columns:24px 1fr}.badge .bem{font-size:20px}.badge b{font-size:12px}.badge small{font-size:10px}.badge .brw{font-size:10.5px} }
+.whos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin:8px 0}
+.who{position:relative}.whob,.whonew{width:100%;display:grid;grid-template-columns:44px 1fr;column-gap:8px;align-items:center;text-align:left;border:3px solid #f0e8ff;padding:8px 10px}
+.whob .wav,.whonew .wav{grid-row:1/3;font-size:34px}.whob small,.whonew small{font-family:'Nunito',sans-serif;font-weight:600;font-size:12px;color:#4C5E49}
+.whodel{position:absolute;top:4px;right:4px;padding:2px 6px;font-size:13px;box-shadow:none;background:transparent}
+.whonew{border-style:dashed}
+.avs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.av{font-size:26px;padding:4px 8px;border:3px solid transparent}.av.sel{border-color:var(--pink);background:#FBE1EE}
+/* ---- Style pixel art ---- */
+body.pixel{font-family:'Pixelify Sans',monospace;background:#e9f5d8}
+body.pixel h2,body.pixel button,body.pixel .pill,body.pixel .price,body.pixel .title,body.pixel .toast .bub b.t,body.pixel .sblk>b,body.pixel .badge b{font-family:'Pixelify Sans',monospace!important}
+body.pixel .pill,body.pixel button,body.pixel .box,body.pixel .card,body.pixel .tip,body.pixel .goal,body.pixel .stage,body.pixel .toast .bub,body.pixel #tip,body.pixel .mrow,body.pixel .sblk,body.pixel .badge,body.pixel .lvl,body.pixel .goalMini,body.pixel .bar,body.pixel .bar>i,body.pixel .mood,body.pixel input{border-radius:0!important}
+body.pixel .pill,body.pixel button{box-shadow:3px 3px 0 #1D351B!important;border:2px solid #1D351B}
+body.pixel .box{box-shadow:6px 6px 0 #1D351B;border:3px solid #1D351B}
+body.pixel .stage{box-shadow:6px 6px 0 #1D351B;border:3px solid #1D351B}
+body.pixel canvas{image-rendering:pixelated}
+body.pixel .coin{border-radius:0}
+@media (max-height:560px) and (orientation:landscape){
+  .menuc h2{font-size:16px!important;margin:0!important} .menuc .lvl{padding:2px 6px} .menuc .lvl b{font-size:13px} .menuc .right{margin-top:2px} .menuc button{padding:3px 8px;font-size:13px}   .menuc .lvl small,.menuc .instx,.menuc>p.small{display:none} .menuc .lvls{margin:2px 0} .menuc p{margin:2px 0!important} .menuc .row{margin:3px 0}
+  .menuc .av{font-size:16px;padding:1px 4px} .menuc input[type=text]{padding:3px 6px;font-size:14px} .menuc .box button{padding:4px 8px}
+}
 </style>
 </head>
 <body>
@@ -235,8 +255,12 @@ const DEFS = [
   {id:'dragon',   name:'Dragon Volant',         em:'🐉', cost:15000, fair:14, interval:0.6, ride:5,   maint:200, fun:12, mega:6, desc:"MÉGA-ATTRACTION BONUS : on vole sur le dos d'un dragon qui ondule dans le ciel !"},
   {id:'robot',    name:'Lili-Robot Géant',      em:'🤖', cost:30000, fair:18, interval:0.5, ride:6,   maint:280, fun:16, mega:9, desc:"MÉGA-ATTRACTION BONUS : un robot géant fait tourner les nacelles dans ses bras !"},
 ];
+// Échelle réaliste : chaque petit personnage = un groupe de GROUP visiteurs.
+// Les prix des tickets restent « par personne » ; les coûts sont multipliés par MUL pour garder la même difficulté.
+const GROUP=8, MUL=8;
+DEFS.forEach(d=>{ d.cost*=MUL; d.maint*=MUL; });
 const DEF = Object.fromEntries(DEFS.map(d=>[d.id,d]));
-const W=1100, H=560, ZONE_COST=1500, NZ=2, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
+const W=1100, H=560, ZONE_COST=12000, NZ=2, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
 
 // ================== ÉTAT ==================
 let S; // état sauvegardé
@@ -247,21 +271,21 @@ const runtime = Array.from({length:16},()=>({queue:[],timer:0}));
 
 // ================== BADGES ==================
 const BADGES=[
-  {id:'v50',   em:'👥', name:'Premiers fans',       desc:'50 visiteurs en une journée',              reward:100,  test:()=>day.entries>=50},
-  {id:'v100',  em:'💯', name:'Cent visiteurs !',    desc:'100 visiteurs en une journée',             reward:300,  test:()=>day.entries>=100},
-  {id:'save1', em:'🐷', name:'Petit épargnant',     desc:'500 L$ dans la tirelire',                  reward:150,  test:()=>S.bank>=500},
-  {id:'build8',em:'🎠', name:'Collectionneur',      desc:'8 attractions en même temps',              reward:500,  test:()=>S.plots.filter(Boolean).length>=8},
-  {id:'star',  em:'🌟', name:'Parc 5 étoiles',      desc:'Note des visiteurs de 4,5 ★ ou plus',      reward:800,  test:()=>S.stars>=4.5},
-  {id:'v250',  em:'🎉', name:'Grosse foule',        desc:'250 visiteurs en une journée',             reward:1000, test:()=>day.entries>=250},
-  {id:'event3',em:'🎅', name:'Organisateur',        desc:'3 événements réussis',                     reward:1000, test:()=>(S.evDone||0)>=3},
-  {id:'save2', em:'🏦', name:'Grand épargnant',     desc:'10 000 L$ dans la tirelire',               reward:1500, test:()=>S.bank>=10000},
-  {id:'build16',em:'🗺️', name:'Parc complet',       desc:'16 attractions en même temps',             reward:2000, test:()=>S.plots.filter(Boolean).length>=16},
-  {id:'v500',  em:'🏟️', name:'Fête géante',         desc:'500 visiteurs en une journée',             reward:3000, test:()=>day.entries>=500},
-  {id:'rich',  em:'💰', name:'Grand forain',        desc:'100 000 L$ gagnés en tout',                reward:3000, test:()=>S.totalEarned>=100000},
-  {id:'clean', em:'🧹', name:'Parc tout propre',    desc:'5 soirs de suite à 90 % de propreté',      reward:600,  lvl:2, streak:'clean',  need:5},
-  {id:'safe',  em:'🛡️', name:'Parc sécurisé',       desc:'Sécurité + secours, et 5 soirs sans visiteur effrayé (100 visiteurs ou plus)', reward:800, lvl:2, streak:'safe', need:5},
-  {id:'health',em:'❤️', name:'Parc en pleine forme', desc:'7 soirs de suite avec une santé de 95 % ou plus', reward:1500, lvl:2, streak:'health', need:7},
-  {id:'flower',em:'🌳', name:'Parc fleuri',         desc:'7 soirs de suite avec des espaces verts à 90 %', reward:800, lvl:3, streak:'green', need:7},
+  {id:'v50',   em:'👥', name:'Premiers fans',       desc:'300 visiteurs en une journée',             reward:800,  test:()=>day.entries>=300},
+  {id:'v100',  em:'💯', name:'Mille visiteurs !',   desc:'1 000 visiteurs en une journée',           reward:2400, test:()=>day.entries>=1000},
+  {id:'save1', em:'🐷', name:'Petit épargnant',     desc:'4 000 L$ dans la tirelire',                reward:1200, test:()=>S.bank>=4000},
+  {id:'build8',em:'🎠', name:'Collectionneur',      desc:'8 attractions en même temps',              reward:4000, test:()=>S.plots.filter(Boolean).length>=8},
+  {id:'star',  em:'🌟', name:'Parc 5 étoiles',      desc:'Note des visiteurs de 4,5 ★ ou plus',      reward:6400, test:()=>S.stars>=4.5},
+  {id:'v250',  em:'🎉', name:'Grosse foule',        desc:'2 000 visiteurs en une journée',           reward:8000, test:()=>day.entries>=2000},
+  {id:'event3',em:'🎅', name:'Organisateur',        desc:'3 événements réussis',                     reward:8000, test:()=>(S.evDone||0)>=3},
+  {id:'save2', em:'🏦', name:'Grand épargnant',     desc:'80 000 L$ dans la tirelire',               reward:12000, test:()=>S.bank>=80000},
+  {id:'build16',em:'🗺️', name:'Parc complet',       desc:'16 attractions en même temps',             reward:16000, test:()=>S.plots.filter(Boolean).length>=16},
+  {id:'v500',  em:'🏟️', name:'Fête géante',         desc:'4 000 visiteurs en une journée',           reward:24000, test:()=>day.entries>=4000},
+  {id:'rich',  em:'💰', name:'Grand forain',        desc:'800 000 L$ gagnés en tout',                reward:24000, test:()=>S.totalEarned>=800000},
+  {id:'clean', em:'🧹', name:'Parc tout propre',    desc:'5 soirs de suite à 90 % de propreté',      reward:4800, lvl:2, streak:'clean',  need:5},
+  {id:'safe',  em:'🛡️', name:'Parc sécurisé',       desc:'Sécurité + secours, et 5 soirs sans visiteur effrayé (500 visiteurs ou plus)', reward:6400, lvl:2, streak:'safe', need:5},
+  {id:'health',em:'❤️', name:'Parc en pleine forme', desc:'7 soirs de suite avec une santé de 95 % ou plus', reward:12000, lvl:2, streak:'health', need:7},
+  {id:'flower',em:'🌳', name:'Parc fleuri',         desc:'7 soirs de suite avec des espaces verts à 90 %', reward:6400, lvl:3, streak:'green', need:7},
 ];
 const badgeList=()=>BADGES.filter(b=>lv()>=(b.lvl||1));
 function badgeOK(b){ return b.streak?((S.streak||{})[b.streak]||0)>=b.need:b.test(); }
@@ -277,7 +301,7 @@ function checkBadges(){
 function updateStreaks(base){
   const st=S.streak=S.streak||{}, inc=(k,ok)=>{ st[k]=ok?(st[k]||0)+1:0; };
   if(lv()>=2){ inc('clean',100-(S.dirt||0)>=90); inc('health',base.health>=95);
-    if(base.refFear>0) st.safe=0; else if(S.svc.secu&&S.svc.secours&&base.entries>=100) st.safe=(st.safe||0)+1; }
+    if(base.refFear>0) st.safe=0; else if(S.svc.secu&&S.svc.secours&&base.entries>=SVC.secu.need) st.safe=(st.safe||0)+1; }
   if(lv()>=3) inc('green',(S.green??100)>=90);
 }
 function openBadges(){
@@ -295,20 +319,20 @@ function openBadges(){
 // Proposés certains soirs pour le lendemain. On paie le lendemain matin (porte-monnaie puis tirelire).
 // Pas assez d'argent à ce moment-là ? L'événement est raté : il fallait penser à épargner !
 const EVENTS=[
-  {id:'noel',    em:'🎅', name:'La visite du Père Noël',        vis:4,   k:1.0, min:300, img:'livia-mission', miss:"le Père Noël n'a pas pu venir", effect:'4 fois plus de visiteurs (+300 %)',
+  {id:'noel',    em:'🎅', name:'La visite du Père Noël',        vis:4,   k:1.0, min:2400, img:'livia-mission', miss:"le Père Noël n'a pas pu venir", effect:'4 fois plus de visiteurs (+300 %)',
    desc:"Le Père Noël vient dire bonjour aux enfants : tout le monde veut le voir !"},
-  {id:'feu',     em:'🎆', name:"Le grand feu d'artifice",       vis:2.5, k:0.5, min:150, img:'lili-contente', miss:"le feu d'artifice n'a pas pu avoir lieu", effect:'2,5 fois plus de visiteurs (+150 %)',
+  {id:'feu',     em:'🎆', name:"Le grand feu d'artifice",       vis:2.5, k:0.5, min:1200, img:'lili-contente', miss:"le feu d'artifice n'a pas pu avoir lieu", effect:'2,5 fois plus de visiteurs (+150 %)',
    desc:"Boum ! Des feux d'artifice toute la journée : les visiteurs arrivent de partout."},
-  {id:'concert', em:'🎤', name:"Le concert d'Ellie et Livia",   vis:1.8, gen:1.4, k:0.5, min:150, img:'duo-victoire', miss:"le concert n'a pas pu avoir lieu", effect:'+80 % de visiteurs, et ils acceptent de payer plus cher',
+  {id:'concert', em:'🎤', name:"Le concert d'Ellie et Livia",   vis:1.8, gen:1.4, k:0.5, min:1200, img:'duo-victoire', miss:"le concert n'a pas pu avoir lieu", effect:'+80 % de visiteurs, et ils acceptent de payer plus cher',
    desc:"Un concert sur la grande allée : les visiteurs sont de si bonne humeur qu'ils dépensent plus."},
-  {id:'parade',  em:'🤡', name:'La parade des clowns',          vis:2,   stars:0.4, k:0.4, min:100, img:'lili-coucou', miss:"les clowns ne sont pas venus", effect:'2 fois plus de visiteurs, et la note de ta fête monte',
+  {id:'parade',  em:'🤡', name:'La parade des clowns',          vis:2,   stars:0.4, k:0.4, min:800, img:'lili-coucou', miss:"les clowns ne sont pas venus", effect:'2 fois plus de visiteurs, et la note de ta fête monte',
    desc:"Des clowns rigolos défilent dans les allées. Tout le monde rit !"},
-  {id:'ecole',   em:'🚌', name:'La sortie des écoles',          vis:3,   money:0.5, k:0.6, min:100, img:'livia-idee', miss:"les écoles ne sont pas venues", effect:'3 fois plus de visiteurs… mais avec peu d\'argent de poche',
+  {id:'ecole',   em:'🚌', name:'La sortie des écoles',          vis:3,   money:0.5, k:0.6, min:800, img:'livia-idee', miss:"les écoles ne sont pas venues", effect:'3 fois plus de visiteurs… mais avec peu d\'argent de poche',
    desc:"Plein de classes viennent visiter la fête avec leurs maîtresses !"},
 ];
 const EV=Object.fromEntries(EVENTS.map(e=>[e.id,e]));
-const round50=n=>Math.max(50,Math.round(n/50)*50);
-function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:50; }
+const round50=n=>Math.max(100,Math.round(n/100)*100);
+function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:400; }
 function eventCost(ev){ return Math.max(ev.min, round50(avgIncome()*ev.k)); }
 function maybeOfferEvent(){
   S.lastOffer=S.lastOffer||0;
@@ -325,7 +349,7 @@ function maybeOfferEvent(){
       <tr><td>👛🐷 Tu as en tout (porte-monnaie + tirelire)</td><td class="${ok?'plus':'minus'}">${fmt(total)} L$</td></tr>
     </table>
     ${lv()>=2?`<p class="small">${WEATHER[S.weather].em} Météo prévue demain : <b>${WEATHER[S.weather].name.toLowerCase()}</b> (${WEATHER[S.weather].eff}).</p>`:''}
-    ${lv()>=2&&(!svcOK('secu')||!svcOK('secours'))?`<p class="small">🛡️⛑️ Avec autant de monde, il faut un <b>${!svcOK('secu')?'poste de sécurité (dès 100 visiteurs)':''}${!svcOK('secu')&&!svcOK('secours')?' et un ':''}${!svcOK('secours')?'poste de secours (dès 200 visiteurs)':''}</b>, sinon les visiteurs auront peur et repartiront !</p>`:''}
+    ${lv()>=2&&(!svcOK('secu')||!svcOK('secours'))?`<p class="small">🛡️⛑️ Avec autant de monde, il faut un <b>${!svcOK('secu')?`poste de sécurité (dès ${fmt(SVC.secu.need)} visiteurs)`:''}${!svcOK('secu')&&!svcOK('secours')?' et un ':''}${!svcOK('secours')?`poste de secours (dès ${fmt(SVC.secours.need)} visiteurs)`:''}</b>, sinon les visiteurs auront peur et repartiront !</p>`:''}
     <p class="small">⚠️ On paie <b>demain matin</b>, avec le porte-monnaie puis la tirelire. S'il n'y a pas assez d'argent à ce moment-là, l'événement n'aura pas lieu !${ok?'':' Il te manque '+fmt(S.offer.cost-total)+' L$…'}</p>
     <div class="right"><button onclick="declineEvent()">Non merci</button><button class="main" onclick="bookEvent()">✅ Réserver</button></div>`, ev.img);
   return true;
@@ -392,12 +416,15 @@ function canToast(k){
   return S.dayNum-(S.tipLog[k]??-99)>=gap;
 }
 function newGame(name,level){
-  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
+  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:800, bank:0, scale:8, dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0, level:level||2, dirt:0, green:100, weather:'sun'};
   initLevel();
   resetDay();
 }
 function initLevel(){
+  if(!S.scale){ // ancienne partie : on passe à l'échelle réaliste (×8) une seule fois
+    S.money*=MUL; S.bank*=MUL; S.totalEarned=(S.totalEarned||0)*MUL; S.incHist=(S.incHist||[]).map(x=>x*MUL);
+    S.lastEntries=(S.lastEntries||0)*GROUP; if(S.booked) S.booked.cost*=MUL; S.scale=MUL; }
   S.svc=S.svc||{}; S.badges=S.badges||[]; S.streak=S.streak||{}; if(S.dirt==null) S.dirt=0; if(S.green==null) S.green=100; S.weather=S.weather||'sun';
   if(S.level>=2 && !S.svc.clean) S.svc.clean={n:1,missed:0,closed:false};
   if(S.level>=3 && !S.svc.green) S.svc.green={n:1,missed:0,closed:false};
@@ -405,8 +432,19 @@ function initLevel(){
 }
 function setLevel(n){ S.level=n; initLevel(); save(); updateHUD(); openMenu(); }
 function resetDay(){ day={shown:{},refFear:0,refHealth:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
-function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
-function load(){ try{ const s=localStorage.getItem(SAVE_KEY); return s?JSON.parse(s):null; }catch(e){ return null; } }
+// ---- Profils : chaque joueuse a sa propre partie sur le même téléphone ----
+let PROFILES=[], CUR=null;
+const AVATARS=['🦄','🐱','🐶','🦊','🐼','🐸','🐰','🐯','🐵','🤖'];
+const keyOf=id=>'lilipark-'+id;
+function saveProfiles(){ try{ localStorage.setItem('lilipark-profiles',JSON.stringify(PROFILES)); }catch(e){} }
+function loadProfiles(){
+  try{ PROFILES=JSON.parse(localStorage.getItem('lilipark-profiles')||'[]')||[]; }catch(e){ PROFILES=[]; }
+  try{ if(!PROFILES.length){ const old=localStorage.getItem(SAVE_KEY); // ancienne partie (avant les profils) : on la garde
+      if(old){ const id='p'+Date.now(); PROFILES=[{id,name:'Joueuse 1',av:'🦄'}]; localStorage.setItem(keyOf(id),old); saveProfiles(); } } }catch(e){}
+}
+const curProfile=()=>PROFILES.find(p=>p.id===CUR);
+function save(){ if(!CUR||!S) return; try{ localStorage.setItem(keyOf(CUR), JSON.stringify(S)); }catch(e){} }
+function load(id){ try{ const s=localStorage.getItem(keyOf(id||CUR)); return s?JSON.parse(s):null; }catch(e){ return null; } }
 
 // ================== OUTILS ==================
 const rnd=(a,b)=>a+Math.random()*(b-a);
@@ -419,8 +457,8 @@ const funOf=p=>DEF[p.id].fun*lvlMul(p,0.5);
 const maintOf=p=>Math.round(DEF[p.id].maint*lvlMul(p,0.5));
 const dueOf=p=>maintOf(p)*2**(p.missed||0);   // entretien de ce soir (doublé à chaque soir oublié)
 const SVC={
-  secu:   {id:'secu',   em:'🛡️', name:'Poste de sécurité', cost:1200, maint:30, need:100, desc:"Des agents veillent sur tout le monde. Obligatoire dès 100 visiteurs dans la journée."},
-  secours:{id:'secours',em:'⛑️', name:'Poste de secours',  cost:2500, maint:50, need:200, desc:"Une infirmerie pour les petits bobos. Obligatoire dès 200 visiteurs dans la journée."},
+  secu:   {id:'secu',   em:'🛡️', name:'Poste de sécurité', cost:9600, maint:240, need:500, desc:"Des agents veillent sur tout le monde. Obligatoire dès 500 visiteurs dans la journée."},
+  secours:{id:'secours',em:'⛑️', name:'Poste de secours',  cost:20000, maint:400, need:1000, desc:"Une infirmerie pour les petits bobos. Obligatoire dès 1 000 visiteurs dans la journée."},
 };
 SVC.clean={id:'clean',em:'🧹',name:'Équipe de nettoyage'};
 SVC.green={id:'green',em:'🌳',name:'Jardiniers'};
@@ -432,10 +470,10 @@ const LVL_DESC={1:"Dès 6 ans : construire, fixer les prix, épargner. L'entreti
   3:"Dès 10 ans : en plus, engager agents, ambulanciers et jardiniers, et entretenir l'herbe et les arbres."};
 const lv=()=>(S&&S.level)||2;
 // ---- Personnel : nettoyage (niv. 2+), agents, ambulanciers, jardiniers (niv. 3) ----
-const STAFF={secu:{em:'👮',one:'agent',many:'agents',hire:200,pay:25,cover:100},
-             secours:{em:'🚑',one:'ambulancier',many:'ambulanciers',hire:300,pay:35,cover:200},
-             clean:{em:'🧹',one:'poste de nettoyage',many:'postes de nettoyage',hire:400,pay:15,cover:50},
-             green:{em:'🌳',one:'jardinier',many:'jardiniers',hire:150,pay:20}};
+const STAFF={secu:{em:'👮',one:'agent',many:'agents',hire:1600,pay:200,cover:500},
+             secours:{em:'🚑',one:'ambulancier',many:'ambulanciers',hire:2400,pay:280,cover:1000},
+             clean:{em:'🧹',one:'équipe de nettoyage',many:'équipes de nettoyage',hire:3200,pay:120,cover:250},
+             green:{em:'🌳',one:'jardinier',many:'jardiniers',hire:1200,pay:160}};
 function svcDue(k){ const st=S.svc[k], n=st.n||0;
   const base=k==='secu'?SVC.secu.maint+(lv()>=3?STAFF.secu.pay*n:0):k==='secours'?SVC.secours.maint+(lv()>=3?STAFF.secours.pay*n:0):STAFF[k].pay*n;
   return base*2**(st.missed||0); }
@@ -453,8 +491,9 @@ function health(){ if(lv()<2) return 100; const h=healthParts();
   const w=lv()>=3?{maint:.3,clean:.25,secu:.125,aid:.125,green:.2}:{maint:.35,clean:.35,secu:.15,aid:.15};
   let t=0; for(const k in w) t+=w[k]*h[k]; return Math.round(100*t); }
 // ---- Météo (niv. 2+) ----
-const WEATHER={sun:{em:'☀️',name:'Soleil',mul:1.15,eff:'un peu plus de visiteurs'},cloud:{em:'⛅',name:'Nuageux',mul:1,eff:'rien de spécial'},rain:{em:'🌧️',name:'Pluie',mul:0.55,eff:'beaucoup moins de visiteurs'}};
-function rollWeather(){ const r=Math.random(); return r<0.5?'sun':r<0.8?'cloud':'rain'; }
+const WEATHER={sun:{em:'☀️',name:'Soleil',mul:1.15,eff:'un peu plus de visiteurs'},cloud:{em:'⛅',name:'Nuageux',mul:1,eff:'rien de spécial'},rain:{em:'🌧️',name:'Pluie',mul:0.55,eff:'beaucoup moins de visiteurs'},
+  snow:{em:'❄️',name:'Neige',mul:0.75,eff:"moins de visiteurs, mais c'est très joli"},storm:{em:'⛈️',name:'Orage',mul:0.45,eff:'presque personne ne vient'}};
+function rollWeather(){ const r=Math.random(); return r<0.48?'sun':r<0.73?'cloud':r<0.87?'rain':r<0.95?'snow':'storm'; }
 const weatherMul=()=>lv()>=2?WEATHER[S.weather||'sun'].mul:1;
 const intervalOf=p=>DEF[p.id].interval/lvlMul(p,0.4);
 const upCost=p=>Math.round(DEF[p.id].cost*0.75*p.lvl);
@@ -491,8 +530,11 @@ function plotRect(i){ i=i%8; const col=i%4,row=Math.floor(i/4); return {x:60+col
 function door(i){ const r=plotRect(i); return {x:r.x+r.w/2, y:r.row?PATH_BOT+2:PATH_TOP-2, dir:r.row?-1:1}; }
 
 // ================== CANVAS ==================
-const cv=document.getElementById('cv'), g=cv.getContext('2d');
-function sizeCanvas(){ const dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; g.setTransform(dpr,0,0,dpr,0,0); }
+const cv=document.getElementById('cv'), g0=cv.getContext('2d'); let g=g0;
+// Mode pixel art : on dessine la scène en petit (1/PX), puis on l'agrandit sans lissage
+const PX=3, pxCanvas=document.createElement('canvas'); pxCanvas.width=Math.ceil(W/PX); pxCanvas.height=Math.ceil(H/PX); const pxCtx=pxCanvas.getContext('2d');
+function setPixel(on){ S.pixel=!!on; document.body.classList.toggle('pixel',!!on); save(); }
+function sizeCanvas(){ const dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; g0.setTransform(dpr,0,0,dpr,0,0); }
 sizeCanvas();
 function rr(x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
 function circ(x,y,r,col){ g.beginPath(); g.arc(x,y,r,0,Math.PI*2); g.fillStyle=col; g.fill(); }
@@ -522,9 +564,36 @@ function drawWear(){
 }
 function drawWeather(dt){
   if(lv()<2) return;
-  if(S.weather==='rain'){ g.fillStyle='rgba(51,65,85,.18)'; g.fillRect(0,0,W,H); g.strokeStyle='rgba(186,230,253,.75)'; g.lineWidth=1.5; g.beginPath();
-    for(let i=0;i<90;i++){ const x=(i*131+animT*60)%W, y=(i*71+animT*520)%H; g.moveTo(x,y); g.lineTo(x-4,y+12); } g.stroke(); }
-  else if(S.weather==='cloud'){ g.fillStyle='rgba(255,255,255,.35)'; for(let i=0;i<4;i++){ const x=((animT*12+i*300)%(W+200))-100, y=20+i*12; circ(x,y,26,'rgba(255,255,255,.35)'); circ(x+28,y+4,20,'rgba(255,255,255,.35)'); circ(x-26,y+6,18,'rgba(255,255,255,.35)'); } }
+  const w=S.weather;
+  if(w==='rain'||w==='storm'){ g.fillStyle=w==='storm'?'rgba(30,41,59,.32)':'rgba(51,65,85,.18)'; g.fillRect(0,0,W,H);
+    g.strokeStyle='rgba(186,230,253,.75)'; g.lineWidth=1.5; g.beginPath(); const n=w==='storm'?150:90;
+    for(let i=0;i<n;i++){ const x=(i*131+animT*(w==='storm'?160:60))%W, y=(i*71+animT*560)%H; g.moveTo(x,y); g.lineTo(x-(w==='storm'?9:4),y+12); } g.stroke();
+    if(w==='storm'){ const ph=(animT*0.7)%5; if(ph<0.12){ g.fillStyle=`rgba(255,255,255,${0.55*(1-ph/0.12)})`; g.fillRect(0,0,W,H);
+        g.strokeStyle='#fef08a'; g.lineWidth=3; g.beginPath(); const lx=200+((Math.floor(animT/5)*397)%700); g.moveTo(lx,0); g.lineTo(lx-20,60); g.lineTo(lx+10,70); g.lineTo(lx-15,140); g.stroke(); } } }
+  else if(w==='snow'){ g.fillStyle='rgba(255,255,255,.22)'; g.fillRect(0,0,W,PATH_TOP); g.fillRect(0,PATH_BOT,W,H-PATH_BOT);
+    for(let i=0;i<120;i++){ const x=(i*97+Math.sin(animT*1.3+i)*14+animT*8)%W, y=(i*53+animT*(28+i%5*6))%H; circ(x,y,1.4+(i%3)*0.8,'rgba(255,255,255,.95)'); } }
+  else if(w==='cloud'){ for(let i=0;i<4;i++){ const x=((animT*12+i*300)%(W+200))-100, y=20+i*12; circ(x,y,26,'rgba(255,255,255,.35)'); circ(x+28,y+4,20,'rgba(255,255,255,.35)'); circ(x-26,y+6,18,'rgba(255,255,255,.35)'); } }
+}
+// Jour, coucher de soleil, nuit (avec les lumières de la fête)
+const LAMPS=[130,330,530,730,930];
+function drawLighting(){
+  const t=S.time/DAY;
+  const dawn=t<0.1?(0.1-t)/0.1:0, sunset=t>0.55?Math.min(1,(t-0.55)/0.15)*(t<0.78?1:Math.max(0,1-(t-0.78)/0.08)):0, night=t>0.72?Math.min(1,(t-0.72)/0.13):0;
+  if(dawn>0){ g.fillStyle=`rgba(255,180,140,${dawn*0.22})`; g.fillRect(0,0,W,H); }
+  if(sunset>0){ g.fillStyle=`rgba(255,120,50,${sunset*0.22})`; g.fillRect(0,0,W,H); }
+  // réverbères
+  for(const x of LAMPS){ g.fillStyle='#334155'; g.fillRect(x-2,PATH_TOP-26,4,30); circ(x,PATH_TOP-28,5,night>0.2?'#fef08a':'#cbd5e1'); }
+  if(night>0){
+    g.fillStyle=`rgba(15,23,60,${night*0.5})`; g.fillRect(0,0,W,H);
+    for(let i=0;i<30;i++) circ((i*233)%W,(i*37)%30+3,1.2,`rgba(255,255,255,${night*0.8*(0.5+0.5*Math.sin(animT*3+i))})`);
+    g.save(); g.globalCompositeOperation='lighter';
+    const glow=(x,y,r,col)=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,col); gr.addColorStop(1,'rgba(0,0,0,0)'); g.fillStyle=gr; g.fillRect(x-r,y-r,2*r,2*r); };
+    for(const x of LAMPS) glow(x,PATH_TOP-28,70,`rgba(255,220,130,${0.45*night})`);
+    for(let j=0;j<8;j++){ const i=view*8+j, p=S.plots[i]; if(!p||p.closed) continue; const r=plotRect(i);
+      glow(r.x+r.w/2,r.y+r.h/2,120,`rgba(255,${180+((i*37)%60)},${120+((i*53)%100)},${0.32*night})`);
+      for(let k=0;k<6;k++) circ(r.x+20+k*37,r.row?r.y+r.h-8:r.y+8,2.5,Math.floor(animT*4+k+i)%2?`rgba(255,240,150,${night})`:`rgba(255,120,200,${night})`); }
+    g.restore();
+  }
 }
 function drawBackground(){
   const gr=g.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#8fdc74'); gr.addColorStop(1,'#6cc45a');
@@ -998,22 +1067,22 @@ function arrive(v){
       const noSecu=day.entries>=secuCap(), noAid=day.entries>=aidCap();
       if(noSecu||noAid){ const k=noSecu?'secu':'secours', none=!svcOK(k);
         say(v,none?(noSecu?"Pas de sécurité… j'ai peur !":"Pas de secours… j'ai peur !"):(noSecu?"Pas assez d'agents… j'ai peur !":"Pas assez d'ambulanciers !"),true);
-        day.refFear++; day.fearWhat=k; day.fearNone=none; day.sad+=0.3; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+        day.refFear+=GROUP; day.fearWhat=k; day.fearNone=none; day.sad+=0.3; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
       if(Math.random()>0.35+0.65*health()/100){ const h=healthParts(); const w=Object.entries({clean:h.clean,maint:h.maint,green:h.green}).filter(e=>e[1]!==null).sort((a,b)=>a[1]-b[1])[0][0];
-        say(v,{clean:"Beurk, c'est sale !",maint:"Tout est fermé…",green:"C'est mal entretenu…"}[w],true); day.refHealth++; day.sad+=0.2; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+        say(v,{clean:"Beurk, c'est sale !",maint:"Tout est fermé…",green:"C'est mal entretenu…"}[w],true); day.refHealth+=GROUP; day.sad+=0.2; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
     }
     const will=entranceFair()*rnd(0.7,1.6)*v.gen;
-    if(S.entrance>will){ say(v,'Trop cher ! 😕',true); day.refGate++; day.sad+=1; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
-    if(S.entrance>0){ earn(S.entrance,'entry'); floatTxt(50,v.y-20,'+'+fmt(S.entrance)); v.money-=S.entrance; }
-    day.entries++; if(lv()>=2 && day.entries>cleanCap()) S.dirt=Math.min(100,(S.dirt||0)+0.6); chooseNext(v); return;
+    if(S.entrance>will){ say(v,'Trop cher ! 😕',true); day.refGate+=GROUP; day.sad+=1; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+    if(S.entrance>0){ earn(S.entrance*GROUP,'entry'); floatTxt(50,v.y-20,'+'+fmt(S.entrance*GROUP)); v.money-=S.entrance; }
+    day.entries+=GROUP; if(lv()>=2 && day.entries>cleanCap()) S.dirt=Math.min(100,(S.dirt||0)+1.2); chooseNext(v); return;
   }
   if(v.mode==='plot'){
     const i=v.target, p=S.plots[i];
     if(!p){ chooseNext(v); return; }
     const will=fairOf(p)*rnd(0.7,1.7)*v.gen;
     v.visited.add(i);
-    if(p.price>will){ say(v,'Trop cher ! 😕',true); day.refPrice++; day.sad+=0.5; chooseNext(v); return; }
-    if(runtime[i].queue.length>=MAXQ){ say(v,"Trop d'attente…",true); day.queueFull++; day.sad+=day.event?0.15:0.5; chooseNext(v); return; }
+    if(p.price>will){ say(v,'Trop cher ! 😕',true); day.refPrice+=GROUP; day.sad+=0.5; chooseNext(v); return; }
+    if(runtime[i].queue.length>=MAXQ){ say(v,"Trop d'attente…",true); day.queueFull+=GROUP; day.sad+=day.event?0.15:0.5; chooseNext(v); return; }
     v.mode='queue'; runtime[i].queue.push(v); return;
   }
   if(v.mode==='exit'||v.mode==='leave'){ v.dead=true; }
@@ -1041,8 +1110,8 @@ function step(dt){
   S.plots.forEach((p,i)=>{ if(!p) return; const rt=runtime[i]; rt.timer-=dt;
     if(rt.queue.length && rt.timer<=0){
       const v=rt.queue.shift();
-      if(v.money>=p.price){ v.money-=p.price; if(p.price>0){ earn(p.price,'ride',i); const d=door(i); floatTxt(d.x,d.y-d.dir*30,'+'+fmt(p.price),null,zoneOf(i)); }
-        day.rides++; v.hidden=true; v.mode='ride'; v.rideT=DEF[p.id].ride; rt.timer=intervalOf(p); }
+      if(v.money>=p.price){ v.money-=p.price; if(p.price>0){ earn(p.price*GROUP,'ride',i); const d=door(i); floatTxt(d.x,d.y-d.dir*30,'+'+fmt(p.price*GROUP),null,zoneOf(i)); }
+        day.rides+=GROUP; v.hidden=true; v.mode='ride'; v.rideT=DEF[p.id].ride; rt.timer=intervalOf(p); }
       else { say(v,'Plus de sous…',true); chooseNext(v); }
     } });
   // visiteurs
@@ -1125,12 +1194,12 @@ function showReport(r){
   if(r.refFear>0) lesson=r.fearNone===false?`😟 <b>${r.refFear}</b> visiteurs ont eu peur : il n'y a pas assez d'<b>${STAFF[r.fearWhat].many}</b> pour autant de monde ! Engage-en dans 🛠️ Services.`
       :`😟 <b>${r.refFear}</b> visiteurs ont eu peur et sont repartis : il manque un <b>${SVC[r.fearWhat].name.toLowerCase()}</b> ! Touche 🛠️ Services pour en construire un.`;
   else if(lv()>=2 && r.health<75 && worst) lesson=`❤️ La santé du parc n'est que de <b>${r.health} %</b> : <b>${r.refHealth}</b> visiteurs ont fait demi-tour. `+
-      {clean:"🧹 Le parc est sale : il faut plus de postes de nettoyage (1 pour 50 visiteurs).",maint:"🔧 Des attractions sont fermées faute d'entretien.",green:"🌳 L'herbe et les buissons envahissent tout : engage des jardiniers."}[worst[0]];
-  else if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
-  else if(r.refPrice>[20,10,4][hl]) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
-  else if(r.queueFull>[15,10,5][hl]) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
+      {clean:"🧹 Le parc est sale : il faut plus d'équipes de nettoyage (1 pour 250 visiteurs).",maint:"🔧 Des attractions sont fermées faute d'entretien.",green:"🌳 L'herbe et les buissons envahissent tout : engage des jardiniers."}[worst[0]];
+  else if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]*GROUP) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
+  else if(r.refPrice>[20,10,4][hl]*GROUP) lesson=`😕 <b>${fmt(r.refPrice)}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
+  else if(r.queueFull>[15,10,5][hl]*GROUP) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
   else if(r.profit<0) lesson=`⚠️ Aujourd'hui tu as dépensé plus que ce que tu as gagné. L'entretien coûte cher : il faut que tes attractions rapportent plus qu'elles ne coûtent !`;
-  else if(S.money>300 && S.bank===0 && hl>0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
+  else if(S.money>2400 && S.bank===0 && hl>0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
   else if(r.interest>0) lesson=`🐷 Ta tirelire t'a rapporté <b>${fmt(r.interest)} L$</b> cette nuit, sans rien faire ! C'est ça, faire fructifier son argent.`;
   else if(hl===2) lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
   openModal(`
@@ -1242,70 +1311,98 @@ function openBank(){
   const btn=(label,fn,dis)=>`<button ${dis?'disabled':''} onclick="${fn}">${label}</button>`;
   openModal(`<h2>🐷 Ma tirelire magique</h2>
     <p>Les LiliDollars rangés dans la tirelire <b>grandissent tout seuls</b> : chaque nuit, elle te donne <b>5 %</b> en plus.</p>
-    <p class="small">Exemple : avec 100 L$ dedans, tu gagnes 5 L$ chaque nuit, sans rien faire !</p>
+    <p class="small">Exemple : avec 1 000 L$ dedans, tu gagnes 50 L$ chaque nuit, sans rien faire !</p>
     <table class="rep">
       <tr><td>👛 Porte-monnaie</td><td>${fmt(S.money)} L$</td></tr>
       <tr><td>🐷 Tirelire</td><td>${fmt(S.bank)} L$</td></tr>
       <tr><td>✨ Cette nuit, elle va te rapporter</td><td class="plus">+ ${fmt(next)} L$</td></tr>
     </table>
     <p><b>Mettre dans la tirelire :</b></p>
-    <div class="row">${btn('10',"bank(10)",S.money<10)}${btn('100',"bank(100)",S.money<100)}${btn('1 000',"bank(1000)",S.money<1000)}${btn('Tout',"bank(S.money)",S.money<1)}</div>
+    <div class="row">${btn('100',"bank(100)",S.money<100)}${btn('1 000',"bank(1000)",S.money<1000)}${btn('10 000',"bank(10000)",S.money<10000)}${btn('Tout',"bank(S.money)",S.money<1)}</div>
     <p><b>Reprendre de la tirelire :</b></p>
-    <div class="row">${btn('10',"bank(-10)",S.bank<10)}${btn('100',"bank(-100)",S.bank<100)}${btn('1 000',"bank(-1000)",S.bank<1000)}${btn('Tout',"bank(-S.bank)",S.bank<1)}</div>
+    <div class="row">${btn('100',"bank(-100)",S.bank<100)}${btn('1 000',"bank(-1000)",S.bank<1000)}${btn('10 000',"bank(-10000)",S.bank<10000)}${btn('Tout',"bank(-S.bank)",S.bank<1)}</div>
     <p class="small">⚠️ L'argent dans la tirelire ne peut pas servir à construire : il faut d'abord le reprendre.</p>
     <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`,'livia-idee');
 }
 function bank(n){ n=Math.floor(n); if(n>0&&S.money>=n){S.money-=n;S.bank+=n;} else if(n<0&&S.bank>=-n){S.bank+=n;S.money-=n;} else return; coinSound(); openBank(); }
 function openMenu(){
-  openModal(`<h2>⚙️ Menu</h2>
+  openModal(`<div class="menuc"><h2>⚙️ Menu</h2>
     <p><b>Nom de ta fête foraine :</b></p><input type="text" id="nm" maxlength="32" value="${S.name.replace(/"/g,'&quot;')}">
     <div class="row"><button class="ok" onclick="S.name=document.getElementById('nm').value.trim()||S.name;closeModal()">Enregistrer</button></div>
     <p class="small">Ta partie est sauvegardée automatiquement dans ce navigateur à la fin de chaque journée.</p>
     <p><b>Niveau de jeu :</b></p>
     <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${lv()===n?'sel':''}" onclick="setLevel(${n})"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
-    <div class="row"><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
-    ${isStandalone()?'':`<p><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
-    <p class="small"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
+    ${curProfile()?`<p><b>Ton prénom et ton avatar :</b></p>
+    <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
+      ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${a}</button>`).join('')}
+      <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
+    <p><b>Style du dessin :</b></p>
+    <div class="row"><button class="${S.pixel?'':'sel'}" onclick="setPixel(false);openMenu()">🎨 Normal</button><button class="${S.pixel?'sel':''}" onclick="setPixel(true);openMenu()">👾 Pixel art</button></div>
+    <div class="row"><button onclick="switchPlayer()">👥 Changer de joueuse</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
+    <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
     <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
-    <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div>`,'lili-explique');
+    <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div></div>`,'lili-explique');
 }
 function confirmReset(){ openModal(`<h2>🔄 Nouvelle partie ?</h2><p>Ta fête foraine actuelle sera effacée. Tu es sûr·e ?</p>
-  <div class="right"><button onclick="closeModal()">Non, je garde</button><button class="main" onclick="startScreen(true)">Oui, recommencer</button></div>`,'lili-perplexe'); }
+  <div class="right"><button onclick="closeModal()">Non, je garde</button><button class="main" onclick="newGameScreen()">Oui, recommencer</button></div>`,'lili-perplexe'); }
 const RULES=`<ul class="rules">
-  <li>🎪 Tu commences avec une <b>pêche aux canards</b> et <b>100 LiliDollars</b>.</li>
+  <li>🎪 Tu commences avec une <b>pêche aux canards</b> et <b>800 LiliDollars</b>.</li>
   <li>🏗️ Clique sur un <b>terrain libre</b> pour construire une attraction (la barbe à papa, c'est un bon début !).</li>
   <li>💰 Clique sur une attraction pour changer son <b>prix</b>. Trop cher ? Les visiteurs repartent. Pas assez cher ? Tu gagnes moins.</li>
   <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
   <li>🔧 Chaque soir, tu paies l'<b>entretien</b>. <i>(Niveaux 2 et 3)</i> Pas assez d'argent ? L'attraction oubliée ferme le lendemain, son entretien double, et après 3 oublis elle est détruite !</li>
-  <li>🛡️ <i>(Niveaux 2 et 3)</i> Dès 100 visiteurs par jour, il faut un <b>poste de sécurité</b>, et dès 200 un <b>poste de secours</b>. Il faut aussi <b>1 poste de nettoyage pour 50 visiteurs</b>. Surveille la <b>santé du parc ❤️</b> et la <b>météo</b>.</li>
+  <li>🛡️ <i>(Niveaux 2 et 3)</i> Dès 500 visiteurs par jour, il faut un <b>poste de sécurité</b>, et dès 1 000 un <b>poste de secours</b>. Il faut aussi <b>1 équipe de nettoyage pour 250 visiteurs</b>. Surveille la <b>santé du parc ❤️</b> et la <b>météo</b>.</li>
+  <li>🌦️ <i>(Niveaux 2 et 3)</i> La météo change : soleil, nuages, pluie, neige ou orage. Regarde la météo de demain avant de réserver un événement !</li>
   <li>👮 <i>(Niveau 3)</i> Engage des agents et des ambulanciers quand il y a beaucoup de monde, et des jardiniers pour l'herbe et les arbres.</li>
   <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
   <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin. Et quand tout est plein, <b>démolis</b> une attraction pour en mettre une meilleure.</li>
   <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li>
   <li>🏅 Gagne des <b>badges</b> : chacun rapporte des LiliDollars, et ils débloquent 3 <b>méga-attractions bonus</b> (avec 3, 6 et 9 badges).</li></ul>`;
 function showRules(){ const back=modalOpen&&!S.dayNum; openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
-function startScreen(force){
-  const saved=load();
-  if(saved && !force){
-    openModal(`<h2>🎪 Re-bonjour !</h2><p>On continue <b>${saved.name}</b> ? Tu en es au jour ${saved.dayNum} avec ${fmt(saved.money)} L$.</p>
-      <div class="right"><button onclick="startScreen(true)">Nouvelle partie</button><button class="main" onclick="continueGame()">▶ Continuer</button></div>`,'lili-coucou');
-  } else {
-    openModal(`<h2>🎪 Bienvenue à Lili Parc !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
+function startScreen(){ whoPlays(); }
+function whoPlays(){
+  const cards=PROFILES.map(p=>{ const sv=load(p.id);
+    return `<div class="who"><button class="whob" onclick="choosePlayer('${p.id}')"><span class="wav">${p.av}</span><b>${p.name.replace(/</g,'&lt;')}</b>
+      <small>${sv?`Jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)}<br>${(sv.name||'').replace(/</g,'&lt;')}`:'Nouvelle partie'}</small></button>
+      <button class="whodel" title="Supprimer" onclick="askDelPlayer('${p.id}')">🗑️</button></div>`; }).join('');
+  openModal(`<h2>👋 Qui joue ?</h2><p class="small">Chaque joueuse a sa propre fête foraine et reprend là où elle s'était arrêtée.</p>
+    <div class="whos">${cards}<button class="who whonew" onclick="newPlayerForm()"><span class="wav">➕</span><b>Nouvelle joueuse</b><small>ou nouveau joueur</small></button></div>`,'duo-equipe');
+  $('box').dataset.lock='1';
+}
+function newPlayerForm(){
+  window.pickAv=AVATARS[PROFILES.length%AVATARS.length];
+  openModal(`<h2>➕ Nouvelle joueuse</h2><p>Comment tu t'appelles ?</p><input type="text" id="pnm" maxlength="16" placeholder="Ton prénom">
+    <p>Choisis ton avatar :</p><div class="avs">${AVATARS.map(a=>`<button class="av ${a===window.pickAv?'sel':''}" onclick="window.pickAv='${a}';document.querySelectorAll('.av').forEach(b=>b.classList.toggle('sel',b===this))">${a}</button>`).join('')}</div>
+    <div class="right">${PROFILES.length?'<button onclick="whoPlays()">Retour</button>':''}<button class="main" onclick="createPlayer()">C'est moi ! ✨</button></div>`,'lili-coucou');
+  $('box').dataset.lock='1';
+}
+function createPlayer(){ const nm=(document.getElementById('pnm').value||'').trim()||('Joueuse '+(PROFILES.length+1));
+  const id='p'+Date.now(); PROFILES.push({id,name:nm,av:window.pickAv||'🦄'}); saveProfiles(); CUR=id; newGameScreen(); }
+function askDelPlayer(id){ const p=PROFILES.find(x=>x.id===id);
+  openModal(`<h2>🗑️ Supprimer ${p.av} ${p.name.replace(/</g,'&lt;')} ?</h2><p>Sa fête foraine sera effacée pour toujours.</p>
+    <div class="right"><button onclick="whoPlays()">Non</button><button class="main" onclick="delPlayer('${id}')">Oui, supprimer</button></div>`,'lili-perplexe'); }
+function delPlayer(id){ PROFILES=PROFILES.filter(p=>p.id!==id); saveProfiles(); try{ localStorage.removeItem(keyOf(id)); }catch(e){} if(CUR===id) CUR=null; whoPlays(); }
+function choosePlayer(id){ CUR=id; try{ localStorage.setItem('lilipark-last',id); }catch(e){}
+  const sv=load(id); if(sv) continueGame(sv); else newGameScreen(); }
+function switchPlayer(){ save(); visitors=[]; floats=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); whoPlays(); }
+function newGameScreen(){
+    const pr=curProfile();
+    openModal(`<h2>🎪 Bienvenue ${pr?pr.av+' '+pr.name.replace(/</g,'&lt;'):''} !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
       <input type="text" id="nm0" maxlength="32" value="Lili Parc">
       <p><b>Choisis ton niveau :</b></p>
       <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${n===2?'sel':''}" onclick="pickLvl(${n},this)"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
-      <div class="right"><button onclick="showRules()">📖 Règles</button><button class="main" onclick="newGame(document.getElementById('nm0').value.trim(),window.chosenLvl||2);visitors=[];save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
+      <div class="right"><button onclick="showRules()">📖 Règles</button><button class="main" onclick="newGame(document.getElementById('nm0').value.trim(),window.chosenLvl||2);visitors=[];view=0;document.body.classList.remove('pixel');save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
     window.chosenLvl=2;
-  }
   $('box').dataset.lock='1';
 }
 function pickLvl(n,el){ window.chosenLvl=n; document.querySelectorAll('.lvl').forEach(b=>b.classList.toggle('sel',b===el)); blip(700,0.06); }
-function continueGame(){ S=load(); S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
+function continueGame(sv){ S=sv||load(); document.body.classList.toggle('pixel',!!S.pixel); visitors=[]; floats=[]; S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
   openModal(`<h2>🎢 BRAVO ! 🎉</h2><p style="font-size:20px">Le <b>Grand Huit Galactique</b> est construit ! ${S.name} est devenue la plus grande fête foraine du pays !</p>
-    <p>Tu es parti·e d'une petite pêche aux canards et de 100 LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
+    <p>Tu es parti·e d'une petite pêche aux canards et de 800 LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
     <p class="small">Tu peux continuer à jouer pour améliorer toutes tes attractions au niveau ★★★.</p>
     <div class="right"><button class="main" onclick="closeModal()">Continuer à jouer</button></div>`,'duo-victoire');
 }
@@ -1314,26 +1411,26 @@ function mkConf(x,y){ return {x,y,vx:rnd(-120,120),vy:rnd(-260,-60),c:BALLOONS[M
 function getTip(){
   const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
   if(day.refFear>0 && day.fearNone===false){ const k=day.fearWhat; return T('fear','lili-pas-contente',`Il y a trop de monde pour tes ${STAFF[k].many} : des visiteurs ont peur ! Engage des <b>${STAFF[k].em} ${STAFF[k].many}</b> dans 🛠️ Services.`); }
-  if(lv()>=2 && (S.dirt||0)>30) return T('dirty','livia-pensive',`Le parc devient sale ! Il faut <b>1 poste de nettoyage pour 50 visiteurs</b>. Touche 🛠️ Services.`);
+  if(lv()>=2 && (S.dirt||0)>30) return T('dirty','livia-pensive',`Le parc devient sale ! Il faut <b>1 équipe de nettoyage pour 250 visiteurs</b>. Touche 🛠️ Services.`);
   if(lv()>=3 && (S.green??100)<55) return T('green','lili-perplexe',`L'herbe et les buissons poussent partout ! Engage des <b>🌳 jardiniers</b> dans 🛠️ Services.`);
   if(lv()>=2 && health()<65) return T('health','lili-pas-contente',`La santé du parc baisse (❤️ ${health()} %) : des visiteurs font demi-tour. Touche ❤️ pour voir ce qui ne va pas.`);
   if(day.refFear>0){ const k=day.fearWhat||'secu'; return T('fear','lili-pas-contente',`Des visiteurs ont peur et font demi-tour : il faut un <b>${SVC[k].em} ${SVC[k].name.toLowerCase()}</b> ! Touche 🛡️ pour le construire (${fmt(SVC[k].cost)} L$).`); }
   if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
-  if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
-  if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
-  if(day.refPrice>[25,14,6][helpLevel()]) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
-  if(day.queueFull>[20,12,6][helpLevel()]) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
+  if(!built.includes('barbe')) return S.money>=DEF.barbe.cost ? T('','livia-idee',`J'ai une idée : avec ${fmt(DEF.barbe.cost)} L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).`) : T('','lili-explique',`Les visiteurs arrivent ! Attends d'avoir ${fmt(DEF.barbe.cost)} L$ pour construire la barbe à papa.`);
+  if(day.refGate>(helpLevel()===2?5:12)*GROUP && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
+  if(day.refPrice>[25,14,6][helpLevel()]*GROUP) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
+  if(day.queueFull>[20,12,6][helpLevel()]*GROUP) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
   const nextD=DEFS.find(d=>!d.mega&&!(S.ever||[]).includes(d.id));
   if(!freePlots().length && S.zones>=NZ && nextD && S.money>=nextD.cost) return T('demolish','lili-idee',`Plus aucun terrain libre ! Pour construire <b>${nextD.em} ${nextD.name}</b>, il faut <b>démolir</b> une attraction (clique dessus, puis 🧨). Choisis celle qui rapporte le moins !`);
   if(!freePlots().length && S.zones<NZ) return T('full','lili-idee',`Ta fête est pleine ! Achète le <b>Grand Parc</b> (${fmt(ZONE_COST)} L$) avec le panneau 🔒 Agrandir à droite.`);
   if(nextD && S.money>=nextD.cost && freePlots().length) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre${S.zones>1&&!freePlots().some(i=>zoneOf(i)===view)?' (dans l\'autre zone)':''}.`);
-  if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
+  if(S.money>4000 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
 const TIP_TITLES={dirty:'Ça se salit !',green:'Ça pousse !',health:'Santé du parc',fear:'Les visiteurs ont peur !',demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
   for(const sv of (lv()>=2?[SVC.secu,SVC.secours]:[])){ const wk='warn_'+sv.id;
-    if(!S.seen.includes(wk) && !(S.svc&&S.svc[sv.id]) && day.entries>=sv.need-20){ S.seen.push(wk); save();
+    if(!S.seen.includes(wk) && !(S.svc&&S.svc[sv.id]) && day.entries>=sv.need*0.8){ S.seen.push(wk); save();
       toast('lili-explique',`Bientôt ${sv.need} visiteurs !`,`Quand ta fête attire plus de ${sv.need} visiteurs dans la journée, il faut un <b>${sv.em} ${sv.name.toLowerCase()}</b>, sinon les gens ont peur. Touche 🛠️ Services (${fmt(sv.cost)} L$).`); return; } }
   for(const d of DEFS){
     if(d.mega || S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
@@ -1341,13 +1438,13 @@ function checkUnlocks(){
   }
 }
 function updateHUD(){
-  $('parkName').innerHTML=`Lili Parc<small>${S.name!=='Lili Parc'?S.name.replace(/</g,'&lt;')+' · ':''}Jour ${S.dayNum}</small>`;
+  const pr=curProfile(); $('parkName').innerHTML=`Lili Parc<small>${pr?pr.av+' '+pr.name.replace(/</g,'&lt;')+' · ':''}Jour ${S.dayNum}</small>`;
   $('money').textContent=fmt(S.money); $('money').classList.toggle('neg',S.money<0);
   $('bankAmt').textContent=fmt(S.bank)+' L$';
   const L2=lv()>=2; $('svcBtn').style.display=L2?'':'none'; $('healthPill').style.display=L2?'':'none';
   if(L2){ const hv=health(); $('healthVal').textContent=hv; $('healthPill').style.color=hv<50?'#dc2626':hv<75?'#d97706':''; $('wxIcon').textContent=WEATHER[S.weather||'sun'].em; }
   $('stars').textContent=starsTxt(S.stars);
-  $('visCount').textContent=visitors.filter(v=>v.mode!=='leave').length;
+  $('visCount').textContent=fmt(visitors.filter(v=>v.mode!=='leave').length*GROUP);
   $('zoneBtn').innerHTML=S.zones>1?(view?'⬅️<span class="lbl"> Zone 1</span>':'➡️<span class="lbl"> Zone 2</span>'):'🗺️<span class="lbl"> Agrandir</span>';
   $('dayFill').style.width=(S.time/DAY*100)+'%';
   const ever=S.ever||[], nextD=DEFS.find(d=>!d.mega&&!ever.includes(d.id));
@@ -1391,9 +1488,9 @@ function openServices(){
     if(L<3) return `<p class="small">✅ Construit. Entretien ${sv.maint} L$ / soir.</p>`;
     const cap=k==='secu'?secuCap():aidCap();
     return `<p class="small">✅ Protège jusqu'à <b>${fmt(cap)}</b> visiteurs par jour <span class="desc">(1 ${STAFF[k].one} de plus = +${STAFF[k].cover})</span>.</p>${staffCtl(k)}`; };
-  let h=blk(`🧹 Propreté : ${Math.round(100-(S.dirt||0))} % propre`,`<p class="small"><span class="desc">Il faut <b>1 poste de nettoyage pour 50 visiteurs</b>. </span>Tes postes nettoient jusqu'à <b>${cleanCap()}</b> visiteurs par jour.</p>${staffCtl('clean')}`);
-  h+=blk('🛡️ Poste de sécurité · dès 100 visiteurs',post('secu'));
-  h+=blk('⛑️ Poste de secours · dès 200 visiteurs',post('secours'));
+  let h=blk(`🧹 Propreté : ${Math.round(100-(S.dirt||0))} % propre`,`<p class="small"><span class="desc">Il faut <b>1 équipe de nettoyage pour 250 visiteurs</b>. </span>Tes équipes nettoient jusqu'à <b>${cleanCap()}</b> visiteurs par jour.</p>${staffCtl('clean')}`);
+  h+=blk(`🛡️ Poste de sécurité · dès ${fmt(SVC.secu.need)} visiteurs`,post('secu'));
+  h+=blk(`⛑️ Poste de secours · dès ${fmt(SVC.secours.need)} visiteurs`,post('secours'));
   if(L>=3) h+=blk(`🌳 Espaces verts : ${Math.round(S.green??100)} %`,`<p class="small"><span class="desc">L'herbe et les arbres poussent chaque jour. </span>Il faut <b>2 jardiniers</b> pour garder le parc beau.</p>${staffCtl('green')}`);
   openModal(`<h2>🛠️ Services du parc</h2>
     <p class="small">Hier : <b>${yest}</b> visiteurs · aujourd'hui : <b>${day.entries}</b> · ❤️ santé : <b>${health()} %</b> · 👛 ${fmt(S.money)} L$</p>
@@ -1468,6 +1565,7 @@ function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; animT+=dt;
   if(S && !modalOpen && speed>0){ const sd=dt*speed; const n=Math.ceil(sd/0.05); for(let k=0;k<n;k++) step(sd/n); }
   if(S){
+    if(S.pixel){ g=pxCtx; g.setTransform(1/PX,0,0,1/PX,0,0); } else g=g0;
     drawBackground();
     drawWear();
     for(let j=0;j<8;j++) drawPlot(view*8+j);
@@ -1478,8 +1576,8 @@ function frame(now){
     visitors.filter(v=>v.zone===view).sort((a,b)=>a.y-b.y).forEach(drawVisitor);
     for(const f of floats){ f.t-=dt; if(f.zone!==view) continue; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
     floats=floats.filter(f=>f.t>0);
-    // crépuscule
-    const dusk=Math.max(0,(S.time/DAY-0.75)/0.25); if(dusk>0){ g.fillStyle=`rgba(40,20,90,${dusk*0.28})`; g.fillRect(0,0,W,H); }
+    drawLighting();
+    if(S.pixel){ g=g0; g.imageSmoothingEnabled=false; g.clearRect(0,0,W,H); g.drawImage(pxCanvas,0,0,W,H); g.imageSmoothingEnabled=true; }
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
     tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
@@ -1489,8 +1587,9 @@ function frame(now){
   }
   requestAnimationFrame(frame);
 }
+loadProfiles();
 newGame(); // état par défaut le temps de l'écran d'accueil
-startScreen(false);
+startScreen();
 document.fonts && document.fonts.ready.then(()=>{});
 requestAnimationFrame(frame);
 </script>
