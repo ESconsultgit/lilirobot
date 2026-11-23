@@ -20,11 +20,12 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 
 ## Le tour de jeu
 
+- On **touche les deux dés** au milieu du plateau : ils servent de bouton (ils clignotent quand c'est à toi). Le bouton **Fin du tour ➡️** apparaît ensuite à leur place, sous les dés.
 - On lance **deux dés**. Un **double** fait rejouer ; **3 doubles de suite** envoient ranger sa chambre (prison).
 - Passer par **Départ** rapporte **200 L$**.
-- Endroit libre : on peut l'**acheter** au prix indiqué, ou dire « Non merci » (pas d'enchères dans cette version).
+- Endroit libre : sa **carte de propriété** s'ouvre, et on choisit **Acheter** ou **Non merci** (pas d'enchères dans cette version).
 - Endroit d'un autre joueur : on paie le **loyer** (sauf s'il est en pause 💤).
-- Toucher une case du plateau affiche sa **carte** (prix, loyers, propriétaire). Toucher un joueur affiche ses endroits et sa fortune.
+- Toucher une case du plateau affiche sa **carte de propriété** : prix, loyer nu, avec toute la couleur, avec 1 à 4 cabanes, avec le château, prix d'une cabane, valeur de la pause, propriétaire. La ligne du loyer actuel est surlignée en jaune.
 
 ## Le plateau
 
@@ -79,7 +80,7 @@ Prix et loyers identiques au Monopoly classique.
 
 ## Construire, revendre, mettre en pause
 
-Bouton **🏠 Mes endroits** (pendant son tour) :
+On touche **sa carte** (dans sa main ou sur le plateau) pendant son tour : les boutons **+ Cabane**, **Revendre**, **💤 Pause** et **Réveiller** sont sous la carte.
 
 - **Cabanes 🛖** (= maisons) : seulement si on a toute la couleur et qu'aucune case de la couleur n'est en pause. On construit **en équilibrant** (pas de 2e cabane tant que les autres cases de la couleur n'en ont pas une). Après 4 cabanes : un **château 🏰** (= hôtel), même prix. Pas de limite de stock.
 - **Revendre** une construction : la banque rend la moitié de son prix (en équilibrant aussi).
@@ -110,7 +111,7 @@ Les paquets sont mélangés en début de partie ; une carte piochée retourne so
 
 ## Pas assez d'argent, faillite
 
-- Si un humain doit payer plus qu'il n'a, le jeu s'arrête sur **« Tu dois payer… »** : il revend des constructions ou met des endroits en pause (bouton **🪄 Vendre pour moi** pour le faire automatiquement : d'abord les constructions, puis les endroits les moins chers).
+- Si un humain doit payer plus qu'il n'a, un encadré **« Tu dois payer… »** apparaît au-dessus de ses cartes : il touche ses cartes pour revendre des constructions ou met des endroits en pause (bouton **🪄 Vendre pour moi** pour le faire automatiquement : d'abord les constructions, puis les endroits les moins chers).
 - **Faillite 😢** n'est possible que si même en vendant tout on ne peut pas payer. Les endroits vont au joueur à qui on devait de l'argent (ou retournent à la banque, libres à l'achat).
 - Les robots et les joueurs qui paient hors de leur tour (anniversaire…) vendent automatiquement.
 
@@ -125,6 +126,9 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 ## Affichage
 
 - **Paysage** (téléphone couché ou ordinateur) : plateau à gauche, panneau à droite. **Portrait** : plateau en haut, panneau en dessous.
+- Le panneau montre **seulement le joueur qui joue** : son pion, son argent, et sa **main de cartes** rangées par couleur. Les cases de la couleur qu'il n'a pas encore sont en pointillés (avec le pion de celui qui les possède). Une couleur complète est entourée en jaune avec une ⭐.
+- En bas : 🤝 Échanger, 👥 Joueurs (argent et fortune de tout le monde), 📜 Journal, ❓ Règles, ⚙️ Menu.
+- Sur un téléphone couché, la carte de propriété s'affiche en version compacte, avec les boutons à côté.
 - Sur grand écran, les noms et prix s'affichent sur les cases ; sur téléphone, seulement l'emoji (toucher la case pour la carte).
 - Menu **⚙️** : vitesse (normale / rapide), nouvelle partie, retour au site. L'écran reste allumé pendant la partie. Installable comme application (Android : menu du navigateur → Installer ; iPhone : Safari → Partager → « Sur l'écran d'accueil »).
 
@@ -149,3 +153,4 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 - **v1** — première version : plateau de 40 cases aux noms rigolos, 2 dés et doubles, cartes Chance et Surprise de Lili, cabanes et châteaux, pause (hypothèque), échanges, robots, chambre en désordre, faillite, parties à tours limités, panier du pique-nique, sauvegarde, application hors connexion, conseils d'Ellie et Livia.
 - **v2** — nouveau logo de l'application : Ellie et Livia sur un plateau de Monopoly, avec deux dés et une pièce de LiliDollar.
 - **v3** — icônes renommées (`-v2`) pour que les téléphones téléchargent vraiment le nouveau logo.
+- **v4** — nouvelle disposition : les dés au centre servent de bouton, le panneau ne montre que le joueur qui joue avec ses propriétés en cartes, vraies cartes de propriété (prix, loyers, cabanes) avec les actions dessous, joueurs et journal dans des fenêtres.
