@@ -222,7 +222,8 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 - **Icône de l'application** : Ellie et Livia devant une grande roue (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
-- **Style** (menu ⚙️) : 🎨 Normal ou 👾 Pixel art (rendu en basse résolution agrandi sans lissage + police pixel). Le choix est mémorisé pour chaque joueuse.
+- **Style** (menu ⚙️) : 🎨 Normal (dessins vectoriels animés) ou 👾 Pixel art. Le choix est mémorisé pour chaque joueuse.
+- **Pixel art** : les 22 attractions sont de vraies images pixel art (`liliparc/px/<id>.png`, max 108 × 82 pixels, 64 couleurs), tirées des planches dessinées pour Lili Parc. Le reste de la scène est rendu en basse résolution (÷2) puis agrandi sans lissage ; les panneaux sont redessinés nets en police pixel. Les images sont fixes ; nuit, lumières et météo s'appliquent aussi.
 
 ## Transférer une partie sur un autre téléphone
 
@@ -241,7 +242,8 @@ Constantes en haut du script de `index.html` :
 - `GROUP` et `MUL` : visiteurs par personnage et multiplicateur des montants ; 8 aux niveaux 2-3, 1 au niveau 1 (`applyScale()`). Prix de base dans `DEFS` (niveau 1).
 - `DAY = 60` s par journée, `MAXQ = 6` groupes par file, `BANK_RATE = 0.05`, `ZONE_COST = 12 000`.
 - `DEFS` (attractions), `EVENTS`, `BADGES`, `SVC` et `STAFF` (services), `WEATHER`.
-- **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW`.
+- **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW` + son image pixel `px/<id>.png`.
+- **Préparer des images pixel** : `liliparc/outils/decouper_planches.py` découpe une planche (dessins en rangées sur fond uni, légendes dessous) en sprites prêts à l'emploi.
 - **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`).
 - **Après chaque modification** : incrémenter `VERSION` dans `liliparc/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
 - Sauvegardes : `lilipark-profiles` (liste des joueuses), `lilipark-<id>` (partie de chaque joueuse). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueuse 1 ».
@@ -258,3 +260,4 @@ Constantes en haut du script de `index.html` :
 - **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueuses, cette documentation.
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
+- **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
