@@ -185,6 +185,11 @@ body.pixel .coin{border-radius:0}
   .menuc h2{font-size:16px!important;margin:0!important} .menuc .lvl{padding:2px 6px} .menuc .lvl b{font-size:13px} .menuc .right{margin-top:2px} .menuc button{padding:3px 8px;font-size:13px}   .menuc .lvl small,.menuc .instx,.menuc>p.small{display:none} .menuc .lvls{margin:2px 0} .menuc p{margin:2px 0!important} .menuc .row{margin:3px 0}
   .menuc .av{font-size:16px;padding:1px 4px} .menuc input[type=text]{padding:3px 6px;font-size:14px} .menuc .box button{padding:4px 8px}
 }
+.xfer{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;margin:6px 0}
+.qrbox{width:210px;height:210px;display:grid;place-items:center;background:#fff;border:2px solid #f0e8ff;border-radius:12px;font-size:13px;text-align:center;padding:4px}
+.qrbox svg{width:100%;height:100%}
+#xcode,#icode{width:100%;height:80px;font-family:monospace;font-size:11px;border:2px solid #e5dcf7;border-radius:10px;padding:6px;word-break:break-all;resize:none}
+@media (max-height:560px) and (orientation:landscape){ .qrbox{width:190px;height:190px} #xcode{height:64px} .xright .small{font-size:11px!important} }
 </style>
 </head>
 <body>
@@ -290,6 +295,7 @@ const BADGES=[
   {id:'clean', em:'🧹', name:'Parc tout propre',    desc:'5 soirs de suite à 90 % de propreté',      reward:4800, lvl:2, streak:'clean',  need:5},
   {id:'safe',  em:'🛡️', name:'Parc sécurisé',       desc:'Sécurité + secours, et 5 soirs sans visiteur effrayé (500 visiteurs ou plus)', reward:6400, lvl:2, streak:'safe', need:5},
   {id:'health',em:'❤️', name:'Parc en pleine forme', desc:'7 soirs de suite avec une santé de 95 % ou plus', reward:12000, lvl:2, streak:'health', need:7},
+  {id:'anniv', em:'🎂', name:'Joyeux anniversaire', desc:'Fêter les 100 jours du parc',               reward:8000, test:()=>(S.annivDone||[]).includes(100)},
   {id:'flower',em:'🌳', name:'Parc fleuri',         desc:'7 soirs de suite avec des espaces verts à 90 %', reward:6400, lvl:3, streak:'green', need:7},
 ];
 const bdesc=b=>b.desc.replace('{n}',fmt(nb(b.n||0)));
@@ -336,8 +342,33 @@ const EVENTS=[
    desc:"Des clowns rigolos défilent dans les allées. Tout le monde rit !"},
   {id:'ecole',   em:'🚌', name:'La sortie des écoles',          vis:3,   money:0.5, k:0.6, min:800, img:'livia-idee', miss:"les écoles ne sont pas venues", effect:'3 fois plus de visiteurs… mais avec peu d\'argent de poche',
    desc:"Plein de classes viennent visiter la fête avec leurs maîtresses !"},
+  {id:'anniv',   em:'🎂', name:"L'anniversaire du parc",        vis:3,   gen:1.3, stars:0.3, k:0, min:0, special:true, img:'duo-victoire', miss:'', effect:'3 fois plus de visiteurs, tous de bonne humeur',
+   desc:"Gâteau géant, ballons et feu d'artifice : toute la région vient fêter le parc !"},
 ];
 const EV=Object.fromEntries(EVENTS.map(e=>[e.id,e]));
+// ---- Anniversaires du parc : tous les 100 jours, et le jour 365 ----
+const isMilestone=d=>d>0&&(d%100===0||d===365);
+function pendingMilestone(){ const done=S.annivDone||[]; for(let d=S.dayNum; d>=100; d--) if(isMilestone(d)) return done.includes(d)?0:d; return 0; }
+function startAnniv(){
+  const m=pendingMilestone(); if(!m) return false;
+  S.annivDone=(S.annivDone||[]); for(let d=100; d<=m; d++) if(isMilestone(d)&&!S.annivDone.includes(d)) S.annivDone.push(d);
+  const gift=(m===365?2000:1000)*MUL;
+  S.money+=gift; day.event='anniv'; day.eventCost=0; day.annivDay=m; day.annivGift=gift; fx=[];
+  for(let k=0;k<220;k++) confetti.push(mkConf(rnd(0,W),rnd(-120,0)));
+  tada(); setTimeout(tada,450); setTimeout(tada,900);
+  const built=S.plots.filter(Boolean).length, nb=(S.badges||[]).length;
+  openModal(`<h2>🎂 Joyeux anniversaire, ${S.name.replace(/</g,'&lt;')} !</h2>
+    <p style="font-size:19px">Ta fête foraine a <b>${m===365?'1 an':m+' jours'}</b> ! Aujourd'hui, on fait une grande fête dans le parc : gâteau géant, ballons et feu d'artifice. Les visiteurs vont venir en masse !</p>
+    <table class="rep">
+      <tr><td>💰 Gagné depuis le début</td><td class="plus">${fmt(S.totalEarned)} L$</td></tr>
+      <tr><td>🎠 Attractions dans le parc</td><td>${built}</td></tr>
+      <tr><td>🧒 Meilleure journée</td><td>${fmt(S.bestDay||0)} visiteurs</td></tr>
+      <tr><td>🏅 Badges</td><td>${nb}</td></tr>
+      <tr><td>🎁 Cadeau d'Ellie et Livia</td><td class="plus">+ ${fmt(gift)} L$</td></tr>
+    </table>
+    <div class="right"><button class="main" onclick="closeModal()">🎉 C'est la fête !</button></div>`,'duo-victoire');
+  save(); return true;
+}
 const round50=n=>MUL>=8?Math.max(100,Math.round(n/100)*100):Math.max(50,Math.round(n/50)*50);
 function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:50*MUL; }
 function eventCost(ev){ return Math.max(ev.min*SC(), round50(avgIncome()*ev.k)); }
@@ -346,7 +377,7 @@ function maybeOfferEvent(){
   if(S.booked || S.dayNum<4) return false;
   const since=S.dayNum-S.lastOffer;
   if(since<3 || (since<6 && Math.random()<0.5)) return false;
-  const pool=EVENTS.filter(e=>e.id!==S.lastEv); const ev=pool[Math.floor(Math.random()*pool.length)];
+  const pool=EVENTS.filter(e=>!e.special&&e.id!==S.lastEv); const ev=pool[Math.floor(Math.random()*pool.length)];
   S.lastOffer=S.dayNum; S.lastEv=ev.id; S.offer={id:ev.id,cost:eventCost(ev)}; save();
   const total=S.money+S.bank, ok=total>=S.offer.cost;
   openModal(`<h2>${ev.em} Demain : ${ev.name} !</h2><p>${ev.desc}</p>
@@ -384,11 +415,28 @@ function drawEventFx(dt){
   const id=day&&day.event; if(!id) return;
   const ev=EV[id];
   // bandeau
-  g.font='700 15px "Baloo 2"'; const txt=`${ev.em} ${ev.name.toUpperCase()} ${ev.em}`, tw=g.measureText(txt).width+28;
+  g.font='700 15px "Baloo 2"'; const txt=id==='anniv'?`🎂 JOYEUX ANNIVERSAIRE : ${day.annivDay===365?'1 AN':day.annivDay+' JOURS'} ! 🎂`:`${ev.em} ${ev.name.toUpperCase()} ${ev.em}`, tw=g.measureText(txt).width+28;
   rr(W/2-tw/2,PATH_TOP+8,tw,24,12); g.fillStyle='rgba(194,54,122,.92)'; g.fill();
   g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(txt,W/2,PATH_TOP+21);
   const walkX=(sp,off)=>((animT*sp+off)%(W+120))-60;
-  if(id==='noel'){
+  if(id==='anniv'){
+    // ballons qui s'envolent + feux d'artifice
+    if(Math.random()<dt*6) fx.push({b:1,x:rnd(20,W-20),y:H+10,vy:rnd(30,60),c:BALLOONS[Math.floor(rnd(0,5))],s:rnd(0,6)});
+    if(Math.random()<dt*0.9){ const col=['#ffd23f','#ff5fa2','#38bdf8','#a78bfa','#4ade80'][Math.floor(rnd(0,5))]; fx.push({b:0,cx:rnd(80,W-80),cy:rnd(30,180),col,t:0}); }
+    for(const f of fx){ if(f.b){ f.y-=f.vy*dt; const x=f.x+Math.sin(animT*2+f.s)*6; g.strokeStyle='#888'; g.lineWidth=1; g.beginPath(); g.moveTo(x,f.y+9); g.lineTo(x+Math.sin(animT*3+f.s)*3,f.y+26); g.stroke();
+        g.beginPath(); g.ellipse(x,f.y,7,9,0,0,Math.PI*2); g.fillStyle=f.c; g.fill(); circ(x-2,f.y-3,2,'rgba(255,255,255,.7)'); }
+      else { f.t+=dt; const r=f.t*90, a=Math.max(0,1-f.t/1.3); g.globalAlpha=a; for(let i=0;i<14;i++){ const an=i*Math.PI/7; circ(f.cx+Math.cos(an)*r,f.cy+Math.sin(an)*r+f.t*f.t*20,2.6,f.col); } g.globalAlpha=1; } }
+    fx=fx.filter(f=>f.b?f.y>-40:f.t<1.3);
+    // gâteau géant au milieu de l'allée (zone 1)
+    if(view===0){ const cx=W/2, by=PATH_BOT-8;
+      g.fillStyle='rgba(0,0,0,.15)'; g.beginPath(); g.ellipse(cx,by,78,8,0,0,Math.PI*2); g.fill();
+      [[70,24,'#f9a8d4'],[52,20,'#fff'],[34,18,'#a16207']].forEach(([hw,hh,c],k)=>{ const y=by-24-k*20; rr(cx-hw,y,hw*2,hh,6); g.fillStyle=c; g.fill();
+        g.fillStyle=k===1?'#f472b6':'#fff'; for(let i=-hw+6;i<hw-4;i+=12) circ(cx+i,y+3,3.2,g.fillStyle); });
+      const nC=day.annivDay===365?5:Math.min(5,Math.max(1,day.annivDay/100));
+      for(let i=0;i<nC;i++){ const x=cx-(nC-1)*9+i*18, y=by-24-40-14; g.fillStyle=['#3b82f6','#22c55e','#facc15','#ef4444','#a855f7'][i]; g.fillRect(x-2.5,y,5,14);
+        const fl=Math.sin(animT*12+i)*1.5; g.fillStyle='#fb923c'; g.beginPath(); g.ellipse(x+fl*0.3,y-5,3,6,0,0,Math.PI*2); g.fill(); circ(x,y-4,1.5,'#fef08a'); }
+      g.font='800 14px "Baloo 2"'; g.fillStyle='#C2367A'; g.textAlign='center'; g.fillText(day.annivDay===365?'1 AN':String(day.annivDay),cx,by-6); }
+  } else if(id==='noel'){
     if(Math.random()<dt*25) fx.push({x:rnd(0,W),y:-5,vy:rnd(25,50),r:rnd(1.5,3.2)});
     for(const f of fx){ f.y+=f.vy*dt; f.x+=Math.sin(animT*2+f.r)*0.3; circ(f.x,f.y,f.r,'rgba(255,255,255,.9)'); } fx=fx.filter(f=>f.y<H+5);
     const x=walkX(35,0), y=PATH_MID+14+Math.abs(Math.sin(animT*6))*-2;
@@ -452,6 +500,54 @@ function loadProfiles(){
       if(old){ const id='p'+Date.now(); PROFILES=[{id,name:'Joueuse 1',av:'🦄'}]; localStorage.setItem(keyOf(id),old); saveProfiles(); } } }catch(e){}
 }
 const curProfile=()=>PROFILES.find(p=>p.id===CUR);
+// ---- Transfert vers un autre téléphone : code (et QR code) contenant la partie compressée ----
+const b64u=bytes=>{ let t=''; for(let i=0;i<bytes.length;i++) t+=String.fromCharCode(bytes[i]); return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); };
+const unb64u=str=>{ str=str.replace(/-/g,'+').replace(/_/g,'/'); while(str.length%4) str+='='; const bin=atob(str), u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return u; };
+async function packSave(obj){ const txt=JSON.stringify(obj);
+  try{ if(window.CompressionStream){ const st=new Blob([txt]).stream().pipeThrough(new CompressionStream('deflate-raw')); return 'LP1.'+b64u(new Uint8Array(await new Response(st).arrayBuffer())); } }catch(e){}
+  return 'LP0.'+b64u(new TextEncoder().encode(txt)); }
+async function unpackSave(code){ code=String(code||'').trim(); const h=code.indexOf('#import='); if(h>=0) code=decodeURIComponent(code.slice(h+8));
+  const i=code.indexOf('LP'); if(i<0) throw new Error('code'); code=code.slice(i).replace(/\s+/g,''); const kind=code.slice(0,4), data=unb64u(code.slice(4));
+  let txt; if(kind==='LP1.'){ const st=new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw')); txt=await new Response(st).text(); }
+  else if(kind==='LP0.') txt=new TextDecoder().decode(data); else throw new Error('code');
+  const o=JSON.parse(txt); if(!o||!o.save||!o.save.plots) throw new Error('code'); return o; }
+function loadQR(){ return window.qrcode?Promise.resolve():new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='qrcode.js'; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); }
+async function openExport(){
+  save(); const pr=curProfile()||{name:'Joueuse',av:'🦄'};
+  const code=await packSave({v:1,prof:{name:pr.name,av:pr.av},save:S}), url=location.origin+location.pathname+'#import='+code;
+  openModal(`<h2>📤 Envoyer ma partie sur un autre téléphone</h2>
+    <div class="xfer"><div id="qrBox" class="qrbox">⏳</div><div class="xright">
+      <p class="small"><b>Android :</b> scanne ce QR code avec l'appareil photo de l'autre téléphone.<br><b>iPhone</b> (ou si ça ne marche pas) : copie le code, envoie-le (message, mail…), puis dans le jeu de l'autre téléphone : « 👋 Qui joue ? » → <b>📥 J'ai un code</b>.</p>
+      <textarea id="xcode" readonly>${code}</textarea>
+      <div class="row"><button class="main" id="copyBtn" onclick="copyCode()">📋 Copier le code</button><span class="small">${code.length} caractères · partie du jour ${S.dayNum}</span></div>
+    </div></div>
+    <div class="right"><button onclick="closeModal()">Fermer</button></div>`,'lili-explique');
+  loadQR().then(()=>{ try{ const q=qrcode(0,'L'); q.addData(url); q.make(); $('qrBox').innerHTML=q.createSvgTag({cellSize:3,margin:2,scalable:true}); }
+    catch(e){ $('qrBox').textContent='Partie trop grande pour un QR code : utilise le code.'; } }).catch(()=>{ $('qrBox').textContent='QR code indisponible sans connexion : utilise le code.'; });
+}
+function copyCode(){ const ta=$('xcode'), done=()=>{ $('copyBtn').textContent='✅ Copié !'; };
+  try{ navigator.clipboard.writeText(ta.value).then(done,()=>{ ta.select(); try{ document.execCommand('copy'); done(); }catch(e){} }); }catch(e){ ta.select(); try{ document.execCommand('copy'); done(); }catch(e2){} } }
+function openImport(err){
+  openModal(`<h2>📥 Récupérer une partie</h2><p class="small">Colle ici le code reçu depuis l'autre téléphone (menu ⚙️ → 📤 Envoyer ma partie).</p>
+    <textarea id="icode" placeholder="LP1.…"></textarea>${err?`<p class="minus"><b>${err}</b></p>`:''}
+    <div class="right"><button onclick="whoPlays()">Retour</button><button class="main" onclick="doImport($('icode').value)">Récupérer</button></div>`,'lili-explique');
+  $('box').dataset.lock='1';
+}
+let pendingImport=null;
+async function doImport(code){
+  try{ pendingImport=await unpackSave(code); }catch(e){ openImport("Ce code ne marche pas. Vérifie qu'il est complet."); return; }
+  const o=pendingImport, sv=o.save, pr=o.prof||{};
+  openModal(`<h2>📥 Partie trouvée !</h2>
+    <p><b>${pr.av||'🦄'} ${(pr.name||'Joueuse').replace(/</g,'&lt;')}</b> · ${(sv.name||'Lili Parc').replace(/</g,'&lt;')} · jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)} · ${fmt(sv.money)} L$</p>
+    <p class="small">Sur ce téléphone, tu veux la mettre…</p>
+    <div class="row"><button class="main" onclick="importAs('new')">➕ Nouvelle joueuse</button>${PROFILES.map(p=>`<button onclick="importAs('${p.id}')">♻️ Remplacer ${p.av} ${p.name.replace(/</g,'&lt;')}</button>`).join('')}</div>
+    <div class="right"><button onclick="whoPlays()">Annuler</button></div>`,'duo-victoire');
+  $('box').dataset.lock='1';
+}
+function importAs(target){ const o=pendingImport; if(!o) return; let id=target;
+  if(target==='new'){ id='p'+Date.now(); PROFILES.push({id,name:(o.prof&&o.prof.name)||'Joueuse',av:(o.prof&&o.prof.av)||'🦄'}); saveProfiles(); }
+  try{ localStorage.setItem(keyOf(id),JSON.stringify(o.save)); }catch(e){}
+  pendingImport=null; tada(); choosePlayer(id); }
 function save(){ if(!CUR||!S) return; try{ localStorage.setItem(keyOf(CUR), JSON.stringify(S)); }catch(e){} }
 function load(id){ try{ const s=localStorage.getItem(keyOf(id||CUR)); return s?JSON.parse(s):null; }catch(e){ return null; } }
 
@@ -1106,7 +1202,7 @@ const BALLOONS=['#ff5fa2','#38bdf8','#ffd23f','#a78bfa','#34d399'];
 
 // ================== SIMULATION ==================
 function step(dt){
-  if(!day.started){ day.started=true; startEvent(); }
+  if(!day.started){ day.started=true; if(!startAnniv()) startEvent(); }
   S.time+=dt;
   // apparition
   if(S.time<DAY-6){
@@ -1159,7 +1255,7 @@ function endDay(){
   if(!day.event){ S.incHist=(S.incHist||[]).concat(income).slice(-3); }
   const items=maintItems(), due=items.reduce((a,x)=>a+x.due,0);
   const base={...day, interest, income, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars, health:health(), hparts:healthParts()};
-  S.lastEntries=day.entries; updateStreaks(base);
+  S.lastEntries=day.entries; S.bestDay=Math.max(S.bestDay||0,day.entries); updateStreaks(base);
   if(lv()>=2){ S.dirt=Math.max(0,(S.dirt||0)-(svcOK('clean')?12*(S.svc.clean.n||0):0)); S.weather=rollWeather(); }
   if(lv()>=3){ S.green=Math.max(0,Math.min(100,(S.green??100)-12+(svcOK('green')?7*(S.svc.green.n||0):0))); }
   visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); floats=[];
@@ -1218,7 +1314,7 @@ function showReport(r){
       <tr><td>🎟️ Billets d'entrée</td><td class="plus">+ ${fmt(r.entryRev)} L$</td></tr>
       <tr><td>🎠 Attractions</td><td class="plus">+ ${fmt(r.rideRev)} L$</td></tr>
       <tr><td>🔧 Entretien payé</td><td class="minus">− ${fmt(r.maint)} L$</td></tr>
-      ${r.event?`<tr><td>${EV[r.event].em} ${EV[r.event].name}</td><td class="minus">− ${fmt(r.evCost)} L$</td></tr>`:''}
+      ${r.event==='anniv'?`<tr><td>🎂 L'anniversaire du parc (cadeau)</td><td class="plus">+ ${fmt(r.annivGift)} L$</td></tr>`:r.event?`<tr><td>${EV[r.event].em} ${EV[r.event].name}</td><td class="minus">− ${fmt(r.evCost)} L$</td></tr>`:''}
       <tr><td class="big">Bénéfice du jour</td><td class="big ${r.profit>=0?'plus':'minus'}">${r.profit>=0?'+ ':'− '}${fmt(Math.abs(r.profit))} L$</td></tr>
       <tr><td>🐷 Intérêts de la tirelire</td><td class="plus">+ ${fmt(r.interest)} L$</td></tr>
     </table>
@@ -1347,7 +1443,7 @@ function openMenu(){
       <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
     <p><b>Style du dessin :</b></p>
     <div class="row"><button class="${S.pixel?'':'sel'}" onclick="setPixel(false);openMenu()">🎨 Normal</button><button class="${S.pixel?'sel':''}" onclick="setPixel(true);openMenu()">👾 Pixel art</button></div>
-    <div class="row"><button onclick="switchPlayer()">👥 Changer de joueuse</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">👥 Changer de joueuse</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
     <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
     <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
@@ -1376,7 +1472,7 @@ function whoPlays(){
       <small>${sv?`Jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)}<br>${(sv.name||'').replace(/</g,'&lt;')}`:'Nouvelle partie'}</small></button>
       <button class="whodel" title="Supprimer" onclick="askDelPlayer('${p.id}')">🗑️</button></div>`; }).join('');
   openModal(`<h2>👋 Qui joue ?</h2><p class="small">Chaque joueuse a sa propre fête foraine et reprend là où elle s'était arrêtée.</p>
-    <div class="whos">${cards}<button class="who whonew" onclick="newPlayerForm()"><span class="wav">➕</span><b>Nouvelle joueuse</b><small>ou nouveau joueur</small></button></div>`,'duo-equipe');
+    <div class="whos">${cards}<button class="who whonew" onclick="openImport()"><span class="wav">📥</span><b>J'ai un code</b><small>récupérer une partie</small></button><button class="who whonew" onclick="newPlayerForm()"><span class="wav">➕</span><b>Nouvelle joueuse</b><small>ou nouveau joueur</small></button></div>`,'duo-equipe');
   $('box').dataset.lock='1';
 }
 function newPlayerForm(){
@@ -1598,7 +1694,9 @@ function frame(now){
 }
 loadProfiles();
 newGame(); // état par défaut le temps de l'écran d'accueil
-startScreen();
+if(location.hash.startsWith('#import=')){ const c=location.hash; try{ history.replaceState(null,'',location.pathname); }catch(e){} doImport(c); }
+else startScreen();
+window.addEventListener('hashchange',()=>{ if(location.hash.startsWith('#import=')){ const c=location.hash; try{ history.replaceState(null,'',location.pathname); }catch(e){} save(); doImport(c); } });
 document.fonts && document.fonts.ready.then(()=>{});
 requestAnimationFrame(frame);
 </script>
