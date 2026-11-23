@@ -11,7 +11,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 
 ## Démarrer une partie
 
-- De **2 à 6 joueurs**, chacun avec un prénom, un pion (🦄 🐱 🐶 🦖 🐸 🐼 🦊 🐰 🐙 🚀 🍦 🌟 🤖) et une couleur.
+- De **2 à 6 joueurs**, chacun avec un prénom, un pion (🦄 🐱 🐶 🦖 🐸 🐼 🦊 🐰 🐙 🚀 🍦 🌟 🤖) et une couleur (framboise, violet, turquoise, orange, or, ardoise : choisies pour bien ressortir sur le plateau vert).
 - Chaque joueur peut être **humain** ou **robot** (l'ordinateur joue tout seul) : on peut donc jouer seul contre un ou plusieurs robots.
 - **Durée** : « Jusqu'au bout » (vraie règle : jusqu'à ce qu'il ne reste qu'un joueur), « Courte » (15 tours) ou « Moyenne » (30 tours). En partie à tours limités, le plus riche gagne (fortune = argent + prix des endroits + constructions ; un endroit en pause compte pour la moitié).
 - **Argent de départ** : 1 000, 1 500 (comme le vrai jeu) ou 2 000 L$.
@@ -24,7 +24,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 - On lance **deux dés**. Un **double** fait rejouer ; **3 doubles de suite** envoient ranger sa chambre (prison).
 - Passer par **Départ** rapporte **200 L$**.
 - Endroit libre : sa **carte de propriété** s'ouvre, et on choisit **Acheter** ou **Non merci** (pas d'enchères dans cette version).
-- Endroit d'un autre joueur : on paie le **loyer** (sauf s'il est en pause 💤).
+- Endroit d'un autre joueur : une fenêtre **« Ellie est chez Livia ! »** montre la case, les deux pions, les pièces qui passent de l'un à l'autre, l'argent de chacun avant → après, et **pourquoi** ce loyer (sans cabane, toute la couleur ⭐ = doublé, 2 cabanes, 3 gares, dés × 4…). On paie avec le bouton **💸 Je paie** (si un robot paie ou est payé par un robot, la fenêtre se ferme toute seule). Pas de loyer si l'endroit est en pause 💤.
 - Toucher une case du plateau affiche sa **carte de propriété** : prix, loyer nu, avec toute la couleur, avec 1 à 4 cabanes, avec le château, prix d'une cabane, valeur de la pause, propriétaire. La ligne du loyer actuel est surlignée en jaune.
 
 ## Le plateau
@@ -125,6 +125,7 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 
 ## Affichage
 
+- **Propriétaires sur le plateau** : une case achetée prend la couleur de son propriétaire (fond teinté + cadre), avec une **bande à sa couleur et son pion** sur le bord extérieur de la case. Une case en pause 💤 a l'emoji pâli et un 💤 au milieu.
 - **Paysage** (téléphone couché ou ordinateur) : plateau à gauche, panneau à droite. **Portrait** : plateau en haut, panneau en dessous.
 - Le panneau montre **seulement le joueur qui joue** : son pion, son argent, et sa **main de cartes** rangées par couleur. Les cases de la couleur qu'il n'a pas encore sont en pointillés (avec le pion de celui qui les possède). Une couleur complète est entourée en jaune avec une ⭐.
 - En bas : 🤝 Échanger, 👥 Joueurs (argent et fortune de tout le monde), 📜 Journal, ❓ Règles, ⚙️ Menu.
@@ -154,3 +155,4 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 - **v2** — nouveau logo de l'application : Ellie et Livia sur un plateau de Monopoly, avec deux dés et une pièce de LiliDollar.
 - **v3** — icônes renommées (`-v2`) pour que les téléphones téléchargent vraiment le nouveau logo.
 - **v4** — nouvelle disposition : les dés au centre servent de bouton, le panneau ne montre que le joueur qui joue avec ses propriétés en cartes, vraies cartes de propriété (prix, loyers, cabanes) avec les actions dessous, joueurs et journal dans des fenêtres.
+- **v5** — propriétaires bien visibles sur le plateau (couleur + bande avec le pion), nouvelles couleurs des joueurs, fenêtre explicative quand on paie un loyer.
