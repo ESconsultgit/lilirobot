@@ -2,7 +2,14 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F6E2B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lili Parc">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Lili Parc</title>
 <link rel="icon" href="img/lili-avatar.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +18,9 @@
 :root{--pink:#C2367A;--violet:#2F6E2B;--yellow:#F2C230;--green:#2F6E2B;--lime:#8CC63F;--red:#C9531E;--ink:#1D351B}
 *{box-sizing:border-box}
 body{margin:0;font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(#F2F7EA,#FBE1EE);color:var(--ink);min-height:100vh}
-.wrap{max-width:1120px;margin:0 auto;padding:10px}
+.wrap{max-width:1120px;margin:0 auto;padding:10px max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+button,canvas{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
 .title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;flex:1 1 240px;color:var(--violet);line-height:1;display:flex;align-items:center;gap:8px}
 .title img{width:52px;height:52px;object-fit:contain}
@@ -30,7 +39,28 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .speed{display:flex;gap:4px}
 .speed button{padding:6px 10px}
 .stage{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 6px 0 rgba(45,27,78,.18);background:#7fd36b}
-canvas{display:block;width:100%;height:auto;touch-action:manipulation}
+canvas{display:block;width:100%;height:auto;margin:0 auto}
+#installBtn{display:none;background:var(--pink);color:#fff}
+#rotate{display:none;position:fixed;inset:0;z-index:30;background:linear-gradient(#F2F7EA,#FBE1EE);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:12px;font-family:'Baloo 2',sans-serif;font-size:24px;color:var(--violet)}
+#rotate img{width:150px}
+#rotate .ph{font-size:56px;animation:turn 1.6s ease-in-out infinite}
+@keyframes turn{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+/* Téléphone à plat (paysage) : on gagne de la place */
+@media (max-height:560px){
+  .wrap{padding-top:max(4px,env(safe-area-inset-top))}
+  .top{gap:5px;margin-bottom:4px;flex-wrap:nowrap;overflow-x:auto}
+  .title{font-size:20px;flex:0 0 auto}.title img{width:34px;height:34px}.title small{font-size:11px}
+  .pill{padding:3px 9px;font-size:14px}.money{font-size:16px}.coin{width:18px;height:18px;font-size:11px}
+  .top button,.top a.pill{padding:4px 8px;font-size:14px;flex:none}
+  #ticketBtn .lbl,#homeLink .lbl{display:none}
+  .bottom{display:none}
+  canvas{width:auto;height:calc(100dvh - 62px - env(safe-area-inset-bottom));max-width:100%}
+  .stage{display:flex;flex-direction:column;align-items:center;background:#7fd36b}
+  .daybar{align-self:stretch}
+  .toast img{width:64px;height:70px}.toast .bub{font-size:13px;padding:6px 10px}
+}
+/* Téléphone debout : on demande de le tourner */
+@media (orientation:portrait) and (max-width:700px){ #rotate{display:flex} }
 .bottom{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .tip{flex:2 1 320px;background:#fff;border-radius:16px;padding:10px 14px;font-size:16px;display:flex;gap:10px;align-items:center;box-shadow:0 3px 0 rgba(45,27,78,.12)}
 .tip .face{width:70px;height:70px;object-fit:contain;flex:none}
@@ -93,9 +123,11 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
       <button id="spd1" class="sel" title="Vitesse normale">▶</button>
       <button id="spd2" title="Rapide">⏩</button>
     </div>
-    <button id="ticketBtn">🎟️ Billet d'entrée</button>
+    <button id="ticketBtn">🎟️<span class="lbl"> Billet d'entrée</span></button>
+    <button id="installBtn">📲 Installer</button>
     <button id="soundBtn" title="Son">🔊</button>
     <button id="menuBtn" title="Menu">⚙️</button>
+    <a class="pill" id="homeLink" href="/" title="Retour à l'atelier de Lili" style="text-decoration:none;color:inherit">🏠<span class="lbl"> Atelier</span></a>
   </div>
   <div class="stage">
     <div class="daybar"><i id="dayFill"></i></div>
@@ -106,6 +138,7 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
     <div class="goal"><div id="goalTxt">Objectif</div><div class="bar"><i id="goalFill"></i></div></div>
   </div>
 </div>
+<div id="rotate"><img src="img/lili-coucou.webp" alt=""><div class="ph">📱</div><div>Tourne ton téléphone<br>pour jouer à Lili Parc !</div></div>
 <div id="toasts"></div>
 <div class="modal" id="modal"><div class="box" id="box"></div></div>
 
@@ -621,6 +654,9 @@ function openMenu(){
     <div class="row"><button class="ok" onclick="S.name=document.getElementById('nm').value.trim()||S.name;closeModal()">Enregistrer</button></div>
     <p class="small">Ta partie est sauvegardée automatiquement dans ce navigateur à la fin de chaque journée.</p>
     <div class="row"><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    ${isStandalone()?'':`<p><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
+    <p class="small"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
+    <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
     <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div>`,'lili-explique');
 }
 function confirmReset(){ openModal(`<h2>🔄 Nouvelle partie ?</h2><p>Ta fête foraine actuelle sera effacée. Tu es sûr·e ?</p>
@@ -699,6 +735,18 @@ cv.addEventListener('mouseleave',()=>hoverPlot=-1);
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
 $('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
 [0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); });
+
+// ================== APPLICATION (téléphone / tablette) ==================
+let installEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; $('installBtn').style.display='inline-block'; });
+$('installBtn').onclick=async()=>{ if(!installEvt) return; installEvt.prompt(); try{ await installEvt.userChoice; }catch(e){} installEvt=null; $('installBtn').style.display='none'; };
+window.addEventListener('appinstalled',()=>{ $('installBtn').style.display='none'; });
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||navigator.standalone===true;
+function tryLandscape(){ try{ if(isStandalone()&&screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }
+document.addEventListener('click',tryLandscape,{once:true});
 
 // ================== BOUCLE ==================
 let last=performance.now(), tipT=0;

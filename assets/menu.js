@@ -90,3 +90,43 @@
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!pm.hidden){pm.hidden=true;pb.setAttribute("aria-expanded","false");pb.focus();}});
   apply();
 })();
+
+/* Menu « Détente » : les jeux de Lili. Pour ajouter un jeu, ajoute une ligne dans JEUX. */
+(function(){
+  if(document.getElementById("funBtn"))return;
+  const EN=document.documentElement.lang==="en";
+  const L=(fr,en)=>EN?en:fr;
+
+  const WHEEL='<svg viewBox="0 0 48 48" width="40" aria-hidden="true"><path d="M24 22L13 44M24 22l11 22" stroke="#1F4D1D" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="22" r="16" fill="none" stroke="#C2367A" stroke-width="3"/><g stroke="#8CC63F" stroke-width="2"><path d="M24 6v32M8 22h32M12.7 10.7l22.6 22.6M35.3 10.7L12.7 33.3"/></g><g fill="#F2C230" stroke="#1F4D1D" stroke-width="1.2"><rect x="21" y="3" width="6" height="5" rx="1.5"/><rect x="37" y="19" width="6" height="5" rx="1.5"/><rect x="5" y="19" width="6" height="5" rx="1.5"/><rect x="21" y="35" width="6" height="5" rx="1.5"/></g><circle cx="24" cy="22" r="3" fill="#C2367A"/></svg>';
+  const SOON='<svg viewBox="0 0 48 48" width="34" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="3"/><path d="M24 14v11l7 4" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>';
+
+  const JEUX=[
+    {href:"/liliparc/",name:"Lili Parc",desc:L("Construis ta fête foraine et fais fructifier tes LiliDollars !","Build your own fun fair and grow your LiliDollars! (in French)"),icon:WHEEL}
+  ];
+
+  const st=document.createElement("style");
+  st.textContent=".fun-dock{position:fixed;left:calc(16px + env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:70}"+
+    ".fun-btn{background:var(--pink)!important;border-color:var(--pink)!important;color:#fff!important;font-size:1.05rem!important;padding:10px 18px!important;box-shadow:0 6px 18px rgba(194,54,122,.35)}"+
+    ".fun-btn svg{transform:rotate(180deg)}.fun-btn[aria-expanded=\"true\"] svg{transform:none}"+
+    ".fun-menu{top:auto!important;bottom:calc(100% + 10px);width:min(360px,calc(100vw - 32px))}.fun-menu .pm-head b{color:var(--pink)}.fun-menu .robot-opt b{color:var(--pink)}"+
+    "@media print{.fun-dock{display:none}}";
+  document.head.appendChild(st);
+
+  const wrap=document.createElement("div");
+  wrap.className="picker fun-dock";
+  wrap.innerHTML=`<button class="picker-btn fun-btn" id="funBtn" aria-expanded="false" aria-controls="funMenu">🎡 ${L("Détente","Fun time")}<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg></button>`+
+    `<div class="picker-menu fun-menu" id="funMenu" hidden><div class="pm-head"><b>${L("Les jeux de Lili","Lili's games")}</b></div><div class="pm-list">`+
+    JEUX.map(j=>`<div class="pm-fam"><a class="robot-opt" href="${j.href}"><span class="ico">${j.icon}</span><span><b>${j.name}</b><small>${j.desc}</small></span></a></div>`).join("")+
+    `<div class="pm-fam"><span class="robot-opt locked" aria-disabled="true"><span class="ico">${SOON}</span><span><b>${L("Bientôt…","Coming soon…")}</b><small>${L("D'autres jeux arrivent !","More games are on the way!")}</small></span></span></div>`+
+    `</div></div>`;
+  document.body.appendChild(wrap);
+
+  const fb=document.getElementById("funBtn"),fm=document.getElementById("funMenu");
+  const pm=document.getElementById("pickerMenu"),pb=document.getElementById("pickerBtn");
+  const close=()=>{fm.hidden=true;fb.setAttribute("aria-expanded","false");};
+  fb.addEventListener("click",e=>{e.stopPropagation();const open=fm.hidden;fm.hidden=!open;fb.setAttribute("aria-expanded",String(open));
+    if(open&&pm&&pb){pm.hidden=true;pb.setAttribute("aria-expanded","false");}});
+  if(pb)pb.addEventListener("click",close);
+  document.addEventListener("click",e=>{if(!wrap.contains(e.target))close();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!fm.hidden){close();fb.focus();}});
+})();
