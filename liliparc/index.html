@@ -144,6 +144,27 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
 .mrow input{width:20px;height:20px;accent-color:#2F6E2B}
 .mrow .me{font-size:12px;color:#4C5E49}.mrow .mw{font-style:normal;font-size:11.5px;color:#C9531E;font-weight:700}
 @media (max-height:560px) and (orientation:landscape){ .mlist{grid-template-columns:1fr 1fr;max-height:44dvh;gap:4px} .mrow{padding:3px 6px;font-size:12.5px;gap:5px} .mrow input{width:16px;height:16px} }
+.lvls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}
+.lvl{display:flex;flex-direction:column;gap:3px;text-align:left;border:3px solid #f0e8ff;padding:8px 10px}
+.lvl small{font-family:'Nunito',sans-serif;font-weight:600;font-size:12.5px;color:#4C5E49;line-height:1.25}
+.lvl.sel{border-color:var(--pink)!important;background:#FBE1EE!important;color:var(--ink)!important}
+.svcgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:8px 0}
+.sblk{border:2px solid #f0e8ff;border-radius:14px;padding:8px 10px}
+.sblk>b{font-family:'Baloo 2',sans-serif;color:var(--violet)}
+.sblk .price button{width:34px;height:34px;font-size:18px}.sblk .price{font-size:16px}
+.hrow{display:grid;grid-template-columns:170px 1fr 52px;gap:8px;align-items:center;margin:5px 0;font-size:15px}.hrow .bar{margin:0}
+@media (max-height:560px) and (orientation:landscape){
+  .lvls{gap:5px}.lvl{padding:4px 7px}.lvl small{font-size:11px;line-height:1.15}
+  .svcgrid{gap:5px;margin:4px 0}.sblk{padding:4px 8px}.sblk p{font-size:11.5px!important;margin:2px 0}.sblk .row{margin:2px 0}.sblk .price button{width:28px;height:28px;font-size:16px}.sblk .price{font-size:14px}
+  .hrow{grid-template-columns:150px 1fr 44px;font-size:13px;margin:2px 0}
+}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin:6px 0}
+.badge{border:2px solid #F2C230;background:#FCF1C7;border-radius:14px;padding:6px 8px;display:grid;grid-template-columns:34px 1fr;column-gap:6px;align-items:center}
+.badge .bem{grid-row:1/4;font-size:28px;text-align:center}.badge b{font-family:'Baloo 2',sans-serif;font-size:14px;line-height:1.1}
+.badge small{font-size:11.5px;color:#4C5E49;line-height:1.2}.badge .brw{font-size:12px;font-weight:800;color:#2F6E2B}
+.badge.off{filter:grayscale(1);opacity:.55;background:#fff;border-color:#e5e7eb}
+.card.locked{opacity:.6}.card.mega{border-color:#F2C230;background:#FCF1C7}
+@media (max-height:560px) and (orientation:landscape){ .box .desc{display:none} .bgrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px} .badge b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px!important} .bgrid+p{margin:2px 0!important} .badge small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:9.5px!important;line-height:1.15!important}.badge{padding:3px 5px;grid-template-columns:24px 1fr}.badge .bem{font-size:20px}.badge b{font-size:12px}.badge small{font-size:10px}.badge .brw{font-size:10.5px} }
 </style>
 </head>
 <body>
@@ -155,6 +176,7 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
       <div class="pill" title="Ta tirelire" style="cursor:pointer" id="bankPill">🐷 <span id="bankAmt">0</span></div>
       <div class="pill" title="Note des visiteurs" id="stars">★★★☆☆</div>
       <div class="pill" title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></div>
+      <div class="pill" id="healthPill" title="Santé du parc et météo" style="cursor:pointer">❤️ <span id="healthVal">100</span>% <span id="wxIcon">☀️</span></div>
       <div class="goalMini"><div id="goalMiniTxt"></div><div class="bar"><i id="goalMiniFill"></i></div></div>
     </div>
     <div class="hud-btns">
@@ -165,7 +187,8 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
       </div>
       <button id="zoneBtn" title="Changer de zone">🗺️<span class="lbl"> Agrandir</span></button>
       <button id="ticketBtn" title="Billet d'entrée">🎟️<span class="lbl"> Billet d'entrée</span></button>
-      <button id="svcBtn" title="Sécurité et secours">🛡️<span class="lbl"> Sécurité</span></button>
+      <button id="svcBtn" title="Services du parc">🛠️<span class="lbl"> Services</span></button>
+      <button id="badgeBtn" title="Mes badges">🏅<span class="lbl"> Badges</span></button>
       <button id="tipBtn" title="Astuce">💡</button>
       <button id="installBtn" title="Installer l'application">📲<span class="lbl"> Installer</span></button>
       <button id="soundBtn" title="Son">🔊</button>
@@ -208,6 +231,9 @@ const DEFS = [
   {id:'chute',    name:'Tour de chute',         em:'🗼', cost:18000, fair:13, interval:0.7, ride:4,   maint:220, fun:8,  desc:"On monte tout doucement… et AAAAH ça tombe !"},
   {id:'pendule',  name:'Pendule géant',         em:'🌀', cost:28000, fair:14, interval:0.6, ride:5,   maint:270, fun:10, desc:"Le grand bras se balance jusqu'au ciel en tournant sur lui-même !"},
   {id:'huit',     name:'Grand Huit Galactique', em:'🎢', cost:40000, fair:15, interval:0.6, ride:6,   maint:320, fun:12, desc:"L'attraction à sensation la plus folle de l'univers !"},
+  {id:'arcenciel',name:'Toboggan Arc-en-ciel', em:'🌈', cost:6000,  fair:10, interval:0.7, ride:4,   maint:110, fun:9,  mega:3, desc:"MÉGA-ATTRACTION BONUS : un toboggan géant aux couleurs de l'arc-en-ciel !"},
+  {id:'dragon',   name:'Dragon Volant',         em:'🐉', cost:15000, fair:14, interval:0.6, ride:5,   maint:200, fun:12, mega:6, desc:"MÉGA-ATTRACTION BONUS : on vole sur le dos d'un dragon qui ondule dans le ciel !"},
+  {id:'robot',    name:'Lili-Robot Géant',      em:'🤖', cost:30000, fair:18, interval:0.5, ride:6,   maint:280, fun:16, mega:9, desc:"MÉGA-ATTRACTION BONUS : un robot géant fait tourner les nacelles dans ses bras !"},
 ];
 const DEF = Object.fromEntries(DEFS.map(d=>[d.id,d]));
 const W=1100, H=560, ZONE_COST=1500, NZ=2, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
@@ -218,6 +244,52 @@ let day;  // stats du jour
 let visitors=[], floats=[], confetti=[];
 let view=0, speed=1, modalOpen=false, soundOn=true, spawnAcc=0, animT=0;
 const runtime = Array.from({length:16},()=>({queue:[],timer:0}));
+
+// ================== BADGES ==================
+const BADGES=[
+  {id:'v50',   em:'👥', name:'Premiers fans',       desc:'50 visiteurs en une journée',              reward:100,  test:()=>day.entries>=50},
+  {id:'v100',  em:'💯', name:'Cent visiteurs !',    desc:'100 visiteurs en une journée',             reward:300,  test:()=>day.entries>=100},
+  {id:'save1', em:'🐷', name:'Petit épargnant',     desc:'500 L$ dans la tirelire',                  reward:150,  test:()=>S.bank>=500},
+  {id:'build8',em:'🎠', name:'Collectionneur',      desc:'8 attractions en même temps',              reward:500,  test:()=>S.plots.filter(Boolean).length>=8},
+  {id:'star',  em:'🌟', name:'Parc 5 étoiles',      desc:'Note des visiteurs de 4,5 ★ ou plus',      reward:800,  test:()=>S.stars>=4.5},
+  {id:'v250',  em:'🎉', name:'Grosse foule',        desc:'250 visiteurs en une journée',             reward:1000, test:()=>day.entries>=250},
+  {id:'event3',em:'🎅', name:'Organisateur',        desc:'3 événements réussis',                     reward:1000, test:()=>(S.evDone||0)>=3},
+  {id:'save2', em:'🏦', name:'Grand épargnant',     desc:'10 000 L$ dans la tirelire',               reward:1500, test:()=>S.bank>=10000},
+  {id:'build16',em:'🗺️', name:'Parc complet',       desc:'16 attractions en même temps',             reward:2000, test:()=>S.plots.filter(Boolean).length>=16},
+  {id:'v500',  em:'🏟️', name:'Fête géante',         desc:'500 visiteurs en une journée',             reward:3000, test:()=>day.entries>=500},
+  {id:'rich',  em:'💰', name:'Grand forain',        desc:'100 000 L$ gagnés en tout',                reward:3000, test:()=>S.totalEarned>=100000},
+  {id:'clean', em:'🧹', name:'Parc tout propre',    desc:'5 soirs de suite à 90 % de propreté',      reward:600,  lvl:2, streak:'clean',  need:5},
+  {id:'safe',  em:'🛡️', name:'Parc sécurisé',       desc:'Sécurité + secours, et 5 soirs sans visiteur effrayé (100 visiteurs ou plus)', reward:800, lvl:2, streak:'safe', need:5},
+  {id:'health',em:'❤️', name:'Parc en pleine forme', desc:'7 soirs de suite avec une santé de 95 % ou plus', reward:1500, lvl:2, streak:'health', need:7},
+  {id:'flower',em:'🌳', name:'Parc fleuri',         desc:'7 soirs de suite avec des espaces verts à 90 %', reward:800, lvl:3, streak:'green', need:7},
+];
+const badgeList=()=>BADGES.filter(b=>lv()>=(b.lvl||1));
+function badgeOK(b){ return b.streak?((S.streak||{})[b.streak]||0)>=b.need:b.test(); }
+function checkBadges(){
+  if(!S) return; S.badges=S.badges||[];
+  for(const b of badgeList()){ if(S.badges.includes(b.id) || !badgeOK(b)) continue;
+    S.badges.push(b.id); S.money+=b.reward; tada();
+    toast('duo-victoire',`🏅 Badge « ${b.name} » ${b.em}`,`${b.desc}. Bravo ! Tu gagnes <b>+${fmt(b.reward)} L$</b>.`);
+    const mg=DEFS.find(d=>d.mega===S.badges.length);
+    if(mg) setTimeout(()=>toast('livia-mission',`Méga-attraction débloquée !`,`Avec ${mg.mega} badges, tu peux construire <b>${mg.em} ${mg.name}</b> ! Il faudra peut-être démolir une attraction pour lui faire de la place.`),900);
+    save(); return; }
+}
+function updateStreaks(base){
+  const st=S.streak=S.streak||{}, inc=(k,ok)=>{ st[k]=ok?(st[k]||0)+1:0; };
+  if(lv()>=2){ inc('clean',100-(S.dirt||0)>=90); inc('health',base.health>=95);
+    if(base.refFear>0) st.safe=0; else if(S.svc.secu&&S.svc.secours&&base.entries>=100) st.safe=(st.safe||0)+1; }
+  if(lv()>=3) inc('green',(S.green??100)>=90);
+}
+function openBadges(){
+  const got=S.badges||[], list=badgeList();
+  const cards=list.map(b=>{ const ok=got.includes(b.id), pr=b.streak&&!ok?` · série ${(S.streak||{})[b.streak]||0}/${b.need}`:'';
+    return `<div class="badge ${ok?'':'off'}"><div class="bem">${b.em}</div><b>${b.name}</b><small>${b.desc}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(b.reward)} L$</span></div>`; }).join('');
+  const megas=DEFS.filter(d=>d.mega).map(d=>`<div class="badge ${got.length>=d.mega?'':'off'}"><div class="bem">${got.length>=d.mega?d.em:'🔒'}</div><b>${d.name}</b><small>${got.length>=d.mega?'Débloquée ! Construis-la sur un terrain libre.':'Avec '+d.mega+' badges'}</small><span class="brw">${fmt(d.cost)} L$</span></div>`).join('');
+  openModal(`<h2>🏅 Mes badges : ${got.length} / ${list.length}</h2>
+    <p class="small desc">Chaque badge rapporte des LiliDollars. Avec 3, 6 et 9 badges, tu débloques les méga-attractions bonus !</p>
+    <div class="bgrid">${cards}</div><p><b>✨ Méga-attractions bonus</b></p><div class="bgrid">${megas}</div>
+    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`,'duo-equipe');
+}
 
 // ================== ÉVÉNEMENTS SPÉCIAUX ==================
 // Proposés certains soirs pour le lendemain. On paie le lendemain matin (porte-monnaie puis tirelire).
@@ -252,7 +324,8 @@ function maybeOfferEvent(){
       <tr><td>💰 Prix de l'événement</td><td>${fmt(S.offer.cost)} L$</td></tr>
       <tr><td>👛🐷 Tu as en tout (porte-monnaie + tirelire)</td><td class="${ok?'plus':'minus'}">${fmt(total)} L$</td></tr>
     </table>
-    ${(!svcOK('secu')||!svcOK('secours'))?`<p class="small">🛡️⛑️ Avec autant de monde, il faut un <b>${!svcOK('secu')?'poste de sécurité (dès 100 visiteurs)':''}${!svcOK('secu')&&!svcOK('secours')?' et un ':''}${!svcOK('secours')?'poste de secours (dès 200 visiteurs)':''}</b>, sinon les visiteurs auront peur et repartiront !</p>`:''}
+    ${lv()>=2?`<p class="small">${WEATHER[S.weather].em} Météo prévue demain : <b>${WEATHER[S.weather].name.toLowerCase()}</b> (${WEATHER[S.weather].eff}).</p>`:''}
+    ${lv()>=2&&(!svcOK('secu')||!svcOK('secours'))?`<p class="small">🛡️⛑️ Avec autant de monde, il faut un <b>${!svcOK('secu')?'poste de sécurité (dès 100 visiteurs)':''}${!svcOK('secu')&&!svcOK('secours')?' et un ':''}${!svcOK('secours')?'poste de secours (dès 200 visiteurs)':''}</b>, sinon les visiteurs auront peur et repartiront !</p>`:''}
     <p class="small">⚠️ On paie <b>demain matin</b>, avec le porte-monnaie puis la tirelire. S'il n'y a pas assez d'argent à ce moment-là, l'événement n'aura pas lieu !${ok?'':' Il te manque '+fmt(S.offer.cost-total)+' L$…'}</p>
     <div class="right"><button onclick="declineEvent()">Non merci</button><button class="main" onclick="bookEvent()">✅ Réserver</button></div>`, ev.img);
   return true;
@@ -268,7 +341,7 @@ function startEvent(){
     save(); return;
   }
   let rest=b.cost; const fromWallet=Math.min(Math.max(0,S.money),rest); S.money-=fromWallet; rest-=fromWallet; S.bank-=rest;
-  day.event=ev.id; day.eventCost=b.cost; fx=[];
+  day.event=ev.id; day.eventCost=b.cost; fx=[]; S.evDone=(S.evDone||0)+1;
   toast(ev.img,`${ev.em} ${ev.name} !`,rest>0?`Payé avec le porte-monnaie et <b>${fmt(rest)} L$</b> de la tirelire. Heureusement qu'on avait épargné !`:`C'est parti ! Les visiteurs arrivent en masse !`);
   for(let k=0;k<80;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
   save();
@@ -315,15 +388,23 @@ function canToast(k){
   S.tipLog=S.tipLog||{};
   const lvl=helpLevel(), max=[1,1,3][lvl];
   if((day.tipToasts||0)>=max) return false;
-  const gap=k==='red'?1:({fear:[1,1,1],demolish:[8,4,1],gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
+  const gap=k==='red'?1:({fear:[1,1,1],dirty:[3,2,1],green:[4,2,1],health:[4,2,1],demolish:[8,4,1],gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
   return S.dayNum-(S.tipLog[k]??-99)>=gap;
 }
-function newGame(name){
+function newGame(name,level){
   S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
-       plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0};
+       plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0, level:level||2, dirt:0, green:100, weather:'sun'};
+  initLevel();
   resetDay();
 }
-function resetDay(){ day={shown:{},refFear:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
+function initLevel(){
+  S.svc=S.svc||{}; S.badges=S.badges||[]; S.streak=S.streak||{}; if(S.dirt==null) S.dirt=0; if(S.green==null) S.green=100; S.weather=S.weather||'sun';
+  if(S.level>=2 && !S.svc.clean) S.svc.clean={n:1,missed:0,closed:false};
+  if(S.level>=3 && !S.svc.green) S.svc.green={n:1,missed:0,closed:false};
+  for(const k of ['secu','secours']) if(S.svc[k] && !S.svc[k].n) S.svc[k].n=1;
+}
+function setLevel(n){ S.level=n; initLevel(); save(); updateHUD(); openMenu(); }
+function resetDay(){ day={shown:{},refFear:0,refHealth:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
 function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
 function load(){ try{ const s=localStorage.getItem(SAVE_KEY); return s?JSON.parse(s):null; }catch(e){ return null; } }
 
@@ -341,7 +422,40 @@ const SVC={
   secu:   {id:'secu',   em:'🛡️', name:'Poste de sécurité', cost:1200, maint:30, need:100, desc:"Des agents veillent sur tout le monde. Obligatoire dès 100 visiteurs dans la journée."},
   secours:{id:'secours',em:'⛑️', name:'Poste de secours',  cost:2500, maint:50, need:200, desc:"Une infirmerie pour les petits bobos. Obligatoire dès 200 visiteurs dans la journée."},
 };
+SVC.clean={id:'clean',em:'🧹',name:'Équipe de nettoyage'};
+SVC.green={id:'green',em:'🌳',name:'Jardiniers'};
 const svcOK=k=>!!(S.svc&&S.svc[k]&&!S.svc[k].closed);
+// ---- Niveaux de jeu ----
+const LVL_NAMES={1:'Petit forain',2:'Forain malin',3:'Grand directeur'};
+const LVL_DESC={1:"Dès 6 ans : construire, fixer les prix, épargner. L'entretien se paie tout seul.",
+  2:"Dès 8 ans : en plus, choisir l'entretien, sécurité et secours, propreté, santé du parc et météo.",
+  3:"Dès 10 ans : en plus, engager agents, ambulanciers et jardiniers, et entretenir l'herbe et les arbres."};
+const lv=()=>(S&&S.level)||2;
+// ---- Personnel : nettoyage (niv. 2+), agents, ambulanciers, jardiniers (niv. 3) ----
+const STAFF={secu:{em:'👮',one:'agent',many:'agents',hire:200,pay:25,cover:100},
+             secours:{em:'🚑',one:'ambulancier',many:'ambulanciers',hire:300,pay:35,cover:200},
+             clean:{em:'🧹',one:'poste de nettoyage',many:'postes de nettoyage',hire:400,pay:15,cover:50},
+             green:{em:'🌳',one:'jardinier',many:'jardiniers',hire:150,pay:20}};
+function svcDue(k){ const st=S.svc[k], n=st.n||0;
+  const base=k==='secu'?SVC.secu.maint+(lv()>=3?STAFF.secu.pay*n:0):k==='secours'?SVC.secours.maint+(lv()>=3?STAFF.secours.pay*n:0):STAFF[k].pay*n;
+  return base*2**(st.missed||0); }
+function secuCap(){ if(lv()<2) return Infinity; if(!svcOK('secu')) return SVC.secu.need; return lv()>=3?STAFF.secu.cover*(1+(S.svc.secu.n||1)):Infinity; }
+function aidCap(){ if(lv()<2) return Infinity; if(!svcOK('secours')) return SVC.secours.need; return lv()>=3?STAFF.secours.cover*(1+(S.svc.secours.n||1)):Infinity; }
+function cleanCap(){ return svcOK('clean')?(S.svc.clean.n||0)*STAFF.clean.cover:0; }
+// ---- Santé du parc (niv. 2+) : entretien, propreté, sécurité, secours (+ espaces verts au niv. 3) ----
+function healthParts(){
+  const built=S.plots.filter(Boolean), maint=built.length?built.filter(p=>!p.closed).length/built.length:1;
+  const clean=1-(S.dirt||0)/100, exp=Math.max(S.lastEntries||0,(day&&day.entries)||0,1);
+  const cov=(cap,need)=>exp<need?1:Math.min(1,cap/exp);
+  return {maint, clean, secu:cov(secuCap(),SVC.secu.need), aid:cov(aidCap(),SVC.secours.need), green:lv()>=3?(S.green??100)/100:null};
+}
+function health(){ if(lv()<2) return 100; const h=healthParts();
+  const w=lv()>=3?{maint:.3,clean:.25,secu:.125,aid:.125,green:.2}:{maint:.35,clean:.35,secu:.15,aid:.15};
+  let t=0; for(const k in w) t+=w[k]*h[k]; return Math.round(100*t); }
+// ---- Météo (niv. 2+) ----
+const WEATHER={sun:{em:'☀️',name:'Soleil',mul:1.15,eff:'un peu plus de visiteurs'},cloud:{em:'⛅',name:'Nuageux',mul:1,eff:'rien de spécial'},rain:{em:'🌧️',name:'Pluie',mul:0.55,eff:'beaucoup moins de visiteurs'}};
+function rollWeather(){ const r=Math.random(); return r<0.5?'sun':r<0.8?'cloud':'rain'; }
+const weatherMul=()=>lv()>=2?WEATHER[S.weather||'sun'].mul:1;
 const intervalOf=p=>DEF[p.id].interval/lvlMul(p,0.4);
 const upCost=p=>Math.round(DEF[p.id].cost*0.75*p.lvl);
 const totalFun=()=>S.plots.reduce((a,p)=>a+(p?funOf(p):0),0);
@@ -389,6 +503,29 @@ function awning(x,y,w,h,c1,c2,n){
 }
 const flowers=[]; for(let i=0;i<140;i++) flowers.push([rnd(0,W),rnd(0,H),['#fff','#ffd23f','#ff8ac2','#b9a5ff'][i%4]]);
 
+const LITTER=Array.from({length:90},(_,i)=>[70+((i*389)%(1100-160)),PATH_TOP+14+((i*53)%(PATH_BOT-PATH_TOP-28)),i%3,(i*1.7)%6.28]);
+const TUFTS=[]; (function(){ let i=0; while(TUFTS.length<260 && i<5000){ i++; const x=(i*97)%1100, y=(i*61)%560;
+  if(y>PATH_TOP-6&&y<PATH_BOT+6) continue; let inPlot=false; for(let j=0;j<8;j++){ const r={x:60+(j%4)*245,y:j<4?14:336,w:225,h:210}; if(x>r.x+4&&x<r.x+r.w-4&&y>r.y+4&&y<r.y+r.h-4){inPlot=true;break;} } if(!inPlot) TUFTS.push([x,y,i%5]); } })();
+function drawWear(){
+  if(lv()<2) return;
+  const n=Math.floor((S.dirt||0)*0.9);
+  for(let i=0;i<n;i++){ const [x,y,t,a]=LITTER[(i+view*45)%LITTER.length]; g.save(); g.translate(x,y); g.rotate(a);
+    if(t===0){ g.fillStyle='#fff'; g.fillRect(-4,-3,8,6); g.strokeStyle='#cbd5e1'; g.lineWidth=1; g.strokeRect(-4,-3,8,6); }
+    else if(t===1){ rr(-2.5,-4,5,8,1.5); g.fillStyle='#ef4444'; g.fill(); }
+    else { g.strokeStyle='#eab308'; g.lineWidth=3; g.beginPath(); g.arc(0,0,4,0.3,2.6); g.stroke(); } g.restore(); }
+  if(lv()>=3){ const k=1-(S.green??100)/100; if(k>0.1){
+    g.fillStyle=`rgba(150,130,50,${k*0.35})`; g.fillRect(0,0,W,PATH_TOP); g.fillRect(0,PATH_BOT,W,H-PATH_BOT);
+    const m=Math.floor(k*TUFTS.length), hgt=6+k*14;
+    for(let i=0;i<m;i++){ const [x,y,t]=TUFTS[i]; g.strokeStyle=t%2?'#3f6212':'#4d7c0f'; g.lineWidth=2; g.beginPath();
+      for(let b=-1;b<=1;b++){ g.moveTo(x+b*3,y); g.lineTo(x+b*5+Math.sin(animT+i)*1.5,y-hgt*(0.7+0.3*((t+b+2)%3)/2)); } g.stroke();
+      if(t===4&&k>0.5) circ(x,y-hgt,2.5,'#facc15'); } } }
+}
+function drawWeather(dt){
+  if(lv()<2) return;
+  if(S.weather==='rain'){ g.fillStyle='rgba(51,65,85,.18)'; g.fillRect(0,0,W,H); g.strokeStyle='rgba(186,230,253,.75)'; g.lineWidth=1.5; g.beginPath();
+    for(let i=0;i<90;i++){ const x=(i*131+animT*60)%W, y=(i*71+animT*520)%H; g.moveTo(x,y); g.lineTo(x-4,y+12); } g.stroke(); }
+  else if(S.weather==='cloud'){ g.fillStyle='rgba(255,255,255,.35)'; for(let i=0;i<4;i++){ const x=((animT*12+i*300)%(W+200))-100, y=20+i*12; circ(x,y,26,'rgba(255,255,255,.35)'); circ(x+28,y+4,20,'rgba(255,255,255,.35)'); circ(x-26,y+6,18,'rgba(255,255,255,.35)'); } }
+}
 function drawBackground(){
   const gr=g.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#8fdc74'); gr.addColorStop(1,'#6cc45a');
   g.fillStyle=gr; g.fillRect(0,0,W,H);
@@ -734,7 +871,48 @@ function dPendule(w,h,t,lvl){
   circ(px,py,7,'#facc15'); circ(px,py,3,'#334155');
   for(let i=0;i<6;i++) circ(px-50+i*20,162,2.4,Math.floor(t*6+i)%2?'#ffd23f':'#fff');
 }
-const DRAW={cirque:dCirque,riviere:dRiviere,pendule:dPendule,canards:dCanards,barbe:dBarbe,churros:dChurros,chamboule:dChamboule,trampo:dTrampo,carrousel:dCarrousel,train:dTrain,tasses:dTasses,autos:dAutos,chateau:dChateau,pirate:dPirate,roue:dRoue,chaises:dChaises,fantome:dFantome,chute:dChute,huit:dHuit};
+function dArcenciel(w,h,t,lvl){
+  const cx=120, cy=168, cols=['#ef4444','#f97316','#facc15','#22c55e','#3b82f6','#6366f1','#a855f7'];
+  g.fillStyle='#94a3b8'; g.fillRect(8,58,8,110); g.fillRect(30,58,8,110); for(let y=66;y<164;y+=12) g.fillRect(8,y,30,3);
+  rr(4,50,38,10,3); g.fillStyle='#C2367A'; g.fill();
+  cols.forEach((c,i)=>{ g.beginPath(); g.arc(cx,cy,104-i*6,Math.PI*1.08,Math.PI*2); g.strokeStyle=c; g.lineWidth=6.5; g.stroke(); });
+  g.beginPath(); g.ellipse(214,164,16,6,0,0,Math.PI*2); g.fillStyle='#38bdf8'; g.fill();
+  for(let k=0;k<2+lvl;k++){ const ph=(t*0.35+k/(2+lvl))%1, a=Math.PI*1.1+ph*Math.PI*0.88, r=86;
+    const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r; kid(x,y-8,['#3f2a14','#f5d06b','#111','#c97b2a','#6b3e1e'][k%5]); g.fillStyle=['#ec4899','#22c55e','#f59e0b','#6366f1','#14b8a6'][k%5]; rr(x-5,y-3,10,8,3); g.fill(); }
+  for(let i=0;i<5;i++){ const a=t*2+i; circ(30+i*40+Math.sin(a)*4,20+Math.cos(a)*4,2,'#fff'); }
+}
+function dDragon(w,h,t,lvl){
+  const segs=15, pts=[];
+  for(let i=0;i<segs;i++){ const x=12+i*13.5, y=96+Math.sin(i*0.55-t*2.4)*26; pts.push([x,y]); }
+  g.strokeStyle='#64748b'; g.lineWidth=3; for(let i=2;i<segs;i+=4){ g.beginPath(); g.moveTo(pts[i][0],pts[i][1]+10); g.lineTo(pts[i][0],166); g.stroke(); }
+  const wy=pts[7][1], fl=Math.sin(t*6)*14;
+  g.fillStyle='rgba(239,68,68,.85)'; g.beginPath(); g.moveTo(pts[6][0],wy-6); g.lineTo(pts[4][0]-6,wy-40-fl); g.lineTo(pts[8][0],wy-8); g.closePath(); g.fill();
+  for(let i=0;i<segs;i++){ const [x,y]=pts[i], r=9-Math.abs(i-8)*0.25; circ(x,y,r,i%2?'#16a34a':'#22c55e'); g.fillStyle='#facc15'; g.beginPath(); g.moveTo(x-3,y-r+1); g.lineTo(x,y-r-6); g.lineTo(x+3,y-r+1); g.fill(); }
+  [3,6,9,12].slice(0,1+lvl).forEach((i,k)=>kid(pts[i][0],pts[i][1]-14,['#3f2a14','#f5d06b','#111','#c97b2a'][k]));
+  const [hx,hy]=pts[segs-1]; g.beginPath(); g.ellipse(hx+8,hy-2,15,11,0,0,Math.PI*2); g.fillStyle='#16a34a'; g.fill();
+  circ(hx+12,hy-6,3.5,'#fff'); circ(hx+13,hy-6,1.8,'#111'); g.fillStyle='#facc15'; g.beginPath(); g.moveTo(hx+2,hy-11); g.lineTo(hx-2,hy-22); g.lineTo(hx+7,hy-12); g.fill();
+  if(Math.floor(t*2)%3===0){ g.fillStyle='rgba(249,115,22,.85)'; g.beginPath(); g.moveTo(hx+22,hy); g.lineTo(hx+40,hy-8); g.lineTo(hx+38,hy+6); g.closePath(); g.fill(); }
+  g.beginPath(); g.moveTo(pts[0][0],pts[0][1]); g.lineTo(pts[0][0]-12,pts[0][1]+6); g.lineTo(pts[0][0]-2,pts[0][1]-6); g.fillStyle='#16a34a'; g.fill();
+}
+function dRobot(w,h,t,lvl){
+  const cx=112, cy=78, R=74, n=8, a0=t*0.5;
+  g.strokeStyle='rgba(140,198,63,.8)'; g.lineWidth=3; g.beginPath(); g.arc(cx,cy,R,0,Math.PI*2); g.stroke();
+  const cols=['#ef4444','#3b82f6','#facc15','#ec4899','#22c55e','#a855f7','#f97316','#14b8a6'];
+  for(let i=0;i<n;i++){ const a=a0+i*Math.PI*2/n, x=cx+Math.cos(a)*R, y=cy+Math.sin(a)*R*0.75; g.strokeStyle='#475569'; g.lineWidth=1.5; g.beginPath(); g.moveTo(cx,cy); g.lineTo(x,y); g.stroke();
+    rr(x-9,y,18,12,4); g.fillStyle=cols[i]; g.fill(); kid(x,y-3,['#3f2a14','#f5d06b'][i%2]); }
+  // le robot
+  g.fillStyle='#1F4D1D'; g.fillRect(cx-22,140,14,26); g.fillRect(cx+8,140,14,26);
+  rr(cx-30,92,60,52,14); g.fillStyle='#8CC63F'; g.fill(); rr(cx-20,100,40,32,10); g.fillStyle='#e9f5d8'; g.fill();
+  g.fillStyle='#22c55e'; g.beginPath(); g.moveTo(cx,124); g.bezierCurveTo(cx-14,112,cx-6,104,cx,111); g.bezierCurveTo(cx+6,104,cx+14,112,cx,124); g.fill();
+  const arm=Math.sin(t*2)*0.4;
+  [[-1,cx-30],[1,cx+30]].forEach(([d,x])=>{ g.save(); g.translate(x,100); g.rotate(d*(-1.1+arm*d)); rr(-6,-2,12,34,6); g.fillStyle='#6FA82E'; g.fill(); circ(0,34,7,'#1F4D1D'); g.restore(); });
+  circ(cx,72,26,'#8CC63F'); circ(cx,76,20,'#fbe9d6');
+  circ(cx-8,74,5.5,'#fff'); circ(cx+8,74,5.5,'#fff'); circ(cx-7,75,3.2,'#166534'); circ(cx+9,75,3.2,'#166534');
+  g.strokeStyle='#9a3412'; g.lineWidth=2; g.beginPath(); g.arc(cx,82,6,0.2,Math.PI-0.2); g.stroke();
+  circ(cx-26,74,7,'#6FA82E'); circ(cx+26,74,7,'#6FA82E');
+  g.strokeStyle='#1F4D1D'; g.lineWidth=3; g.beginPath(); g.moveTo(cx,46); g.lineTo(cx,34); g.stroke(); circ(cx,32,5,Math.floor(t*3)%2?'#facc15':'#8CC63F');
+}
+const DRAW={arcenciel:dArcenciel,dragon:dDragon,robot:dRobot,cirque:dCirque,riviere:dRiviere,pendule:dPendule,canards:dCanards,barbe:dBarbe,churros:dChurros,chamboule:dChamboule,trampo:dTrampo,carrousel:dCarrousel,train:dTrain,tasses:dTasses,autos:dAutos,chateau:dChateau,pirate:dPirate,roue:dRoue,chaises:dChaises,fantome:dFantome,chute:dChute,huit:dHuit};
 
 let hoverPlot=-1;
 function drawPlot(i){
@@ -816,12 +994,18 @@ function route(v,tz,tx,ty){
 function goExit(v){ v.mode='exit'; const wp=[[v.x,v.lane]]; let z=v.zone; while(z<S.zones-1){ wp.push([W+20,v.lane]); z++; wp.push({tp:z,x:-20}); } wp.push([W+40,v.lane]); v.wp=wp; }
 function arrive(v){
   if(v.mode==='gate'){
-    const noSecu=day.entries>=SVC.secu.need && !svcOK('secu'), noAid=day.entries>=SVC.secours.need && !svcOK('secours');
-    if(noSecu||noAid){ say(v,noSecu?"Pas de sécurité… j'ai peur !":"Pas de secours… j'ai peur !",true); day.refFear++; day.fearWhat=noSecu?'secu':'secours'; day.sad+=0.3; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+    if(lv()>=2){
+      const noSecu=day.entries>=secuCap(), noAid=day.entries>=aidCap();
+      if(noSecu||noAid){ const k=noSecu?'secu':'secours', none=!svcOK(k);
+        say(v,none?(noSecu?"Pas de sécurité… j'ai peur !":"Pas de secours… j'ai peur !"):(noSecu?"Pas assez d'agents… j'ai peur !":"Pas assez d'ambulanciers !"),true);
+        day.refFear++; day.fearWhat=k; day.fearNone=none; day.sad+=0.3; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+      if(Math.random()>0.35+0.65*health()/100){ const h=healthParts(); const w=Object.entries({clean:h.clean,maint:h.maint,green:h.green}).filter(e=>e[1]!==null).sort((a,b)=>a[1]-b[1])[0][0];
+        say(v,{clean:"Beurk, c'est sale !",maint:"Tout est fermé…",green:"C'est mal entretenu…"}[w],true); day.refHealth++; day.sad+=0.2; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
+    }
     const will=entranceFair()*rnd(0.7,1.6)*v.gen;
     if(S.entrance>will){ say(v,'Trop cher ! 😕',true); day.refGate++; day.sad+=1; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
     if(S.entrance>0){ earn(S.entrance,'entry'); floatTxt(50,v.y-20,'+'+fmt(S.entrance)); v.money-=S.entrance; }
-    day.entries++; chooseNext(v); return;
+    day.entries++; if(lv()>=2 && day.entries>cleanCap()) S.dirt=Math.min(100,(S.dirt||0)+0.6); chooseNext(v); return;
   }
   if(v.mode==='plot'){
     const i=v.target, p=S.plots[i];
@@ -849,7 +1033,7 @@ function step(dt){
   // apparition
   if(S.time<DAY-6){
     const evv=day.event?EV[day.event]:null;
-    const rate=Math.min(2.6,0.35+0.09*totalFun())*(0.5+S.stars/5)*(evv?evv.vis:1);
+    const rate=Math.min(2.6,0.35+0.09*totalFun())*(0.5+S.stars/5)*(evv?evv.vis:1)*weatherMul();
     spawnAcc+=rate*dt;
     while(spawnAcc>=1){ spawnAcc--; if(visitors.length<(evv?Math.min(520,170*evv.vis):170)) spawnVisitor(); }
   }
@@ -884,7 +1068,7 @@ function moveTo(v,tx,ty,dt){
 function maintItems(){
   const it=[];
   S.plots.forEach((p,i)=>{ if(p) it.push({key:'p'+i, em:DEF[p.id].em, name:DEF[p.id].name, due:dueOf(p), missed:p.missed||0, earned:day.earned[i]||0, ref:p}); });
-  for(const k in (S.svc||{})) it.push({key:'s'+k, em:SVC[k].em, name:SVC[k].name, due:SVC[k].maint*2**(S.svc[k].missed||0), missed:S.svc[k].missed||0, earned:null, ref:S.svc[k]});
+  for(const k in (S.svc||{})){ const d=svcDue(k); if(d>0) it.push({key:'s'+k, em:SVC[k].em, name:SVC[k].name+(S.svc[k].n>1&&k!=='secu'&&k!=='secours'?' ×'+S.svc[k].n:''), due:d, missed:S.svc[k].missed||0, earned:null, ref:S.svc[k]}); }
   return it;
 }
 function endDay(){
@@ -896,7 +1080,10 @@ function endDay(){
   const income=day.entryRev+day.rideRev, evCost=day.eventCost||0;
   if(!day.event){ S.incHist=(S.incHist||[]).concat(income).slice(-3); }
   const items=maintItems(), due=items.reduce((a,x)=>a+x.due,0);
-  const base={...day, interest, income, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars};
+  const base={...day, interest, income, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars, health:health(), hparts:healthParts()};
+  S.lastEntries=day.entries; updateStreaks(base);
+  if(lv()>=2){ S.dirt=Math.max(0,(S.dirt||0)-(svcOK('clean')?12*(S.svc.clean.n||0):0)); S.weather=rollWeather(); }
+  if(lv()>=3){ S.green=Math.max(0,Math.min(100,(S.green??100)-12+(svcOK('green')?7*(S.svc.green.n||0):0))); }
   visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); floats=[];
   S.dayNum++; S.time=0; spawnAcc=0; resetDay();
   const finish=keys=>{
@@ -908,9 +1095,11 @@ function endDay(){
       else { x.ref.closed=true; closed.push(x.em+' '+x.name+(x.ref.missed===2?' (dernière chance !)':'')); }
     });
     S.money-=paid;
-    save(); showReport({...base, maint:paid, profit:income-paid-evCost, closed, destroyed});
+    checkBadges(); save(); showReport({...base, maint:paid, profit:income-paid-evCost, closed, destroyed});
   };
-  if(S.money>=due) finish(new Set(items.map(x=>x.key)));
+  if(S.money>=due || lv()<2){
+    if(S.money<due){ const take=Math.min(S.bank,due-S.money); S.bank-=take; S.money+=take; }   // niveau 1 : on paie tout (tirelire, puis dans le rouge)
+    finish(new Set(items.map(x=>x.key))); }
   else if(window.AUTO_MAINT) finish(greedyMaint(items));
   else { mSel=greedyMaint(items); mItems=items; mFinish=finish; save(); renderMaint(); }
 }
@@ -932,7 +1121,11 @@ function confirmMaint(){ const sel=mSel, f=mFinish; mSel=null; mFinish=null; $('
 function showReport(r){
   let lesson='';
   const hl=helpLevel();
-  if(r.refFear>0) lesson=`😟 <b>${r.refFear}</b> visiteurs ont eu peur et sont repartis : il manque un <b>${SVC[r.fearWhat].name.toLowerCase()}</b> ! Touche 🛡️ pour en construire un.`;
+  const hp=r.hparts||{}, worst=lv()>=2?Object.entries({clean:hp.clean,maint:hp.maint,green:hp.green}).filter(e=>e[1]!=null).sort((a,b)=>a[1]-b[1])[0]:null;
+  if(r.refFear>0) lesson=r.fearNone===false?`😟 <b>${r.refFear}</b> visiteurs ont eu peur : il n'y a pas assez d'<b>${STAFF[r.fearWhat].many}</b> pour autant de monde ! Engage-en dans 🛠️ Services.`
+      :`😟 <b>${r.refFear}</b> visiteurs ont eu peur et sont repartis : il manque un <b>${SVC[r.fearWhat].name.toLowerCase()}</b> ! Touche 🛠️ Services pour en construire un.`;
+  else if(lv()>=2 && r.health<75 && worst) lesson=`❤️ La santé du parc n'est que de <b>${r.health} %</b> : <b>${r.refHealth}</b> visiteurs ont fait demi-tour. `+
+      {clean:"🧹 Le parc est sale : il faut plus de postes de nettoyage (1 pour 50 visiteurs).",maint:"🔧 Des attractions sont fermées faute d'entretien.",green:"🌳 L'herbe et les buissons envahissent tout : engage des jardiniers."}[worst[0]];
   else if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
   else if(r.refPrice>[20,10,4][hl]) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
   else if(r.queueFull>[15,10,5][hl]) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
@@ -953,6 +1146,7 @@ function showReport(r){
     </table>
     ${r.closed&&r.closed.length?`<p>🔒 <b>Fermé demain</b> (pas entretenu) : ${r.closed.join(', ')}</p>`:''}
     ${r.destroyed&&r.destroyed.length?`<p>💥 <b>Détruit</b> après 3 soirs sans entretien : ${r.destroyed.join(', ')}</p>`:''}
+    ${lv()>=2?`<p>❤️ Santé du parc : <b>${r.health} %</b> · Demain : ${WEATHER[S.weather].em} <b>${WEATHER[S.weather].name.toLowerCase()}</b> (${WEATHER[S.weather].eff})</p>`:''}
     <p>${lesson}</p>
     <p class="small">Note des visiteurs : ${starsTxt(S.stars)} ${r.starsUp>0.05?'(en hausse 📈)':r.starsUp<-0.05?'(en baisse 📉)':''}</p>
     ${r.event?`<p>${EV[r.event].em} Grâce à l'événement, <b>${r.entries}</b> visiteurs sont venus. ${r.profit>0?'Ça valait le coup !':'Cette fois, ça n\'a pas rapporté assez…'}</p>`:''}
@@ -979,8 +1173,9 @@ function openPlot(i){
   const p=S.plots[i];
   if(!p){
     const built=new Set(S.plots.filter(Boolean).map(p=>p.id));
-    const cards=DEFS.map(d=>{ const has=built.has(d.id), miss=d.cost-S.money;
-      return `<div class="card ${has?'done':''}"><div class="em">${d.em}</div><b>${d.name}</b>
+    const cards=DEFS.map(d=>{ const has=built.has(d.id), miss=d.cost-S.money, nb=(S.badges||[]).length;
+      if(d.mega && nb<d.mega) return `<div class="card locked"><div class="em">🔒</div><b>${d.name}</b><div class="c">🏅 ${nb} / ${d.mega} badges</div><div class="small">Méga-attraction bonus</div><button disabled>Bloquée</button></div>`;
+      return `<div class="card ${has?'done':''} ${d.mega?'mega':''}"><div class="em">${d.em}</div><b>${d.name}</b>
         <div class="c">${fmt(d.cost)} ${coin}</div>
         ${has?'<div class="small">Déjà construit ✔️</div>': miss>0?`<div class="miss">Il te manque ${fmt(miss)} L$</div>`:'<div class="small">Tu peux l\'acheter !</div>'}
         <button class="ok" ${has||miss>0?'disabled':''} onclick="build(${i},'${d.id}')">Construire</button></div>`; }).join('');
@@ -1023,7 +1218,7 @@ function demolish(i){
   save(); openPlot(i);
 }
 function build(i,id){
-  const d=DEF[id]; if(S.money<d.cost||S.plots[i]) return;
+  const d=DEF[id]; if(S.money<d.cost||S.plots[i]||(d.mega&&(S.badges||[]).length<d.mega)) return;
   S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,}; S.ever=S.ever||[]; if(!S.ever.includes(id)) S.ever.push(id);
   tada(); save(); closeModal();
   if(id!=='huit' && helpLevel()>0) toast('duo-victoire',`${d.em} ${d.name} construit !`,helpLevel()===2?`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`:`Bravo !`);
@@ -1066,6 +1261,8 @@ function openMenu(){
     <p><b>Nom de ta fête foraine :</b></p><input type="text" id="nm" maxlength="32" value="${S.name.replace(/"/g,'&quot;')}">
     <div class="row"><button class="ok" onclick="S.name=document.getElementById('nm').value.trim()||S.name;closeModal()">Enregistrer</button></div>
     <p class="small">Ta partie est sauvegardée automatiquement dans ce navigateur à la fin de chaque journée.</p>
+    <p><b>Niveau de jeu :</b></p>
+    <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${lv()===n?'sel':''}" onclick="setLevel(${n})"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
     <div class="row"><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
     <p class="small"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
@@ -1079,12 +1276,14 @@ const RULES=`<ul class="rules">
   <li>🏗️ Clique sur un <b>terrain libre</b> pour construire une attraction (la barbe à papa, c'est un bon début !).</li>
   <li>💰 Clique sur une attraction pour changer son <b>prix</b>. Trop cher ? Les visiteurs repartent. Pas assez cher ? Tu gagnes moins.</li>
   <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
-  <li>🔧 Chaque soir, tu paies l'<b>entretien</b>. Pas assez d'argent ? L'attraction oubliée ferme le lendemain, son entretien double, et après 3 oublis elle est détruite !</li>
-  <li>🛡️ Dès 100 visiteurs par jour, il faut un <b>poste de sécurité</b>, et dès 200 un <b>poste de secours</b>.</li>
+  <li>🔧 Chaque soir, tu paies l'<b>entretien</b>. <i>(Niveaux 2 et 3)</i> Pas assez d'argent ? L'attraction oubliée ferme le lendemain, son entretien double, et après 3 oublis elle est détruite !</li>
+  <li>🛡️ <i>(Niveaux 2 et 3)</i> Dès 100 visiteurs par jour, il faut un <b>poste de sécurité</b>, et dès 200 un <b>poste de secours</b>. Il faut aussi <b>1 poste de nettoyage pour 50 visiteurs</b>. Surveille la <b>santé du parc ❤️</b> et la <b>météo</b>.</li>
+  <li>👮 <i>(Niveau 3)</i> Engage des agents et des ambulanciers quand il y a beaucoup de monde, et des jardiniers pour l'herbe et les arbres.</li>
   <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
   <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin. Et quand tout est plein, <b>démolis</b> une attraction pour en mettre une meilleure.</li>
-  <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li></ul>`;
-function showRules(){ openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
+  <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li>
+  <li>🏅 Gagne des <b>badges</b> : chacun rapporte des LiliDollars, et ils débloquent 3 <b>méga-attractions bonus</b> (avec 3, 6 et 9 badges).</li></ul>`;
+function showRules(){ const back=modalOpen&&!S.dayNum; openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
 function startScreen(force){
   const saved=load();
   if(saved && !force){
@@ -1092,12 +1291,16 @@ function startScreen(force){
       <div class="right"><button onclick="startScreen(true)">Nouvelle partie</button><button class="main" onclick="continueGame()">▶ Continuer</button></div>`,'lili-coucou');
   } else {
     openModal(`<h2>🎪 Bienvenue à Lili Parc !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
-      <input type="text" id="nm0" maxlength="32" value="Lili Parc">${RULES}
-      <div class="right"><button class="main" onclick="newGame(document.getElementById('nm0').value.trim());visitors=[];save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
+      <input type="text" id="nm0" maxlength="32" value="Lili Parc">
+      <p><b>Choisis ton niveau :</b></p>
+      <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${n===2?'sel':''}" onclick="pickLvl(${n},this)"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
+      <div class="right"><button onclick="showRules()">📖 Règles</button><button class="main" onclick="newGame(document.getElementById('nm0').value.trim(),window.chosenLvl||2);visitors=[];save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
+    window.chosenLvl=2;
   }
   $('box').dataset.lock='1';
 }
-function continueGame(){ S=load(); S.svc=S.svc||{}; S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
+function pickLvl(n,el){ window.chosenLvl=n; document.querySelectorAll('.lvl').forEach(b=>b.classList.toggle('sel',b===el)); blip(700,0.06); }
+function continueGame(){ S=load(); S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
@@ -1110,26 +1313,30 @@ function mkConf(x,y){ return {x,y,vx:rnd(-120,120),vy:rnd(-260,-60),c:BALLOONS[M
 
 function getTip(){
   const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
+  if(day.refFear>0 && day.fearNone===false){ const k=day.fearWhat; return T('fear','lili-pas-contente',`Il y a trop de monde pour tes ${STAFF[k].many} : des visiteurs ont peur ! Engage des <b>${STAFF[k].em} ${STAFF[k].many}</b> dans 🛠️ Services.`); }
+  if(lv()>=2 && (S.dirt||0)>30) return T('dirty','livia-pensive',`Le parc devient sale ! Il faut <b>1 poste de nettoyage pour 50 visiteurs</b>. Touche 🛠️ Services.`);
+  if(lv()>=3 && (S.green??100)<55) return T('green','lili-perplexe',`L'herbe et les buissons poussent partout ! Engage des <b>🌳 jardiniers</b> dans 🛠️ Services.`);
+  if(lv()>=2 && health()<65) return T('health','lili-pas-contente',`La santé du parc baisse (❤️ ${health()} %) : des visiteurs font demi-tour. Touche ❤️ pour voir ce qui ne va pas.`);
   if(day.refFear>0){ const k=day.fearWhat||'secu'; return T('fear','lili-pas-contente',`Des visiteurs ont peur et font demi-tour : il faut un <b>${SVC[k].em} ${SVC[k].name.toLowerCase()}</b> ! Touche 🛡️ pour le construire (${fmt(SVC[k].cost)} L$).`); }
   if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
   if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
   if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
   if(day.refPrice>[25,14,6][helpLevel()]) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
   if(day.queueFull>[20,12,6][helpLevel()]) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
-  const nextD=DEFS.find(d=>!(S.ever||[]).includes(d.id));
+  const nextD=DEFS.find(d=>!d.mega&&!(S.ever||[]).includes(d.id));
   if(!freePlots().length && S.zones>=NZ && nextD && S.money>=nextD.cost) return T('demolish','lili-idee',`Plus aucun terrain libre ! Pour construire <b>${nextD.em} ${nextD.name}</b>, il faut <b>démolir</b> une attraction (clique dessus, puis 🧨). Choisis celle qui rapporte le moins !`);
   if(!freePlots().length && S.zones<NZ) return T('full','lili-idee',`Ta fête est pleine ! Achète le <b>Grand Parc</b> (${fmt(ZONE_COST)} L$) avec le panneau 🔒 Agrandir à droite.`);
   if(nextD && S.money>=nextD.cost && freePlots().length) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre${S.zones>1&&!freePlots().some(i=>zoneOf(i)===view)?' (dans l\'autre zone)':''}.`);
   if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
-const TIP_TITLES={fear:'Les visiteurs ont peur !',demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
+const TIP_TITLES={dirty:'Ça se salit !',green:'Ça pousse !',health:'Santé du parc',fear:'Les visiteurs ont peur !',demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
-  for(const sv of Object.values(SVC)){ const wk='warn_'+sv.id;
+  for(const sv of (lv()>=2?[SVC.secu,SVC.secours]:[])){ const wk='warn_'+sv.id;
     if(!S.seen.includes(wk) && !(S.svc&&S.svc[sv.id]) && day.entries>=sv.need-20){ S.seen.push(wk); save();
-      toast('lili-explique',`Bientôt ${sv.need} visiteurs !`,`Quand ta fête attire plus de ${sv.need} visiteurs dans la journée, il faut un <b>${sv.em} ${sv.name.toLowerCase()}</b>, sinon les gens ont peur. Touche 🛡️ (${fmt(sv.cost)} L$).`); return; } }
+      toast('lili-explique',`Bientôt ${sv.need} visiteurs !`,`Quand ta fête attire plus de ${sv.need} visiteurs dans la journée, il faut un <b>${sv.em} ${sv.name.toLowerCase()}</b>, sinon les gens ont peur. Touche 🛠️ Services (${fmt(sv.cost)} L$).`); return; } }
   for(const d of DEFS){
-    if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
+    if(d.mega || S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
     if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); if(DEFS.indexOf(d)>=6){ save(); break; } toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
   }
 }
@@ -1137,11 +1344,13 @@ function updateHUD(){
   $('parkName').innerHTML=`Lili Parc<small>${S.name!=='Lili Parc'?S.name.replace(/</g,'&lt;')+' · ':''}Jour ${S.dayNum}</small>`;
   $('money').textContent=fmt(S.money); $('money').classList.toggle('neg',S.money<0);
   $('bankAmt').textContent=fmt(S.bank)+' L$';
+  const L2=lv()>=2; $('svcBtn').style.display=L2?'':'none'; $('healthPill').style.display=L2?'':'none';
+  if(L2){ const hv=health(); $('healthVal').textContent=hv; $('healthPill').style.color=hv<50?'#dc2626':hv<75?'#d97706':''; $('wxIcon').textContent=WEATHER[S.weather||'sun'].em; }
   $('stars').textContent=starsTxt(S.stars);
   $('visCount').textContent=visitors.filter(v=>v.mode!=='leave').length;
   $('zoneBtn').innerHTML=S.zones>1?(view?'⬅️<span class="lbl"> Zone 1</span>':'➡️<span class="lbl"> Zone 2</span>'):'🗺️<span class="lbl"> Agrandir</span>';
   $('dayFill').style.width=(S.time/DAY*100)+'%';
-  const ever=S.ever||[], nextD=DEFS.find(d=>!ever.includes(d.id));
+  const ever=S.ever||[], nextD=DEFS.find(d=>!d.mega&&!ever.includes(d.id));
   let pct, mini;
   if(nextD){ const have=S.money+S.bank; pct=Math.max(0,Math.min(100,have/nextD.cost*100)); $('goalTxt').innerHTML=`🎯 Prochain objectif : <b>${nextD.em} ${nextD.name}</b> (${fmt(have)} / ${fmt(nextD.cost)} L$)`; mini=`🎯 ${nextD.em} ${fmt(nextD.cost)}`; }
   else { const lv=S.plots.reduce((a,p)=>a+(p?p.lvl:0),0); pct=lv/48*100; $('goalTxt').innerHTML='🏆 Tu as construit toutes les attractions ! Garde les meilleures et améliore-les au niveau ★★★.'; mini='🏆 ★★★'; }
@@ -1171,21 +1380,46 @@ function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COS
   for(let k=0;k<120;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
   toast('duo-victoire','Le Grand Parc est à toi !','8 nouveaux terrains ! Les visiteurs passent par la droite pour venir ici.'); }
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(view?0:1); else openZoneBuy(); };
+function staffCtl(k){ const st=S.svc[k], sf=STAFF[k], n=st?(st.n||0):0, min=(k==='secu'||k==='secours')?1:0;
+  return `<div class="row"><div class="price"><button ${n<=min?'disabled':''} onclick="hire('${k}',-1)">−</button><span>${sf.em} ${n}</span><button ${S.money<sf.hire?'disabled':''} onclick="hire('${k}',1)">+</button></div>
+    <span class="small snote">+1 : ${fmt(sf.hire)} L$ · ${sf.pay} L$ / soir</span></div>`; }
 function openServices(){
-  const cards=Object.values(SVC).map(sv=>{ const st=S.svc&&S.svc[sv.id], miss=sv.cost-S.money;
-    return `<div class="card"><div class="em">${sv.em}</div><b>${sv.name}</b>
-      <div class="c">${st?(st.closed?'🔒 Fermé':'✅ Construit'):fmt(sv.cost)+' '+coin}</div>
-      <div class="small">Dès ${sv.need} visiteurs · entretien ${sv.maint} L$ / soir</div>
-      ${st?'':`<button class="ok" ${miss>0?'disabled':''} onclick="buySvc('${sv.id}')">Construire</button>`}</div>`; }).join('');
-  openModal(`<h2>🛡️ Sécurité et secours</h2>
-    <p>Quand une fête attire beaucoup de monde, les familles veulent être rassurées. Sans ces postes, les visiteurs ont <b>peur</b> et font demi-tour.</p>
-    <p class="small">🛡️ Poste de sécurité : obligatoire dès <b>100</b> visiteurs dans la journée · ⛑️ Poste de secours : dès <b>200</b>. Aujourd'hui : <b>${day.entries}</b> visiteurs.</p>
-    <div class="cards">${cards}</div>
-    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`,'lili-explique');
+  const L=lv(), yest=S.lastEntries||0, blk=(title,body)=>`<div class="sblk"><b>${title}</b>${body}</div>`;
+  const post=k=>{ const sv=SVC[k], st=S.svc[k];
+    if(!st) return `<p class="small desc">${sv.desc}</p><div class="row"><button class="ok" ${S.money<sv.cost?'disabled':''} onclick="buySvc('${k}')">Construire pour ${fmt(sv.cost)} L$</button></div>`;
+    if(st.closed) return `<p class="small">🔒 Fermé cette nuit (pas entretenu).</p>`;
+    if(L<3) return `<p class="small">✅ Construit. Entretien ${sv.maint} L$ / soir.</p>`;
+    const cap=k==='secu'?secuCap():aidCap();
+    return `<p class="small">✅ Protège jusqu'à <b>${fmt(cap)}</b> visiteurs par jour <span class="desc">(1 ${STAFF[k].one} de plus = +${STAFF[k].cover})</span>.</p>${staffCtl(k)}`; };
+  let h=blk(`🧹 Propreté : ${Math.round(100-(S.dirt||0))} % propre`,`<p class="small"><span class="desc">Il faut <b>1 poste de nettoyage pour 50 visiteurs</b>. </span>Tes postes nettoient jusqu'à <b>${cleanCap()}</b> visiteurs par jour.</p>${staffCtl('clean')}`);
+  h+=blk('🛡️ Poste de sécurité · dès 100 visiteurs',post('secu'));
+  h+=blk('⛑️ Poste de secours · dès 200 visiteurs',post('secours'));
+  if(L>=3) h+=blk(`🌳 Espaces verts : ${Math.round(S.green??100)} %`,`<p class="small"><span class="desc">L'herbe et les arbres poussent chaque jour. </span>Il faut <b>2 jardiniers</b> pour garder le parc beau.</p>${staffCtl('green')}`);
+  openModal(`<h2>🛠️ Services du parc</h2>
+    <p class="small">Hier : <b>${yest}</b> visiteurs · aujourd'hui : <b>${day.entries}</b> · ❤️ santé : <b>${health()} %</b> · 👛 ${fmt(S.money)} L$</p>
+    <div class="svcgrid">${h}</div>
+    <div class="right"><button onclick="openHealth()">❤️ Santé du parc</button><button class="main" onclick="closeModal()">OK</button></div>`,'lili-explique');
 }
-function buySvc(k){ const sv=SVC[k]; if(S.money<sv.cost||(S.svc&&S.svc[k])) return; S.money-=sv.cost; S.svc=S.svc||{}; S.svc[k]={missed:0,closed:false}; tada(); save(); openServices(); }
-$('svcBtn').onclick=openServices;
+function buySvc(k){ const sv=SVC[k]; if(S.money<sv.cost||(S.svc&&S.svc[k])) return; S.money-=sv.cost; S.svc=S.svc||{}; S.svc[k]={n:1,missed:0,closed:false}; tada(); save(); openServices(); }
+function hire(k,d){ const st=S.svc[k], sf=STAFF[k];
+  if(d>0){ if(S.money<sf.hire) return; S.money-=sf.hire; if(!st) S.svc[k]={n:1,missed:0,closed:false}; else st.n=(st.n||0)+1; blip(880,0.08); }
+  else { if(!st) return; const min=(k==='secu'||k==='secours')?1:0; if((st.n||0)>min) st.n--; if(!st.n && min===0) delete S.svc[k]; blip(500,0.08); }
+  save(); openServices(); }
+function openHealth(){
+  const h=healthParts(), bar=(lab,v)=>v==null?'':`<div class="hrow"><span>${lab}</span><div class="bar"><i style="width:${Math.round(v*100)}%;background:${v<.5?'#ef4444':v<.8?'#f59e0b':'#22c55e'}"></i></div><b>${Math.round(v*100)} %</b></div>`;
+  openModal(`<h2>❤️ Santé du parc : ${health()} %</h2>
+    <p class="small">Plus la santé est haute, plus les visiteurs ont envie d'entrer. En dessous de 100 %, certains font demi-tour.</p>
+    ${bar('🔧 Attractions ouvertes',h.maint)}${bar('🧹 Propreté',h.clean)}${bar('🛡️ Sécurité',h.secu)}${bar('⛑️ Secours',h.aid)}${bar('🌳 Espaces verts',h.green)}
+    <p>${WEATHER[S.weather||'sun'].em} Météo du jour : <b>${WEATHER[S.weather||'sun'].name}</b> (${WEATHER[S.weather||'sun'].eff}).</p>
+    <div class="right"><button onclick="openServices()">🛠️ Services</button><button class="main" onclick="closeModal()">OK</button></div>`,'lili-explique');
+}
+$('svcBtn').onclick=openServices; $('badgeBtn').onclick=openBadges; $('healthPill').onclick=openHealth;
 function drawServices(){
+  if(lv()<2) return;
+  const cl=svcOK('clean')?(S.svc.clean.n||0):0;
+  for(let k=0;k<cl;k++){ if(k%S.zones!==view) continue; const sp=16+(k%3)*4, x=((animT*sp+k*173)%(W+80))-40, y=PATH_MID+(k%2?20:-14);
+    g.strokeStyle='#8b5a2b'; g.lineWidth=2; g.beginPath(); g.moveTo(x+5,y-2); g.lineTo(x+11,y+12); g.stroke(); g.fillStyle='#facc15'; g.fillRect(x+8,y+10,8,4);
+    rr(x-5,y-4,10,11,3); g.fillStyle='#16a34a'; g.fill(); kid(x,y-9,'#3f2a14'); }
   if(view!==0) return;
   [['secu',118],['secours',168]].forEach(([k,x])=>{ const st=S.svc&&S.svc[k]; if(!st) return; const y=PATH_BOT-30, off=st.closed;
     rr(x-15,y,30,24,4); g.fillStyle=off?'#9ca3af':(k==='secu'?'#1d4ed8':'#fff'); g.fill(); g.strokeStyle=off?'#6b7280':(k==='secu'?'#1e3a8a':'#dc2626'); g.lineWidth=2; g.stroke();
@@ -1235,10 +1469,12 @@ function frame(now){
   if(S && !modalOpen && speed>0){ const sd=dt*speed; const n=Math.ceil(sd/0.05); for(let k=0;k<n;k++) step(sd/n); }
   if(S){
     drawBackground();
+    drawWear();
     for(let j=0;j<8;j++) drawPlot(view*8+j);
     drawZoneSigns();
     drawServices();
     drawEventFx(dt);
+    drawWeather(dt);
     visitors.filter(v=>v.zone===view).sort((a,b)=>a.y-b.y).forEach(drawVisitor);
     for(const f of floats){ f.t-=dt; if(f.zone!==view) continue; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
     floats=floats.filter(f=>f.t>0);
@@ -1247,7 +1483,7 @@ function frame(now){
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
     tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
-      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
+      if(!modalOpen && speed>0){ checkUnlocks(); checkBadges(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
   }
