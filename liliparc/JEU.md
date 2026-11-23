@@ -271,6 +271,6 @@ Constantes en haut du script de `index.html` :
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
 - **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
-- **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
+- **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #18** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
