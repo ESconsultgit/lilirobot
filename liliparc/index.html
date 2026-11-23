@@ -20,6 +20,11 @@
 body{margin:0;font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(#F2F7EA,#FBE1EE);color:var(--ink);min-height:100vh}
 .wrap{max-width:1120px;margin:0 auto;padding:10px max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
 html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+/* Pas de sélection de texte ni de « Toucher pour rechercher » (Chrome Android) quand on touche le jeu */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea{-webkit-user-select:text;user-select:text}
+img{-webkit-user-drag:none;pointer-events:none}
+.coin{pointer-events:none}
 button,canvas{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
 .title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;flex:1 1 240px;color:var(--violet);line-height:1;display:flex;align-items:center;gap:8px}
@@ -204,6 +209,104 @@ let visitors=[], floats=[], confetti=[];
 let view=0, speed=1, modalOpen=false, soundOn=true, spawnAcc=0, animT=0;
 const runtime = Array.from({length:16},()=>({queue:[],timer:0}));
 
+// ================== ÉVÉNEMENTS SPÉCIAUX ==================
+// Proposés certains soirs pour le lendemain. On paie le lendemain matin (porte-monnaie puis tirelire).
+// Pas assez d'argent à ce moment-là ? L'événement est raté : il fallait penser à épargner !
+const EVENTS=[
+  {id:'noel',    em:'🎅', name:'La visite du Père Noël',        vis:4,   k:1.0, min:300, img:'livia-mission', miss:"le Père Noël n'a pas pu venir", effect:'4 fois plus de visiteurs (+300 %)',
+   desc:"Le Père Noël vient dire bonjour aux enfants : tout le monde veut le voir !"},
+  {id:'feu',     em:'🎆', name:"Le grand feu d'artifice",       vis:2.5, k:0.5, min:150, img:'lili-contente', miss:"le feu d'artifice n'a pas pu avoir lieu", effect:'2,5 fois plus de visiteurs (+150 %)',
+   desc:"Boum ! Des feux d'artifice toute la journée : les visiteurs arrivent de partout."},
+  {id:'concert', em:'🎤', name:"Le concert d'Ellie et Livia",   vis:1.8, gen:1.4, k:0.5, min:150, img:'duo-victoire', miss:"le concert n'a pas pu avoir lieu", effect:'+80 % de visiteurs, et ils acceptent de payer plus cher',
+   desc:"Un concert sur la grande allée : les visiteurs sont de si bonne humeur qu'ils dépensent plus."},
+  {id:'parade',  em:'🤡', name:'La parade des clowns',          vis:2,   stars:0.4, k:0.4, min:100, img:'lili-coucou', miss:"les clowns ne sont pas venus", effect:'2 fois plus de visiteurs, et la note de ta fête monte',
+   desc:"Des clowns rigolos défilent dans les allées. Tout le monde rit !"},
+  {id:'ecole',   em:'🚌', name:'La sortie des écoles',          vis:3,   money:0.5, k:0.6, min:100, img:'livia-idee', miss:"les écoles ne sont pas venues", effect:'3 fois plus de visiteurs… mais avec peu d\'argent de poche',
+   desc:"Plein de classes viennent visiter la fête avec leurs maîtresses !"},
+];
+const EV=Object.fromEntries(EVENTS.map(e=>[e.id,e]));
+const round50=n=>Math.max(50,Math.round(n/50)*50);
+function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:50; }
+function eventCost(ev){ return Math.max(ev.min, round50(avgIncome()*ev.k)); }
+function maybeOfferEvent(){
+  S.lastOffer=S.lastOffer||0;
+  if(S.booked || S.dayNum<4) return false;
+  const since=S.dayNum-S.lastOffer;
+  if(since<3 || (since<6 && Math.random()<0.5)) return false;
+  const pool=EVENTS.filter(e=>e.id!==S.lastEv); const ev=pool[Math.floor(Math.random()*pool.length)];
+  S.lastOffer=S.dayNum; S.lastEv=ev.id; S.offer={id:ev.id,cost:eventCost(ev)}; save();
+  const total=S.money+S.bank, ok=total>=S.offer.cost;
+  openModal(`<h2>${ev.em} Demain : ${ev.name} !</h2><p>${ev.desc}</p>
+    <p><b>Ce que ça change :</b> ${ev.effect}.</p>
+    <table class="rep">
+      <tr><td>💰 Prix de l'événement</td><td>${fmt(S.offer.cost)} L$</td></tr>
+      <tr><td>👛🐷 Tu as en tout (porte-monnaie + tirelire)</td><td class="${ok?'plus':'minus'}">${fmt(total)} L$</td></tr>
+    </table>
+    <p class="small">⚠️ On paie <b>demain matin</b>, avec le porte-monnaie puis la tirelire. S'il n'y a pas assez d'argent à ce moment-là, l'événement n'aura pas lieu !${ok?'':' Il te manque '+fmt(S.offer.cost-total)+' L$…'}</p>
+    <div class="right"><button onclick="declineEvent()">Non merci</button><button class="main" onclick="bookEvent()">✅ Réserver</button></div>`, ev.img);
+  return true;
+}
+function bookEvent(){ S.booked=S.offer; S.offer=null; save(); closeModal(); blip(880,0.1); }
+function declineEvent(){ S.offer=null; save(); closeModal(); }
+function afterReport(){ closeModal(); maybeOfferEvent(); }
+function startEvent(){
+  const b=S.booked; if(!b) return; S.booked=null;
+  const ev=EV[b.id], total=S.money+S.bank;
+  if(total<b.cost){
+    toast('lili-pas-contente',`Oh non… ${ev.em}`,`Il manque <b>${fmt(b.cost-total)} L$</b> : ${ev.miss}. La prochaine fois, pense à <b>épargner</b> dans ta tirelire 🐷 !`);
+    save(); return;
+  }
+  let rest=b.cost; const fromWallet=Math.min(Math.max(0,S.money),rest); S.money-=fromWallet; rest-=fromWallet; S.bank-=rest;
+  day.event=ev.id; day.eventCost=b.cost; fx=[];
+  toast(ev.img,`${ev.em} ${ev.name} !`,rest>0?`Payé avec le porte-monnaie et <b>${fmt(rest)} L$</b> de la tirelire. Heureusement qu'on avait épargné !`:`C'est parti ! Les visiteurs arrivent en masse !`);
+  for(let k=0;k<80;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
+  save();
+}
+
+// ---------- animations des événements ----------
+let fx=[];
+function drawEventFx(dt){
+  const id=day&&day.event; if(!id) return;
+  const ev=EV[id];
+  // bandeau
+  g.font='700 15px "Baloo 2"'; const txt=`${ev.em} ${ev.name.toUpperCase()} ${ev.em}`, tw=g.measureText(txt).width+28;
+  rr(W/2-tw/2,PATH_TOP+8,tw,24,12); g.fillStyle='rgba(194,54,122,.92)'; g.fill();
+  g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(txt,W/2,PATH_TOP+21);
+  const walkX=(sp,off)=>((animT*sp+off)%(W+120))-60;
+  if(id==='noel'){
+    if(Math.random()<dt*25) fx.push({x:rnd(0,W),y:-5,vy:rnd(25,50),r:rnd(1.5,3.2)});
+    for(const f of fx){ f.y+=f.vy*dt; f.x+=Math.sin(animT*2+f.r)*0.3; circ(f.x,f.y,f.r,'rgba(255,255,255,.9)'); } fx=fx.filter(f=>f.y<H+5);
+    const x=walkX(35,0), y=PATH_MID+14+Math.abs(Math.sin(animT*6))*-2;
+    rr(x-9,y-4,18,18,6); g.fillStyle='#dc2626'; g.fill(); g.fillStyle='#fff'; g.fillRect(x-9,y+4,18,3);
+    circ(x,y-10,7,'#fcd9b8'); g.beginPath(); g.arc(x,y-7,7,0,Math.PI); g.fillStyle='#fff'; g.fill();
+    g.beginPath(); g.moveTo(x-7,y-13); g.lineTo(x+7,y-13); g.lineTo(x+10,y-24); g.closePath(); g.fillStyle='#dc2626'; g.fill(); circ(x+10,y-24,2.5,'#fff');
+    rr(x+9,y-2,10,12,3); g.fillStyle='#a16207'; g.fill();
+  } else if(id==='feu'){
+    if(Math.random()<dt*1.6){ const cx=rnd(80,W-80), cy=rnd(30,200), col=['#ffd23f','#ff5fa2','#38bdf8','#a78bfa','#4ade80'][Math.floor(rnd(0,5))]; fx.push({cx,cy,col,t:0}); }
+    for(const f of fx){ f.t+=dt; const r=f.t*90, a=Math.max(0,1-f.t/1.3); g.globalAlpha=a; for(let i=0;i<14;i++){ const an=i*Math.PI/7; circ(f.cx+Math.cos(an)*r,f.cy+Math.sin(an)*r+f.t*f.t*20,2.6,f.col); } g.globalAlpha=1; }
+    fx=fx.filter(f=>f.t<1.3);
+  } else if(id==='concert'){
+    if(Math.random()<dt*4) fx.push({x:rnd(80,W-80),y:PATH_MID+20,t:0,s:['♪','♫','♬'][Math.floor(rnd(0,3))],c:['#C2367A','#2F6E2B','#7b4cff'][Math.floor(rnd(0,3))]});
+    g.font='700 20px "Baloo 2"'; g.textAlign='center';
+    for(const f of fx){ f.t+=dt; g.globalAlpha=Math.max(0,1-f.t/2.5); g.fillStyle=f.c; g.fillText(f.s,f.x+Math.sin(f.t*3)*8,f.y-f.t*45); g.globalAlpha=1; }
+    fx=fx.filter(f=>f.t<2.5);
+  } else if(id==='parade'){
+    for(let k=0;k<4;k++){ const x=walkX(45,k*-34), y=PATH_MID+16+Math.sin(animT*8+k)*2, c=['#ef4444','#3b82f6','#22c55e','#f59e0b'][k];
+      rr(x-8,y-4,16,16,6); g.fillStyle=c; g.fill(); circ(x-4,y+4,2,'#fff'); circ(x+4,y+4,2,'#fff');
+      circ(x,y-11,7,'#fff'); circ(x,y-9,2.4,'#ef4444'); circ(x-7,y-14,4,['#f472b6','#facc15','#60a5fa','#a78bfa'][k]); circ(x+7,y-14,4,['#f472b6','#facc15','#60a5fa','#a78bfa'][k]);
+      if(k===0){ g.strokeStyle='#555'; g.lineWidth=1; g.beginPath(); g.moveTo(x+8,y); g.lineTo(x+14,y-28); g.stroke(); circ(x+14,y-32,6,'#ff5fa2'); } }
+  }
+}
+
+// Aide dégressive : beaucoup de conseils les 3 premiers jours, puis de plus en plus rares
+const helpLevel=()=>S.dayNum<=3?2:S.dayNum<=10?1:0;   // 2 = début, 1 = milieu, 0 = elles se débrouillent
+function canToast(k){
+  S.tipLog=S.tipLog||{};
+  const lvl=helpLevel(), max=[1,1,3][lvl];
+  if((day.tipToasts||0)>=max) return false;
+  const gap=k==='red'?1:({gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
+  return S.dayNum-(S.tipLog[k]??-99)>=gap;
+}
 function newGame(name){
   S = {name:name||'Lili Parc', seen:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0};
@@ -603,6 +706,7 @@ function drawVisitor(v){
   rr(x-5*s,y-5*s,10*s,10*s,4*s); g.fillStyle=v.cloth; g.fill();
   circ(x,y-10*s,5.5*s,v.skin);
   g.beginPath(); g.arc(x,y-11*s,5.8*s,Math.PI,0); g.fillStyle=v.hair; g.fill();
+  if(v.cap){ g.fillStyle='#facc15'; g.beginPath(); g.arc(x,y-12*s,6*s,Math.PI,0); g.fill(); g.fillRect(x,y-13*s,9*s,2.5*s); }
   if(v.balloon){ const bx=x+8*s, by=y-30*s+Math.sin(animT*2+v.seed)*2; g.strokeStyle='#666'; g.lineWidth=1; g.beginPath(); g.moveTo(x+4*s,y-2*s); g.lineTo(bx,by+7); g.stroke();
     g.beginPath(); g.ellipse(bx,by,6,7.5,0,0,Math.PI*2); g.fillStyle=v.balloon; g.fill(); circ(bx-2,by-3,1.6,'rgba(255,255,255,.7)'); }
   if(v.bubble && v.bubble.t>0){
@@ -620,7 +724,7 @@ function spawnVisitor(){
   const v={zone:0,x:-15,y:lane,lane,wp:[[44,lane]],mode:'gate',hidden:false,moving:true,phase:rnd(0,6),seed:rnd(0,9),
     speed:rnd(55,80),size:rnd(0.85,1.15),cloth:CLOTH[Math.floor(rnd(0,8))],skin:SKIN[Math.floor(rnd(0,5))],
     hair:['#3f2a14','#111','#c97b2a','#f5d06b','#6b3e1e'][Math.floor(rnd(0,5))],
-    money:Math.round(10+rnd(0,25)+totalFun()*2), wishes:Math.floor(rnd(2,6)), gen:rnd(0.8,1.3),
+    money:Math.round((10+rnd(0,25)+totalFun()*2)*(day.event&&EV[day.event].money||1)), wishes:Math.floor(rnd(2,6)), gen:rnd(0.8,1.3)*(day.event&&EV[day.event].gen||1), cap:day.event==='ecole',
     visited:new Set(), rides:0, balloon:null, target:-1};
   visitors.push(v);
 }
@@ -668,12 +772,14 @@ const BALLOONS=['#ff5fa2','#38bdf8','#ffd23f','#a78bfa','#34d399'];
 
 // ================== SIMULATION ==================
 function step(dt){
+  if(!day.started){ day.started=true; startEvent(); }
   S.time+=dt;
   // apparition
   if(S.time<DAY-6){
-    const rate=Math.min(2.6,0.35+0.09*totalFun())*(0.5+S.stars/5);
+    const evv=day.event?EV[day.event]:null;
+    const rate=Math.min(2.6,0.35+0.09*totalFun())*(0.5+S.stars/5)*(evv?evv.vis:1);
     spawnAcc+=rate*dt;
-    while(spawnAcc>=1){ spawnAcc--; if(visitors.length<170) spawnVisitor(); }
+    while(spawnAcc>=1){ spawnAcc--; if(visitors.length<(evv?320:170)) spawnVisitor(); }
   }
   // service des attractions
   S.plots.forEach((p,i)=>{ if(!p) return; const rt=runtime[i]; rt.timer-=dt;
@@ -709,22 +815,24 @@ function endDay(){
   const startStars=S.stars;
   S.money-=maint; S.bank+=interest;
   const tot=day.happy+day.sad, ratio=tot?day.happy/tot:0.6;
-  S.stars=Math.max(1,Math.min(5,S.stars*0.6+(1+4*ratio)*0.4));
-  const income=day.entryRev+day.rideRev, profit=income-maint;
-  const rep={...day, maint, interest, income, profit, dayNum:S.dayNum, starsUp:S.stars-startStars};
+  S.stars=Math.max(1,Math.min(5,S.stars*0.6+(1+4*ratio)*0.4+(day.event&&EV[day.event].stars||0)));
+  const income=day.entryRev+day.rideRev, evCost=day.eventCost||0, profit=income-maint-evCost;
+  if(!day.event){ S.incHist=(S.incHist||[]).concat(income).slice(-3); }
+  const rep={...day, maint, interest, income, profit, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars};
   visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); floats=[];
   S.dayNum++; S.time=0; spawnAcc=0;
   save(); showReport(rep); resetDay();
 }
 function showReport(r){
   let lesson='';
-  if(r.refGate>r.entries*0.4 && r.refGate>3) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
-  else if(r.refPrice>4) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
-  else if(r.queueFull>5) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
+  const hl=helpLevel();
+  if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
+  else if(r.refPrice>[20,10,4][hl]) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
+  else if(r.queueFull>[15,10,5][hl]) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
   else if(r.profit<0) lesson=`⚠️ Aujourd'hui tu as dépensé plus que ce que tu as gagné. L'entretien coûte cher : il faut que tes attractions rapportent plus qu'elles ne coûtent !`;
-  else if(S.money>300 && S.bank===0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
+  else if(S.money>300 && S.bank===0 && hl>0) lesson=`🐷 Tu as des LiliDollars qui dorment dans ton porte-monnaie. Mets-en dans ta <b>tirelire</b> : chaque nuit elle grandit de 5 % !`;
   else if(r.interest>0) lesson=`🐷 Ta tirelire t'a rapporté <b>${fmt(r.interest)} L$</b> cette nuit, sans rien faire ! C'est ça, faire fructifier son argent.`;
-  else lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
+  else if(hl===2) lesson=`💡 Astuce : si un prix est trop bas, tu gagnes moins. S'il est trop haut, les visiteurs ne viennent plus. Trouve le <b>juste prix</b> !`;
   openModal(`
     <h2>🌙 Fin du jour ${r.dayNum}</h2>
     <p>${r.entries} visiteurs sont venus · ${r.rides} tours d'attraction</p>
@@ -732,12 +840,14 @@ function showReport(r){
       <tr><td>🎟️ Billets d'entrée</td><td class="plus">+ ${fmt(r.entryRev)} L$</td></tr>
       <tr><td>🎠 Attractions</td><td class="plus">+ ${fmt(r.rideRev)} L$</td></tr>
       <tr><td>🔧 Entretien des attractions</td><td class="minus">− ${fmt(r.maint)} L$</td></tr>
+      ${r.event?`<tr><td>${EV[r.event].em} ${EV[r.event].name}</td><td class="minus">− ${fmt(r.evCost)} L$</td></tr>`:''}
       <tr><td class="big">Bénéfice du jour</td><td class="big ${r.profit>=0?'plus':'minus'}">${r.profit>=0?'+ ':'− '}${fmt(Math.abs(r.profit))} L$</td></tr>
       <tr><td>🐷 Intérêts de la tirelire</td><td class="plus">+ ${fmt(r.interest)} L$</td></tr>
     </table>
     <p>${lesson}</p>
     <p class="small">Note des visiteurs : ${starsTxt(S.stars)} ${r.starsUp>0.05?'(en hausse 📈)':r.starsUp<-0.05?'(en baisse 📉)':''}</p>
-    <div class="right"><button class="main" onclick="closeModal()">☀️ Jour suivant</button></div>`, r.profit<0?'duo-oups':(r.profit>0&&r.interest>0?'lili-mission':'lili-contente'));
+    ${r.event?`<p>${EV[r.event].em} Grâce à l'événement, <b>${r.entries}</b> visiteurs sont venus. ${r.profit>0?'Ça valait le coup !':'Cette fois, ça n\'a pas rapporté assez…'}</p>`:''}
+    <div class="right"><button class="main" onclick="afterReport()">☀️ Jour suivant</button></div>`, r.profit<0?'duo-oups':(r.profit>0&&r.interest>0?'lili-mission':'lili-contente'));
   tada();
 }
 
@@ -790,11 +900,11 @@ function build(i,id){
   const d=DEF[id]; if(S.money<d.cost||S.plots[i]) return;
   S.money-=d.cost; S.plots[i]={id,lvl:1,price:d.fair,};
   tada(); save(); closeModal();
-  if(id!=='huit') toast('duo-victoire',`${d.em} ${d.name} construit !`,`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`);
+  if(id!=='huit' && helpLevel()>0) toast('duo-victoire',`${d.em} ${d.name} construit !`,helpLevel()===2?`Bravo ! Les visiteurs vont adorer. Pense à vérifier son prix.`:`Bravo !`);
   const r=plotRect(i); for(let k=0;k<40;k++) confetti.push(mkConf(r.x+r.w/2,r.y+r.h/2));
   if(id==='huit' && !S.won){ S.won=true; save(); setTimeout(victory,600); }
 }
-function upgrade(i){ const p=S.plots[i], c=upCost(p); if(S.money<c||p.lvl>=3) return; S.money-=c; p.lvl++; tada(); save(); openPlot(i); toast('lili-contente','Niveau '+p.lvl+' !',`${DEF[p.id].name} est plus rapide et plus amusant !`); }
+function upgrade(i){ const p=S.plots[i], c=upCost(p); if(S.money<c||p.lvl>=3) return; S.money-=c; p.lvl++; tada(); save(); openPlot(i); }
 function setPrice(i,dlt){ const p=S.plots[i]; p.price=Math.max(0,Math.min(60,p.price+dlt)); blip(dlt>0?700:500,0.05); openPlot(i); }
 function openTicket(){
   const m=mood(S.entrance,entranceFair());
@@ -875,20 +985,20 @@ function getTip(){
   const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
   if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
   if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
-  if(day.refGate>5 && day.refGate>day.entries*0.4) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
-  if(day.refPrice>6) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
-  if(day.queueFull>6) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
+  if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
+  if(day.refPrice>[25,14,6][helpLevel()]) return T('price','livia-pensive',"Des visiteurs trouvent nos attractions trop chères. Clique dessus pour voir ce qu'ils en pensent.");
+  if(day.queueFull>[20,12,6][helpLevel()]) return T('queue','lili-perplexe',"Il y a trop de monde qui attend ! Améliore une attraction pour qu'elle aille plus vite.");
   const nextD=DEFS.find(d=>!built.includes(d.id));
   if(!freePlots().length && S.zones<NZ) return T('full','lili-idee',`Ta fête est pleine ! Achète le <b>Grand Parc</b> (${fmt(ZONE_COST)} L$) avec le panneau 🔒 Agrandir à droite.`);
   if(nextD && S.money>=nextD.cost && freePlots().length) return T('','livia-idee',`On peut construire : <b>${nextD.em} ${nextD.name}</b> ! Clique sur un terrain libre${S.zones>1&&!freePlots().some(i=>zoneOf(i)===view)?' (dans l\'autre zone)':''}.`);
-  if(S.money>500 && S.bank<S.money) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
+  if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
 const TIP_TITLES={full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
   for(const d of DEFS){
     if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
-    if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
+    if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); if(DEFS.indexOf(d)>=6){ save(); break; } toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
   }
 }
 function updateHUD(){
@@ -932,7 +1042,7 @@ $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(view?0:1); else openZoneBuy(); 
 $('tipBtn').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
 $('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
-[0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); });
+[0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); syncWake(); });
 
 // ================== APPLICATION (téléphone / tablette) ==================
 let installEvt=null;
@@ -946,6 +1056,22 @@ const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||
 function tryLandscape(){ try{ if(isStandalone()&&screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); }catch(e){} }
 document.addEventListener('click',tryLandscape,{once:true});
 
+// Garder l'écran allumé pendant que le jeu tourne (pas en pause, pas pendant une fenêtre)
+let wakeLock=null, wakeBusy=false;
+async function syncWake(){
+  const want=!!S && speed>0 && !modalOpen && document.visibilityState==='visible';
+  if(wakeBusy || !('wakeLock' in navigator) || want===!!wakeLock) return;
+  wakeBusy=true;
+  try{
+    if(want){ wakeLock=await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release',()=>{ wakeLock=null; }); }
+    else { const wl=wakeLock; wakeLock=null; await wl.release(); }
+  }catch(e){ wakeLock=null; }
+  wakeBusy=false;
+}
+document.addEventListener('visibilitychange',syncWake);
+document.addEventListener('click',syncWake);
+document.addEventListener('touchend',syncWake);
+
 // ================== BOUCLE ==================
 let last=performance.now(), tipT=0;
 function frame(now){
@@ -955,6 +1081,7 @@ function frame(now){
     drawBackground();
     for(let j=0;j<8;j++) drawPlot(view*8+j);
     drawZoneSigns();
+    drawEventFx(dt);
     visitors.filter(v=>v.zone===view).sort((a,b)=>a.y-b.y).forEach(drawVisitor);
     for(const f of floats){ f.t-=dt; if(f.zone!==view) continue; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
     floats=floats.filter(f=>f.t>0);
@@ -962,8 +1089,8 @@ function frame(now){
     const dusk=Math.max(0,(S.time/DAY-0.75)/0.25); if(dusk>0){ g.fillStyle=`rgba(40,20,90,${dusk*0.28})`; g.fillRect(0,0,W,H); }
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
-    tipT-=dt; if(tipT<=0){ tipT=1; const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
-      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k]){ day.shown[tp.k]=1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
+    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
+      if(!modalOpen && speed>0){ checkUnlocks(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
   }
