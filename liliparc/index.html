@@ -138,6 +138,12 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
   ul.rules{font-size:12.5px;line-height:1.3;margin:4px 0;padding-left:16px}
   input[type=text]{font-size:16px;padding:5px 8px}
 }
+.mlist{display:grid;gap:5px;margin:8px 0;max-height:46vh;overflow:auto}
+.mrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center;padding:6px 10px;border:2px solid #f0e8ff;border-radius:12px;cursor:pointer;font-size:15px}
+.mrow.on{background:#D7EDB9;border-color:#8CC63F}
+.mrow input{width:20px;height:20px;accent-color:#2F6E2B}
+.mrow .me{font-size:12px;color:#4C5E49}.mrow .mw{font-style:normal;font-size:11.5px;color:#C9531E;font-weight:700}
+@media (max-height:560px) and (orientation:landscape){ .mlist{grid-template-columns:1fr 1fr;max-height:44dvh;gap:4px} .mrow{padding:3px 6px;font-size:12.5px;gap:5px} .mrow input{width:16px;height:16px} }
 </style>
 </head>
 <body>
@@ -159,6 +165,7 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
       </div>
       <button id="zoneBtn" title="Changer de zone">🗺️<span class="lbl"> Agrandir</span></button>
       <button id="ticketBtn" title="Billet d'entrée">🎟️<span class="lbl"> Billet d'entrée</span></button>
+      <button id="svcBtn" title="Sécurité et secours">🛡️<span class="lbl"> Sécurité</span></button>
       <button id="tipBtn" title="Astuce">💡</button>
       <button id="installBtn" title="Installer l'application">📲<span class="lbl"> Installer</span></button>
       <button id="soundBtn" title="Son">🔊</button>
@@ -245,6 +252,7 @@ function maybeOfferEvent(){
       <tr><td>💰 Prix de l'événement</td><td>${fmt(S.offer.cost)} L$</td></tr>
       <tr><td>👛🐷 Tu as en tout (porte-monnaie + tirelire)</td><td class="${ok?'plus':'minus'}">${fmt(total)} L$</td></tr>
     </table>
+    ${(!svcOK('secu')||!svcOK('secours'))?`<p class="small">🛡️⛑️ Avec autant de monde, il faut un <b>${!svcOK('secu')?'poste de sécurité (dès 100 visiteurs)':''}${!svcOK('secu')&&!svcOK('secours')?' et un ':''}${!svcOK('secours')?'poste de secours (dès 200 visiteurs)':''}</b>, sinon les visiteurs auront peur et repartiront !</p>`:''}
     <p class="small">⚠️ On paie <b>demain matin</b>, avec le porte-monnaie puis la tirelire. S'il n'y a pas assez d'argent à ce moment-là, l'événement n'aura pas lieu !${ok?'':' Il te manque '+fmt(S.offer.cost-total)+' L$…'}</p>
     <div class="right"><button onclick="declineEvent()">Non merci</button><button class="main" onclick="bookEvent()">✅ Réserver</button></div>`, ev.img);
   return true;
@@ -307,15 +315,15 @@ function canToast(k){
   S.tipLog=S.tipLog||{};
   const lvl=helpLevel(), max=[1,1,3][lvl];
   if((day.tipToasts||0)>=max) return false;
-  const gap=k==='red'?1:({demolish:[8,4,1],gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
+  const gap=k==='red'?1:({fear:[1,1,1],demolish:[8,4,1],gate:[6,3,1],price:[6,3,1],queue:[6,3,1],full:[6,3,1],bank:[10,5,1]}[k]||[4,2,1])[lvl];
   return S.dayNum-(S.tipLog[k]??-99)>=gap;
 }
 function newGame(name){
-  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
+  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:100, bank:0, dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0};
   resetDay();
 }
-function resetDay(){ day={shown:{},entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
+function resetDay(){ day={shown:{},refFear:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
 function save(){ try{ localStorage.setItem(SAVE_KEY, JSON.stringify(S)); }catch(e){} }
 function load(){ try{ const s=localStorage.getItem(SAVE_KEY); return s?JSON.parse(s):null; }catch(e){ return null; } }
 
@@ -328,6 +336,12 @@ const lvlMul=(p,k)=>1+k*(p.lvl-1);
 const fairOf=p=>Math.round(DEF[p.id].fair*lvlMul(p,0.2)*10)/10;
 const funOf=p=>DEF[p.id].fun*lvlMul(p,0.5);
 const maintOf=p=>Math.round(DEF[p.id].maint*lvlMul(p,0.5));
+const dueOf=p=>maintOf(p)*2**(p.missed||0);   // entretien de ce soir (doublé à chaque soir oublié)
+const SVC={
+  secu:   {id:'secu',   em:'🛡️', name:'Poste de sécurité', cost:1200, maint:30, need:100, desc:"Des agents veillent sur tout le monde. Obligatoire dès 100 visiteurs dans la journée."},
+  secours:{id:'secours',em:'⛑️', name:'Poste de secours',  cost:2500, maint:50, need:200, desc:"Une infirmerie pour les petits bobos. Obligatoire dès 200 visiteurs dans la journée."},
+};
+const svcOK=k=>!!(S.svc&&S.svc[k]&&!S.svc[k].closed);
 const intervalOf=p=>DEF[p.id].interval/lvlMul(p,0.4);
 const upCost=p=>Math.round(DEF[p.id].cost*0.75*p.lvl);
 const totalFun=()=>S.plots.reduce((a,p)=>a+(p?funOf(p):0),0);
@@ -735,7 +749,11 @@ function drawPlot(i){
     g.fillStyle='#fff'; g.font='600 17px \"Baloo 2\"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('Terrain libre',r.x+r.w/2,r.y+r.h/2+38);
     return;
   }
-  g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,animT,p.lvl); g.restore();
+  g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,p.closed?0:animT,p.lvl); g.restore();
+  if(p.closed){ rr(r.x,r.y,r.w,r.h,16); g.fillStyle='rgba(30,27,46,.55)'; g.fill();
+    g.save(); g.translate(r.x+r.w/2,r.y+r.h/2-8); g.rotate(-0.12); rr(-74,-22,148,44,8); g.fillStyle='#fbbf24'; g.fill(); g.strokeStyle='#111'; g.lineWidth=3; g.stroke();
+    g.fillStyle='#111'; g.font='800 20px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('FERMÉ 🔧',0,-5);
+    g.font='700 12px "Baloo 2"'; g.fillText(`pas entretenu ${p.missed}/3`,0,13); g.restore(); }
   // panneau
   rr(r.x+12,signY,r.w-24,28,8); g.fillStyle='#8b5a2b'; g.fill(); rr(r.x+15,signY+3,r.w-30,22,6); g.fillStyle='#fff6e0'; g.fill();
   g.fillStyle='#4a2a10'; g.font='600 13px \"Baloo 2\"'; g.textAlign='left'; g.textBaseline='middle';
@@ -782,7 +800,7 @@ function spawnVisitor(){
 }
 function chooseNext(v){
   const opts=[];
-  S.plots.forEach((p,i)=>{ if(p && !v.visited.has(i) && p.price<=v.money) opts.push(i); });
+  S.plots.forEach((p,i)=>{ if(p && !p.closed && !v.visited.has(i) && p.price<=v.money) opts.push(i); });
   if(v.wishes<=0 || !opts.length){ goExit(v); return; }
   let tot=0; const ws=opts.map(i=>{ const w=funOf(S.plots[i])+0.5; tot+=w; return w; });
   let r=Math.random()*tot, pick=opts[0]; for(let k=0;k<opts.length;k++){ r-=ws[k]; if(r<=0){ pick=opts[k]; break; } }
@@ -798,6 +816,8 @@ function route(v,tz,tx,ty){
 function goExit(v){ v.mode='exit'; const wp=[[v.x,v.lane]]; let z=v.zone; while(z<S.zones-1){ wp.push([W+20,v.lane]); z++; wp.push({tp:z,x:-20}); } wp.push([W+40,v.lane]); v.wp=wp; }
 function arrive(v){
   if(v.mode==='gate'){
+    const noSecu=day.entries>=SVC.secu.need && !svcOK('secu'), noAid=day.entries>=SVC.secours.need && !svcOK('secours');
+    if(noSecu||noAid){ say(v,noSecu?"Pas de sécurité… j'ai peur !":"Pas de secours… j'ai peur !",true); day.refFear++; day.fearWhat=noSecu?'secu':'secours'; day.sad+=0.3; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
     const will=entranceFair()*rnd(0.7,1.6)*v.gen;
     if(S.entrance>will){ say(v,'Trop cher ! 😕',true); day.refGate++; day.sad+=1; v.mode='leave'; v.wp=[[-30,v.lane]]; return; }
     if(S.entrance>0){ earn(S.entrance,'entry'); floatTxt(50,v.y-20,'+'+fmt(S.entrance)); v.money-=S.entrance; }
@@ -861,24 +881,59 @@ function moveTo(v,tx,ty,dt){
 }
 
 // ================== FIN DE JOURNÉE ==================
+function maintItems(){
+  const it=[];
+  S.plots.forEach((p,i)=>{ if(p) it.push({key:'p'+i, em:DEF[p.id].em, name:DEF[p.id].name, due:dueOf(p), missed:p.missed||0, earned:day.earned[i]||0, ref:p}); });
+  for(const k in (S.svc||{})) it.push({key:'s'+k, em:SVC[k].em, name:SVC[k].name, due:SVC[k].maint*2**(S.svc[k].missed||0), missed:S.svc[k].missed||0, earned:null, ref:S.svc[k]});
+  return it;
+}
 function endDay(){
-  const maint=S.plots.reduce((a,p)=>a+(p?maintOf(p):0),0);
   const interest=Math.floor(S.bank*BANK_RATE);
   const startStars=S.stars;
-  S.money-=maint; S.bank+=interest;
+  S.bank+=interest;
   const tot=day.happy+day.sad, ratio=tot?day.happy/tot:0.6;
   S.stars=Math.max(1,Math.min(5,S.stars*0.6+(1+4*ratio)*0.4+(day.event&&EV[day.event].stars||0)));
-  const income=day.entryRev+day.rideRev, evCost=day.eventCost||0, profit=income-maint-evCost;
+  const income=day.entryRev+day.rideRev, evCost=day.eventCost||0;
   if(!day.event){ S.incHist=(S.incHist||[]).concat(income).slice(-3); }
-  const rep={...day, maint, interest, income, profit, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars};
+  const items=maintItems(), due=items.reduce((a,x)=>a+x.due,0);
+  const base={...day, interest, income, evCost, dayNum:S.dayNum, starsUp:S.stars-startStars};
   visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); floats=[];
-  S.dayNum++; S.time=0; spawnAcc=0;
-  save(); showReport(rep); resetDay();
+  S.dayNum++; S.time=0; spawnAcc=0; resetDay();
+  const finish=keys=>{
+    let paid=0; const closed=[], destroyed=[];
+    items.forEach(x=>{
+      if(keys.has(x.key)){ paid+=x.due; x.ref.missed=0; x.ref.closed=false; return; }
+      x.ref.missed=(x.ref.missed||0)+1;
+      if(x.ref.missed>=3){ destroyed.push(x.em+' '+x.name); if(x.key[0]==='p') S.plots[+x.key.slice(1)]=null; else delete S.svc[x.key.slice(1)]; }
+      else { x.ref.closed=true; closed.push(x.em+' '+x.name+(x.ref.missed===2?' (dernière chance !)':'')); }
+    });
+    S.money-=paid;
+    save(); showReport({...base, maint:paid, profit:income-paid-evCost, closed, destroyed});
+  };
+  if(S.money>=due) finish(new Set(items.map(x=>x.key)));
+  else if(window.AUTO_MAINT) finish(greedyMaint(items));
+  else { mSel=greedyMaint(items); mItems=items; mFinish=finish; save(); renderMaint(); }
 }
+let mSel=null, mItems=[], mFinish=null;
+function greedyMaint(items,sel){ sel=sel||new Set(); let left=S.money-items.filter(x=>sel.has(x.key)).reduce((a,x)=>a+x.due,0);
+  [...items].sort((a,b)=>(b.earned===null?1e9:b.earned)-(a.earned===null?1e9:a.earned)).forEach(x=>{ if(!sel.has(x.key)&&x.due<=left){ sel.add(x.key); left-=x.due; } }); return sel; }
+function renderMaint(){
+  const tot=mItems.filter(x=>mSel.has(x.key)).reduce((a,x)=>a+x.due,0), all=mItems.reduce((a,x)=>a+x.due,0), ok=tot<=S.money;
+  openModal(`<h2>🔧 Pas assez d'argent pour l'entretien !</h2>
+    <p>Ce soir, tout l'entretien coûte <b>${fmt(all)} L$</b>, mais il n'y a que <b>${fmt(S.money)} L$</b> dans le porte-monnaie. Choisis ce que tu entretiens. Le reste sera <b>fermé demain</b> (pas de visiteurs, pas d'argent) et son entretien <b>doublera</b>. Après 3 soirs sans entretien, c'est <b>détruit</b> !</p>
+    <div class="mlist">${mItems.map(x=>`<label class="mrow ${mSel.has(x.key)?'on':''}"><input type="checkbox" ${mSel.has(x.key)?'checked':''} onchange="toggleM('${x.key}')"><span class="mn">${x.em} ${x.name}${x.missed?` <i class="mw">${x.missed===2?'⚠️ dernière chance':'déjà oubliée'}</i>`:''}</span><span class="me">${x.earned===null?'':'💰 '+fmt(x.earned)}</span><b>${fmt(x.due)} L$</b></label>`).join('')}</div>
+    <p>Total choisi : <b class="${ok?'plus':'minus'}">${fmt(tot)} L$</b> sur ${fmt(S.money)} L$ · <span class="small">💰 = gagné aujourd'hui</span></p>
+    <div class="right">${S.bank>0&&tot<all?`<button onclick="maintBank()">🐷 Prendre dans la tirelire (${fmt(S.bank)} L$)</button>`:''}<button class="main" ${ok?'':'disabled'} onclick="confirmMaint()">✅ Valider</button></div>`,'lili-perplexe');
+  $('box').dataset.lock='1';
+}
+function toggleM(k){ mSel.has(k)?mSel.delete(k):mSel.add(k); renderMaint(); }
+function maintBank(){ const all=mItems.reduce((a,x)=>a+x.due,0), take=Math.min(S.bank,Math.max(0,all-S.money)); S.bank-=take; S.money+=take; coinSound(); mSel=greedyMaint(mItems,mSel); renderMaint(); }
+function confirmMaint(){ const sel=mSel, f=mFinish; mSel=null; mFinish=null; $('box').dataset.lock=''; closeModal(); f(sel); }
 function showReport(r){
   let lesson='';
   const hl=helpLevel();
-  if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
+  if(r.refFear>0) lesson=`😟 <b>${r.refFear}</b> visiteurs ont eu peur et sont repartis : il manque un <b>${SVC[r.fearWhat].name.toLowerCase()}</b> ! Touche 🛡️ pour en construire un.`;
+  else if(r.refGate>r.entries*[0.55,0.45,0.4][hl] && r.refGate>[10,6,3][hl]) lesson=`🎟️ <b>${r.refGate}</b> visiteurs ont fait demi-tour à l'entrée car le billet était trop cher. Essaie de baisser un peu le prix du billet !`;
   else if(r.refPrice>[20,10,4][hl]) lesson=`😕 <b>${r.refPrice}</b> fois, un visiteur a trouvé une attraction trop chère. Regarde les prix de tes attractions !`;
   else if(r.queueFull>[15,10,5][hl]) lesson=`⏳ Il y avait trop de monde qui attendait ! <b>Améliore</b> une attraction pour qu'elle aille plus vite, ou construis-en une nouvelle.`;
   else if(r.profit<0) lesson=`⚠️ Aujourd'hui tu as dépensé plus que ce que tu as gagné. L'entretien coûte cher : il faut que tes attractions rapportent plus qu'elles ne coûtent !`;
@@ -891,11 +946,13 @@ function showReport(r){
     <table class="rep">
       <tr><td>🎟️ Billets d'entrée</td><td class="plus">+ ${fmt(r.entryRev)} L$</td></tr>
       <tr><td>🎠 Attractions</td><td class="plus">+ ${fmt(r.rideRev)} L$</td></tr>
-      <tr><td>🔧 Entretien des attractions</td><td class="minus">− ${fmt(r.maint)} L$</td></tr>
+      <tr><td>🔧 Entretien payé</td><td class="minus">− ${fmt(r.maint)} L$</td></tr>
       ${r.event?`<tr><td>${EV[r.event].em} ${EV[r.event].name}</td><td class="minus">− ${fmt(r.evCost)} L$</td></tr>`:''}
       <tr><td class="big">Bénéfice du jour</td><td class="big ${r.profit>=0?'plus':'minus'}">${r.profit>=0?'+ ':'− '}${fmt(Math.abs(r.profit))} L$</td></tr>
       <tr><td>🐷 Intérêts de la tirelire</td><td class="plus">+ ${fmt(r.interest)} L$</td></tr>
     </table>
+    ${r.closed&&r.closed.length?`<p>🔒 <b>Fermé demain</b> (pas entretenu) : ${r.closed.join(', ')}</p>`:''}
+    ${r.destroyed&&r.destroyed.length?`<p>💥 <b>Détruit</b> après 3 soirs sans entretien : ${r.destroyed.join(', ')}</p>`:''}
     <p>${lesson}</p>
     <p class="small">Note des visiteurs : ${starsTxt(S.stars)} ${r.starsUp>0.05?'(en hausse 📈)':r.starsUp<-0.05?'(en baisse 📉)':''}</p>
     ${r.event?`<p>${EV[r.event].em} Grâce à l'événement, <b>${r.entries}</b> visiteurs sont venus. ${r.profit>0?'Ça valait le coup !':'Cette fois, ça n\'a pas rapporté assez…'}</p>`:''}
@@ -933,14 +990,14 @@ function openPlot(i){
   }
   const d=DEF[p.id], m=mood(p.price,fairOf(p)), earned=day.earned[i]||0;
   const canUp=p.lvl<3, uc=upCost(p);
-  openModal(`<h2>${d.em} ${d.name}</h2><p>${d.desc}</p>
+  openModal(`<h2>${d.em} ${d.name}</h2>${p.closed?`<p class="mood m3">🔒 Fermée aujourd'hui : elle n'a pas été entretenue (${p.missed}/3). Si elle n'est pas entretenue ce soir encore, ${p.missed>=2?'elle sera détruite':'son entretien doublera encore'} !</p>`:`<p>${d.desc}</p>`}
     <p class="small">Niveau ${'★'.repeat(p.lvl)}${'☆'.repeat(3-p.lvl)}</p>
     <p><b>Prix d'un tour :</b></p>
     <div class="row"><div class="price"><button onclick="setPrice(${i},-1)">−</button><span>${fmt(p.price)} ${coin}</span><button onclick="setPrice(${i},1)">+</button></div>
       <div class="mood ${m.c}">${m.e} Les visiteurs trouvent ça ${m.t}</div></div>
     <table class="rep">
       <tr><td>💰 Gagné aujourd'hui</td><td class="plus">${fmt(earned)} L$</td></tr>
-      <tr><td>🔧 Entretien chaque soir</td><td class="minus">${fmt(maintOf(p))} L$</td></tr>
+      <tr><td>🔧 Entretien ce soir</td><td class="minus">${fmt(dueOf(p))} L$${p.missed?' (×'+2**p.missed+')':''}</td></tr>
       <tr><td>👥 File d'attente</td><td>${runtime[i].queue.length} / ${MAXQ}</td></tr>
     </table>
     ${canUp?`<p>⬆️ <b>Améliorer au niveau ${p.lvl+1}</b> : plus rapide, plus amusant, et les visiteurs acceptent de payer un peu plus cher. Mais l'entretien coûtera aussi plus cher !</p>
@@ -1022,7 +1079,8 @@ const RULES=`<ul class="rules">
   <li>🏗️ Clique sur un <b>terrain libre</b> pour construire une attraction (la barbe à papa, c'est un bon début !).</li>
   <li>💰 Clique sur une attraction pour changer son <b>prix</b>. Trop cher ? Les visiteurs repartent. Pas assez cher ? Tu gagnes moins.</li>
   <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
-  <li>🔧 Chaque soir, tu paies l'<b>entretien</b> de tes attractions.</li>
+  <li>🔧 Chaque soir, tu paies l'<b>entretien</b>. Pas assez d'argent ? L'attraction oubliée ferme le lendemain, son entretien double, et après 3 oublis elle est détruite !</li>
+  <li>🛡️ Dès 100 visiteurs par jour, il faut un <b>poste de sécurité</b>, et dès 200 un <b>poste de secours</b>.</li>
   <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
   <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin. Et quand tout est plein, <b>démolis</b> une attraction pour en mettre une meilleure.</li>
   <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li></ul>`;
@@ -1039,7 +1097,7 @@ function startScreen(force){
   }
   $('box').dataset.lock='1';
 }
-function continueGame(){ S=load(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
+function continueGame(){ S=load(); S.svc=S.svc||{}; S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
@@ -1052,6 +1110,7 @@ function mkConf(x,y){ return {x,y,vx:rnd(-120,120),vy:rnd(-260,-60),c:BALLOONS[M
 
 function getTip(){
   const built=S.plots.filter(Boolean).map(p=>p.id), T=(k,img,txt)=>({k,img,txt});
+  if(day.refFear>0){ const k=day.fearWhat||'secu'; return T('fear','lili-pas-contente',`Des visiteurs ont peur et font demi-tour : il faut un <b>${SVC[k].em} ${SVC[k].name.toLowerCase()}</b> ! Touche 🛡️ pour le construire (${fmt(SVC[k].cost)} L$).`); }
   if(S.money<0) return T('red','lili-pas-contente',"Oh non, on est dans le rouge ! L'entretien a coûté plus que ce qu'on a gagné. Reprends de l'argent dans la tirelire ou attends de regagner des LiliDollars.");
   if(!built.includes('barbe')) return S.money>=80 ? T('','livia-idee',"J'ai une idée : avec 80 L$, on peut construire un <b>stand de barbe à papa</b> ! Clique sur un terrain libre (avec le gros +).") : T('','lili-explique',"Les visiteurs arrivent ! Attends d'avoir 80 L$ pour construire la barbe à papa.");
   if(day.refGate>(helpLevel()===2?5:12) && day.refGate>day.entries*(helpLevel()===2?0.4:0.55)) return T('gate','livia-pensive',"Hmm… beaucoup de visiteurs font demi-tour à l'entrée. Le billet est peut-être trop cher ?");
@@ -1064,8 +1123,11 @@ function getTip(){
   if(S.money>500 && S.bank<S.money && helpLevel()>0) return T('bank','lili-idee',"Astuce : l'argent rangé dans la tirelire 🐷 grandit chaque nuit. Pense à en mettre de côté !");
   return T('','lili-explique',"Clique sur une attraction pour changer son prix ou l'améliorer. Clique sur l'entrée pour le prix du billet.");
 }
-const TIP_TITLES={demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
+const TIP_TITLES={fear:'Les visiteurs ont peur !',demolish:'Plus de place !',full:'Plus de place !',red:'Attention !',gate:'Trop cher ?',price:'Les prix…',queue:"Trop d'attente !",bank:'Astuce de Lili'};
 function checkUnlocks(){
+  for(const sv of Object.values(SVC)){ const wk='warn_'+sv.id;
+    if(!S.seen.includes(wk) && !(S.svc&&S.svc[sv.id]) && day.entries>=sv.need-20){ S.seen.push(wk); save();
+      toast('lili-explique',`Bientôt ${sv.need} visiteurs !`,`Quand ta fête attire plus de ${sv.need} visiteurs dans la journée, il faut un <b>${sv.em} ${sv.name.toLowerCase()}</b>, sinon les gens ont peur. Touche 🛡️ (${fmt(sv.cost)} L$).`); return; } }
   for(const d of DEFS){
     if(S.seen.includes(d.id) || S.plots.some(p=>p&&p.id===d.id)) continue;
     if(S.money>=d.cost && freePlots().length){ S.seen.push(d.id); if(DEFS.indexOf(d)>=6){ save(); break; } toast(DEFS.indexOf(d)%2?'livia-idee':'lili-idee','Nouvelle attraction débloquée !',`On a assez de LiliDollars pour construire <b>${d.em} ${d.name}</b> ! Clique sur un terrain libre.`); save(); break; }
@@ -1109,6 +1171,30 @@ function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COS
   for(let k=0;k<120;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
   toast('duo-victoire','Le Grand Parc est à toi !','8 nouveaux terrains ! Les visiteurs passent par la droite pour venir ici.'); }
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(view?0:1); else openZoneBuy(); };
+function openServices(){
+  const cards=Object.values(SVC).map(sv=>{ const st=S.svc&&S.svc[sv.id], miss=sv.cost-S.money;
+    return `<div class="card"><div class="em">${sv.em}</div><b>${sv.name}</b>
+      <div class="c">${st?(st.closed?'🔒 Fermé':'✅ Construit'):fmt(sv.cost)+' '+coin}</div>
+      <div class="small">Dès ${sv.need} visiteurs · entretien ${sv.maint} L$ / soir</div>
+      ${st?'':`<button class="ok" ${miss>0?'disabled':''} onclick="buySvc('${sv.id}')">Construire</button>`}</div>`; }).join('');
+  openModal(`<h2>🛡️ Sécurité et secours</h2>
+    <p>Quand une fête attire beaucoup de monde, les familles veulent être rassurées. Sans ces postes, les visiteurs ont <b>peur</b> et font demi-tour.</p>
+    <p class="small">🛡️ Poste de sécurité : obligatoire dès <b>100</b> visiteurs dans la journée · ⛑️ Poste de secours : dès <b>200</b>. Aujourd'hui : <b>${day.entries}</b> visiteurs.</p>
+    <div class="cards">${cards}</div>
+    <div class="right"><button class="main" onclick="closeModal()">OK</button></div>`,'lili-explique');
+}
+function buySvc(k){ const sv=SVC[k]; if(S.money<sv.cost||(S.svc&&S.svc[k])) return; S.money-=sv.cost; S.svc=S.svc||{}; S.svc[k]={missed:0,closed:false}; tada(); save(); openServices(); }
+$('svcBtn').onclick=openServices;
+function drawServices(){
+  if(view!==0) return;
+  [['secu',118],['secours',168]].forEach(([k,x])=>{ const st=S.svc&&S.svc[k]; if(!st) return; const y=PATH_BOT-30, off=st.closed;
+    rr(x-15,y,30,24,4); g.fillStyle=off?'#9ca3af':(k==='secu'?'#1d4ed8':'#fff'); g.fill(); g.strokeStyle=off?'#6b7280':(k==='secu'?'#1e3a8a':'#dc2626'); g.lineWidth=2; g.stroke();
+    g.fillStyle=off?'#6b7280':(k==='secu'?'#1e3a8a':'#dc2626'); g.fillRect(x-17,y-5,34,6);
+    if(k==='secu'){ g.fillStyle='#facc15'; g.beginPath(); g.moveTo(x,y+4); g.lineTo(x+7,y+7); g.quadraticCurveTo(x+6,y+17,x,y+20); g.quadraticCurveTo(x-6,y+17,x-7,y+7); g.closePath(); g.fill(); }
+    else { g.fillStyle=off?'#6b7280':'#dc2626'; g.fillRect(x-2.5,y+5,5,14); g.fillRect(x-7,y+9.5,14,5); }
+    if(off){ g.font='700 12px "Baloo 2"'; g.textAlign='center'; g.fillStyle='#111'; g.fillText('🔒',x,y-10); }
+    else { kid(x+21,y+6,k==='secu'?'#1e3a8a':'#fff'); g.fillStyle=k==='secu'?'#1d4ed8':'#fff'; rr(x+16,y+11,10,10,3); g.fill(); } });
+}
 $('tipBtn').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
 $('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
@@ -1151,6 +1237,7 @@ function frame(now){
     drawBackground();
     for(let j=0;j<8;j++) drawPlot(view*8+j);
     drawZoneSigns();
+    drawServices();
     drawEventFx(dt);
     visitors.filter(v=>v.zone===view).sort((a,b)=>a.y-b.y).forEach(drawVisitor);
     for(const f of floats){ f.t-=dt; if(f.zone!==view) continue; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
