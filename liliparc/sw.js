@@ -1,6 +1,6 @@
 /* Lili Parc : fonctionne même sans connexion. Change VERSION à chaque mise à jour du jeu. */
-const VERSION='liliparc-v8';
-const SHELL=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png',
+const VERSION='liliparc-v9';
+const SHELL=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','qrcode.js',
   'img/duo-equipe.webp','img/duo-oups.webp','img/duo-victoire.webp','img/lili-avatar.webp','img/lili-contente.webp',
   'img/lili-coucou.webp','img/lili-explique.webp','img/lili-idee.webp','img/lili-mission.webp','img/lili-pas-contente.webp',
   'img/lili-perplexe.webp','img/livia-idee.webp','img/livia-mission.webp','img/livia-pensive.webp','img/livia-petite.webp'];

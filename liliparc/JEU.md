@@ -21,9 +21,11 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 - [Santé du parc](#santé-du-parc)
 - [Météo, jour et nuit](#météo-jour-et-nuit)
 - [Événements spéciaux](#événements-spéciaux)
+- [Anniversaires du parc](#anniversaires-du-parc)
 - [Badges](#badges)
 - [Conseils d'Ellie et Livia](#conseils-dellie-et-livia)
 - [Affichage : téléphone et pixel art](#affichage--téléphone-et-pixel-art)
+- [Transférer une partie sur un autre téléphone](#transférer-une-partie-sur-un-autre-téléphone)
 - [Réglages techniques](#réglages-techniques)
 - [Historique des versions](#historique-des-versions)
 
@@ -174,6 +176,18 @@ Niveaux 2 et 3. La météo du lendemain est annoncée dans le bilan du soir et d
 
 Attention : un gros événement attire du monde ; il faut la sécurité, les secours et assez d'équipes de nettoyage, sinon il rapporte beaucoup moins.
 
+## Anniversaires du parc
+
+Tous les **100 jours** (100, 200, 300…) et le **jour 365**, le parc fête son anniversaire, automatiquement et gratuitement :
+
+- une fenêtre de fête avec le bilan (argent gagné depuis le début, attractions, meilleure journée, badges) ;
+- un **cadeau d'Ellie et Livia** : 1 000 L$ × échelle (8 000 L$ aux niveaux 2 et 3, 1 000 L$ au niveau 1), le double pour 1 an ;
+- une journée de fête : **3 fois plus de visiteurs**, de bonne humeur (ils dépensent plus), la note monte ;
+- dans l'allée : un **gâteau géant** avec ses bougies et le nombre de jours, des **ballons** qui s'envolent et un **feu d'artifice** ;
+- le badge **🎂 Joyeux anniversaire** (100 jours).
+
+Une partie qui a déjà dépassé le cap fête l'anniversaire dès le jour suivant. Si un événement était réservé, il est décalé au lendemain.
+
 ## Badges
 
 Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges débloquent les méga-attractions. Montants des niveaux 2 et 3 ; au niveau 1, seuils et récompenses sont divisés par 8 (arrondis).
@@ -194,6 +208,7 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 | 🧹 | **Parc tout propre** | 5 soirs de suite à 90 % de propreté | +4 800 L$ | ⭐⭐+ |
 | 🛡️ | **Parc sécurisé** | Sécurité + secours, et 5 soirs sans visiteur effrayé (500 visiteurs ou plus) | +6 400 L$ | ⭐⭐+ |
 | ❤️ | **Parc en pleine forme** | 7 soirs de suite avec une santé de 95 % ou plus | +12 000 L$ | ⭐⭐+ |
+| 🎂 | **Joyeux anniversaire** | Fêter les 100 jours du parc | +8 000 L$ | ⭐+ |
 | 🌳 | **Parc fleuri** | 7 soirs de suite avec des espaces verts à 90 % | +6 400 L$ | ⭐⭐⭐+ |
 
 ## Conseils d'Ellie et Livia
@@ -208,6 +223,16 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
 - **Style** (menu ⚙️) : 🎨 Normal ou 👾 Pixel art (rendu en basse résolution agrandi sans lissage + police pixel). Le choix est mémorisé pour chaque joueuse.
+
+## Transférer une partie sur un autre téléphone
+
+Menu ⚙️ → **📤 Envoyer ma partie** : le jeu affiche un **QR code** et un **code** (texte d'environ 500 caractères) qui contiennent toute la partie compressée, avec le prénom et l'avatar. Rien n'est envoyé sur un serveur.
+
+- **Android** : scanner le QR code avec l'appareil photo de l'autre téléphone ; le lien ouvre Lili Parc et propose d'importer la partie.
+- **iPhone** (l'app installée sur l'écran d'accueil ne partage pas ses données avec Safari) : **📋 Copier le code**, l'envoyer (message, mail…), puis dans le jeu de l'autre téléphone : « Qui joue ? » → **📥 J'ai un code**, coller, Récupérer.
+- À l'import, on choisit : **➕ Nouvelle joueuse** ou **♻️ Remplacer** une joueuse existante.
+- Le code est une photo de la partie à cet instant : les deux téléphones continuent ensuite chacun de leur côté.
+- Technique : JSON → compression `deflate-raw` → base64url, préfixe `LP1.` ; lien `…/liliparc/#import=<code>` ; QR code généré localement (`liliparc/qrcode.js`, bibliothèque qrcode-generator, licence MIT).
 
 ## Réglages techniques
 
@@ -232,3 +257,4 @@ Constantes en haut du script de `index.html` :
 - **PR #7** — niveaux de jeu, propreté, personnel, espaces verts, santé du parc, météo, badges, 3 méga-attractions.
 - **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueuses, cette documentation.
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
+- **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
