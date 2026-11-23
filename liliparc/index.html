@@ -11,7 +11,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Lili Parc</title>
-<link rel="icon" href="img/lili-avatar.webp">
+<link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -257,10 +257,15 @@ const DEFS = [
 ];
 // Échelle réaliste : chaque petit personnage = un groupe de GROUP visiteurs.
 // Les prix des tickets restent « par personne » ; les coûts sont multipliés par MUL pour garder la même difficulté.
-const GROUP=8, MUL=8;
-DEFS.forEach(d=>{ d.cost*=MUL; d.maint*=MUL; });
+// Niveau 1 : petits montants (1 personnage = 1 visiteur, prix de base). Niveaux 2-3 : ×8.
+let GROUP=8, MUL=8;
+const scaleFor=lvl=>(lvl||2)>=2?8:1;
+const SC=()=>MUL/8;
+const nb=n=>MUL>=8?n:(n>=1000?Math.round(n/8/100)*100:n/8>=100?Math.round(n/8/10)*10:Math.round(n/8/5)*5);   // facteur appliqué aux montants « niveau 2 » (badges, événements)
+DEFS.forEach(d=>{ d.base={cost:d.cost,maint:d.maint}; });
+function applyScale(){ GROUP=MUL=scaleFor(S&&S.level); DEFS.forEach(d=>{ d.cost=d.base.cost*MUL; d.maint=d.base.maint*MUL; }); ZONE_COST=1500*MUL; }
 const DEF = Object.fromEntries(DEFS.map(d=>[d.id,d]));
-const W=1100, H=560, ZONE_COST=12000, NZ=2, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
+let ZONE_COST=12000; const W=1100, H=560, NZ=2, DAY=60, MAXQ=6, BANK_RATE=0.05, SAVE_KEY='lilipark-v1';
 
 // ================== ÉTAT ==================
 let S; // état sauvegardé
@@ -271,29 +276,31 @@ const runtime = Array.from({length:16},()=>({queue:[],timer:0}));
 
 // ================== BADGES ==================
 const BADGES=[
-  {id:'v50',   em:'👥', name:'Premiers fans',       desc:'300 visiteurs en une journée',             reward:800,  test:()=>day.entries>=300},
-  {id:'v100',  em:'💯', name:'Mille visiteurs !',   desc:'1 000 visiteurs en une journée',           reward:2400, test:()=>day.entries>=1000},
-  {id:'save1', em:'🐷', name:'Petit épargnant',     desc:'4 000 L$ dans la tirelire',                reward:1200, test:()=>S.bank>=4000},
+  {id:'v50',   em:'👥', name:'Premiers fans',       desc:'{n} visiteurs en une journée', n:300,             reward:800,  test:()=>day.entries>=nb(300)},
+  {id:'v100',  em:'💯', name:'Plein de monde !',     desc:'{n} visiteurs en une journée', n:1000,           reward:2400, test:()=>day.entries>=nb(1000)},
+  {id:'save1', em:'🐷', name:'Petit épargnant',     desc:'{n} L$ dans la tirelire', n:4000,                reward:1200, test:()=>S.bank>=nb(4000)},
   {id:'build8',em:'🎠', name:'Collectionneur',      desc:'8 attractions en même temps',              reward:4000, test:()=>S.plots.filter(Boolean).length>=8},
   {id:'star',  em:'🌟', name:'Parc 5 étoiles',      desc:'Note des visiteurs de 4,5 ★ ou plus',      reward:6400, test:()=>S.stars>=4.5},
-  {id:'v250',  em:'🎉', name:'Grosse foule',        desc:'2 000 visiteurs en une journée',           reward:8000, test:()=>day.entries>=2000},
+  {id:'v250',  em:'🎉', name:'Grosse foule',        desc:'{n} visiteurs en une journée', n:2000,           reward:8000, test:()=>day.entries>=nb(2000)},
   {id:'event3',em:'🎅', name:'Organisateur',        desc:'3 événements réussis',                     reward:8000, test:()=>(S.evDone||0)>=3},
-  {id:'save2', em:'🏦', name:'Grand épargnant',     desc:'80 000 L$ dans la tirelire',               reward:12000, test:()=>S.bank>=80000},
+  {id:'save2', em:'🏦', name:'Grand épargnant',     desc:'{n} L$ dans la tirelire', n:80000,               reward:12000, test:()=>S.bank>=nb(80000)},
   {id:'build16',em:'🗺️', name:'Parc complet',       desc:'16 attractions en même temps',             reward:16000, test:()=>S.plots.filter(Boolean).length>=16},
-  {id:'v500',  em:'🏟️', name:'Fête géante',         desc:'4 000 visiteurs en une journée',           reward:24000, test:()=>day.entries>=4000},
-  {id:'rich',  em:'💰', name:'Grand forain',        desc:'800 000 L$ gagnés en tout',                reward:24000, test:()=>S.totalEarned>=800000},
+  {id:'v500',  em:'🏟️', name:'Fête géante',         desc:'{n} visiteurs en une journée', n:4000,           reward:24000, test:()=>day.entries>=nb(4000)},
+  {id:'rich',  em:'💰', name:'Grand forain',        desc:'{n} L$ gagnés en tout', n:800000,                reward:24000, test:()=>S.totalEarned>=nb(800000)},
   {id:'clean', em:'🧹', name:'Parc tout propre',    desc:'5 soirs de suite à 90 % de propreté',      reward:4800, lvl:2, streak:'clean',  need:5},
   {id:'safe',  em:'🛡️', name:'Parc sécurisé',       desc:'Sécurité + secours, et 5 soirs sans visiteur effrayé (500 visiteurs ou plus)', reward:6400, lvl:2, streak:'safe', need:5},
   {id:'health',em:'❤️', name:'Parc en pleine forme', desc:'7 soirs de suite avec une santé de 95 % ou plus', reward:12000, lvl:2, streak:'health', need:7},
   {id:'flower',em:'🌳', name:'Parc fleuri',         desc:'7 soirs de suite avec des espaces verts à 90 %', reward:6400, lvl:3, streak:'green', need:7},
 ];
+const bdesc=b=>b.desc.replace('{n}',fmt(nb(b.n||0)));
+const brew=b=>Math.round(b.reward*SC());
 const badgeList=()=>BADGES.filter(b=>lv()>=(b.lvl||1));
 function badgeOK(b){ return b.streak?((S.streak||{})[b.streak]||0)>=b.need:b.test(); }
 function checkBadges(){
   if(!S) return; S.badges=S.badges||[];
   for(const b of badgeList()){ if(S.badges.includes(b.id) || !badgeOK(b)) continue;
-    S.badges.push(b.id); S.money+=b.reward; tada();
-    toast('duo-victoire',`🏅 Badge « ${b.name} » ${b.em}`,`${b.desc}. Bravo ! Tu gagnes <b>+${fmt(b.reward)} L$</b>.`);
+    S.badges.push(b.id); S.money+=brew(b); tada();
+    toast('duo-victoire',`🏅 Badge « ${b.name} » ${b.em}`,`${bdesc(b)}. Bravo ! Tu gagnes <b>+${fmt(brew(b))} L$</b>.`);
     const mg=DEFS.find(d=>d.mega===S.badges.length);
     if(mg) setTimeout(()=>toast('livia-mission',`Méga-attraction débloquée !`,`Avec ${mg.mega} badges, tu peux construire <b>${mg.em} ${mg.name}</b> ! Il faudra peut-être démolir une attraction pour lui faire de la place.`),900);
     save(); return; }
@@ -307,7 +314,7 @@ function updateStreaks(base){
 function openBadges(){
   const got=S.badges||[], list=badgeList();
   const cards=list.map(b=>{ const ok=got.includes(b.id), pr=b.streak&&!ok?` · série ${(S.streak||{})[b.streak]||0}/${b.need}`:'';
-    return `<div class="badge ${ok?'':'off'}"><div class="bem">${b.em}</div><b>${b.name}</b><small>${b.desc}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(b.reward)} L$</span></div>`; }).join('');
+    return `<div class="badge ${ok?'':'off'}"><div class="bem">${b.em}</div><b>${b.name}</b><small>${bdesc(b)}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(brew(b))} L$</span></div>`; }).join('');
   const megas=DEFS.filter(d=>d.mega).map(d=>`<div class="badge ${got.length>=d.mega?'':'off'}"><div class="bem">${got.length>=d.mega?d.em:'🔒'}</div><b>${d.name}</b><small>${got.length>=d.mega?'Débloquée ! Construis-la sur un terrain libre.':'Avec '+d.mega+' badges'}</small><span class="brw">${fmt(d.cost)} L$</span></div>`).join('');
   openModal(`<h2>🏅 Mes badges : ${got.length} / ${list.length}</h2>
     <p class="small desc">Chaque badge rapporte des LiliDollars. Avec 3, 6 et 9 badges, tu débloques les méga-attractions bonus !</p>
@@ -331,9 +338,9 @@ const EVENTS=[
    desc:"Plein de classes viennent visiter la fête avec leurs maîtresses !"},
 ];
 const EV=Object.fromEntries(EVENTS.map(e=>[e.id,e]));
-const round50=n=>Math.max(100,Math.round(n/100)*100);
-function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:400; }
-function eventCost(ev){ return Math.max(ev.min, round50(avgIncome()*ev.k)); }
+const round50=n=>MUL>=8?Math.max(100,Math.round(n/100)*100):Math.max(50,Math.round(n/50)*50);
+function avgIncome(){ const h=S.incHist||[]; return h.length?h.reduce((a,b)=>a+b,0)/h.length:50*MUL; }
+function eventCost(ev){ return Math.max(ev.min*SC(), round50(avgIncome()*ev.k)); }
 function maybeOfferEvent(){
   S.lastOffer=S.lastOffer||0;
   if(S.booked || S.dayNum<4) return false;
@@ -416,21 +423,23 @@ function canToast(k){
   return S.dayNum-(S.tipLog[k]??-99)>=gap;
 }
 function newGame(name,level){
-  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:800, bank:0, scale:8, dayNum:1, time:0, entrance:1, stars:3, won:false,
+  S = {name:name||'Lili Parc', seen:['canards'], ever:['canards'], svc:{}, money:100*scaleFor(level), bank:0, scale:scaleFor(level), dayNum:1, time:0, entrance:1, stars:3, won:false,
        plots:[{id:'canards',lvl:1,price:2}].concat(Array(15).fill(null)), zones:1, totalEarned:0, level:level||2, dirt:0, green:100, weather:'sun'};
   initLevel();
   resetDay();
 }
 function initLevel(){
-  if(!S.scale){ // ancienne partie : on passe à l'échelle réaliste (×8) une seule fois
-    S.money*=MUL; S.bank*=MUL; S.totalEarned=(S.totalEarned||0)*MUL; S.incHist=(S.incHist||[]).map(x=>x*MUL);
-    S.lastEntries=(S.lastEntries||0)*GROUP; if(S.booked) S.booked.cost*=MUL; S.scale=MUL; }
+  applyScale();
+  const cur=S.scale||1;
+  if(cur!==MUL){ const f=MUL/cur; // conversion des montants (ancienne partie ou changement de niveau)
+    S.money=Math.round(S.money*f); S.bank=Math.round(S.bank*f); S.totalEarned=Math.round((S.totalEarned||0)*f); S.incHist=(S.incHist||[]).map(x=>x*f);
+    S.lastEntries=Math.round((S.lastEntries||0)*f); if(S.booked) S.booked.cost=Math.round(S.booked.cost*f); S.scale=MUL; }
   S.svc=S.svc||{}; S.badges=S.badges||[]; S.streak=S.streak||{}; if(S.dirt==null) S.dirt=0; if(S.green==null) S.green=100; S.weather=S.weather||'sun';
   if(S.level>=2 && !S.svc.clean) S.svc.clean={n:1,missed:0,closed:false};
   if(S.level>=3 && !S.svc.green) S.svc.green={n:1,missed:0,closed:false};
   for(const k of ['secu','secours']) if(S.svc[k] && !S.svc[k].n) S.svc[k].n=1;
 }
-function setLevel(n){ S.level=n; initLevel(); save(); updateHUD(); openMenu(); }
+function setLevel(n){ S.level=n; initLevel(); visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); save(); updateHUD(); openMenu(); }
 function resetDay(){ day={shown:{},refFear:0,refHealth:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
 // ---- Profils : chaque joueuse a sa propre partie sur le même téléphone ----
 let PROFILES=[], CUR=null;
@@ -465,7 +474,7 @@ SVC.green={id:'green',em:'🌳',name:'Jardiniers'};
 const svcOK=k=>!!(S.svc&&S.svc[k]&&!S.svc[k].closed);
 // ---- Niveaux de jeu ----
 const LVL_NAMES={1:'Petit forain',2:'Forain malin',3:'Grand directeur'};
-const LVL_DESC={1:"Dès 6 ans : construire, fixer les prix, épargner. L'entretien se paie tout seul.",
+const LVL_DESC={1:"Dès 6 ans : petits montants pour bien compter ; construire, fixer les prix, épargner. L'entretien se paie tout seul.",
   2:"Dès 8 ans : en plus, choisir l'entretien, sécurité et secours, propreté, santé du parc et météo.",
   3:"Dès 10 ans : en plus, engager agents, ambulanciers et jardiniers, et entretenir l'herbe et les arbres."};
 const lv=()=>(S&&S.level)||2;
@@ -1347,7 +1356,7 @@ function openMenu(){
 function confirmReset(){ openModal(`<h2>🔄 Nouvelle partie ?</h2><p>Ta fête foraine actuelle sera effacée. Tu es sûr·e ?</p>
   <div class="right"><button onclick="closeModal()">Non, je garde</button><button class="main" onclick="newGameScreen()">Oui, recommencer</button></div>`,'lili-perplexe'); }
 const RULES=`<ul class="rules">
-  <li>🎪 Tu commences avec une <b>pêche aux canards</b> et <b>800 LiliDollars</b>.</li>
+  <li>🎪 Tu commences avec une <b>pêche aux canards</b> et <b>un peu d'argent de poche</b>.</li>
   <li>🏗️ Clique sur un <b>terrain libre</b> pour construire une attraction (la barbe à papa, c'est un bon début !).</li>
   <li>💰 Clique sur une attraction pour changer son <b>prix</b>. Trop cher ? Les visiteurs repartent. Pas assez cher ? Tu gagnes moins.</li>
   <li>🎟️ Règle aussi le prix du <b>billet d'entrée</b>.</li>
@@ -1357,7 +1366,7 @@ const RULES=`<ul class="rules">
   <li>👮 <i>(Niveau 3)</i> Engage des agents et des ambulanciers quand il y a beaucoup de monde, et des jardiniers pour l'herbe et les arbres.</li>
   <li>🐷 Range tes économies dans la <b>tirelire</b> : elle grandit de 5 % chaque nuit !</li>
   <li>🗺️ Plus de place ? <b>Agrandis</b> ta fête avec le panneau à droite du chemin. Et quand tout est plein, <b>démolis</b> une attraction pour en mettre une meilleure.</li>
-  <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> à 40 000 L$ !</li>
+  <li>🎢 Le but : construire les 19 attractions, jusqu'au <b>Grand Huit Galactique</b> !</li>
   <li>🏅 Gagne des <b>badges</b> : chacun rapporte des LiliDollars, et ils débloquent 3 <b>méga-attractions bonus</b> (avec 3, 6 et 9 badges).</li></ul>`;
 function showRules(){ const back=modalOpen&&!S.dayNum; openModal(`<h2>📖 Comment jouer</h2>${RULES}<div class="right"><button class="main" onclick="closeModal()">J'ai compris !</button></div>`,'lili-explique'); }
 function startScreen(){ whoPlays(); }
@@ -1402,7 +1411,7 @@ function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
   openModal(`<h2>🎢 BRAVO ! 🎉</h2><p style="font-size:20px">Le <b>Grand Huit Galactique</b> est construit ! ${S.name} est devenue la plus grande fête foraine du pays !</p>
-    <p>Tu es parti·e d'une petite pêche aux canards et de 800 LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
+    <p>Tu es parti·e d'une petite pêche aux canards et de ${fmt(100*MUL)} LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
     <p class="small">Tu peux continuer à jouer pour améliorer toutes tes attractions au niveau ★★★.</p>
     <div class="right"><button class="main" onclick="closeModal()">Continuer à jouer</button></div>`,'duo-victoire');
 }

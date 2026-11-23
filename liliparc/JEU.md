@@ -35,7 +35,7 @@ Le **niveau de jeu** se choisit au début de chaque partie et peut être changé
 
 | Niveau | Pour qui | Ce qui est actif |
 |---|---|---|
-| ⭐ Petit forain | Dès 6 ans  | construire, fixer les prix, épargner. L'entretien se paie tout seul. |
+| ⭐ Petit forain | Dès 6 ans  | petits montants pour bien compter ; construire, fixer les prix, épargner. L'entretien se paie tout seul. |
 | ⭐⭐ Forain malin | Dès 8 ans  | en plus, choisir l'entretien, sécurité et secours, propreté, santé du parc et météo. |
 | ⭐⭐⭐ Grand directeur | Dès 10 ans  | en plus, engager agents, ambulanciers et jardiniers, et entretenir l'herbe et les arbres. |
 
@@ -63,7 +63,8 @@ Le **niveau de jeu** se choisit au début de chaque partie et peut être changé
 
 ## L'argent
 
-- On démarre avec une **pêche aux canards** et **800 L$**.
+- On démarre avec une **pêche aux canards** et **800 L$** (niveaux 2 et 3) ou **100 L$** (niveau 1).
+- **Niveau 1 = petits montants** pour les plus jeunes : chaque personnage est 1 visiteur et tous les prix, entretiens et récompenses sont **divisés par 8** (pêche aux canards 50 L$, Grand Huit 40 000 L$). Les niveaux 2 et 3 utilisent l'échelle réaliste (groupes de 8 visiteurs, montants ×8). Changer de niveau en cours de partie convertit l'argent automatiquement.
 - **Prix** : chaque attraction a un « juste prix » par personne. Trop cher, les visiteurs refusent (« Trop cher ! ») ; pas assez cher, on gagne moins. La fenêtre de l'attraction indique ce que pensent les visiteurs (pas cher / juste prix / un peu cher / beaucoup trop cher). Le juste prix augmente avec le niveau de l'attraction.
 - **Billet d'entrée** : son juste prix augmente avec le nombre et la qualité des attractions.
 - **Tirelire 🐷** : l'argent rangé rapporte **5 % chaque nuit**. Il faut le reprendre pour le dépenser. Le soir, la tirelire peut servir à payer l'entretien ou un événement.
@@ -71,35 +72,35 @@ Le **niveau de jeu** se choisit au début de chaque partie et peut être changé
 
 ## Les attractions
 
-Prix et entretien en L$ ; « juste prix » = prix d'un tour par personne au niveau 1.
+Prix et entretien en L$ (niveaux 2 et 3 ; au niveau 1 : divisés par 8). « Juste prix » = prix d'un tour par personne, identique à tous les niveaux.
 
-| | Attraction | Prix | Juste prix | Entretien / soir | Fun |
-|---|---|--:|--:|--:|--:|
-| 🦆 | **Pêche aux canards** — Attrape un canard et gagne un petit cadeau ! | 400 | 2 | 24 | 1 |
-| 🍭 | **Barbe à papa** — Un gros nuage rose tout sucré. | 640 | 3 | 40 | 1 |
-| 🥨 | **Churros** — Des churros tout chauds avec plein de sucre ! | 1 200 | 3 | 64 | 1 |
-| 🥫 | **Chamboule-tout** — Fais tomber toutes les boîtes avec une balle ! | 2 000 | 4 | 80 | 2 |
-| 🤸 | **Trampolines** — Boing ! Boing ! On saute jusqu'au ciel ! | 3 200 | 4 | 120 | 2 |
-| 🎠 | **Carrousel** — Les chevaux de bois qui tournent en musique. | 4 800 | 5 | 200 | 3 |
-| 🚂 | **Petit train** — Tchou tchou ! Tout le monde en voiture ! | 7 200 | 5 | 280 | 3 |
-| ☕ | **Tasses tournantes** — On tourne, on tourne… la tête qui tourne ! | 9 600 | 6 | 360 | 3 |
-| 🚗 | **Autos tamponneuses** — Bim ! Bam ! Boum ! On se rentre dedans. | 12 800 | 7 | 440 | 4 |
-| 🏰 | **Château gonflable** — Un château tout mou où on rebondit partout. | 17 600 | 6 | 520 | 4 |
-| 🏴‍☠️ | **Bateau pirate** — À l'abordage ! Le bateau se balance très haut. | 24 000 | 8 | 680 | 5 |
-| 🎡 | **Grande roue** — Tout là-haut, on voit toute la fête ! | 32 000 | 8 | 800 | 5 |
-| 🪂 | **Chaises volantes** — On vole en rond, les pieds dans le vide ! | 56 000 | 9 | 960 | 6 |
-| 🎪 | **Grand chapiteau** — Jongleurs, acrobates et clowns sous le grand chapiteau ! | 68 000 | 10 | 1 120 | 6 |
-| 👻 | **Train fantôme** — Hou hou… même pas peur ! | 80 000 | 10 | 1 200 | 6 |
-| 🛶 | **Rivière sauvage** — En bateau sur la rivière… et SPLASH dans la grande descente ! | 112 000 | 12 | 1 520 | 7 |
-| 🗼 | **Tour de chute** — On monte tout doucement… et AAAAH ça tombe ! | 144 000 | 13 | 1 760 | 8 |
-| 🌀 | **Pendule géant** — Le grand bras se balance jusqu'au ciel en tournant sur lui-même ! | 224 000 | 14 | 2 160 | 10 |
-| 🎢 | **Grand Huit Galactique** — L'attraction à sensation la plus folle de l'univers ! | 320 000 | 15 | 2 560 | 12 |
+| | Attraction | Prix (niv. 2-3) | Prix (niv. 1) | Juste prix | Entretien / soir (niv. 2-3) | Fun |
+|---|---|--:|--:|--:|--:|--:|
+| 🦆 | **Pêche aux canards** — Attrape un canard et gagne un petit cadeau ! | 400 | 50 | 2 | 24 | 1 |
+| 🍭 | **Barbe à papa** — Un gros nuage rose tout sucré. | 640 | 80 | 3 | 40 | 1 |
+| 🥨 | **Churros** — Des churros tout chauds avec plein de sucre ! | 1 200 | 150 | 3 | 64 | 1 |
+| 🥫 | **Chamboule-tout** — Fais tomber toutes les boîtes avec une balle ! | 2 000 | 250 | 4 | 80 | 2 |
+| 🤸 | **Trampolines** — Boing ! Boing ! On saute jusqu'au ciel ! | 3 200 | 400 | 4 | 120 | 2 |
+| 🎠 | **Carrousel** — Les chevaux de bois qui tournent en musique. | 4 800 | 600 | 5 | 200 | 3 |
+| 🚂 | **Petit train** — Tchou tchou ! Tout le monde en voiture ! | 7 200 | 900 | 5 | 280 | 3 |
+| ☕ | **Tasses tournantes** — On tourne, on tourne… la tête qui tourne ! | 9 600 | 1 200 | 6 | 360 | 3 |
+| 🚗 | **Autos tamponneuses** — Bim ! Bam ! Boum ! On se rentre dedans. | 12 800 | 1 600 | 7 | 440 | 4 |
+| 🏰 | **Château gonflable** — Un château tout mou où on rebondit partout. | 17 600 | 2 200 | 6 | 520 | 4 |
+| 🏴‍☠️ | **Bateau pirate** — À l'abordage ! Le bateau se balance très haut. | 24 000 | 3 000 | 8 | 680 | 5 |
+| 🎡 | **Grande roue** — Tout là-haut, on voit toute la fête ! | 32 000 | 4 000 | 8 | 800 | 5 |
+| 🪂 | **Chaises volantes** — On vole en rond, les pieds dans le vide ! | 56 000 | 7 000 | 9 | 960 | 6 |
+| 🎪 | **Grand chapiteau** — Jongleurs, acrobates et clowns sous le grand chapiteau ! | 68 000 | 8 500 | 10 | 1 120 | 6 |
+| 👻 | **Train fantôme** — Hou hou… même pas peur ! | 80 000 | 10 000 | 10 | 1 200 | 6 |
+| 🛶 | **Rivière sauvage** — En bateau sur la rivière… et SPLASH dans la grande descente ! | 112 000 | 14 000 | 12 | 1 520 | 7 |
+| 🗼 | **Tour de chute** — On monte tout doucement… et AAAAH ça tombe ! | 144 000 | 18 000 | 13 | 1 760 | 8 |
+| 🌀 | **Pendule géant** — Le grand bras se balance jusqu'au ciel en tournant sur lui-même ! | 224 000 | 28 000 | 14 | 2 160 | 10 |
+| 🎢 | **Grand Huit Galactique** — L'attraction à sensation la plus folle de l'univers ! | 320 000 | 40 000 | 15 | 2 560 | 12 |
 
 Le but : construire les 19 attractions, jusqu'au **Grand Huit Galactique** (écran de victoire). On peut continuer à jouer ensuite.
 
 ## Les méga-attractions bonus
 
-Débloquées par les **badges** (3, 6 puis 9 badges), elles ne font pas partie de l'objectif mais rapportent beaucoup.
+Débloquées par les **badges** (3, 6 puis 9 badges ; montants ÷8 au niveau 1), elles ne font pas partie de l'objectif mais rapportent beaucoup.
 
 | | Méga-attraction | Badges nécessaires | Prix | Juste prix | Entretien | Fun |
 |---|---|:-:|--:|--:|--:|--:|
@@ -175,12 +176,12 @@ Attention : un gros événement attire du monde ; il faut la sécurité, les sec
 
 ## Badges
 
-Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges débloquent les méga-attractions.
+Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges débloquent les méga-attractions. Montants des niveaux 2 et 3 ; au niveau 1, seuils et récompenses sont divisés par 8 (arrondis).
 
 | | Badge | Condition | Récompense | Niveau |
 |---|---|---|--:|:-:|
 | 👥 | **Premiers fans** | 300 visiteurs en une journée | +800 L$ | ⭐+ |
-| 💯 | **Mille visiteurs !** | 1 000 visiteurs en une journée | +2 400 L$ | ⭐+ |
+| 💯 | **Plein de monde !** | 1 000 visiteurs en une journée | +2 400 L$ | ⭐+ |
 | 🐷 | **Petit épargnant** | 4 000 L$ dans la tirelire | +1 200 L$ | ⭐+ |
 | 🎠 | **Collectionneur** | 8 attractions en même temps | +4 000 L$ | ⭐+ |
 | 🌟 | **Parc 5 étoiles** | Note des visiteurs de 4,5 ★ ou plus | +6 400 L$ | ⭐+ |
@@ -203,6 +204,7 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 
 ## Affichage : téléphone et pixel art
 
+- **Icône de l'application** : Ellie et Livia devant une grande roue (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
 - **Style** (menu ⚙️) : 🎨 Normal ou 👾 Pixel art (rendu en basse résolution agrandi sans lissage + police pixel). Le choix est mémorisé pour chaque joueuse.
@@ -211,7 +213,7 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 
 Constantes en haut du script de `index.html` :
 
-- `GROUP = 8` : visiteurs par personnage ; `MUL = 8` : multiplicateur appliqué aux prix et entretiens (équilibrage).
+- `GROUP` et `MUL` : visiteurs par personnage et multiplicateur des montants ; 8 aux niveaux 2-3, 1 au niveau 1 (`applyScale()`). Prix de base dans `DEFS` (niveau 1).
 - `DAY = 60` s par journée, `MAXQ = 6` groupes par file, `BANK_RATE = 0.05`, `ZONE_COST = 12 000`.
 - `DEFS` (attractions), `EVENTS`, `BADGES`, `SVC` et `STAFF` (services), `WEATHER`.
 - **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW`.
@@ -229,3 +231,4 @@ Constantes en haut du script de `index.html` :
 - **PR #6** — entretien à choisir (fermetures, destruction), postes de sécurité et de secours.
 - **PR #7** — niveaux de jeu, propreté, personnel, espaces verts, santé du parc, météo, badges, 3 méga-attractions.
 - **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueuses, cette documentation.
+- **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
