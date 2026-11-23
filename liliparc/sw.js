@@ -1,9 +1,10 @@
 /* Lili Parc : fonctionne même sans connexion. Change VERSION à chaque mise à jour du jeu. */
-const VERSION='liliparc-v10';
+const VERSION='liliparc-v11';
 const SHELL=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','qrcode.js',
   'img/duo-equipe.webp','img/duo-oups.webp','img/duo-victoire.webp','img/lili-avatar.webp','img/lili-contente.webp',
   'img/lili-coucou.webp','img/lili-explique.webp','img/lili-idee.webp','img/lili-mission.webp','img/lili-pas-contente.webp',
-  'img/lili-perplexe.webp','img/livia-idee.webp','img/livia-mission.webp','img/livia-pensive.webp','img/livia-petite.webp'];
+  'img/lili-perplexe.webp','img/livia-idee.webp','img/livia-mission.webp','img/livia-pensive.webp','img/livia-petite.webp',
+  'badges/v50.webp','badges/v100.webp','badges/v250.webp','badges/v500.webp','badges/save1.webp','badges/save2.webp','badges/rich.webp','badges/build8.webp','badges/build16.webp','badges/star.webp','badges/event3.webp','badges/anniv.webp','badges/clean.webp','badges/safe.webp','badges/health.webp','badges/flower.webp'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('liliparc-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{

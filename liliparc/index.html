@@ -13,7 +13,7 @@
 <title>Lili Parc</title>
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#C2367A;--violet:#2F6E2B;--yellow:#F2C230;--green:#2F6E2B;--lime:#8CC63F;--red:#C9531E;--ink:#1D351B}
 *{box-sizing:border-box}
@@ -160,27 +160,20 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
   .hrow{grid-template-columns:150px 1fr 44px;font-size:13px;margin:2px 0}
 }
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin:6px 0}
-.badge{border:2px solid #F2C230;background:#FCF1C7;border-radius:14px;padding:6px 8px;display:grid;grid-template-columns:34px 1fr;column-gap:6px;align-items:center}
-.badge .bem{grid-row:1/4;font-size:28px;text-align:center}.badge b{font-family:'Baloo 2',sans-serif;font-size:14px;line-height:1.1}
+@media (min-width:900px) and (min-height:561px){ .box:has(.bgrid){max-width:960px} .bgrid{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.badge{border:2px solid #F2C230;background:#FCF1C7;border-radius:14px;padding:6px 8px;display:grid;grid-template-columns:56px 1fr;column-gap:6px;align-items:center}
+.badge .bem{grid-row:1/4;font-size:28px;text-align:center}.badge img.bimg{grid-row:1/4;width:52px;height:52px;display:block;filter:drop-shadow(0 2px 1px rgba(0,0,0,.2))}
+.badge.off img.bimg{opacity:.7}.badge b{font-family:'Baloo 2',sans-serif;font-size:14px;line-height:1.1}
 .badge small{font-size:11.5px;color:#4C5E49;line-height:1.2}.badge .brw{font-size:12px;font-weight:800;color:#2F6E2B}
 .badge.off{filter:grayscale(1);opacity:.55;background:#fff;border-color:#e5e7eb}
 .card.locked{opacity:.6}.card.mega{border-color:#F2C230;background:#FCF1C7}
-@media (max-height:560px) and (orientation:landscape){ .box .desc{display:none} .bgrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px} .badge b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px!important} .bgrid+p{margin:2px 0!important} .badge small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:9.5px!important;line-height:1.15!important}.badge{padding:3px 5px;grid-template-columns:24px 1fr}.badge .bem{font-size:20px}.badge b{font-size:12px}.badge small{font-size:10px}.badge .brw{font-size:10.5px} }
+@media (max-height:560px) and (orientation:landscape){ .box .desc{display:none} .bgrid{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px} .badge b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px!important} .bgrid+p{margin:2px 0!important} .badge small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:9.5px!important;line-height:1.15!important}.badge{padding:3px 5px;grid-template-columns:34px 1fr}.badge .bem{font-size:20px}.badge img.bimg{width:32px;height:32px}.badge b{font-size:12px}.badge small{font-size:10px}.badge .brw{font-size:10.5px} }
 .whos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin:8px 0}
 .who{position:relative}.whob,.whonew{width:100%;display:grid;grid-template-columns:44px 1fr;column-gap:8px;align-items:center;text-align:left;border:3px solid #f0e8ff;padding:8px 10px}
 .whob .wav,.whonew .wav{grid-row:1/3;font-size:34px}.whob small,.whonew small{font-family:'Nunito',sans-serif;font-weight:600;font-size:12px;color:#4C5E49}
 .whodel{position:absolute;top:4px;right:4px;padding:2px 6px;font-size:13px;box-shadow:none;background:transparent}
 .whonew{border-style:dashed}
 .avs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.av{font-size:26px;padding:4px 8px;border:3px solid transparent}.av.sel{border-color:var(--pink);background:#FBE1EE}
-/* ---- Style pixel art ---- */
-body.pixel{font-family:'Pixelify Sans',monospace;background:#e9f5d8}
-body.pixel h2,body.pixel button,body.pixel .pill,body.pixel .price,body.pixel .title,body.pixel .toast .bub b.t,body.pixel .sblk>b,body.pixel .badge b{font-family:'Pixelify Sans',monospace!important}
-body.pixel .pill,body.pixel button,body.pixel .box,body.pixel .card,body.pixel .tip,body.pixel .goal,body.pixel .stage,body.pixel .toast .bub,body.pixel #tip,body.pixel .mrow,body.pixel .sblk,body.pixel .badge,body.pixel .lvl,body.pixel .goalMini,body.pixel .bar,body.pixel .bar>i,body.pixel .mood,body.pixel input{border-radius:0!important}
-body.pixel .pill,body.pixel button{box-shadow:3px 3px 0 #1D351B!important;border:2px solid #1D351B}
-body.pixel .box{box-shadow:6px 6px 0 #1D351B;border:3px solid #1D351B}
-body.pixel .stage{box-shadow:6px 6px 0 #1D351B;border:3px solid #1D351B}
-body.pixel canvas{image-rendering:pixelated}
-body.pixel .coin{border-radius:0}
 @media (max-height:560px) and (orientation:landscape){
   .menuc h2{font-size:16px!important;margin:0!important} .menuc .lvl{padding:2px 6px} .menuc .lvl b{font-size:13px} .menuc .right{margin-top:2px} .menuc button{padding:3px 8px;font-size:13px}   .menuc .lvl small,.menuc .instx,.menuc>p.small{display:none} .menuc .lvls{margin:2px 0} .menuc p{margin:2px 0!important} .menuc .row{margin:3px 0}
   .menuc .av{font-size:16px;padding:1px 4px} .menuc input[type=text]{padding:3px 6px;font-size:14px} .menuc .box button{padding:4px 8px}
@@ -306,7 +299,7 @@ function checkBadges(){
   if(!S) return; S.badges=S.badges||[];
   for(const b of badgeList()){ if(S.badges.includes(b.id) || !badgeOK(b)) continue;
     S.badges.push(b.id); S.money+=brew(b); tada();
-    toast('duo-victoire',`🏅 Badge « ${b.name} » ${b.em}`,`${bdesc(b)}. Bravo ! Tu gagnes <b>+${fmt(brew(b))} L$</b>.`);
+    toast('badges/'+b.id+'.webp',`🏅 Badge « ${b.name} »`,`${bdesc(b)}. Bravo ! Tu gagnes <b>+${fmt(brew(b))} L$</b>.`);
     const mg=DEFS.find(d=>d.mega===S.badges.length);
     if(mg) setTimeout(()=>toast('livia-mission',`Méga-attraction débloquée !`,`Avec ${mg.mega} badges, tu peux construire <b>${mg.em} ${mg.name}</b> ! Il faudra peut-être démolir une attraction pour lui faire de la place.`),900);
     save(); return; }
@@ -320,7 +313,7 @@ function updateStreaks(base){
 function openBadges(){
   const got=S.badges||[], list=badgeList();
   const cards=list.map(b=>{ const ok=got.includes(b.id), pr=b.streak&&!ok?` · série ${(S.streak||{})[b.streak]||0}/${b.need}`:'';
-    return `<div class="badge ${ok?'':'off'}"><div class="bem">${b.em}</div><b>${b.name}</b><small>${bdesc(b)}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(brew(b))} L$</span></div>`; }).join('');
+    return `<div class="badge ${ok?'':'off'}"><img class="bimg" src="badges/${b.id}.webp" alt="${b.em}"><b>${b.name}</b><small>${bdesc(b)}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(brew(b))} L$</span></div>`; }).join('');
   const megas=DEFS.filter(d=>d.mega).map(d=>`<div class="badge ${got.length>=d.mega?'':'off'}"><div class="bem">${got.length>=d.mega?d.em:'🔒'}</div><b>${d.name}</b><small>${got.length>=d.mega?'Débloquée ! Construis-la sur un terrain libre.':'Avec '+d.mega+' badges'}</small><span class="brw">${fmt(d.cost)} L$</span></div>`).join('');
   openModal(`<h2>🏅 Mes badges : ${got.length} / ${list.length}</h2>
     <p class="small desc">Chaque badge rapporte des LiliDollars. Avec 3, 6 et 9 badges, tu débloques les méga-attractions bonus !</p>
@@ -636,12 +629,6 @@ function door(i){ const r=plotRect(i); return {x:r.x+r.w/2, y:r.row?PATH_BOT+2:P
 
 // ================== CANVAS ==================
 const cv=document.getElementById('cv'), g0=cv.getContext('2d'); let g=g0;
-// Mode pixel art : on dessine la scène en petit (1/PX), puis on l'agrandit sans lissage
-const PX=2, pxCanvas=document.createElement('canvas'); pxCanvas.width=Math.ceil(W/PX); pxCanvas.height=Math.ceil(H/PX); const pxCtx=pxCanvas.getContext('2d');
-// Sprites pixel art des attractions (dossier px/). Une attraction sans sprite garderait le dessin vectoriel.
-const PX_SPRITES=DEFS.map(d=>d.id);   // toutes les attractions ont leur sprite (dossier px/)
-const PXSPR={}; PX_SPRITES.forEach(id=>{ const im=new Image(); im.src='px/'+id+'.png'; PXSPR[id]=im; });
-function setPixel(on){ S.pixel=!!on; document.body.classList.toggle('pixel',!!on); save(); }
 function sizeCanvas(){ const dpr=Math.min(2,window.devicePixelRatio||1); cv.width=W*dpr; cv.height=H*dpr; g0.setTransform(dpr,0,0,dpr,0,0); }
 sizeCanvas();
 function rr(x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
@@ -1093,10 +1080,9 @@ const DRAW={arcenciel:dArcenciel,dragon:dDragon,robot:dRobot,cirque:dCirque,rivi
 
 let hoverPlot=-1;
 function drawSign(i){
-  const r=plotRect(i), p=S.plots[i]; if(!p) return; const signY=r.row? r.y+2 : r.y+r.h-30, px=!!S.pixel;
-  if(px){ g.fillStyle='#5b3714'; g.fillRect(r.x+12,signY,r.w-24,28); g.fillStyle='#fff6e0'; g.fillRect(r.x+15,signY+3,r.w-30,22); }
-  else { rr(r.x+12,signY,r.w-24,28,8); g.fillStyle='#8b5a2b'; g.fill(); rr(r.x+15,signY+3,r.w-30,22,6); g.fillStyle='#fff6e0'; g.fill(); }
-  const f1=px?'600 13px "Pixelify Sans", monospace':'600 13px "Baloo 2"', f2=px?'700 14px "Pixelify Sans", monospace':'700 14px "Baloo 2"';
+  const r=plotRect(i), p=S.plots[i]; if(!p) return; const signY=r.row? r.y+2 : r.y+r.h-30;
+  rr(r.x+12,signY,r.w-24,28,8); g.fillStyle='#8b5a2b'; g.fill(); rr(r.x+15,signY+3,r.w-30,22,6); g.fillStyle='#fff6e0'; g.fill();
+  const f1='600 13px "Baloo 2"', f2='700 14px "Baloo 2"';
   g.fillStyle='#4a2a10'; g.font=f1; g.textAlign='left'; g.textBaseline='middle'; g.fillText(DEF[p.id].name,r.x+22,signY+14,r.w-100);
   g.textAlign='right'; g.fillStyle='#c2007a'; g.font=f2; g.fillText(fmt(p.price)+' L$',r.x+r.w-21,signY+14);
 }
@@ -1112,16 +1098,13 @@ function drawPlot(i){
     g.fillStyle='#fff'; g.font='600 17px \"Baloo 2\"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('Terrain libre',r.x+r.w/2,r.y+r.h/2+38);
     return;
   }
-  const spr=S.pixel&&PXSPR[p.id];
-  if(spr&&spr.complete&&spr.naturalWidth){ const w=spr.naturalWidth*PX, h=spr.naturalHeight*PX;
-    g.drawImage(spr, Math.round((r.x+(r.w-w)/2)/PX)*PX, Math.round((areaY+168-h)/PX)*PX, w, h); }
-  else { g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,p.closed?0:animT,p.lvl); g.restore(); }
+  g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,p.closed?0:animT,p.lvl); g.restore();
   if(p.closed){ rr(r.x,r.y,r.w,r.h,16); g.fillStyle='rgba(30,27,46,.55)'; g.fill();
     g.save(); g.translate(r.x+r.w/2,r.y+r.h/2-8); g.rotate(-0.12); rr(-74,-22,148,44,8); g.fillStyle='#fbbf24'; g.fill(); g.strokeStyle='#111'; g.lineWidth=3; g.stroke();
     g.fillStyle='#111'; g.font='800 20px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('FERMÉ 🔧',0,-5);
     g.font='700 12px "Baloo 2"'; g.fillText(`pas entretenu ${p.missed}/3`,0,13); g.restore(); }
-  // panneau (en mode pixel, il est redessiné net après l'agrandissement : drawPixelSigns)
-  if(!S.pixel) drawSign(i);
+  // panneau
+  drawSign(i);
   // niveau
   for(let k=0;k<3;k++){ g.fillStyle=k<p.lvl?'#ffd23f':'rgba(255,255,255,.5)'; star(r.x+r.w-48+k*16, r.row? r.y+r.h-14 : r.y+14, 7); }
 }
@@ -1346,7 +1329,7 @@ const LIVIA=n=>n.startsWith('livia');
 function toast(img,title,txt){
   const box=$('toasts'); while(box.children.length>=3) box.firstChild.remove();
   const el=document.createElement('div'); el.className='toast'+(LIVIA(img)?' pinkb':'');
-  el.innerHTML=`<img src="img/${img}.webp" alt=""><div class="bub"><b class="t">${title}</b>${txt}</div>`;
+  el.innerHTML=`<img src="${img.includes('/')?img:'img/'+img+'.webp'}" alt=""><div class="bub"><b class="t">${title}</b>${txt}</div>`;
   const kill=()=>{ el.classList.add('out'); setTimeout(()=>el.remove(),400); };
   el.onclick=kill; setTimeout(kill,7000); box.appendChild(el); blip(988,0.12,'sine',0.07); setTimeout(()=>blip(1319,0.15,'sine',0.07),110);
 }
@@ -1452,8 +1435,6 @@ function openMenu(){
     <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
       ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${a}</button>`).join('')}
       <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
-    <p><b>Style du dessin :</b></p>
-    <div class="row"><button class="${S.pixel?'':'sel'}" onclick="setPixel(false);openMenu()">🎨 Normal</button><button class="${S.pixel?'sel':''}" onclick="setPixel(true);openMenu()">👾 Pixel art</button></div>
     <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">👥 Changer de joueuse</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
     <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
@@ -1508,12 +1489,12 @@ function newGameScreen(){
       <input type="text" id="nm0" maxlength="32" value="Lili Parc">
       <p><b>Choisis ton niveau :</b></p>
       <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${n===2?'sel':''}" onclick="pickLvl(${n},this)"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
-      <div class="right"><button onclick="showRules()">📖 Règles</button><button class="main" onclick="newGame(document.getElementById('nm0').value.trim(),window.chosenLvl||2);visitors=[];view=0;document.body.classList.remove('pixel');save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
+      <div class="right"><button onclick="showRules()">📖 Règles</button><button class="main" onclick="newGame(document.getElementById('nm0').value.trim(),window.chosenLvl||2);visitors=[];view=0;save();closeModal()">C'est parti ! 🎉</button></div>`,'lili-coucou');
     window.chosenLvl=2;
   $('box').dataset.lock='1';
 }
 function pickLvl(n,el){ window.chosenLvl=n; document.querySelectorAll('.lvl').forEach(b=>b.classList.toggle('sel',b===el)); blip(700,0.06); }
-function continueGame(sv){ S=sv||load(); document.body.classList.toggle('pixel',!!S.pixel); visitors=[]; floats=[]; S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
+function continueGame(sv){ S=sv||load(); delete S.pixel; visitors=[]; floats=[]; S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
   for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
   tada(); setTimeout(tada,500);
@@ -1681,7 +1662,6 @@ function frame(now){
   const dt=Math.min(0.05,(now-last)/1000); last=now; animT+=dt;
   if(S && !modalOpen && speed>0){ const sd=dt*speed; const n=Math.ceil(sd/0.05); for(let k=0;k<n;k++) step(sd/n); }
   if(S){
-    if(S.pixel){ g=pxCtx; g.setTransform(1/PX,0,0,1/PX,0,0); g.imageSmoothingEnabled=false; } else g=g0;
     drawBackground();
     drawWear();
     for(let j=0;j<8;j++) drawPlot(view*8+j);
@@ -1693,7 +1673,6 @@ function frame(now){
     for(const f of floats){ f.t-=dt; if(f.zone!==view) continue; f.y-=dt*30; g.globalAlpha=Math.max(0,Math.min(1,f.t)); g.font='700 16px \"Baloo 2\"'; g.textAlign='center'; g.lineWidth=3; g.strokeStyle='#fff'; g.strokeText(f.txt+' L$',f.x,f.y); g.fillStyle=f.col; g.fillText(f.txt+' L$',f.x,f.y); g.globalAlpha=1; }
     floats=floats.filter(f=>f.t>0);
     drawLighting();
-    if(S.pixel){ g=g0; g.imageSmoothingEnabled=false; g.clearRect(0,0,W,H); g.drawImage(pxCanvas,0,0,W,H); for(let j=0;j<8;j++) drawSign(view*8+j); g.imageSmoothingEnabled=true; }
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
     tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));

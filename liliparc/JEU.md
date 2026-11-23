@@ -24,7 +24,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 - [Anniversaires du parc](#anniversaires-du-parc)
 - [Badges](#badges)
 - [Conseils d'Ellie et Livia](#conseils-dellie-et-livia)
-- [Affichage : téléphone et pixel art](#affichage--téléphone-et-pixel-art)
+- [Affichage et téléphone](#affichage-et-téléphone)
 - [Transférer une partie sur un autre téléphone](#transférer-une-partie-sur-un-autre-téléphone)
 - [Réglages techniques](#réglages-techniques)
 - [Historique des versions](#historique-des-versions)
@@ -190,7 +190,7 @@ Une partie qui a déjà dépassé le cap fête l'anniversaire dès le jour suiva
 
 ## Badges
 
-Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges débloquent les méga-attractions. Montants des niveaux 2 et 3 ; au niveau 1, seuils et récompenses sont divisés par 8 (arrondis).
+Bouton **🏅**. Chaque badge a son image (médaille dessinée pour Lili Parc, `liliparc/badges/<id>.webp`, 192 × 192, fond transparent), en couleur quand il est gagné et en gris sinon ; elle s'affiche aussi dans l'annonce du badge. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges débloquent les méga-attractions. Montants des niveaux 2 et 3 ; au niveau 1, seuils et récompenses sont divisés par 8 (arrondis).
 
 | | Badge | Condition | Récompense | Niveau |
 |---|---|---|--:|:-:|
@@ -217,13 +217,12 @@ Bouton **🏅**. Chaque badge rapporte des LiliDollars ; 3, 6 et 9 badges déblo
 - Les bulles (pop-ups) sont **dégressives** : beaucoup d'aide les 3 premiers jours, puis de moins en moins (au plus 1 par jour, alertes de prix espacées). Les alertes importantes (dans le rouge, visiteurs effrayés) restent.
 - Les déblocages d'attraction sont annoncés pour les 6 premières seulement.
 
-## Affichage : téléphone et pixel art
+## Affichage et téléphone
 
 - **Icône de l'application** : Ellie et Livia devant une grande roue (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
-- **Style** (menu ⚙️) : 🎨 Normal (dessins vectoriels animés) ou 👾 Pixel art. Le choix est mémorisé pour chaque joueuse.
-- **Pixel art** : les 22 attractions sont de vraies images pixel art (`liliparc/px/<id>.png`, max 108 × 82 pixels, 64 couleurs), tirées des planches dessinées pour Lili Parc. Le reste de la scène est rendu en basse résolution (÷2) puis agrandi sans lissage ; les panneaux sont redessinés nets en police pixel. Les images sont fixes ; nuit, lumières et météo s'appliquent aussi.
+- **Dessins** : attractions dessinées en vectoriel et animées (le mode pixel art a été retiré).
 
 ## Transférer une partie sur un autre téléphone
 
@@ -242,8 +241,8 @@ Constantes en haut du script de `index.html` :
 - `GROUP` et `MUL` : visiteurs par personnage et multiplicateur des montants ; 8 aux niveaux 2-3, 1 au niveau 1 (`applyScale()`). Prix de base dans `DEFS` (niveau 1).
 - `DAY = 60` s par journée, `MAXQ = 6` groupes par file, `BANK_RATE = 0.05`, `ZONE_COST = 12 000`.
 - `DEFS` (attractions), `EVENTS`, `BADGES`, `SVC` et `STAFF` (services), `WEATHER`.
-- **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW` + son image pixel `px/<id>.png`.
-- **Préparer des images pixel** : `liliparc/outils/decouper_planches.py` découpe une planche (dessins en rangées sur fond uni, légendes dessous) en sprites prêts à l'emploi.
+- **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW`.
+- **Ajouter un badge** : une ligne dans `BADGES` + son image ronde `badges/<id>.webp` (à ajouter aussi dans `SHELL` de `sw.js`).
 - **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`).
 - **Après chaque modification** : incrémenter `VERSION` dans `liliparc/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
 - Sauvegardes : `lilipark-profiles` (liste des joueuses), `lilipark-<id>` (partie de chaque joueuse). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueuse 1 ».
@@ -261,3 +260,4 @@ Constantes en haut du script de `index.html` :
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
 - **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
+- **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
