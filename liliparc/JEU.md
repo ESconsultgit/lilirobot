@@ -254,7 +254,7 @@ Constantes en haut du script de `index.html` :
 - **Plan du parc** : `COLS`, `ROWY` (position des terrains), `mainY()` (forme de la grande rue), `buildStreets()` (graphe des rues suivi par les visiteurs), `OVS` (zoom de la vue d'ensemble).
 - **Ajouter une attraction** : une ligne dans `DEFS` + une fonction de dessin `dXxx(w,h,t,lvl)` (zone de 225 × 170) déclarée dans `DRAW`.
 - **Ajouter un badge** : une ligne dans `BADGES` + son image ronde `badges/<id>.webp` (à ajouter aussi dans `SHELL` de `sw.js`).
-- **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`).
+- **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`), avec `icon:APP("/<jeu>/icon-192.png")` pour afficher le logo de l'application.
 - **Après chaque modification** : incrémenter `VERSION` dans `liliparc/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
 - Sauvegardes : `lilipark-profiles` (liste des joueuses), `lilipark-<id>` (partie de chaque joueuse). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueuse 1 ».
 
@@ -271,5 +271,6 @@ Constantes en haut du script de `index.html` :
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
 - **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
+- **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
 - **PR #18** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
