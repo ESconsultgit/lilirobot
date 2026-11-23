@@ -33,14 +33,14 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 
 /* ---------- Mise en page ---------- */
 .app{display:flex;height:100dvh;gap:10px;padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
-.boardWrap{flex:1 1 auto;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0}
-.side{flex:0 0 320px;display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto}
+.boardWrap{flex:none;display:flex;align-items:center;justify-content:center}
+.side{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:8px;min-height:0;max-width:560px}
 @media (orientation:portrait){
   .app{flex-direction:column;height:auto;min-height:100dvh}
   .boardWrap{flex:none}
   .side{flex:none;overflow:visible}
 }
-@media (max-height:500px) and (orientation:landscape){ .side{flex-basis:270px} button{font-size:14px;padding:6px 10px} .b-big{font-size:18px;padding:8px 12px} }
+@media (max-height:500px) and (orientation:landscape){ button{font-size:14px;padding:6px 10px} }
 
 /* ---------- Plateau ---------- */
 .board{position:relative;display:grid;grid-template-columns:1.6fr repeat(9,1fr) 1.6fr;grid-template-rows:1.6fr repeat(9,1fr) 1.6fr;
@@ -63,13 +63,16 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 @keyframes hl{0%,100%{background:#FFFDF6}40%{background:#FFF0A0}}
 .center{grid-column:2/11;grid-row:2/11;background:linear-gradient(135deg,#E3F3CC,#FCE3F0);border-radius:4px;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:calc(var(--u)*.25);position:relative;overflow:hidden}
-.logo{font-family:'Baloo 2';font-weight:800;font-size:calc(var(--u)*1.15);line-height:1;color:var(--pink);transform:rotate(-6deg);
+.logo{font-family:'Baloo 2';font-weight:800;font-size:calc(var(--u)*.95);line-height:1;color:var(--pink);transform:rotate(-6deg);
   text-shadow:0 calc(var(--u)*.06) 0 #fff,0 calc(var(--u)*.12) 0 rgba(29,53,27,.2)}
 .logo b{color:var(--green)}
-.dice{display:flex;gap:calc(var(--u)*.35)}
-.die{width:calc(var(--u)*1.15);height:calc(var(--u)*1.15);background:#fff;border-radius:calc(var(--u)*.22);box-shadow:0 calc(var(--u)*.08) 0 #c9c3b5,0 3px 10px rgba(0,0,0,.15);
+.diceBtn{display:flex;gap:calc(var(--u)*.4);background:none;box-shadow:none;padding:calc(var(--u)*.15);border-radius:calc(var(--u)*.35)}
+.diceBtn:disabled{opacity:1}
+.diceBtn.ready{animation:ready 1.2s ease-in-out infinite;background:rgba(255,255,255,.55);box-shadow:0 0 0 calc(var(--u)*.06) var(--pink)}
+@keyframes ready{50%{transform:scale(1.07) rotate(-2deg)}}
+.die{width:calc(var(--u)*1.5);height:calc(var(--u)*1.5);background:#fff;border-radius:calc(var(--u)*.22);box-shadow:0 calc(var(--u)*.08) 0 #c9c3b5,0 3px 10px rgba(0,0,0,.15);
   display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:calc(var(--u)*.15)}
-.die i{width:calc(var(--u)*.22);height:calc(var(--u)*.22);border-radius:50%;background:var(--pink);place-self:center;visibility:hidden}
+.die i{width:calc(var(--u)*.28);height:calc(var(--u)*.28);border-radius:50%;background:var(--pink);place-self:center;visibility:hidden}
 .die.on1 i:nth-child(5),.die.on2 i:nth-child(1),.die.on2 i:nth-child(9),.die.on3 i:nth-child(1),.die.on3 i:nth-child(5),.die.on3 i:nth-child(9),
 .die.on4 i:nth-child(1),.die.on4 i:nth-child(3),.die.on4 i:nth-child(7),.die.on4 i:nth-child(9),
 .die.on5 i:nth-child(1),.die.on5 i:nth-child(3),.die.on5 i:nth-child(5),.die.on5 i:nth-child(7),.die.on5 i:nth-child(9),
@@ -78,11 +81,11 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .die.roll{animation:shake .12s linear infinite}
 @keyframes shake{0%{transform:rotate(-12deg) translateY(-3px)}50%{transform:rotate(10deg) translateY(2px)}100%{transform:rotate(-12deg) translateY(-3px)}}
 .cmsg{font-family:'Baloo 2';font-weight:700;font-size:calc(var(--u)*.32);text-align:center;max-width:85%;min-height:2.4em;line-height:1.2}
-.decks{display:flex;gap:calc(var(--u)*.5)}
-.deck{width:calc(var(--u)*1.7);height:calc(var(--u)*1.1);border-radius:calc(var(--u)*.15);display:flex;align-items:center;justify-content:center;flex-direction:column;
-  font-family:'Baloo 2';font-weight:800;font-size:calc(var(--u)*.2);color:#fff;transform:rotate(-8deg);box-shadow:3px 3px 0 rgba(0,0,0,.18)}
-.deck span{font-size:calc(var(--u)*.45)}
-.deck.ch{background:#F59A23}.deck.su{background:#2E5BD8;transform:rotate(8deg)}
+.cact{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*.15);min-height:calc(var(--u)*1.1)}
+.cact .hint{font-family:'Baloo 2';font-weight:800;font-size:calc(var(--u)*.36);color:var(--pink)}
+.cact .row{display:flex;gap:calc(var(--u)*.15)}
+.cact button{font-size:calc(var(--u)*.34);padding:calc(var(--u)*.12) calc(var(--u)*.3)}
+.cact .endBtn{font-size:calc(var(--u)*.45);padding:calc(var(--u)*.15) calc(var(--u)*.5)}
 .pawns{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:1px;pointer-events:none}
 .pawn{width:calc(var(--u)*.52);height:calc(var(--u)*.52);border-radius:50%;background:var(--pc);border:2px solid #fff;display:flex;align-items:center;justify-content:center;
   font-size:calc(var(--u)*.34);box-shadow:0 2px 4px rgba(0,0,0,.35);transition:transform .15s}
@@ -90,31 +93,43 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 @keyframes bob{50%{transform:scale(1.18) translateY(-3px)}}
 .pawn.jailed{filter:grayscale(.6)}
 
-/* ---------- Panneau ---------- */
-.card{background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 4px 0 rgba(29,53,27,.12)}
-.topbar{display:flex;gap:6px;align-items:center}
-.topbar .t{font-family:'Baloo 2';font-weight:800;font-size:22px;color:var(--pink);flex:1;display:flex;align-items:center;gap:6px;line-height:1}
-.topbar .t img{width:34px;height:34px}
-.topbar button{padding:5px 10px}
-.turn{display:flex;align-items:center;gap:10px}
-.turn .pawn{width:46px;height:46px;font-size:28px;animation:none;transform:none}
-.turn .who{font-family:'Baloo 2';font-weight:800;font-size:20px;line-height:1.05}
-.turn .who small{display:block;font-family:Nunito;font-weight:700;font-size:13px;color:#666}
-.turn .cash{margin-left:auto;font-family:'Baloo 2';font-weight:800;font-size:22px;white-space:nowrap}
-.acts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.acts .row{display:flex;gap:6px}.acts .row>*{flex:1}
-.note{font-size:14px;font-weight:700;text-align:center;color:#555}
-.plist{display:flex;flex-direction:column;gap:5px}
-.pl{display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:12px;cursor:pointer}
+/* ---------- Panneau : le joueur qui joue et ses cartes ---------- */
+.hand{background:#fff;border-radius:18px;padding:10px;box-shadow:0 4px 0 rgba(29,53,27,.12);display:flex;flex-direction:column;gap:8px;flex:1 1 auto;min-height:0}
+.hhead{display:flex;align-items:center;gap:10px;border-radius:14px;padding:6px 8px;background:color-mix(in srgb,var(--pc) 14%,#fff)}
+.hhead .pawn{width:48px;height:48px;font-size:29px;animation:none;transform:none;flex:none}
+.hhead .who{font-family:'Baloo 2';font-weight:800;font-size:21px;line-height:1.05;min-width:0}
+.hhead .who small{display:block;font-family:Nunito;font-weight:700;font-size:13px;color:#666}
+.hhead .cash{margin-left:auto;font-family:'Baloo 2';font-weight:800;font-size:25px;white-space:nowrap}
+.cards{flex:1 1 auto;min-height:60px;overflow:auto;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;padding:2px}
+.cards .empty{color:#777;font-weight:700;font-size:14px;padding:8px;text-align:center;width:100%}
+.stack{display:flex;gap:3px;padding:4px;border-radius:11px;background:#F4F1E8;position:relative}
+.stack.full{background:#FFF0B8;box-shadow:0 0 0 2px var(--yellow)}
+.stack.full::before{content:"⭐";position:absolute;top:-9px;left:-6px;font-size:15px}
+.mc{width:58px;height:78px;border-radius:8px;border:2px solid #1D351B;background:#fff;display:flex;flex-direction:column;align-items:center;overflow:hidden;
+  padding:0;box-shadow:0 2px 0 rgba(29,53,27,.25);position:relative;font-family:Nunito}
+.mc .top{width:100%;height:15px;background:var(--gc);flex:none;font-size:10px;line-height:15px;color:#fff;text-align:center}
+.mc .e{font-size:24px;line-height:1.15;margin-top:2px}
+.mc .n{font-size:9.5px;font-weight:800;line-height:1.05;padding:0 2px;text-align:center;overflow:hidden;max-height:2.2em}
+.mc.ghost{border:2px dashed #b9b2a0;background:transparent;box-shadow:none;opacity:.55}
+.mc.ghost .top{background:transparent;border-bottom:2px dashed #b9b2a0}
+.mc.ghost .e{filter:grayscale(1)}
+.mc.mort .e,.mc.mort .n{opacity:.35}.mc.mort::after{content:"💤";position:absolute;bottom:2px;right:3px;font-size:14px}
+.mc .op{position:absolute;bottom:2px;right:2px;width:17px;height:17px;border-radius:50%;background:var(--pc);font-size:11px;line-height:15px;border:1px solid #fff}
+.tools{display:flex;gap:6px}
+.tools button{flex:1;padding:7px 4px;font-size:14px;line-height:1.1}
+.tools button b{display:block;font-size:20px}
+.debt{background:#FFE7DA;border-radius:14px;padding:8px;font-weight:700;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.debt .row{display:flex;gap:6px}.debt .row>*{flex:1}
+.neg{color:var(--red)}
+.pl{display:flex;align-items:center;gap:8px;padding:6px;border-radius:12px}
 .pl.cur{background:#FFF4C8}.pl.out{opacity:.4}
-.pl .pawn{width:30px;height:30px;font-size:18px;animation:none;transform:none}
+.pl .pawn{width:34px;height:34px;font-size:20px;animation:none;transform:none}
 .pl .n{font-weight:800;flex:1;min-width:0}
 .pl .n small{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
-.pl .sq{width:9px;height:9px;border-radius:2px;display:inline-block}
-.pl .m{font-family:'Baloo 2';font-weight:800;white-space:nowrap}
-.log{font-size:13px;line-height:1.35;color:#444;max-height:130px;overflow:auto}
-.log div{padding:1px 0;border-bottom:1px dashed #eee}
-.neg{color:var(--red)}
+.pl .sq{width:10px;height:10px;border-radius:2px;display:inline-block}
+.pl .m{font-family:'Baloo 2';font-weight:800;white-space:nowrap;text-align:right}
+.pl .m small{display:block;font-family:Nunito;font-size:11px;color:#777}
+.logl div{padding:3px 0;border-bottom:1px dashed #eee;font-size:14px}
 
 /* ---------- Fenêtres ---------- */
 .ov{position:fixed;inset:0;background:rgba(29,53,27,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:12px}
@@ -126,21 +141,39 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .mod .hero{display:flex;gap:10px;align-items:center}
 .mod .hero img{width:96px;height:96px;object-fit:contain;flex:none}
 .mod.wide{max-width:620px}
-.deed{border:3px solid #222;border-radius:12px;overflow:hidden;margin:4px 0}
-.deed .hd{padding:8px;text-align:center;color:#fff;font-family:'Baloo 2';font-weight:800;font-size:19px;line-height:1.1;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-.deed .hd .e{font-size:36px;display:block;text-shadow:none}
-.deed table{width:100%;border-collapse:collapse;font-size:15px}
-.deed td{padding:3px 10px}.deed td:last-child{text-align:right;font-weight:800}
-.deed tr.on td{background:#FFF4C8}
+.mod.slim{max-width:330px;background:#FBF8EE}
+.deed{width:100%;max-width:290px;margin:0 auto;background:#fff;border:3px solid #1D351B;border-radius:14px;overflow:hidden;box-shadow:0 5px 0 rgba(29,53,27,.2);font-family:Nunito}
+.deed .dh{background:var(--gc);color:#fff;text-align:center;padding:8px 8px 10px;border-bottom:3px solid #1D351B;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.deed .dh small{display:block;font-family:'Baloo 2';font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:.9}
+.deed .dh .e{display:block;font-size:44px;line-height:1.1;text-shadow:none}
+.deed .dh b{display:block;font-family:'Baloo 2';font-weight:800;font-size:21px;line-height:1.05}
+.deed .price{text-align:center;font-family:'Baloo 2';font-weight:800;font-size:19px;padding:6px 0 2px}
+.deed table{width:100%;border-collapse:collapse;font-size:15px;margin:2px 0 4px}
+.deed td{padding:3px 12px}.deed td:last-child{text-align:right;font-weight:800;white-space:nowrap}
+.deed tr.on td{background:#FFF0A0}
+.deed tr.sep td{border-top:2px dotted #ccc;font-size:13px;color:#555}
+.deed .dt{font-size:13px;color:#555;text-align:center;padding:2px 10px 8px}
+.deed .own{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px;background:#F4F1E8;font-weight:800;font-size:15px;border-top:2px solid #e2dccb}
+.deed .own .pawn{width:26px;height:26px;font-size:15px;animation:none;transform:none}
+.deed.sq .info{padding:12px;font-size:15px;text-align:center;line-height:1.35}
+@media (max-height:560px){
+  .mod.slim{max-width:600px;width:auto;display:flex;gap:12px;align-items:center;padding:10px}
+  .mod.slim .body{flex:1 1 auto;min-width:0}
+  .mod.slim .btns{flex-direction:column;flex:0 0 190px;margin:0}
+  .deed{max-width:330px}
+  .deed .dh{display:flex;align-items:center;gap:8px;padding:5px 10px;text-align:left}
+  .deed .dh small{display:none}.deed .dh .e{font-size:30px}.deed .dh b{font-size:17px}
+  .deed .price{font-size:15px;padding:3px 0 0}
+  .deed table{font-size:13px;margin:0 0 2px}.deed td{padding:1px 10px}.deed tr.sep td{font-size:12px}
+  .deed .dt{display:none}.deed .own{padding:3px;font-size:13px}
+  .deed.sq .info{padding:8px;font-size:14px}
+  .offerq{font-size:16px;margin:6px 0 0}
+}
+.offerq{text-align:center;font-family:'Baloo 2';font-weight:800;font-size:19px;margin:10px 0 0}
 .ccard{border-radius:16px;padding:14px;color:#fff;text-align:center;font-weight:800;font-size:19px;line-height:1.3}
 .ccard .e{font-size:48px;display:block}
 .ccard.chance{background:linear-gradient(135deg,#F59A23,#E85F1F)}.ccard.surprise{background:linear-gradient(135deg,#2E5BD8,#7A4BD8)}
 .ccard small{display:block;font-family:'Baloo 2';font-size:15px;opacity:.85;letter-spacing:1px;text-transform:uppercase}
-.props .grp{border-left:8px solid var(--gc);padding-left:8px;margin:8px 0}
-.props .pr{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:4px 0}
-.props .pr .nm{flex:1 1 140px;font-weight:800;font-size:15px}
-.props .pr .nm small{display:block;font-weight:600;color:#777;font-size:12px}
-.props .pr button{padding:5px 8px;font-size:14px}
 .setup .prow{display:flex;gap:6px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .setup input[type=text]{font:inherit;font-weight:800;border:2px solid #ddd;border-radius:10px;padding:6px 8px;width:110px}
 .setup .pw{font-size:22px;padding:4px 8px}
@@ -505,7 +538,7 @@ function buyOffer(){
   log(`🏡 ${p.name} achète ${sq.name} (${sq.price} L$)`); msg(`${p.name} achète ${sq.name} ! ${sq.emo}`);
   G.offer=null; hl(i);
   if(sq.t==='street'&&ownsGroup(G.cur,sq.g)){ log(`⭐ ${p.name} a toute la couleur ${GROUPS[sq.g].n} !`);
-    if(!p.bot) tip('group','duo-victoire',`Bravo ! Tu as <b>toutes les cases ${GROUPS[sq.g].n}</b>. Les loyers y sont doublés, et tu peux maintenant construire des <b>cabanes 🛖</b> avec le bouton « Mes endroits ». Avec 4 cabanes, tu peux construire un <b>château 🏰</b> !`); }
+    if(!p.bot) tip('group','duo-victoire',`Bravo ! Tu as <b>toutes les cases ${GROUPS[sq.g].n}</b>. Les loyers y sont doublés, et tu peux maintenant construire des <b>cabanes 🛖</b> : touche ta carte en bas de l'écran. Avec 4 cabanes, tu peux construire un <b>château 🏰</b> !`); }
   resolveEnd();
 }
 function passOffer(){ if(G.phase!=='buy') return; log(`${cur().name} n'achète pas ${BOARD[G.offer].name}`); G.offer=null; resolveEnd(); }
@@ -674,21 +707,21 @@ function buildBoard(){
       `<div class="pawns" id="pw${i}"></div></div>`;
   });
   h+=`<div class="center"><div class="logo">Monopo<b>Lili</b></div>
-    <div class="dice"><div class="die on3" id="d0">${'<i></i>'.repeat(9)}</div><div class="die on4" id="d1">${'<i></i>'.repeat(9)}</div></div>
-    <div class="cmsg" id="cmsg"></div>
-    <div class="decks"><div class="deck ch"><span>🍀</span>Chance</div><div class="deck su"><span>🎁</span>Surprise</div></div></div>`;
+    <button class="diceBtn" id="diceBtn" onclick="rollDice()" aria-label="Lancer les dés"><div class="die on3" id="d0">${'<i></i>'.repeat(9)}</div><div class="die on4" id="d1">${'<i></i>'.repeat(9)}</div></button>
+    <div class="cact" id="cact"></div>
+    <div class="cmsg" id="cmsg"></div></div>`;
   b.innerHTML=h;
   b.onclick=e=>{ const c=e.target.closest('.cell'); if(c) showDeed(+c.dataset.i); };
   sizeBoard();
 }
 function sizeBoard(){
-  const w=document.getElementById('boardWrap'), b=document.getElementById('board'); if(!b) return;
+  const b=document.getElementById('board'), w=document.getElementById('boardWrap'); if(!b) return;
   const portrait=matchMedia('(orientation:portrait)').matches;
   let s;
-  if(portrait) s=Math.min(window.innerWidth-16,window.innerHeight*0.72);
-  else s=Math.min(w.clientWidth,window.innerHeight-16);
+  if(portrait) s=Math.min(window.innerWidth-16,window.innerHeight*0.64);
+  else s=Math.min(window.innerHeight-16,window.innerWidth-16-10-250);
   s=Math.max(260,Math.floor(s));
-  b.style.width=s+'px'; b.style.height=s+'px';
+  b.style.width=s+'px'; b.style.height=s+'px'; w.style.width=s+'px';
   const u=s/12.2; document.documentElement.style.setProperty('--u',u+'px');
   b.classList.toggle('big',u>=52);
 }
@@ -705,6 +738,24 @@ function renderBoard(){
   const d=G.dice;
   ['d0','d1'].forEach((id,k)=>{ const el=document.getElementById(id); if(!el.classList.contains('roll')) el.className='die on'+d[k]+(d[0]===d[1]?' dbl':''); });
   document.getElementById('cmsg').textContent=G.msg||'';
+  renderCenter();
+}
+function renderCenter(){
+  const btn=document.getElementById('diceBtn'), ca=document.getElementById('cact'); if(!btn||!G.players.length) return;
+  const p=cur(), me=!p.bot, canRoll=me&&G.phase==='roll'&&!busy;
+  btn.disabled=!canRoll; btn.classList.toggle('ready',canRoll);
+  let h='';
+  if(G.over) h=`<button class="b-pink endBtn" onclick="setupScreen()">🎲 Nouvelle partie</button>`;
+  else if(p.bot) h=G.phase==='roll'||G.phase==='buy'||G.phase==='end'?`<div class="hint">🤖 ${esc(p.name)} réfléchit…</div>`:'';
+  else if(G.phase==='roll'){
+    if(p.jail) h=`<div class="hint">🛏️ Touche les dés : fais un double ! (${p.jailTurns+1}/3)</div><div class="row">
+      <button class="b-yellow" onclick="payJail()" ${p.money<JAIL_FINE?'disabled':''}>Payer ${JAIL_FINE} L$</button>${p.cards.length?`<button class="b-green" onclick="useCard()">🧹 Ma carte</button>`:''}</div>`;
+    else h=`<div class="hint">👆 Touche les dés !</div>`;
+  }
+  else if(G.phase==='end') h=`<button class="b-yellow endBtn" onclick="nextTurn()">Fin du tour ➡️</button>`;
+  else if(G.phase==='buy') h=`<button class="b-green" onclick="openOffer(true)">🏡 Acheter ou pas ?</button>`;
+  else if(G.phase==='debt') h=`<div class="hint">💸 Il faut trouver de l'argent !</div>`;
+  ca.innerHTML=h;
 }
 function renderPawns(){
   for(let i=0;i<40;i++){ const el=document.getElementById('pw'+i); if(el) el.innerHTML=''; }
@@ -721,69 +772,64 @@ async function animateDice(d){
   await sleep(250);
 }
 function flyMoney(pi,amt){
-  if(!amt) return; const el=document.querySelector(`.pl[data-p="${pi}"] .m`); if(!el) return;
+  if(!amt||!G) return; const shown=G.phase==='debt'&&G.debt?G.debt.pi:G.cur; if(pi!==shown) return;
+  const el=document.querySelector('.hhead .cash'); if(!el) return;
   const r=el.getBoundingClientRect(); const f=document.createElement('div'); f.className='fly';
   f.style.left=(r.left)+'px'; f.style.top=(r.top-8)+'px'; f.style.color=amt>0?'#2F6E2B':'#C9531E';
   f.textContent=(amt>0?'+':'−')+Math.abs(amt); document.body.appendChild(f); setTimeout(()=>f.remove(),1500);
 }
-
 /* ---------- Affichage : panneau ---------- */
-function renderSide(){
-  const side=document.getElementById('side'); const p=cur(); const me=!p.bot;
-  let acts='';
-  if(G.phase==='over') acts=`<button class="b-pink b-big" onclick="setupScreen()">🎲 Nouvelle partie</button>`;
-  else if(p.bot&&G.phase!=='debt') acts=`<div class="note">🤖 ${esc(p.name)} réfléchit…</div>`;
-  else if(G.phase==='roll'){
-    if(p.jail) acts=`<div class="note">🛏️ Tu es dans la chambre en désordre (essai ${p.jailTurns+1}/3)</div>
-      <button class="b-pink b-big" onclick="rollDice()">🎲 Tenter un double</button>
-      <div class="row"><button class="b-yellow" onclick="payJail()" ${p.money<JAIL_FINE?'disabled':''}>Payer ${JAIL_FINE} L$</button>
-      ${p.cards.length?`<button class="b-green" onclick="useCard()">🧹 Ma carte</button>`:''}</div>`;
-    else acts=`<button class="b-pink b-big" onclick="rollDice()">🎲 Lancer les dés</button>`;
-  }
-  else if(G.phase==='buy'){ const sq=BOARD[G.offer];
-    acts=`<div class="note">${sq.emo} ${esc(sq.name)}</div>
-      <div class="row"><button class="b-green b-big" onclick="buyOffer()" ${p.money<sq.price?'disabled':''}>Acheter ${sq.price} L$</button>
-      <button class="b-big" onclick="passOffer()">Non merci</button></div>
-      <button onclick="showDeed(${G.offer})">📜 Voir la carte</button>`;
-  }
-  else if(G.phase==='end') acts=`<button class="b-yellow b-big" onclick="nextTurn()">Fin du tour ➡️</button>`;
-  else if(G.phase==='debt'){ const d=G.debt, dp=G.players[d.pi];
-    acts=`<div class="note neg">Tu dois payer ${L$(d.amt)} à ${esc(toName(d.to))}. Il te manque ${L$(Math.max(0,d.amt-dp.money))}.</div>
-      <button class="b-green b-big" onclick="payDebt()" ${dp.money<d.amt?'disabled':''}>Payer ${d.amt} L$</button>
-      <div class="row"><button onclick="openProps()">🏠 Mes endroits</button><button class="b-yellow" onclick="autoLiquidate(G.debt.pi,G.debt.amt);save();render()">🪄 Vendre pour moi</button></div>
-      <button class="b-red" onclick="giveUp()" ${liquidValue(d.pi)>=d.amt?'disabled':''}>Faillite 😢</button>`;
-  }
-  else acts=`<div class="note">…</div>`;
-  const mine=G.players.indexOf(p);
-  const canManage=me&&['roll','end','buy','debt'].includes(G.phase)&&BOARD.some((s,i)=>G.own[i]&&G.own[i].o===mine);
-  if(canManage&&G.phase!=='debt') acts+=`<button onclick="openProps()">🏠 Mes endroits${BOARD.some((s,i)=>canBuild(mine,i))?' — on peut construire ! 🛖':''}</button>`;
-  if(me&&['roll','end'].includes(G.phase)&&!p.jail||me&&G.phase==='end') acts+=`<button onclick="openTrade()">🤝 Échanger</button>`;
-
-  side.innerHTML=`
-  <div class="card topbar"><div class="t"><img src="img/lili-avatar.webp" alt="">MonopoLili</div>
-    <button onclick="showRules()" title="Règles">❓</button><button onclick="openMenu()" title="Menu">⚙️</button></div>
-  <div class="card">
-    <div class="turn"><span class="pawn" style="--pc:${p.color}">${p.pawn}</span>
-      <div class="who">${esc(p.name)}<small>${G.over?'Partie finie':`Tour ${G.round}${G.opts.rounds?' / '+G.opts.rounds:''}`}${p.jail?' · 🛏️ dans sa chambre':''}${p.cards.length?' · 🧹×'+p.cards.length:''}</small></div>
-      <div class="cash ${p.money<0?'neg':''}">${L$(p.money)}</div></div>
-    <div class="acts">${acts}</div>
-  </div>
-  <div class="card plist">${G.players.map((q,k)=>`<div class="pl${k===G.cur?' cur':''}${q.out?' out':''}" data-p="${k}" onclick="showPlayer(${k})">
-     <span class="pawn" style="--pc:${q.color}">${q.pawn}</span>
-     <div class="n">${esc(q.name)}${q.bot?' 🤖':''}${q.jail?' 🛏️':''}<small>${BOARD.map((s,i)=>G.own[i]&&G.own[i].o===k?`<span class="sq" title="${esc(s.name)}" style="background:${s.g?GROUPS[s.g].c:'#999'};${G.own[i].m?'opacity:.35':''}"></span>`:'').join('')}</small></div>
-     <span class="m">${q.out?'💥':L$(q.money)}</span></div>`).join('')}
-     ${G.opts.pot?`<div class="note">🧺 Panier du pique-nique : ${L$(G.pot)}</div>`:''}</div>
-  <div class="card log">${G.log.slice(0,14).map(t=>`<div>${esc(t)}</div>`).join('')}</div>`;
+const HAND_GROUPS=['brown','lblue','pink','orange','red','yellow','green','dblue','rail','util'];
+function miniCard(i,pi){
+  const s=BOARD[i], st=G.own[i], mine=st.o===pi, gc=s.g?GROUPS[s.g].c:s.t==='rail'?'#4a4a4a':'#16A3A3';
+  const op=!mine&&st.o>=0?G.players[st.o]:null;
+  return `<button class="mc${mine?'':' ghost'}${mine&&st.m?' mort':''}" style="--gc:${gc}" onclick="showDeed(${i})" title="${esc(s.name)}">
+    <span class="top">${mine&&st.h?(st.h===5?'🏰':'🛖'.repeat(st.h)):''}</span><span class="e">${s.emo}</span><span class="n">${esc(s.short)}</span>
+    ${op?`<span class="op" style="--pc:${op.color}">${op.pawn}</span>`:''}</button>`;
 }
+function renderSide(){
+  const side=document.getElementById('side'); if(!G.players.length) return;
+  const pi=G.phase==='debt'&&G.debt?G.debt.pi:G.cur, p=G.players[pi], me=!p.bot;
+  let cards='';
+  HAND_GROUPS.forEach(g=>{
+    const idx=GROUPS[g]?groupIdx(g):BOARD.map((s,i)=>s.t===g?i:-1).filter(i=>i>=0);
+    const mine=idx.filter(i=>G.own[i].o===pi); if(!mine.length) return;
+    const full=GROUPS[g]&&mine.length===idx.length;
+    cards+=`<div class="stack${full?' full':''}">${idx.map(i=>miniCard(i,pi)).join('')}</div>`;
+  });
+  if(!cards) cards=`<div class="empty">${me?"Tu n'as encore aucun endroit.<br>Arrête-toi sur une case libre pour l'acheter !":"Pas encore d'endroit."}</div>`;
+  let debt='';
+  if(G.phase==='debt'&&G.debt){ const d=G.debt;
+    debt=`<div class="debt"><div>💸 Tu dois payer <b>${L$(d.amt)}</b> à ${esc(toName(d.to))}. Il te manque <b class="neg">${L$(Math.max(0,d.amt-p.money))}</b>.<br><small>Touche tes cartes pour revendre des cabanes ou mettre en pause 💤.</small></div>
+      <div class="row"><button class="b-green" onclick="payDebt()" ${p.money<d.amt?'disabled':''}>Payer</button>
+      <button class="b-yellow" onclick="autoLiquidate(G.debt.pi,G.debt.amt);save();render()">🪄 Vendre pour moi</button>
+      <button class="b-red" onclick="giveUp()" ${liquidValue(pi)>=d.amt?'disabled':''}>Faillite</button></div></div>`; }
+  const canTrade=me&&!G.over&&(G.phase==='end'||(G.phase==='roll'&&!p.jail))&&alive().length>1;
+  side.innerHTML=`<div class="hand">
+    <div class="hhead" style="--pc:${p.color}"><span class="pawn" style="--pc:${p.color}">${p.pawn}</span>
+      <div class="who">${esc(p.name)}${p.bot?' 🤖':''}<small>${G.over?'Partie finie':`Tour ${G.round}${G.opts.rounds?' / '+G.opts.rounds:''}`}${p.jail?' · 🛏️ dans sa chambre':''}${p.cards.length?' · 🧹 carte de sortie':''}</small></div>
+      <div class="cash ${p.money<0?'neg':''}">${L$(p.money)}</div></div>
+    ${debt}
+    <div class="cards">${cards}</div>
+    <div class="tools">
+      <button onclick="openTrade()" ${canTrade?'':'disabled'}><b>🤝</b>Échanger</button>
+      <button onclick="showPlayers()"><b>👥</b>Joueurs</button>
+      <button onclick="showLog()"><b>📜</b>Journal</button>
+      <button onclick="showRules()"><b>❓</b>Règles</button>
+      <button onclick="openMenu()"><b>⚙️</b>Menu</button></div>
+  </div>`;
+  if(G.phase==='buy'&&me&&!offerOpen&&!modalOpen) openOffer();
+}
+let offerOpen=false;
 function render(){ if(!G) return; renderBoard(); renderSide(); botTick(); }
 
 /* ---------- Fenêtres ---------- */
-function modal({title='',img='',html='',buttons=[{l:'OK',v:1}],auto=0,wide=false}){
+function modal({title='',img='',html='',buttons=[{l:'OK',v:1}],auto=0,wide=false,slim=false}){
   return new Promise(res=>{
     modalOpen++;
     const ov=document.createElement('div'); ov.className='ov';
-    ov.innerHTML=`<div class="mod${wide?' wide':''}">${img?`<div class="hero"><img src="img/${img}.webp" alt=""><div>${title?`<h2>${title}</h2>`:''}</div></div>`:(title?`<h2>${title}</h2>`:'')}
-      <div class="body">${html}</div><div class="btns">${buttons.map((b,k)=>`<button data-k="${k}" class="${b.c||''}">${b.l}</button>`).join('')}</div></div>`;
+    ov.innerHTML=`<div class="mod${wide?' wide':''}${slim?' slim':''}">${img?`<div class="hero"><img src="img/${img}.webp" alt=""><div>${title?`<h2>${title}</h2>`:''}</div></div>`:(title?`<h2>${title}</h2>`:'')}
+      <div class="body">${html}</div><div class="btns">${buttons.map((b,k)=>`<button data-k="${k}" class="${b.c||''}"${b.d?' disabled':''}>${b.l}</button>`).join('')}</div></div>`;
     let done=false;
     const close=v=>{ if(done) return; done=true; ov.remove(); modalOpen--; res(v); if(G&&!G.over) setTimeout(render,0); };
     ov.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>close(buttons[+b.dataset.k].v));
@@ -800,63 +846,78 @@ function tip(key,img,html){
 function deedHtml(i){
   const sq=BOARD[i], st=G&&G.own[i];
   if(!BUYABLE(sq.t)){
-    const info={go:`Chaque fois que tu passes ici, la banque te donne ${START_BONUS} L$.`,jail:`Si tu t'arrêtes ici, tu dis juste bonjour. Si tu es envoyé·e ici, tu dois ranger ta chambre : pour sortir, fais un double, paie ${JAIL_FINE} L$ ou utilise la carte « Maman range ta chambre ».`,
-      parking:G&&G.opts.pot?`On se repose… et on ramasse le panier du pique-nique ! (${G.pot} L$ dedans)`:'On se repose, il ne se passe rien.',gotojail:'Hop ! Tu files ranger ta chambre, sans passer par Départ.',
-      tax:`Il faut payer ${sq.amt} L$.`,chance:'Pioche une carte Chance 🍀.',surprise:'Pioche une carte Surprise de Lili 🎁.'}[sq.t];
-    return `<div class="deed"><div class="hd" style="background:#888"><span class="e">${sq.emo}</span>${esc(sq.name)}</div><p style="padding:6px 10px">${info}</p></div>`;
+    const info={go:`Chaque fois que tu passes ici, la banque te donne <b>${START_BONUS} L$</b>.`,jail:`Si tu t'arrêtes ici, tu dis juste bonjour 👋.<br>Si on t'y envoie, tu dois ranger ta chambre : pour sortir, fais un double, paie ${JAIL_FINE} L$ ou utilise la carte « Maman range ta chambre ».`,
+      parking:G&&G.opts.pot?`On se repose… et on ramasse le panier du pique-nique ! (<b>${G.pot} L$</b> dedans)`:'On se repose, il ne se passe rien.',gotojail:'Hop ! Tu files ranger ta chambre, sans passer par Départ.',
+      tax:`Il faut payer <b>${sq.amt} L$</b>.`,chance:'Pioche une carte Chance 🍀 : bonne ou mauvaise surprise !',surprise:'Pioche une carte Surprise de Lili 🎁.'}[sq.t];
+    const col={chance:'#F59A23',surprise:'#2E5BD8',tax:'#C9531E',gotojail:'#7A4BD8',jail:'#7A4BD8',go:'#2F6E2B',parking:'#3DB04B'}[sq.t]||'#888';
+    return `<div class="deed sq" style="--gc:${col}"><div class="dh"><span class="e">${sq.emo}</span><b>${esc(sq.name)}</b></div><div class="info">${info}</div></div>`;
   }
-  const col=sq.g?GROUPS[sq.g].c:sq.t==='rail'?'#444':'#16A3A3';
-  let rows='';
-  if(sq.t==='street') rows=[['Loyer',sq.rent[0]],['Avec toute la couleur',sq.rent[0]*2],['Avec 1 cabane 🛖',sq.rent[1]],['Avec 2 cabanes',sq.rent[2]],['Avec 3 cabanes',sq.rent[3]],['Avec 4 cabanes',sq.rent[4]],['Avec un château 🏰',sq.rent[5]]]
-    .map((r,k)=>{ const on=st&&st.o>=0&&!st.m&&((k===0&&st.h===0&&!ownsGroup(st.o,sq.g))||(k===1&&st.h===0&&ownsGroup(st.o,sq.g))||(k>=2&&st.h===k-1)); return `<tr class="${on?'on':''}"><td>${r[0]}</td><td>${r[1]} L$</td></tr>`; }).join('')+
-    `<tr><td>Prix d'une cabane / du château</td><td>${GROUPS[sq.g].h} L$</td></tr>`;
-  else if(sq.t==='rail') rows=[1,2,3,4].map(n=>`<tr class="${st&&st.o>=0&&countType(st.o,'rail')===n?'on':''}"><td>Si on a ${n} gare${n>1?'s':''}</td><td>${25*Math.pow(2,n-1)} L$</td></tr>`).join('');
-  else rows=`<tr><td>Si on a 1 usine</td><td>4 × les dés</td></tr><tr><td>Si on a les 2 usines</td><td>10 × les dés</td></tr>`;
-  rows+=`<tr><td>Mettre en pause 💤 (hypothèque)</td><td>+${mortVal(i)} L$</td></tr>`;
-  const own=st&&st.o>=0?`<p style="padding:2px 10px">Propriétaire : <b>${G.players[st.o].pawn} ${esc(G.players[st.o].name)}</b>${st.m?' — en pause 💤':''}</p>`:`<p style="padding:2px 10px">À vendre : <b>${sq.price} L$</b></p>`;
-  return `<div class="deed"><div class="hd" style="background:${col}"><span class="e">${sq.emo}</span>${esc(sq.name)}</div><table>${rows}</table>${G?own:''}</div>`;
+  const col=sq.g?GROUPS[sq.g].c:sq.t==='rail'?'#4a4a4a':'#16A3A3';
+  const owned=st&&st.o>=0, act=owned&&!st.m;
+  const tr=(label,val,on,cls='')=>`<tr class="${on?'on ':''}${cls}"><td>${label}</td><td>${val}</td></tr>`;
+  let rows='', note='';
+  if(sq.t==='street'){
+    const full=owned&&ownsGroup(st.o,sq.g), h=owned?st.h:-1;
+    rows=tr('Loyer',sq.rent[0]+' L$',act&&h===0&&!full)+tr('Avec toute la couleur ⭐',sq.rent[0]*2+' L$',act&&h===0&&full)+
+      [1,2,3,4].map(n=>tr('Avec '+'🛖'.repeat(n),sq.rent[n]+' L$',act&&h===n)).join('')+tr('Avec le château 🏰',sq.rent[5]+' L$',act&&h===5)+
+      tr('Une cabane / le château coûte',GROUPS[sq.g].h+' L$',false,'sep')+tr('Mettre en pause 💤',mortVal(i)+' L$',false,'sep');
+    const n=groupIdx(sq.g).length;
+    note=`Couleur ${GROUPS[sq.g].n} : ${n} cases. Il faut toutes les avoir pour construire.`;
+  } else if(sq.t==='rail'){
+    const n=owned?countType(st.o,'rail'):0;
+    rows=[1,2,3,4].map(k=>tr(`Avec ${k} gare${k>1?'s':''}`,25*Math.pow(2,k-1)+' L$',act&&n===k)).join('')+tr('Mettre en pause 💤',mortVal(i)+' L$',false,'sep');
+    note='Plus tu as de gares, plus elles rapportent !';
+  } else {
+    const n=owned?countType(st.o,'util'):0;
+    rows=tr('Avec 1 usine','4 × les dés',act&&n===1)+tr('Avec les 2 usines','10 × les dés',act&&n===2)+tr('Mettre en pause 💤',mortVal(i)+' L$',false,'sep');
+    note='Le loyer dépend des dés du visiteur.';
+  }
+  const own=owned?`<div class="own"><span class="pawn" style="--pc:${G.players[st.o].color}">${G.players[st.o].pawn}</span>Chez ${esc(G.players[st.o].name)}${st.m?' · en pause 💤':''}</div>`
+    :`<div class="own">🏷️ À vendre</div>`;
+  return `<div class="deed" style="--gc:${col}"><div class="dh"><small>${sq.t==='street'?'Titre de propriété':sq.t==='rail'?'Gare':'Usine'}</small><span class="e">${sq.emo}</span><b>${esc(sq.name)}</b></div>
+    <div class="price">Prix : ${sq.price} L$</div><table>${rows}</table><div class="dt">${note}</div>${G?own:''}</div>`;
 }
-function showDeed(i){ modal({html:deedHtml(i),buttons:[{l:'Fermer',v:1}]}); }
-function showPlayer(k){
-  const q=G.players[k]; const list=BOARD.map((s,i)=>G.own[i]&&G.own[i].o===k?`<div>${s.emo} ${esc(s.name)} ${G.own[i].h===5?'🏰':'🛖'.repeat(G.own[i].h)}${G.own[i].m?' 💤':''}</div>`:'').join('')||'<p>Aucun endroit pour l\'instant.</p>';
-  modal({title:`${q.pawn} ${esc(q.name)}`,html:`<p>Argent : <b>${L$(q.money)}</b> · Fortune : <b>${L$(fortune(k))}</b></p>${list}`,buttons:[{l:'Fermer',v:1}]});
+function deedActions(i){
+  if(!G||G.over||!G.own[i]) return [];
+  const pi=G.phase==='debt'&&G.debt?G.debt.pi:G.cur, p=G.players[pi], st=G.own[i], sq=BOARD[i];
+  if(p.bot||st.o!==pi||!['roll','end','buy','debt'].includes(G.phase)) return [];
+  const a=[], debt=G.phase==='debt';
+  if(sq.t==='street'&&ownsGroup(pi,sq.g)&&!debt&&st.h<5){ const c=GROUPS[sq.g].h; a.push({l:`+ ${st.h===4?'🏰 Château':'🛖 Cabane'} (${c} L$)`,v:'b',c:'b-green',d:!(canBuild(pi,i)&&p.money>=c)}); }
+  if(sq.t==='street'&&st.h>0) a.push({l:`Revendre ${st.h===5?'🏰':'🛖'} (+${GROUPS[sq.g].h/2})`,v:'s',d:!canSell(pi,i)});
+  if(!st.m) a.push({l:`💤 Pause (+${mortVal(i)})`,v:'m',d:!canMort(pi,i)});
+  else if(!debt) a.push({l:`Réveiller (−${unmortCost(i)})`,v:'u',c:'b-yellow',d:p.money<unmortCost(i)});
+  return a;
 }
-
-/* Gestion des endroits : construire, revendre, mettre en pause */
-function openProps(){
-  const pi=G.phase==='debt'?G.debt.pi:G.cur; const p=G.players[pi];
-  const ov=document.createElement('div'); ov.className='ov'; modalOpen++;
-  const draw=()=>{
-    const groups={};
-    BOARD.forEach((s,i)=>{ const st=G.own[i]; if(st&&st.o===pi){ const k=s.g||s.t; (groups[k]=groups[k]||[]).push(i); }});
-    let h=`<h2>🏠 Les endroits de ${esc(p.name)}</h2><p>Argent : <b>${L$(p.money)}</b>${G.debt?` — à payer : <b class="neg">${L$(G.debt.amt)}</b>`:''}</p><div class="props">`;
-    Object.keys(groups).forEach(k=>{
-      const gc=GROUPS[k]?GROUPS[k].c:k==='rail'?'#444':'#16A3A3';
-      const full=GROUPS[k]&&ownsGroup(pi,k);
-      h+=`<div class="grp" style="--gc:${gc}">${GROUPS[k]?`<small><b>${full?'⭐ Toute la couleur '+GROUPS[k].n+' !':'Couleur '+GROUPS[k].n+' : il en manque '+(groupIdx(k).length-groupIdx(k).filter(j=>G.own[j].o===pi).length)}</b></small>`:''}`;
-      groups[k].forEach(i=>{ const s=BOARD[i], st=G.own[i];
-        h+=`<div class="pr"><span class="nm">${s.emo} ${esc(s.short)} ${st.h===5?'🏰':'🛖'.repeat(st.h)}${st.m?' 💤':''}<small>Loyer : ${st.m?'aucun (en pause)':s.t==='util'?'selon les dés':rentOf(i)+' L$'}</small></span>`;
-        if(s.t==='street'&&full&&!G.debt) h+=`<button class="b-green" data-a="b" data-i="${i}" ${canBuild(pi,i)&&p.money>=GROUPS[s.g].h?'':'disabled'}>+${st.h===4?'🏰':'🛖'} ${GROUPS[s.g].h}</button>`;
-        if(s.t==='street'&&st.h>0) h+=`<button data-a="s" data-i="${i}" ${canSell(pi,i)?'':'disabled'}>− ${st.h===5?'🏰':'🛖'} +${GROUPS[s.g].h/2}</button>`;
-        if(!st.m) h+=`<button data-a="m" data-i="${i}" ${canMort(pi,i)?'':'disabled'}>💤 +${mortVal(i)}</button>`;
-        else if(!G.debt) h+=`<button class="b-yellow" data-a="u" data-i="${i}" ${p.money>=unmortCost(i)?'':'disabled'}>Réveiller −${unmortCost(i)}</button>`;
-        h+=`</div>`; });
-      h+=`</div>`;
-    });
-    h+=`</div><p style="font-size:13px;color:#666">On construit les cabanes une par une, en équilibrant les cases d'une même couleur. Revendre rend la moitié du prix. Un endroit en pause 💤 ne rapporte plus de loyer ; le réveiller coûte un peu plus cher (+10 %).</p>
-      <div class="btns"><button class="b-pink" data-a="x">Fermer</button></div>`;
-    ov.innerHTML=`<div class="mod wide">${h}</div>`;
-  };
-  ov.onclick=e=>{ const b=e.target.closest('button'); if(!b||b.disabled) return; const a=b.dataset.a, i=+b.dataset.i;
-    if(a==='x'){ ov.remove(); modalOpen--; save(); render(); return; }
-    if(a==='b') doBuild(pi,i); else if(a==='s') doSell(pi,i); else if(a==='m') doMort(pi,i); else if(a==='u') doUnmort(pi,i);
-    save(); draw(); renderBoard(); };
-  draw(); document.getElementById('modals').appendChild(ov);
+async function showDeed(i){
+  for(;;){
+    const acts=deedActions(i);
+    const v=await modal({slim:true,html:deedHtml(i),buttons:[...acts,{l:'Fermer',v:'x',c:'b-pink'}]});
+    if(!v||v==='x'||!G) return;
+    const pi=G.phase==='debt'&&G.debt?G.debt.pi:G.cur;
+    if(v==='b') doBuild(pi,i); else if(v==='s') doSell(pi,i); else if(v==='m') doMort(pi,i); else if(v==='u') doUnmort(pi,i);
+    save(); render();
+  }
 }
-
+async function openOffer(force){
+  if(offerOpen||!G||G.phase!=='buy'||cur().bot) return;
+  offerOpen=true;
+  const p=cur(), i=G.offer, sq=BOARD[i];
+  const v=await modal({slim:true,html:deedHtml(i)+`<p class="offerq">${p.money>=sq.price?'Tu l\'achètes ?':'Pas assez de LiliDollars pour l\'acheter…'}</p>`,
+    buttons:[{l:`Acheter ${sq.price} L$`,v:'buy',c:'b-green',d:p.money<sq.price},{l:'Non merci',v:'no'}]});
+  offerOpen=false;
+  if(G.phase!=='buy') return;
+  v==='buy'?buyOffer():passOffer();
+}
+function showPlayers(){
+  const rows=G.players.map((q,k)=>`<div class="pl${k===G.cur?' cur':''}${q.out?' out':''}"><span class="pawn" style="--pc:${q.color}">${q.pawn}</span>
+    <div class="n">${esc(q.name)}${q.bot?' 🤖':''}${q.jail?' 🛏️':''}${k===G.cur?' · joue':''}<small>${BOARD.map((s,i)=>G.own[i]&&G.own[i].o===k?`<span class="sq" style="background:${s.g?GROUPS[s.g].c:s.t==='rail'?'#4a4a4a':'#16A3A3'};${G.own[i].m?'opacity:.35':''}"></span>`:'').join('')}</small></div>
+    <span class="m">${q.out?'faillite 💥':L$(q.money)}${q.out?'':`<small>fortune ${fortune(k).toLocaleString('fr-FR')}</small>`}</span></div>`).join('');
+  modal({title:'👥 Les joueurs',html:rows+(G.opts.pot?`<p>🧺 Panier du pique-nique : <b>${L$(G.pot)}</b></p>`:'')+`<p style="font-size:13px;color:#666">La fortune, c'est l'argent + le prix des endroits + les constructions.</p>`,buttons:[{l:'Fermer',v:1}]});
+}
+function showLog(){ modal({title:'📜 Ce qui s\'est passé',html:`<div class="logl">${G.log.slice(0,30).map(t=>`<div>${esc(t)}</div>`).join('')}</div>`,buttons:[{l:'Fermer',v:1}]}); }
 function showRules(){
   modal({title:'Les règles de MonopoLili',wide:true,html:`
-  <p>🎲 <b>À ton tour</b>, lance les deux dés et avance ton pion. Si tu fais un <b>double</b>, tu rejoues (mais 3 doubles de suite = va ranger ta chambre !).</p>
+  <p>🎲 <b>À ton tour</b>, touche les dés au milieu du plateau et avance ton pion. Si tu fais un <b>double</b>, tu rejoues (mais 3 doubles de suite = va ranger ta chambre !).</p>
   <p>🚩 Chaque fois que tu passes par <b>Départ</b>, tu reçois <b>${START_BONUS} L$</b>.</p>
   <p>🏡 Sur un endroit libre, tu peux l'<b>acheter</b>. Quand quelqu'un s'arrête chez toi, il te paie un <b>loyer</b>.</p>
   <p>⭐ Si tu as <b>toutes les cases d'une couleur</b>, le loyer double et tu peux construire des <b>cabanes 🛖</b> (jusqu'à 4), puis un <b>château 🏰</b>. Plus il y a de constructions, plus le loyer est gros !</p>
@@ -865,7 +926,7 @@ function showRules(){
   <p>🧹 <b>Va ranger ta chambre</b> : tu vas dans la chambre en désordre. Pour sortir : faire un double, payer ${JAIL_FINE} L$, ou utiliser la carte « Maman range ta chambre ». Au 3e essai raté, tu paies ${JAIL_FINE} L$ et tu sors.</p>
   <p>💤 <b>Pas assez d'argent ?</b> Revends des cabanes ou mets un endroit en pause (la banque te donne la moitié de son prix). Si vraiment tu ne peux pas payer, c'est la <b>faillite</b>.</p>
   <p>🏆 <b>On gagne</b> quand tous les autres ont fait faillite, ou, en partie courte, quand on est le plus riche à la fin des tours.</p>
-  <p>👆 Touche une case du plateau pour voir sa carte et ses loyers.</p>`,buttons:[{l:"J'ai compris !",v:1,c:'b-green'}]});
+  <p>👆 Touche une case du plateau, ou une de tes cartes, pour voir son prix et ses loyers. C'est aussi là qu'on construit des cabanes 🛖.</p>`,buttons:[{l:"J'ai compris !",v:1,c:'b-green'}]});
 }
 async function openMenu(){
   const v=await modal({title:'⚙️ Menu',html:`<p>Vitesse du jeu :</p>`,buttons:[
@@ -938,7 +999,7 @@ window.addEventListener('orientationchange',()=>setTimeout(sizeBoard,200));
 document.getElementById('board').innerHTML='';
 G={players:[],own:BOARD.map(()=>null),cur:0,dice:[3,4],log:[],msg:'',opts:{},phase:'over',over:true,round:1};
 buildBoard(); renderBoard(); G=null;
-document.getElementById('side').innerHTML=`<div class="card topbar"><div class="t"><img src="img/lili-avatar.webp" alt="">MonopoLili</div></div>`;
+
 setupScreen();
 
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
