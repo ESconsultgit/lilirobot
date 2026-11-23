@@ -134,6 +134,7 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 - **Renommer une case** : dans `BOARD`, `S('début|fin', emoji, couleur, prix, loyers)` ; la partie après `|` est le nom court affiché sur le plateau. Les indices 8 (Chance) et 4 (Surprise) sont les cartes « Maman range ta chambre » (utilisés pour les remettre dans le paquet).
 - Sauvegardes : `monopolili-save` (partie en cours), `monopolili-last` (derniers joueurs et options), `monopolili-prefs` (vitesse).
 - **Après chaque modification** : incrémenter `VERSION` dans `monopolili/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
+- **Changer le logo** : donner un **nouveau nom** aux fichiers d'icône (`icon-192-v2.png` → `-v3`…) et mettre à jour `manifest.webmanifest`, `index.html` (avec `manifest.webmanifest?v=…`) et `sw.js`. Sinon les téléphones gardent l'ancienne image en cache.
 - Le service worker ne supprime que ses propres caches (`monopolili-…`) ; celui de Lili Parc a été corrigé de la même façon (`liliparc-…`) pour que les deux jeux ne s'effacent pas mutuellement.
 
 ## Pistes pour la suite
@@ -147,3 +148,4 @@ Une seule fois par partie, au bon moment, pour les joueurs humains : bienvenue, 
 
 - **v1** — première version : plateau de 40 cases aux noms rigolos, 2 dés et doubles, cartes Chance et Surprise de Lili, cabanes et châteaux, pause (hypothèque), échanges, robots, chambre en désordre, faillite, parties à tours limités, panier du pique-nique, sauvegarde, application hors connexion, conseils d'Ellie et Livia.
 - **v2** — nouveau logo de l'application : Ellie et Livia sur un plateau de Monopoly, avec deux dés et une pièce de LiliDollar.
+- **v3** — icônes renommées (`-v2`) pour que les téléphones téléchargent vraiment le nouveau logo.

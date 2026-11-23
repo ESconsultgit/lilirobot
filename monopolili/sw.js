@@ -1,6 +1,6 @@
 /* MonopoLili : fonctionne même sans connexion. Change VERSION à chaque mise à jour du jeu. */
-const VERSION='monopolili-v2';
-const SHELL=['./','index.html','manifest.webmanifest','icon-192.png','icon-512.png','apple-touch-icon.png','img/duo-oups.webp','img/duo-victoire.webp','img/lili-avatar.webp','img/lili-contente.webp','img/lili-coucou.webp','img/lili-explique.webp','img/lili-idee.webp','img/lili-pas-contente.webp','img/livia-idee.webp','img/livia-mission.webp','img/livia-pensive.webp'];
+const VERSION='monopolili-v3';
+const SHELL=['./','index.html','manifest.webmanifest?v=2','icon-192-v2.png','icon-512-v2.png','apple-touch-icon-v2.png','img/duo-oups.webp','img/duo-victoire.webp','img/lili-avatar.webp','img/lili-contente.webp','img/lili-coucou.webp','img/lili-explique.webp','img/lili-idee.webp','img/lili-pas-contente.webp','img/livia-idee.webp','img/livia-mission.webp','img/livia-pensive.webp'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('monopolili-')&&k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{
