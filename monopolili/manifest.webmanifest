@@ -1,0 +1,16 @@
+{
+  "name": "MonopoLili",
+  "short_name": "MonopoLili",
+  "description": "Le Monopoly de Lili : achète la Cité des Peluches Péteuses et deviens riche en LiliDollars !",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#F2F7EA",
+  "theme_color": "#C2367A",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
