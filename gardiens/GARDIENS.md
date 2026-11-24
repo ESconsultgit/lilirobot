@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (images du jeu), icônes `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` (dessinées par Gemini : la princesse Lili devant son château avec Braisou, Gouttine et Feuillou)
-- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
+- **Statut** : en ligne (v7). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -140,7 +140,7 @@ Constantes en haut du script de `index.html` :
 - **Préparer une image Gemini** : `python3 gemini/cut.py <source.jpg> <green|magenta|blue> <nombre de personnages> <taille max> <sorties…>` retire le fond uni, découpe la planche en personnages et enregistre des `.webp`. Les originaux sont gardés dans `gemini/sources/`. Si des personnages se chevauchent en colonnes (un volant au-dessus d'un autre), utiliser `gemini/cut_blobs.py` (mêmes arguments), qui sépare par taches et retire aussi les ombres vert foncé.
 - Sauvegardes : `gardiens-profiles` (liste des joueurs), `gardiens-<id>` (partie de chaque joueur), `gardiens-last`.
 - **Après chaque modification** : incrémenter `VERSION` dans `gardiens/sw.js` et mettre à jour ce document.
-- **Mise en ligne** : ajouter une ligne dans `JEUX` (`assets/menu.js`) quand le jeu est prêt pour le menu Détente.
+- **Mise en ligne** : en ligne sur lilirobot.com/gardiens/ et dans le menu Détente du site (ligne dans `JEUX`, `assets/menu.js`).
 
 ## Liste des images pour Gemini
 
