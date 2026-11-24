@@ -25,7 +25,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 
 ## Démarrer
 
-- Écran **« Qui joue ? »** : chaque joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
+- Écran **« Qui joue ? »** : chaque joueur a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
 - À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou.
 - Écran **🗺️ Choisis ton monde** : progression de chaque monde, mondes suivants verrouillés tant que le précédent n'est pas réussi.
 
@@ -95,7 +95,7 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 
 ## Niveaux de jeu
 
-Chaque joueuse choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
+Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 
 | Niveau | Pour qui | Différence |
 |---|---|---|
@@ -111,7 +111,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 
 ## Écran et téléphone
 
-- Téléphone **à l'horizontale** : infos à gauche (cœurs, L$, vague, monde, joueuse), map 16:9 au centre, boutons à droite. En portrait, Livia demande de tourner le téléphone.
+- Téléphone **à l'horizontale** : infos à gauche (cœurs, L$, vague, monde, joueur), map 16:9 au centre, boutons à droite. En portrait, Livia demande de tourner le téléphone.
 - Dessin net à toutes les tailles (jusqu'à ×3 de densité de pixels). L'écran reste allumé pendant le jeu ; quand on quitte l'app pendant une vague, le jeu se met en pause.
 - **Mode test** : ajouter `#dev` à l'adresse affiche trois boutons (+ argent, vague +5, gagner la vague).
 
@@ -123,7 +123,7 @@ Constantes en haut du script de `index.html` :
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
 - **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
-- Sauvegardes : `gardiens-profiles` (liste des joueuses), `gardiens-<id>` (partie de chaque joueuse), `gardiens-last`.
+- Sauvegardes : `gardiens-profiles` (liste des joueurs), `gardiens-<id>` (partie de chaque joueur), `gardiens-last`.
 - **Après chaque modification** : incrémenter `VERSION` dans `gardiens/sw.js` et mettre à jour ce document.
 - **Mise en ligne** : ajouter une ligne dans `JEUX` (`assets/menu.js`) quand le jeu est prêt pour le menu Détente.
 
@@ -158,4 +158,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 
 ## Historique des versions
 
-- **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueuses. Formes simples en attendant les images.
+- **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueurs. Formes simples en attendant les images.
+- **v0.1** — « joueur » au lieu de « joueuse » partout.
