@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (images du jeu), icônes `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` (dessinées par Gemini : la princesse Lili devant son château avec Braisou, Gouttine et Feuillou)
-- **Statut** : en ligne (v7). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
+- **Statut** : en ligne (v7). Images Gemini : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
