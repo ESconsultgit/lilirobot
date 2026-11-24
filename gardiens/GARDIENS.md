@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v0). Gardiens et méchants dessinés en formes simples, en attendant les images de Gemini.
+- **Statut** : draft jouable (v1). Gardiens et méchants dessinés en formes simples, en attendant les images de Gemini.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -26,7 +26,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 ## Démarrer
 
 - Écran **« Qui joue ? »** : chaque joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
-- À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou.
+- À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou, puis on le fait glisser sur la map.
 - Écran **🗺️ Choisis ton monde** : progression de chaque monde, mondes suivants verrouillés tant que le précédent n'est pas réussi.
 
 ## Les mondes et les vagues
@@ -47,13 +47,25 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 ## L'argent et la progression
 
 - Les **LiliDollars (L$)** se gagnent en battant les méchants, avec un bonus à chaque vague réussie (et grâce à Sousou).
-- Ils servent à **améliorer** les gardiens. Placer un gardien est gratuit.
+- Ils servent à **acheter** certains gardiens et à les **améliorer**. Placer un gardien est gratuit.
 - **Tout est gardé**, même après une défaite : LiliDollars, gardiens et améliorations. Perdre ne fait jamais perdre ce qu'on a gagné : on s'améliore et on réessaie.
 - La partie est sauvegardée à la fin de chaque vague (une vague interrompue recommence).
 
 ## Les gardiens
 
-On commence avec **1 gardien parmi 3**. La première fois qu'on bat un boss (vagues 10, 20, 30, 40 des mondes 1 et 2), **un nouveau gardien veut rejoindre l'équipe** (choix entre 2). Chaque gardien est unique et se place une fois sur une map, sur un **emplacement** (cercle ➕ près du chemin, 14 par map). On peut le **déplacer** ou le **rentrer au château** à tout moment. Bouton **🛡️ Équipe** : tous ses gardiens, placés ou non.
+On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autres s'obtiennent de deux façons :
+
+| Comment | Gardiens |
+|---|---|
+| 🛒 **Achat en LiliDollars** | les 2 gardiens de départ non choisis (150 L$ chacun), Sousou (400 L$), Zapic (700 L$), Givrou (1 200 L$) |
+| 👑 **Libérés par le Chef des Chipeurs** (la première fois qu'on le bat) | Plumo (monde 1, vague 20), Rocaillou (monde 1, vague 40), Étoilette (monde 2, vague 20), Lunette (monde 2, vague 40) |
+
+**La barre du bas**, sous la map, montre les 10 gardiens :
+- gardien de l'équipe : en couleur, avec ses étoiles et son niveau (pâle s'il est déjà sur la map) ;
+- gardien à acheter : grisé avec son prix (surligné en jaune quand on a assez de L$) ; le toucher ouvre la fenêtre d'achat ;
+- gardien prisonnier : sombre, avec 🔒 et le monde-vague du boss qui le libère.
+
+**Glisser-déposer** : on fait glisser un gardien de la barre du bas vers un **emplacement** (cercle ➕ près du chemin, 14 par map) ; pendant le glisser, sa portée s'affiche sur l'emplacement visé. Sur la map, on fait glisser un gardien vers un autre emplacement pour le déplacer (si l'emplacement est pris, les deux gardiens échangent leur place), ou vers la barre du bas pour le rentrer au château. Un simple toucher sur un gardien ouvre sa fiche ; toucher un cercle libre propose les gardiens disponibles. Chaque gardien est unique et ne se place qu'une fois par map.
 
 | | Gardien | Élément | Pouvoir | Dégâts | Portée | Tirs/s |
 |---|---|---|---|--:|--:|--:|
@@ -107,7 +119,7 @@ Chaque joueuse choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 
 ## Conseils d'Ellie et Livia
 
-Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'apparaît qu'une fois : placer son premier gardien, lancer la vague, mode Auto (vague 3), premier cœur perdu, premiers Casqués, Volants et Fantômes. Les annonces de boss reviennent à chaque fois.
+Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'apparaît qu'une fois : faire glisser son premier gardien, lancer la vague, premier gardien qu'on peut acheter, mode Auto (vague 3), premier cœur perdu, premiers Casqués, Volants et Fantômes. Les annonces de boss reviennent à chaque fois.
 
 ## Écran et téléphone
 
@@ -120,7 +132,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 Constantes en haut du script de `index.html` :
 
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
-- `DIFF` (niveaux de jeu), `GUARD` (gardiens), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
+- `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
 - **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
 - Sauvegardes : `gardiens-profiles` (liste des joueuses), `gardiens-<id>` (partie de chaque joueuse), `gardiens-last`.
@@ -144,7 +156,7 @@ Gemini ne sait pas faire de vrai fond transparent : chaque personnage est demand
 | Fonds de maps | 3 | 1920 × 1080 | vue de dessus ; je fournis une **image guide** avec le chemin et le château tracés, à donner à Gemini pour qu'il dessine le décor autour du même chemin |
 | Icône de l'application | 1 | 1024 × 1024 | Lili devant son château |
 
-Total : environ **49 images**. Les projectiles (boules de feu, flocons, éclairs) et les effets sont dessinés par le code.
+Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) dans la barre du bas : ils doivent rester reconnaissables en tout petit (silhouette simple, couleur dominante bien marquée). Les projectiles (boules de feu, flocons, éclairs) et les effets sont dessinés par le code.
 
 ## Vidéo de lancement
 
@@ -159,3 +171,4 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 ## Historique des versions
 
 - **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueuses. Formes simples en attendant les images.
+- **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss).

@@ -37,7 +37,17 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .stat.sm{font-size:14px}
 .panel button{width:100%}
 #bWave{font-size:19px;padding:10px 6px}
-#stage{flex:1 1 auto;min-width:0;position:relative;display:flex;align-items:center;justify-content:center}
+#stage{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
+#cvWrap{flex:1 1 auto;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
+#bench{flex:none;display:flex;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,255,255,.75);border-radius:14px;padding:4px 6px;overflow-x:auto;align-self:center;max-width:100%}
+.bi{flex:none;width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Baloo 2';font-weight:800;font-size:12px;line-height:1.1;touch-action:none;cursor:grab;border-radius:10px;padding:2px 0}
+.bi .gico{pointer-events:none}
+.bi.placed{opacity:.4}
+.bi.shop{cursor:pointer}.bi.shop .gico{filter:grayscale(.7) opacity(.8)}
+.bi.shop.afford{background:#FFF3C4}.bi.shop.afford .gico{filter:none}
+.bi.lock{cursor:pointer}.bi.lock .gico{filter:grayscale(1) brightness(.55)}
+.dragGhost{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,-60%) scale(1.15);filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
+@media (max-height:520px){.bi{width:46px;font-size:10px}}
 #cv{display:block;border-radius:16px;box-shadow:0 8px 24px rgba(42,31,61,.25);touch-action:none;background:#9ED36A}
 #dev{display:none;flex-direction:column;gap:4px}
 #dev button{font-size:12px;padding:4px}
@@ -102,8 +112,11 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
     <div class="stat sm" id="sPlayer"></div>
   </div>
   <div id="stage">
-    <canvas id="cv"></canvas>
-    <div id="tip"><img id="tipImg" alt=""><div class="bub" id="tipTxt"></div></div>
+    <div id="cvWrap">
+      <canvas id="cv"></canvas>
+      <div id="tip"><img id="tipImg" alt=""><div class="bub" id="tipTxt"></div></div>
+    </div>
+    <div id="bench"></div>
   </div>
   <div class="panel">
     <button id="bWave" class="b-pink">▶<br>Vague 1</button>
@@ -169,6 +182,12 @@ const GUARD={
   sousou:   {name:'Sousou',   em:'🪙',col:'#F2C230',elem:'Pièce',      pow:'N\'attaque pas : fait gagner des LiliDollars à chaque vague.',kind:'coin',gold:12}
 };
 const STARTERS=['braisou','gouttine','feuillou'];
+// Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
+const SHOP={braisou:150,gouttine:150,feuillou:150,sousou:400,zapic:700,givrou:1200};
+// Gardiens libérés par les boss : clé « monde-vague »
+const BOSS_GIFT={'1-20':'plumo','1-40':'rocaillou','2-20':'etoilette','2-40':'lunette'};
+const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette'];
+function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 
 // ---------- Les méchants ----------
@@ -246,7 +265,7 @@ let PID=null,P=null;
 function newSave(name,av,diff){
   return{v:1,name,av,diff,money:CFG.START_MONEY,starter:null,owned:[],up:{},unlocked:1,
     worlds:{1:{cp:1,done:false},2:{cp:1,done:false},3:{cp:1,done:false}},
-    runs:{},place:{1:{},2:{},3:{}},recruited:{},tips:{},auto:false};
+    runs:{},place:{1:{},2:{},3:{}},tips:{},auto:false};
 }
 function save(){if(PID&&P)LS.set('gardiens-'+PID,P);}
 function up(gid){return P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0});}
@@ -268,17 +287,17 @@ function rewMul(world,w){return Math.pow(CFG.REW_GROWTH,dIndex(world,w));}
 
 // ---------- La partie en cours ----------
 const G={world:1,wave:1,hearts:20,state:'idle',queue:[],t:0,enemies:[],projs:[],fx:[],texts:[],towers:[],
-  speed:1,paused:false,autoT:0,sel:null,moving:null,lastTime:0,anim:0,lostHeart:false};
+  speed:1,paused:false,autoT:0,sel:null,lastTime:0,anim:0,lostHeart:false};
 function maxHearts(){return DIFF[P.diff].hearts;}
 
 function enterWorld(n){
   G.world=n;const r=P.runs[n];
   G.wave=r?r.wave:P.worlds[n].cp;G.hearts=r?r.hearts:maxHearts();
   resetField();buildTowers();buildBg();save();refreshHUD();
-  if(!P.tips.place)setTimeout(()=>tipOnce('place','lili-explique','Touche un cercle ➕ près du chemin pour placer ton gardien. Il attaquera les Chipeurs tout seul !',9000),400);
+  if(!P.tips.place)setTimeout(()=>tipOnce('place','lili-explique',`Fais glisser ${GUARD[P.starter].name} depuis la barre du bas jusqu'à un cercle ➕ près du chemin. Il attaquera les Chipeurs tout seul !`,10000),400);
   else if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
-function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.moving=null;G.autoT=0;}
+function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.autoT=0;}
 function buildTowers(){
   const pl=P.place[G.world];G.towers=[];
   for(const k in pl){const s=WORLDS[G.world-1].spots[k];if(s&&P.owned.includes(pl[k]))G.towers.push({gid:pl[k],spot:+k,x:s.x,y:s.y,cd:0.3,anim:Math.random()*6,kick:0});}
@@ -337,8 +356,8 @@ function waveClear(){
   if(w%10===0&&w<CFG.WAVES)wd.cp=w+1;
   if(w>=CFG.WAVES){worldWon();return;}
   G.wave=w+1;saveRun();refreshHUD();
-  const key=G.world+'-'+w;
-  if(w%10===0&&!P.recruited[key]){P.recruited[key]=1;save();if(recruitOffer())return;}
+  const gift=BOSS_GIFT[G.world+'-'+w];
+  if(gift&&!P.owned.includes(gift)){bossGift(gift);return;}
   if(w===3)tipOnce('auto','livia-idee','Astuce : appuie sur 🔁 Auto et les vagues se lanceront toutes seules !');
   if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
@@ -361,21 +380,49 @@ function defeat(){
     <div class="right"><button onclick="showTeam()">🛡️ Équipe</button><button class="b-pink" onclick="closeModal();resetField();refreshHUD()">🔄 On recommence !</button></div>`,'duo-oups');
 }
 
-// ---------- Recrutement ----------
-function unowned(){return Object.keys(GUARD).filter(g=>!P.owned.includes(g));}
-function recruitOffer(){
-  const left=unowned();if(!left.length)return false;
-  const R=rng(Object.keys(P.recruited).length*97+P.owned.length);
-  const pick=left.slice().sort(()=>R()-0.5).slice(0,2);
-  openModal(`<h2>✨ Un nouveau gardien veut te rejoindre !</h2>
-    <p>${pick.length>1?'Choisis celui qui entre dans ton équipe :':'Il entre dans ton équipe :'}</p>
-    <div class="cards">${pick.map(g=>gCard(g,`recruit('${g}')`)).join('')}</div>`,'lili-contente',true);
-  return true;
+// ---------- Nouveaux gardiens : boutique et boss ----------
+function bossGift(gid){
+  P.owned.push(gid);save();refreshHUD();
+  openModal(`<h2>✨ Le Chef des Chipeurs a libéré ${GUARD[gid].name} !</h2>
+    <p>Il l'avait capturé… Maintenant, ${GUARD[gid].name} veut protéger le château avec toi !</p>
+    <div class="cards">${gCard(gid,'closeGift()')}</div>
+    <div class="right"><button class="b-pink" onclick="closeGift()">Bienvenue !</button></div>`,'lili-contente',true);
 }
-function recruit(gid){
-  P.owned.push(gid);save();closeModal();
-  tip('livia-idee',`${GUARD[gid].name} est dans ton équipe ! Touche un cercle ➕ libre pour le placer.`,6000);
+function closeGift(){
+  closeModal();tip('livia-idee','Fais glisser ton nouveau gardien depuis la barre du bas sur un cercle ➕ libre.',6000);
   if(P.auto)G.autoT=CFG.AUTO_DELAY+3;
+}
+function buyGuard(gid){
+  const price=SHOP[gid];if(!price||P.owned.includes(gid)||P.money<price)return;
+  P.money-=price;P.owned.push(gid);save();closeModal();refreshHUD();
+  tip('lili-contente',`${GUARD[gid].name} est dans ton équipe ! Fais-le glisser sur un cercle ➕ libre.`,6000);
+}
+function benchTap(gid){
+  if(P.owned.includes(gid)){showGuard(gid);return;}
+  const g=GUARD[gid];
+  if(SHOP[gid]){
+    const ok=P.money>=SHOP[gid];
+    openModal(`<h2>🛒 Acheter ${g.name} ?</h2><div class="cards">${gCard(gid,'')}</div>
+      <p style="text-align:center;font-weight:800">Prix : ${fmt(SHOP[gid])} L$ — tu as ${fmt(P.money)} L$</p>
+      ${ok?'':`<p style="text-align:center">Il te manque <b>${fmt(SHOP[gid]-P.money)} L$</b>. Continue à défendre le château !</p>`}
+      <div class="right"><button onclick="closeModal()">Plus tard</button><button class="b-pink" ${ok?'':'disabled'} onclick="buyGuard('${gid}')">Acheter</button></div>`,null,false,true);
+    return;
+  }
+  const gf=giftOf(gid);
+  if(gf)tip('lili-idee',`${g.name} est prisonnier du Chef des Chipeurs ! Bats-le à la vague ${gf.wave} du monde ${gf.world} pour le libérer.`,5500);
+}
+function renderBench(){
+  if(!P)return;
+  const placed=G.towers.map(t=>t.gid);
+  $('bench').innerHTML=BENCH_ORDER.map(gid=>{
+    const own=P.owned.includes(gid);let cls='bi',tag;
+    if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid)))+' '+level(gid);}
+    else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
+    else{const gf=giftOf(gid);cls+=' lock';tag='🔒 '+gf.world+'-'+gf.wave;}
+    return `<div class="${cls}" data-g="${gid}">${gIcon(gid,40,own?undefined:1)}<span>${tag}</span></div>`;
+  }).join('');
+  if(!P.tips.shop&&P.tips.wave&&Object.keys(SHOP).some(g=>!P.owned.includes(g)&&P.money>=SHOP[g]))
+    tipOnce('shop','livia-idee','Tu as assez de LiliDollars pour acheter un nouveau gardien ! Touche-le dans la barre du bas.');
 }
 function gIcon(gid,size,form){
   const g=GUARD[gid];form=form||formOf(level(gid));const s=size*(0.8+0.12*form);
@@ -390,7 +437,10 @@ function gCard(gid,onclick){
 function bench(){const placed=G.towers.map(t=>t.gid);return P.owned.filter(g=>!placed.includes(g));}
 function towerAtSpot(i){return G.towers.find(t=>t.spot===i);}
 function placeGuard(gid,spot){
-  P.place[G.world][spot]=gid;save();buildTowers();closeModal();
+  const pl=P.place[G.world];let from=null;for(const k in pl)if(pl[k]===gid)from=k;
+  const occ=pl[spot];if(occ===gid){closeModal();return;}
+  if(from!==null){delete pl[from];if(occ)pl[from]=occ;}
+  pl[spot]=gid;save();buildTowers();closeModal();
   if(!P.tips.wave){P.tips.wave=1;save();tip('lili-idee','Bravo ! Quand tu es prête, appuie sur ▶ Vague. Les Chipeurs arrivent par le chemin !',7000);}
 }
 function chooseForSpot(i){
@@ -415,8 +465,8 @@ function showGuard(gid,fromTeam){
       <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)}</span>${btn('rg')}</div>
       <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`;
   }
-  const foot=t?`<button onclick="startMove('${gid}')">↔️ Déplacer</button><button onclick="unplace('${gid}')">🏰 Rentrer au château</button>`
-              :`<span style="align-self:center;font-weight:700;opacity:.75">Touche un cercle ➕ libre pour le placer.</span>`;
+  const foot=t?`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser pour le déplacer.</span><button onclick="unplace('${gid}')">🏰 Rentrer au château</button>`
+              :`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser depuis la barre du bas sur un cercle ➕ libre.</span>`;
   openModal(`<div class="hasimg" style="align-items:center">${gIcon(gid,84)}<div><h2>${g.name} <small style="font-size:16px;color:#777">${FORMS[s.form]} · niveau ${s.lv}</small></h2>
       <p>${g.elem} — ${g.pow}</p><p>${next}</p></div></div>
     <div style="margin-top:6px">${rows}</div>
@@ -438,7 +488,6 @@ function buyUp(gid,k,fromTeam){
   }
   showGuard(gid,fromTeam);
 }
-function startMove(gid){G.moving=gid;closeModal();G.sel=G.towers.find(t=>t.gid===gid)||null;tip('lili-explique',`Touche un cercle ➕ libre pour y mettre ${GUARD[gid].name}.`,4000);}
 function unplace(gid){const pl=P.place[G.world];for(const k in pl)if(pl[k]===gid)delete pl[k];save();buildTowers();G.sel=null;closeModal();}
 function showTeam(){
   const list=P.owned.map(g=>{const s=stats(g),placed=G.towers.some(t=>t.gid===g);
@@ -447,7 +496,7 @@ function showTeam(){
   openModal(`<h2>🛡️ Ton équipe (${P.owned.length}/${nb})</h2>
     <p>Touche un gardien pour l'améliorer. Les améliorations restent pour toujours, même si tu perds.</p>
     <div class="team">${list}</div>
-    <p style="opacity:.75">${P.owned.length<nb?'Après chaque boss vaincu, un nouveau gardien veut rejoindre ton équipe.':'Tu as tous les gardiens !'}</p>
+    <p style="opacity:.75">${P.owned.length<nb?'Les autres gardiens s\'achètent avec des LiliDollars ou sont libérés en battant le Chef des Chipeurs (barre du bas).':'Tu as tous les gardiens !'}</p>
     <div class="right"><button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
 
@@ -458,7 +507,7 @@ function openModal(html,image,noClose,wide){
   $('mbox').innerHTML=image?`<div class="hasimg"><img src="img/${image}.webp" alt=""><div>${html}</div></div>`:html;
   $('modal').style.display='flex';modalOpen=true;$('modal').dataset.noclose=noClose?1:'';
 }
-function closeModal(){$('modal').style.display='none';modalOpen=false;G.sel=G.moving?G.sel:null;refreshHUD();}
+function closeModal(){$('modal').style.display='none';modalOpen=false;G.sel=null;refreshHUD();}
 $('modal').addEventListener('pointerdown',e=>{if(e.target===$('modal')&&!$('modal').dataset.noclose)closeModal();});
 
 // ---------- Bulles d'Ellie et Livia ----------
@@ -558,6 +607,7 @@ function refreshHUD(){
   $('bSpeed').textContent=`⏩ ×${G.speed}`;
   $('bPause').textContent=G.paused?'▶ Reprendre':'⏸ Pause';
   $('bPause').className=G.paused?'b-yellow':'';
+  renderBench();
 }
 
 // ---------- Simulation ----------
@@ -664,7 +714,7 @@ function impact(p){
 // ---------- Dessin ----------
 const cv=$('cv'),ctx=cv.getContext('2d');let K=1,BG=null;
 function resize(){
-  const st=$('stage'),sw=st.clientWidth,sh=st.clientHeight;
+  const st=$('cvWrap'),sw=st.clientWidth,sh=st.clientHeight;
   let cw=Math.min(sw,sh*16/9),ch=cw*9/16;
   const dpr=Math.min(3,window.devicePixelRatio||1);
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
@@ -738,6 +788,7 @@ function drawCastleLife(wd){
   const t=`❤️ ${G.hearts}`;ctx.strokeText(t,1530,cy+108);ctx.fillText(t,1530,cy+108);
 }
 function drawGuard(t,sel){
+  if(DR&&DR.active&&DR.gid===t.gid)ctx.globalAlpha=0.35;
   const g=GUARD[t.gid],s=stats(t.gid),r=22+6*s.form,b=Math.sin(t.anim*3)*2,k=t.kick*0.12;
   if(sel&&g.kind!=='coin'){ctx.fillStyle='rgba(255,255,255,.18)';ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(t.x,t.y,s.rg,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);}
   ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(t.x,t.y+r*0.8,r*0.9,r*0.3,0,0,7);ctx.fill();
@@ -746,7 +797,7 @@ function drawGuard(t,sel){
   ctx.font=`${r*1.05}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.em,0,2);
   ctx.restore();
   ctx.font='800 15px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='rgba(42,31,61,.8)';ctx.lineWidth=4;
-  const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);
+  const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);ctx.globalAlpha=1;
 }
 function drawFoe(e){
   const fl=e.fly?22:0,b=Math.abs(Math.sin(e.ph))*(e.fly?3:6);
@@ -781,10 +832,13 @@ function draw(){
   const wd=WORLDS[G.world-1];
   // emplacements libres
   wd.spots.forEach((s,i)=>{if(towerAtSpot(i))return;
-    const pulse=(G.moving||!G.towers.length)?Math.sin(G.anim*4)*4:0;
+    const pulse=((DR&&DR.active)||!G.towers.length)?Math.sin(G.anim*4)*4:0;
     ctx.fillStyle='rgba(255,255,255,.28)';ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=3;ctx.setLineDash([8,6]);
     ctx.beginPath();ctx.arc(s.x,s.y,30+pulse,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);
     ctx.font='800 30px "Baloo 2",sans-serif';ctx.fillStyle='rgba(255,255,255,.95)';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('+',s.x,s.y+2);});
+  if(DR&&DR.active&&DR.spot>=0&&GUARD[DR.gid].kind!=='coin'){const s=wd.spots[DR.spot],rg=stats(DR.gid).rg;
+    ctx.fillStyle='rgba(255,255,255,.22)';ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(s.x,s.y,rg,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='#FFD93D';ctx.lineWidth=6;ctx.beginPath();ctx.arc(s.x,s.y,36,0,7);ctx.stroke();}
   drawCastleLife(wd);
   const objs=[...G.towers.map(t=>({y:t.y,f:()=>drawGuard(t,G.sel===t)})),...G.enemies.map(e=>({y:e.y,f:()=>drawFoe(e)}))].sort((a,b)=>a.y-b.y);
   objs.forEach(o=>o.f());
@@ -798,22 +852,45 @@ function draw(){
   if(G.paused){ctx.fillStyle='rgba(42,31,61,.35)';ctx.fillRect(0,0,W,H);ctx.font='800 64px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.textAlign='center';ctx.fillText('⏸ Pause',W/2,H/2);}
 }
 
-// ---------- Toucher la map ----------
+// ---------- Toucher la map, glisser-déposer ----------
+let DR=null; // gardien en cours de glisser : {gid,pid,sx,sy,active,el,spot}
+function toMap(cx,cy){const r=cv.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;return{x:(cx-r.left)/r.width*W,y:(cy-r.top)/r.height*H};}
+function spotAt(x,y){return WORLDS[G.world-1].spots.findIndex(s=>Math.hypot(s.x-x,s.y-y)<52);}
+function dragStart(e,gid){DR={gid,pid:e.pointerId,sx:e.clientX,sy:e.clientY,active:false,spot:-1};}
 cv.addEventListener('pointerdown',e=>{
   if(!P||modalOpen)return;
-  const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
-  const wd=WORLDS[G.world-1];
-  const t=G.towers.find(t=>Math.hypot(t.x-x,t.y-y)<44);
-  if(G.moving){
-    const i=wd.spots.findIndex(s=>Math.hypot(s.x-x,s.y-y)<44);
-    if(i>=0&&!towerAtSpot(i)){const pl=P.place[G.world];for(const k in pl)if(pl[k]===G.moving)delete pl[k];pl[i]=G.moving;save();buildTowers();}
-    G.moving=null;G.sel=null;return;
-  }
-  if(t){showGuard(t.gid);return;}
-  const i=wd.spots.findIndex(s=>Math.hypot(s.x-x,s.y-y)<44);
+  const p=toMap(e.clientX,e.clientY);if(!p)return;
+  const t=G.towers.find(t=>Math.hypot(t.x-p.x,t.y-p.y)<46);
+  if(t){e.preventDefault();dragStart(e,t.gid);return;}
+  const i=spotAt(p.x,p.y);
   if(i>=0){chooseForSpot(i);return;}
   G.sel=null;
 });
+$('bench').addEventListener('pointerdown',e=>{
+  if(!P||modalOpen)return;
+  const b=e.target.closest('.bi');if(!b)return;const gid=b.dataset.g;
+  if(P.owned.includes(gid)){e.preventDefault();dragStart(e,gid);}
+  else benchTap(gid);
+});
+document.addEventListener('pointermove',e=>{
+  if(!DR||e.pointerId!==DR.pid)return;
+  if(!DR.active&&Math.hypot(e.clientX-DR.sx,e.clientY-DR.sy)>8){
+    DR.active=true;DR.el=document.createElement('div');DR.el.className='dragGhost';DR.el.innerHTML=gIcon(DR.gid,56);document.body.appendChild(DR.el);
+    G.sel=G.towers.find(t=>t.gid===DR.gid)||null;
+  }
+  if(DR.active){DR.el.style.left=e.clientX+'px';DR.el.style.top=e.clientY+'px';const p=toMap(e.clientX,e.clientY);DR.spot=p?spotAt(p.x,p.y):-1;}
+});
+function dragEnd(e,cancel){
+  if(!DR||e.pointerId!==DR.pid)return;
+  const d=DR;DR=null;if(d.el)d.el.remove();G.sel=null;
+  if(cancel)return;
+  if(!d.active){showGuard(d.gid);return;}
+  if(d.spot>=0){placeGuard(d.gid,d.spot);return;}
+  const br=$('bench').getBoundingClientRect();
+  if(e.clientX>=br.left&&e.clientX<=br.right&&e.clientY>=br.top-20&&e.clientY<=br.bottom&&G.towers.some(t=>t.gid===d.gid))unplace(d.gid);
+}
+document.addEventListener('pointerup',e=>dragEnd(e,false));
+document.addEventListener('pointercancel',e=>dragEnd(e,true));
 
 // ---------- Boucle ----------
 function frame(ts){
@@ -821,6 +898,7 @@ function frame(ts){
   if(P&&!modalOpen&&!G.paused&&G.state!=='over'){
     let left=dt*G.speed;while(left>0){const s=Math.min(0.025,left);update(s);left-=s;if(G.state==='over'||modalOpen)break;}
   }else if(P)G.anim+=dt;
+  if(P&&P.money!==G.shownMoney&&ts-(G.hudT||0)>250){G.shownMoney=P.money;G.hudT=ts;refreshHUD();}
   draw();requestAnimationFrame(frame);
 }
 
@@ -832,6 +910,7 @@ function devWin(){if(G.state!=='wave')return;G.queue=[];G.enemies=[];}
 
 // ---------- Démarrage ----------
 window.addEventListener('resize',resize);
+if(window.ResizeObserver){let rt=0;new ResizeObserver(()=>{cancelAnimationFrame(rt);rt=requestAnimationFrame(resize);}).observe($('cvWrap'));}
 window.addEventListener('orientationchange',()=>setTimeout(resize,200));
 let wakeLock=null;
 async function keepAwake(){try{if('wakeLock' in navigator&&!wakeLock){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>wakeLock=null);}}catch(e){}}
