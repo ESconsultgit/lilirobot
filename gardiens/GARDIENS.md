@@ -4,8 +4,8 @@
 > Inspiration de gameplay : [PokéPath TD](https://pokepathtd.io/) (l'idée, pas l'identité : toutes les créatures sont originales).
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
-- **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss et les 3 fonds de maps sont intégrés ; reste l'icône.
+- **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (images du jeu), icônes `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` (dessinées par Gemini : la princesse Lili devant son château avec Braisou, Gouttine et Feuillou)
+- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -14,7 +14,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 1. ✅ **Conception** : ce document.
 2. ✅ **Draft jouable** avec des formes simples (ronds de couleur et emojis) — à tester et à équilibrer.
 3. ✅ **Prompts Gemini** : `gardiens/gemini/PROMPTS-GEMINI.md` (avec les images guides des maps et les images de référence d'Ellie et Livia).
-4. **Assemblage** (en cours) : les images remplacent les formes, le chemin est calé sur chaque fond de map.
+4. ✅ **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
 5. **Vidéo de lancement** générée par Gemini, une fois le design validé (voir [plus bas](#vidéo-de-lancement)).
 
 ## L'histoire
@@ -179,4 +179,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 - **v4** — images de Rocaillou, Étoilette, Lunette et Sousou ; images des 6 Chipeurs et du Chef des Chipeurs, qui se tournent dans le sens de la marche.
 - **v5** — images des 3 grands boss (Grosse Taupe Grognon, Yéti Ronchon, Dragon de Grognon).
 - **v6** — fonds de maps Gemini pour les 3 mondes, chemins recalés dessus, château plus petit dans le monde 3.
+- **v7** — icône de l'application (Gemini) ; toutes les images du jeu sont en place.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
