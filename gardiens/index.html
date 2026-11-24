@@ -189,6 +189,9 @@ const BOSS_GIFT={'1-20':'plumo','1-40':'rocaillou','2-20':'etoilette','2-40':'lu
 const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette'];
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
+// Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
+const ART={braisou:1,gouttine:1,feuillou:1};
+function gImg(gid,form){return ART[gid]?img('g/'+gid+'-'+form):null;}
 
 // ---------- Les méchants ----------
 const FOES={
@@ -205,11 +208,11 @@ const INTRO={chipeur:[1,1,4],fusee:[1,3,2],costaud:[1,6,1.5],casque:[2,2,2],vola
 // ---------- Les mondes ----------
 const WORLDS=[
   {id:1,name:'La Prairie fleurie',em:'🌸',theme:'prairie',boss:{name:'La Grosse Taupe Grognon',em:'🦫',col:'#8B6B4A'},
-   path:[[-40,170],[300,170],[300,700],[660,700],[660,240],[1010,240],[1010,690],[1300,690],[1300,450],[1470,450]]},
+   path:[[-40,170],[300,170],[300,700],[660,700],[660,240],[1010,240],[1010,690],[1300,690],[1300,450],[1390,450]]},
   {id:2,name:'La Forêt enneigée',em:'❄️',theme:'neige',boss:{name:'Le Yéti Ronchon',em:'🦍',col:'#DDE8F5'},
-   path:[[220,-40],[220,400],[560,400],[560,130],[900,130],[900,570],[420,570],[420,790],[1180,790],[1180,330],[1470,330]]},
+   path:[[220,-40],[220,400],[560,400],[560,130],[900,130],[900,570],[420,570],[420,790],[1180,790],[1180,330],[1390,330]]},
   {id:3,name:'Le Volcan',em:'🌋',theme:'volcan',boss:{name:'Le Dragon de Grognon',em:'🐉',col:'#D2452F'},
-   path:[[-40,770],[340,770],[340,200],[740,200],[740,650],[1090,650],[1090,170],[1340,170],[1340,560],[1470,560]]}
+   path:[[-40,770],[340,770],[340,200],[740,200],[740,650],[1090,650],[1090,170],[1240,170],[1240,560],[1390,560]]}
 ];
 const MINIBOSS={name:'Chef des Chipeurs',em:'😤',col:'#B0306A'};
 
@@ -243,11 +246,11 @@ function distSeg(px,py,s){
 }
 function distPath(p,x,y){let m=1e9;for(const s of p.segs)m=Math.min(m,distSeg(x,y,s));return m;}
 // Emplacements des gardiens : calculés automatiquement le long du chemin
-function genSpots(p){
+function genSpots(p,castle){
   const samples=[];for(let d=0;d<p.len;d+=20){const q=posAt(p,d);if(q.x>0&&q.y>0&&q.x<W&&q.y<H)samples.push(q);}
   const cands=[];
   for(let x=70;x<=1400;x+=25)for(let y=70;y<=H-70;y+=25){
-    const dp=distPath(p,x,y);if(dp<74||dp>118)continue;
+    const dp=distPath(p,x,y);if(dp<74||dp>118||inCastle(castle,x,y,36))continue;
     let sc=0;for(const q of samples)if(Math.hypot(q.x-x,q.y-y)<165)sc++;
     cands.push({x,y,sc});
   }
@@ -256,7 +259,11 @@ function genSpots(p){
   for(const c of cands){if(spots.length>=14)break;if(spots.every(s=>Math.hypot(s.x-c.x,s.y-c.y)>=140))spots.push({x:c.x,y:c.y});}
   return spots;
 }
-WORLDS.forEach(w=>{w.P=buildPath(w.path);w.spots=genSpots(w.P);const e=w.path[w.path.length-1];w.castle={x:e[0],y:e[1]};});
+// Château (image de Gemini) : la porte (27 % de la largeur, 82 % de la hauteur) est au bout du chemin
+const CASTLE={w:280,h:296,gx:0.272,gy:0.82};
+function castleRect(c){return{x:c.x-CASTLE.w*CASTLE.gx,y:c.y-CASTLE.h*CASTLE.gy,w:CASTLE.w,h:CASTLE.h};}
+function inCastle(c,x,y,m){const r=castleRect(c);return x>r.x-m&&x<r.x+r.w+m&&y>r.y-m&&y<r.y+r.h+m;}
+WORLDS.forEach(w=>{const e=w.path[w.path.length-1];w.castle={x:e[0],y:e[1]};w.P=buildPath(w.path);w.spots=genSpots(w.P,w.castle);});
 
 // ---------- Joueurs et sauvegarde ----------
 const PKEY='gardiens-profiles';
@@ -329,7 +336,7 @@ function startWave(){
   if(G.state!=='idle')return;
   if(!G.towers.length){tip('lili-explique','Place d\'abord un gardien : touche un cercle ➕ près du chemin !',5000);return;}
   G.queue=makeWave(G.world,G.wave);G.t=0;G.state='wave';G.lostHeart=false;
-  if(G.wave%10===0)tip(G.wave===CFG.WAVES?'livia-mission':'lili-mission',G.wave===CFG.WAVES?`Attention ! ${WORLDS[G.world-1].boss.name} arrive ! C'est la dernière vague !`:'Attention, le Chef des Chipeurs arrive avec cette vague !',5000);
+  if(G.wave%10===0)tip('princesse-inquiete',G.wave===CFG.WAVES?`Attention ! ${WORLDS[G.world-1].boss.name} arrive ! C'est la dernière vague !`:'Attention, le Chef des Chipeurs arrive avec cette vague !',5000);
   hideTipSoon();refreshHUD();
 }
 function spawn(s){
@@ -369,7 +376,7 @@ function worldWon(){
   openModal(`<h2>🎉 Bravo ! Le château est sauvé !</h2>
     <p>Tu as réussi les ${CFG.WAVES} vagues de <b>${WORLDS[n-1].name}</b> et chassé ${esc(WORLDS[n-1].boss.name)} !</p>
     ${next?`<p>Un nouveau monde t'attend : <b>${next.em} ${next.name}</b>. Tes gardiens gardent toutes leurs améliorations.</p>`:`<p>Tu as fini les trois mondes : tu fais partie des <b>Grands Gardiens</b> du château ! La princesse Lili te dit merci !</p>`}
-    <div class="right">${next?`<button class="b-pink" onclick="closeModal();enterWorld(${n+1})">${next.em} En route !</button>`:''}<button onclick="showWorlds()">🗺️ Les mondes</button></div>`,'duo-victoire');
+    <div class="right">${next?`<button class="b-pink" onclick="closeModal();enterWorld(${n+1})">${next.em} En route !</button>`:''}<button onclick="showWorlds()">🗺️ Les mondes</button></div>`,'princesse-victoire');
 }
 function defeat(){
   G.state='over';const cp=P.worlds[G.world].cp;
@@ -377,7 +384,7 @@ function defeat(){
   openModal(`<h2>Oh non ! Les Chipeurs sont entrés…</h2>
     <p>Ils ont chipé le goûter de la princesse Lili ! Mais pas de panique : <b>tes gardiens gardent toutes leurs améliorations</b> et tes LiliDollars.</p>
     <p>Améliore-les un peu, puis on recommence à la <b>vague ${cp}</b>.</p>
-    <div class="right"><button onclick="showTeam()">🛡️ Équipe</button><button class="b-pink" onclick="closeModal();resetField();refreshHUD()">🔄 On recommence !</button></div>`,'duo-oups');
+    <div class="right"><button onclick="showTeam()">🛡️ Équipe</button><button class="b-pink" onclick="closeModal();resetField();refreshHUD()">🔄 On recommence !</button></div>`,'princesse-inquiete');
 }
 
 // ---------- Nouveaux gardiens : boutique et boss ----------
@@ -426,6 +433,7 @@ function renderBench(){
 }
 function gIcon(gid,size,form){
   const g=GUARD[gid];form=form||formOf(level(gid));const s=size*(0.8+0.12*form);
+  if(ART[gid])return `<span class="gico" style="width:${s}px;height:${s}px;background:radial-gradient(circle,#fff 55%,${g.col}55);border-color:${g.col}"><img src="img/g/${gid}-${form}.webp" alt="" style="width:88%;height:88%;object-fit:contain"></span>`;
   return `<span class="gico" style="width:${s}px;height:${s}px;background:${g.col};font-size:${s*0.5}px">${g.em}</span>`;
 }
 function gCard(gid,onclick){
@@ -526,7 +534,7 @@ function showWho(){
   PROFILES=LS.get(PKEY)||[];
   const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
   openModal(`<h2>🏰 Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
-    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button></div>`,'duo-equipe',true);
+    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button></div>`,'princesse-contente',true);
 }
 let NP={av:AVATARS[0],diff:2};
 function newProfile(){
@@ -649,7 +657,7 @@ function update(dt){
     const p=posAt(path,e.dist);e.x=p.x;e.y=p.y;e.seen=seenBy(e);
     if(e.dist>=path.len){
       e.hp=0;e.out=true;G.hearts=Math.max(0,G.hearts-e.hearts);
-      addText(wd.castle.x+60,wd.castle.y-120,'-'+e.hearts+' ❤️','#E0245E',26);refreshHUD();
+      addText(wd.castle.x+60,wd.castle.y-160,'-'+e.hearts+' ❤️','#E0245E',26);refreshHUD();
       tipOnce('hurt','lili-pas-contente','Oh non, un Chipeur est entré dans le château ! Améliore tes gardiens ou ajoute-en un sur le chemin.');
     }
   }
@@ -731,7 +739,7 @@ function buildBg(){
   c.width=cv.width;c.height=cv.height;const x=c.getContext('2d');x.scale(K,K);
   const gr=x.createLinearGradient(0,0,0,H);gr.addColorStop(0,th.bg1);gr.addColorStop(1,th.bg2);x.fillStyle=gr;x.fillRect(0,0,W,H);
   const R=rng(wd.id*77);
-  const free=(px,py,m)=>distPath(wd.P,px,py)>m&&wd.spots.every(s=>Math.hypot(s.x-px,s.y-py)>46)&&!(px>1420&&Math.abs(py-wd.castle.y)<200);
+  const free=(px,py,m)=>distPath(wd.P,px,py)>m&&wd.spots.every(s=>Math.hypot(s.x-px,s.y-py)>46)&&!inCastle(wd.castle,px,py,10);
   // décor
   for(let i=0;i<900;i++){
     const px=R()*W,py=R()*H;if(!free(px,py,46))continue;const k=R();
@@ -759,43 +767,32 @@ function buildBg(){
   // entrée des Chipeurs
   const s0=wd.path[0],s1=wd.path[1],ex=Math.max(30,Math.min(W-30,s0[0]+(s1[0]-s0[0])*0.06)),ey=Math.max(30,Math.min(H-30,s0[1]+(s1[1]-s0[1])*0.06));
   x.font='800 22px "Baloo 2",sans-serif';x.textAlign='center';x.fillStyle='rgba(60,20,60,.8)';x.fillText('Chipeurs ➜',ex+(s1[0]>s0[0]?60:0),ey+(s1[1]>s0[1]?60:-46));
-  castle(x,wd.castle.x,wd.castle.y);
   BG=c;
 }
 function tree(x,px,py,c1,c2){x.fillStyle='#7A5230';x.fillRect(px-4,py,8,16);x.fillStyle=c2;x.beginPath();x.arc(px,py-6,20,0,7);x.fill();x.fillStyle=c1;x.beginPath();x.arc(px-5,py-11,14,0,7);x.fill();}
 function pine(x,px,py){x.fillStyle='#6B4A30';x.fillRect(px-3,py+8,6,10);x.fillStyle='#2F6B4A';for(let i=0;i<3;i++){x.beginPath();x.moveTo(px,py-30+i*12);x.lineTo(px+16-i*2,py-6+i*12);x.lineTo(px-16+i*2,py-6+i*12);x.fill();}x.fillStyle='#fff';x.beginPath();x.moveTo(px,py-30);x.lineTo(px+6,py-20);x.lineTo(px-6,py-20);x.fill();}
-function castle(x,cx,cy){
-  const L=cx-12,T=cy-120;
-  x.fillStyle='rgba(0,0,0,.15)';x.beginPath();x.ellipse(1530,cy+82,90,18,0,0,7);x.fill();
-  x.fillStyle='#F7C3DA';x.strokeStyle='#B5527F';x.lineWidth=4;
-  x.fillRect(L,cy-70,W-L+10,150);x.strokeRect(L,cy-70,W-L+10,150);
-  for(let i=L;i<W;i+=22){x.fillRect(i,cy-86,12,18);x.strokeRect(i,cy-86,12,18);}
-  [[L+4,48],[1560,48]].forEach(([tx,w])=>{x.fillStyle='#F7C3DA';x.fillRect(tx,T-40,w,200);x.strokeRect(tx,T-40,w,200);
-    x.fillStyle='#8A5BD6';x.beginPath();x.moveTo(tx-8,T-40);x.lineTo(tx+w/2,T-110);x.lineTo(tx+w+8,T-40);x.closePath();x.fill();x.stroke();
-    x.strokeStyle='#B5527F';x.beginPath();x.moveTo(tx+w/2,T-110);x.lineTo(tx+w/2,T-140);x.stroke();x.fillStyle='#FF5FA2';x.beginPath();x.moveTo(tx+w/2,T-140);x.lineTo(tx+w/2+24,T-132);x.lineTo(tx+w/2,T-124);x.fill();x.strokeStyle='#B5527F';});
-  x.fillStyle='#FBD9E8';x.fillRect(1490,T-10,56,100);x.strokeRect(1490,T-10,56,100);
-  x.fillStyle='#8A5BD6';x.beginPath();x.moveTo(1482,T-10);x.lineTo(1518,T-70);x.lineTo(1554,T-10);x.closePath();x.fill();x.stroke();
-  x.fillStyle='#5A2D4A';x.beginPath();x.moveTo(L-2,cy+80);x.lineTo(L-2,cy-26);x.arc(L+24,cy-26,26,Math.PI,0);x.lineTo(L+50,cy+80);x.fill();
-  x.fillStyle='#FFE6A8';[[1510,T+30],[1585,cy-20],[L+28,T+20]].forEach(([wx,wy])=>{x.beginPath();x.arc(wx,wy,8,Math.PI,0);x.rect(wx-8,wy,16,14);x.fill();});
-}
 function drawCastleLife(wd){
-  const cy=wd.castle.y,T=cy-120,bob=Math.sin(G.anim*2)*3;
-  ctx.font='46px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('👸',1518,T+30+bob);
-  const e=img('lili-coucou'),l=img('livia-idee');
-  if(e.complete&&e.naturalWidth)ctx.drawImage(e,1452,cy-150+Math.sin(G.anim*2.4)*2,48,55);
-  if(l.complete&&l.naturalWidth)ctx.drawImage(l,1548,cy-152+Math.sin(G.anim*2.1+1)*2,46,55);
-  ctx.font='800 24px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='#B5527F';ctx.lineWidth=6;
-  const t=`❤️ ${G.hearts}`;ctx.strokeText(t,1530,cy+108);ctx.fillText(t,1530,cy+108);
+  const c=wd.castle,im=img('chateau'),r=castleRect(c);
+  ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(r.x+r.w*0.52,r.y+r.h*0.93,r.w*0.48,r.h*0.09,0,0,7);ctx.fill();
+  if(im.complete&&im.naturalWidth)ctx.drawImage(im,r.x,r.y,r.w,r.h);
+  else{ctx.font='120px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🏰',r.x+r.w/2,r.y+r.h/2);}
+  ctx.font='800 24px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.strokeStyle='#B5527F';ctx.lineWidth=6;
+  const t=`❤️ ${G.hearts}`,ty=Math.min(H-14,r.y+r.h+16);ctx.strokeText(t,r.x+r.w*0.55,ty);ctx.fillText(t,r.x+r.w*0.55,ty);
 }
 function drawGuard(t,sel){
   if(DR&&DR.active&&DR.gid===t.gid)ctx.globalAlpha=0.35;
   const g=GUARD[t.gid],s=stats(t.gid),r=22+6*s.form,b=Math.sin(t.anim*3)*2,k=t.kick*0.12;
   if(sel&&g.kind!=='coin'){ctx.fillStyle='rgba(255,255,255,.18)';ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(t.x,t.y,s.rg,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);}
   ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(t.x,t.y+r*0.8,r*0.9,r*0.3,0,0,7);ctx.fill();
+  const im=gImg(t.gid,s.form);
+  if(im&&im.complete&&im.naturalWidth){
+    const hh=[0,74,90,106][s.form],ww=hh*im.naturalWidth/im.naturalHeight,base=t.y+r*0.8;
+    ctx.save();ctx.translate(t.x,base);ctx.scale(1+k,1-k);ctx.drawImage(im,-ww/2,-hh+b,ww,hh);ctx.restore();
+  }else{
   ctx.save();ctx.translate(t.x,t.y+b);ctx.scale(1+k,1-k);
   ctx.fillStyle=g.col;ctx.strokeStyle='#fff';ctx.lineWidth=4+s.form;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.stroke();
   ctx.font=`${r*1.05}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.em,0,2);
-  ctx.restore();
+  ctx.restore();}
   ctx.font='800 15px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='rgba(42,31,61,.8)';ctx.lineWidth=4;
   const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);ctx.globalAlpha=1;
 }
