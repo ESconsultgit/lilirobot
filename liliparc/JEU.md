@@ -274,4 +274,4 @@ Constantes en haut du script de `index.html` :
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
 - **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #18** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
-- **PR #19** — « joueur » à la place de « joueuse » (le jeu est pour tout le monde).
+- **PR #21** — « joueur » à la place de « joueuse » (le jeu est pour tout le monde).
