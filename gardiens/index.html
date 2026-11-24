@@ -190,7 +190,7 @@ const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','pl
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
-const ART={braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1};
+const ART={braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1};
 function gImg(gid,form){return ART[gid]?img('g/'+gid+'-'+form):null;}
 
 // ---------- Les méchants ----------
@@ -342,11 +342,11 @@ function startWave(){
 function spawn(s){
   const wd=WORLDS[G.world-1];
   if(s.type==='boss'){
-    const b=s.boss;G.enemies.push({type:'boss',name:b.name,em:b.em,col:b.col,hp:s.hp,max:s.hp,spd:28,rew:s.rew,r:s.final?46:36,hearts:CFG.BOSS_HEARTS,boss:true,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
+    const b=s.boss;G.enemies.push({type:'boss',art:s.final?null:'chef',name:b.name,em:b.em,col:b.col,hp:s.hp,max:s.hp,spd:28,rew:s.rew,r:s.final?46:36,hearts:CFG.BOSS_HEARTS,boss:true,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
     return;
   }
   const f=FOES[s.type];
-  G.enemies.push({type:s.type,name:f.name,em:f.em,col:f.col,hp:s.hp,max:s.hp,spd:f.spd*(0.95+Math.random()*0.1),rew:s.rew,r:f.r,hearts:1,
+  G.enemies.push({type:s.type,art:s.type,name:f.name,em:f.em,col:f.col,hp:s.hp,max:s.hp,spd:f.spd*(0.95+Math.random()*0.1),rew:s.rew,r:f.r,hearts:1,
     armor:!!f.armor,fly:!!f.fly,ghost:!!f.ghost,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
   if(f.armor)tipOnce('armor','lili-idee','Les Casqués ont un casque : tes gardiens leur font moitié moins mal. Rocaillou peut casser leur casque !');
   if(f.fly)tipOnce('fly','livia-idee','Les Volants passent au-dessus des lianes, de la glace et du vent : ils ne sont ni ralentis ni repoussés.');
@@ -654,7 +654,7 @@ function update(dt){
     if(e.burnT>0){e.burnT-=dt;hurt(e,e.burn*dt,'burn');}
     if(e.hp<=0)continue;
     e.dist+=e.spd*e.slowF*dt;e.ph+=dt*8*e.slowF;
-    const p=posAt(path,e.dist);e.x=p.x;e.y=p.y;e.seen=seenBy(e);
+    const p=posAt(path,e.dist);if(e.x!==undefined){const dx=p.x-e.x;if(Math.abs(dx)>0.01)e.face=dx<0?-1:1;}e.x=p.x;e.y=p.y;e.seen=seenBy(e);
     if(e.dist>=path.len){
       e.hp=0;e.out=true;G.hearts=Math.max(0,G.hearts-e.hearts);
       addText(wd.castle.x+60,wd.castle.y-160,'-'+e.hearts+' ❤️','#E0245E',26);refreshHUD();
@@ -801,7 +801,18 @@ function drawFoe(e){
   if(e.ghost&&!e.seen){ctx.globalAlpha=0.1+0.05*Math.sin(G.anim*6);}
   else if(e.ghost)ctx.globalAlpha=0.6;
   ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(e.x,e.y+e.r*0.85,e.r*(e.fly?0.6:0.9),e.r*0.28,0,0,7);ctx.fill();
-  const y=e.y-fl-b;
+  const y=e.y-fl-b,im=e.art?img('f/'+e.art):null;
+  if(im&&im.complete&&im.naturalWidth){
+    const h=e.r*2.9,w=h*im.naturalWidth/im.naturalHeight;
+    if(e.slowT>0){ctx.fillStyle='rgba(140,210,255,.55)';ctx.beginPath();ctx.ellipse(e.x,y+h*0.1,w*0.55,h*0.5,0,0,7);ctx.fill();}
+    ctx.save();ctx.translate(e.x,y+h*0.42);ctx.rotate(Math.sin(e.ph)*0.07);ctx.scale(e.face||1,1);
+    ctx.drawImage(im,-w/2,-h,w,h);ctx.restore();
+    if(e.burnT>0){ctx.font=`${e.r*0.8}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🔥',e.x+(Math.sin(G.anim*12)*4),y-h*0.45);}
+    if(e.type==='casque'&&!e.armor){ctx.font=`${e.r*0.7}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💥',e.x,y-h*0.42);}
+    ctx.globalAlpha=1;
+    if(e.hp<e.max&&(!e.ghost||e.seen)){const bw=e.r*2,hy=y-h*0.62-8;ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(e.x-bw/2,hy,bw,6);ctx.fillStyle=e.hp/e.max>0.4?'#6BD86B':'#FF6B6B';ctx.fillRect(e.x-bw/2,hy,bw*Math.max(0,e.hp/e.max),6);}
+    return;
+  }
   ctx.fillStyle=e.col;ctx.beginPath();ctx.arc(e.x,y,e.r,0,7);ctx.fill();
   if(e.slowT>0){ctx.fillStyle='rgba(140,210,255,.45)';ctx.beginPath();ctx.arc(e.x,y,e.r,0,7);ctx.fill();}
   if(e.burnT>0&&Math.sin(G.anim*20)>0){ctx.fillStyle='rgba(255,120,40,.45)';ctx.beginPath();ctx.arc(e.x,y,e.r,0,7);ctx.fill();}
