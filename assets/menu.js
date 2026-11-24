@@ -102,7 +102,8 @@
   const APP=src=>`<img src="${src}" width="60" height="60" alt="" style="border-radius:14px;box-shadow:0 2px 6px rgba(31,77,29,.25)">`;
   const JEUX=[
     {href:"/liliparc/",name:"Lili Parc",desc:L("Construis ta fête foraine et fais fructifier tes LiliDollars !","Build your own fun fair and grow your LiliDollars! (in French)"),icon:APP("/liliparc/icon-192.png")},
-    {href:"/monopolili/",name:"MonopoLili",desc:L("Le Monopoly de Lili : achète la Cité des Peluches Péteuses !","Lili's Monopoly: buy the Farty Plushie City! (in French)"),icon:APP("/monopolili/icon-192-v2.png")}
+    {href:"/monopolili/",name:"MonopoLili",desc:L("Le Monopoly de Lili : achète la Cité des Peluches Péteuses !","Lili's Monopoly: buy the Farty Plushie City! (in French)"),icon:APP("/monopolili/icon-192-v2.png")},
+    {href:"/gardiens/",name:"Les Gardiens de Lili",desc:L("Place tes gardiens et protège le château de la princesse Lili contre les Chipeurs !","Place your guardians and protect Princess Lili's castle from the Chipeurs! (in French)"),icon:APP("/gardiens/icon-192.png")}
   ];
 
   const st=document.createElement("style");

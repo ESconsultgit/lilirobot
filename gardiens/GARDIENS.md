@@ -4,8 +4,8 @@
 > Inspiration de gameplay : [PokéPath TD](https://pokepathtd.io/) (l'idée, pas l'identité : toutes les créatures sont originales).
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
-- **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v0). Gardiens et méchants dessinés en formes simples, en attendant les images de Gemini.
+- **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (images du jeu), icônes `icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png` (dessinées par Gemini : la princesse Lili devant son château avec Braisou, Gouttine et Feuillou)
+- **Statut** : en ligne (v7). Images Gemini : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss les 3 fonds de maps et l'icône de l'application sont intégrés. Toutes les images Gemini sont en place.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -13,8 +13,8 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 
 1. ✅ **Conception** : ce document.
 2. ✅ **Draft jouable** avec des formes simples (ronds de couleur et emojis) — à tester et à équilibrer.
-3. **Prompts Gemini**, générés à partir de la [liste des images](#liste-des-images-pour-gemini).
-4. **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
+3. ✅ **Prompts Gemini** : `gardiens/gemini/PROMPTS-GEMINI.md` (avec les images guides des maps et les images de référence d'Ellie et Livia).
+4. ✅ **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
 5. **Vidéo de lancement** générée par Gemini, une fois le design validé (voir [plus bas](#vidéo-de-lancement)).
 
 ## L'histoire
@@ -25,8 +25,8 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 
 ## Démarrer
 
-- Écran **« Qui joue ? »** : chaque joueur a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
-- À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou.
+- Écran **« Qui joue ? »** : chaque joueur ou joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
+- À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou, puis on le fait glisser sur la map.
 - Écran **🗺️ Choisis ton monde** : progression de chaque monde, mondes suivants verrouillés tant que le précédent n'est pas réussi.
 
 ## Les mondes et les vagues
@@ -47,13 +47,25 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 ## L'argent et la progression
 
 - Les **LiliDollars (L$)** se gagnent en battant les méchants, avec un bonus à chaque vague réussie (et grâce à Sousou).
-- Ils servent à **améliorer** les gardiens. Placer un gardien est gratuit.
+- Ils servent à **acheter** certains gardiens et à les **améliorer**. Placer un gardien est gratuit.
 - **Tout est gardé**, même après une défaite : LiliDollars, gardiens et améliorations. Perdre ne fait jamais perdre ce qu'on a gagné : on s'améliore et on réessaie.
 - La partie est sauvegardée à la fin de chaque vague (une vague interrompue recommence).
 
 ## Les gardiens
 
-On commence avec **1 gardien parmi 3**. La première fois qu'on bat un boss (vagues 10, 20, 30, 40 des mondes 1 et 2), **un nouveau gardien veut rejoindre l'équipe** (choix entre 2). Chaque gardien est unique et se place une fois sur une map, sur un **emplacement** (cercle ➕ près du chemin, 14 par map). On peut le **déplacer** ou le **rentrer au château** à tout moment. Bouton **🛡️ Équipe** : tous ses gardiens, placés ou non.
+On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autres s'obtiennent de deux façons :
+
+| Comment | Gardiens |
+|---|---|
+| 🛒 **Achat en LiliDollars** | les 2 gardiens de départ non choisis (150 L$ chacun), Sousou (400 L$), Zapic (700 L$), Givrou (1 200 L$) |
+| 👑 **Libérés par le Chef des Chipeurs** (la première fois qu'on le bat) | Plumo (monde 1, vague 20), Rocaillou (monde 1, vague 40), Étoilette (monde 2, vague 20), Lunette (monde 2, vague 40) |
+
+**La barre du bas**, sous la map, montre les 10 gardiens :
+- gardien de l'équipe : en couleur, avec ses étoiles et son niveau (pâle s'il est déjà sur la map) ;
+- gardien à acheter : grisé avec son prix (surligné en jaune quand on a assez de L$) ; le toucher ouvre la fenêtre d'achat ;
+- gardien prisonnier : sombre, avec 🔒 et le monde-vague du boss qui le libère.
+
+**Glisser-déposer** : on fait glisser un gardien de la barre du bas vers un **emplacement** (cercle ➕ près du chemin, 14 par map) ; pendant le glisser, sa portée s'affiche sur l'emplacement visé. Sur la map, on fait glisser un gardien vers un autre emplacement pour le déplacer (si l'emplacement est pris, les deux gardiens échangent leur place), ou vers la barre du bas pour le rentrer au château. Un simple toucher sur un gardien ouvre sa fiche ; toucher un cercle libre propose les gardiens disponibles. Chaque gardien est unique et ne se place qu'une fois par map.
 
 | | Gardien | Élément | Pouvoir | Dégâts | Portée | Tirs/s |
 |---|---|---|---|--:|--:|--:|
@@ -107,7 +119,7 @@ Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 
 ## Conseils d'Ellie et Livia
 
-Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'apparaît qu'une fois : placer son premier gardien, lancer la vague, mode Auto (vague 3), premier cœur perdu, premiers Casqués, Volants et Fantômes. Les annonces de boss reviennent à chaque fois.
+Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'apparaît qu'une fois : faire glisser son premier gardien, lancer la vague, premier gardien qu'on peut acheter, mode Auto (vague 3), premier cœur perdu, premiers Casqués, Volants et Fantômes. Les annonces de boss reviennent à chaque fois.
 
 ## Écran et téléphone
 
@@ -120,12 +132,15 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 Constantes en haut du script de `index.html` :
 
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
-- `DIFF` (niveaux de jeu), `GUARD` (gardiens), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
+- `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
-- **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
+- **Fonds de maps** : `img/map-1|2|3.webp` (1 920 × 1 080, dessinés par Gemini), affichés par `buildBg()` ; le décor dessiné par le code ne sert plus que pendant le chargement. Le tracé `path` de chaque monde a été recalé sur le chemin dessiné. Dans le monde 3, le chemin descend tout près du bord droit : le château y est réduit à 82 % (`cs:0.82` dans `WORLDS`) pour ne pas le cacher.
+- **Images** : `ART` liste les gardiens qui ont leurs images (`img/g/<id>-<forme>.webp`, 320 px) ; les autres restent en ronds de couleur. Château : `img/chateau.webp`, placé par `CASTLE` (sa porte, à 27 % de la largeur et 82 % de la hauteur, est au bout du chemin, en x = 1 390). Princesse : `img/princesse-contente|inquiete|victoire.webp` (« Qui joue ? », annonces de boss, défaite, victoire).
+- **Méchants** : `img/f/<type>.webp` (chipeur, fusee, costaud, casque, volant, fantome, chef), dessinés de profil tournés vers la droite ; le jeu les retourne quand ils vont vers la gauche. Un Casqué dont le casque est cassé affiche 💥. Grands boss : `img/f/boss-taupe|yeti|dragon.webp` ; la taupe et le dragon sont dessinés tournés vers la gauche, ce qu'indique `FOE_FACE` pour que le jeu les tourne dans le bon sens.
+- **Préparer une image Gemini** : `python3 gemini/cut.py <source.jpg> <green|magenta|blue> <nombre de personnages> <taille max> <sorties…>` retire le fond uni, découpe la planche en personnages et enregistre des `.webp`. Les originaux sont gardés dans `gemini/sources/`. Si des personnages se chevauchent en colonnes (un volant au-dessus d'un autre), utiliser `gemini/cut_blobs.py` (mêmes arguments), qui sépare par taches et retire aussi les ombres vert foncé.
 - Sauvegardes : `gardiens-profiles` (liste des joueurs), `gardiens-<id>` (partie de chaque joueur), `gardiens-last`.
 - **Après chaque modification** : incrémenter `VERSION` dans `gardiens/sw.js` et mettre à jour ce document.
-- **Mise en ligne** : ajouter une ligne dans `JEUX` (`assets/menu.js`) quand le jeu est prêt pour le menu Détente.
+- **Mise en ligne** : en ligne sur lilirobot.com/gardiens/ et dans le menu Détente du site (ligne dans `JEUX`, `assets/menu.js`).
 
 ## Liste des images pour Gemini
 
@@ -144,7 +159,7 @@ Gemini ne sait pas faire de vrai fond transparent : chaque personnage est demand
 | Fonds de maps | 3 | 1920 × 1080 | vue de dessus ; je fournis une **image guide** avec le chemin et le château tracés, à donner à Gemini pour qu'il dessine le décor autour du même chemin |
 | Icône de l'application | 1 | 1024 × 1024 | Lili devant son château |
 
-Total : environ **49 images**. Les projectiles (boules de feu, flocons, éclairs) et les effets sont dessinés par le code.
+Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) dans la barre du bas : ils doivent rester reconnaissables en tout petit (silhouette simple, couleur dominante bien marquée). Les projectiles (boules de feu, flocons, éclairs) et les effets sont dessinés par le code.
 
 ## Vidéo de lancement
 
@@ -159,4 +174,10 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 ## Historique des versions
 
 - **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueurs. Formes simples en attendant les images.
-- **v0.1** — « joueur » au lieu de « joueuse » partout.
+- **v2** — premières images Gemini : château (au bout du chemin, qui s'arrête maintenant en x = 1 390 ; chemin du monde 3 retouché), princesse Lili dans les fenêtres, Braisou, Gouttine et Feuillou dans leurs 3 formes.
+- **v3** — images de Zapic, Givrou et Plumo (3 formes chacun).
+- **v4** — images de Rocaillou, Étoilette, Lunette et Sousou ; images des 6 Chipeurs et du Chef des Chipeurs, qui se tournent dans le sens de la marche.
+- **v5** — images des 3 grands boss (Grosse Taupe Grognon, Yéti Ronchon, Dragon de Grognon).
+- **v6** — fonds de maps Gemini pour les 3 mondes, chemins recalés dessus, château plus petit dans le monde 3.
+- **v7** — icône de l'application (Gemini) ; toutes les images du jeu sont en place.
+- **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
