@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, Braisou, Gouttine et Feuillou sont intégrés ; les autres gardiens et les méchants sont encore en formes simples.
+- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, Braisou, Gouttine, Feuillou, Zapic, Givrou et Plumo sont intégrés ; les autres gardiens et les méchants sont encore en formes simples.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -174,4 +174,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 
 - **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueurs. Formes simples en attendant les images.
 - **v2** — premières images Gemini : château (au bout du chemin, qui s'arrête maintenant en x = 1 390 ; chemin du monde 3 retouché), princesse Lili dans les fenêtres, Braisou, Gouttine et Feuillou dans leurs 3 formes.
+- **v3** — images de Zapic, Givrou et Plumo (3 formes chacun).
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
