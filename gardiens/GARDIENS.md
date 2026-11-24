@@ -25,6 +25,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 
 ## Démarrer
 
+- **Vidéo de lancement** à chaque ouverture du jeu, en plein écran, avant « Qui joue ? ». Elle démarre sans le son (les navigateurs bloquent le son tant qu'on n'a pas touché l'écran) : bouton **🔇 Activer le son** en bas à gauche, ou toucher la vidéo. Bouton **Passer ⏭** en bas à droite. Si la vidéo ne se charge pas en 6 secondes (hors connexion), le jeu démarre directement.
 - Écran **« Qui joue ? »** : chaque joueur ou joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
 - À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou, puis on le fait glisser sur la map.
 - Écran **🗺️ Choisis ton monde** : progression de chaque monde, mondes suivants verrouillés tant que le précédent n'est pas réussi.
@@ -163,7 +164,7 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 
 ## Vidéo de lancement
 
-**`gardiens/video/lancement.mp4`** — https://lilirobot.com/gardiens/video/lancement.mp4 (30 s, 1 280 × 720, avec musique et bruitages). Générée par Gemini Omni en 3 plans de 10 s (le château en danger, les gardiens entrent en jeu, le grand boss et la victoire) avec les prompts de `gemini/PROMPTS-GEMINI.md`. Le titre « Les Gardiens de Lili » et l'adresse lilirobot.com/gardiens sont ajoutés par-dessus dans les 4 dernières secondes (`gemini/video/titre.png`, police Baloo 2). Original sans titre : `gemini/sources/video-lancement-gemini.mp4`. La vidéo n'est pas mise en cache hors connexion.
+**`gardiens/video/lancement.mp4`** — https://lilirobot.com/gardiens/video/lancement.mp4 (30 s, 1 280 × 720, avec musique et bruitages). Générée par Gemini Omni en 3 plans de 10 s (le château en danger, les gardiens entrent en jeu, le grand boss et la victoire) avec les prompts de `gemini/PROMPTS-GEMINI.md`. Le titre « Les Gardiens de Lili » et l'adresse lilirobot.com/gardiens sont ajoutés par-dessus dans les 4 dernières secondes (`gemini/video/titre.png`, police Baloo 2). Original sans titre : `gemini/sources/video-lancement-gemini.mp4`. Elle passe au démarrage du jeu (`showIntro()`). Elle n'est pas mise en cache hors connexion (`sw.js` laisse passer les `.mp4` vers le réseau).
 
 ## Questions ouvertes
 
@@ -181,4 +182,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v6** — fonds de maps Gemini pour les 3 mondes, chemins recalés dessus, château plus petit dans le monde 3.
 - **v7** — icône de l'application (Gemini) ; toutes les images du jeu sont en place.
 - **v8** — vidéo de lancement (`video/lancement.mp4`).
+- **v9** — la vidéo de lancement passe au démarrage du jeu, avec les boutons « Activer le son » et « Passer ».
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

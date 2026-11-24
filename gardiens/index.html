@@ -97,6 +97,12 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border:2px solid #d9cce9;width:100%}
 .team{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
 
+/* ---------- Vidéo de lancement au démarrage ---------- */
+#intro{position:fixed;inset:0;background:#000;z-index:40;display:none;align-items:center;justify-content:center}
+#intro video{width:100%;height:100%;object-fit:contain;background:#000}
+#intro .ib{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));font-size:18px;padding:10px 18px;opacity:.92}
+#introSkip{right:max(14px,env(safe-area-inset-right))}
+#introSound{left:max(14px,env(safe-area-inset-left))}
 #rotate{position:fixed;inset:0;background:linear-gradient(135deg,#F3ECFF,#FBE1EE);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;padding:20px;font-family:'Baloo 2';font-size:22px;font-weight:700}
 #rotate img{width:150px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
@@ -133,6 +139,8 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
   </div>
 </div>
 <div id="modal"><div class="box" id="mbox"></div></div>
+<div id="intro"><video id="introV" playsinline muted preload="auto"></video>
+  <button class="ib" id="introSound">🔇 Activer le son</button><button class="ib b-pink" id="introSkip">Passer ⏭</button></div>
 <div id="rotate"><img src="img/livia-pensive.webp" alt=""><div>Tourne ton téléphone<br>pour défendre le château !</div></div>
 
 <script>
@@ -932,7 +940,19 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 document.addEventListener('pointerdown',keepAwake,{once:true});
 if('serviceWorker' in navigator&&/lilirobot\.com$/.test(location.hostname))navigator.serviceWorker.register('sw.js').catch(()=>{});
 resize();refreshHUD();requestAnimationFrame(frame);
-(function(){const last=LS.get('gardiens-last');if(last&&(LS.get(PKEY)||[]).some(p=>p.id===last))showWho();else showWho();})();
+// Au démarrage : la vidéo de lancement (sans le son, car les navigateurs bloquent le son au lancement), puis « Qui joue ? ».
+// Bouton « Passer » ; si la vidéo ne se charge pas (hors connexion), on passe directement au jeu.
+function showIntro(next){
+  const o=$('intro'),v=$('introV');let done=false,to=0;
+  const end=()=>{if(done)return;done=true;clearTimeout(to);try{v.pause();}catch(e){}o.style.display='none';v.removeAttribute('src');v.load();next();};
+  const sound=()=>{v.muted=!v.muted;$('introSound').textContent=v.muted?'🔇 Activer le son':'🔊 Son activé';v.play().catch(()=>{});};
+  $('introSkip').onclick=end;$('introSound').onclick=sound;v.onclick=()=>{if(v.muted)sound();};
+  v.onended=end;v.onerror=end;v.onplaying=()=>clearTimeout(to);
+  v.src='video/lancement.mp4';o.style.display='flex';
+  to=setTimeout(()=>{if(v.readyState<2)end();},6000);
+  v.play().catch(()=>{});
+}
+showIntro(showWho);
 document.fonts&&document.fonts.ready.then(()=>buildBg());
 </script>
 </body>
