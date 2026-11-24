@@ -9,7 +9,8 @@ Prompts pour générer les images du jeu avec Gemini (Nano Banana). Ils sont **e
 - ✅ Étape 3 — château
 - Étape 4 — gardiens : ✅ Braisou, ✅ Gouttine, ✅ Feuillou, ✅ Zapic, ✅ Givrou, ✅ Plumo, ✅ Rocaillou, ✅ Étoilette, ✅ Lunette, ✅ Sousou
 - ✅ Étape 5 — Chipeurs
-- Étapes 6 à 8 — à faire (les images guides des maps ont été refaites le 24/11 : utiliser les versions actuelles)
+- ✅ Étape 6 — grands boss
+- Étapes 7 et 8 — à faire (les images guides des maps ont été refaites le 24/11 : utiliser les versions actuelles)
 
 ## Méthode
 
