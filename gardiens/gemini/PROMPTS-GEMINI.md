@@ -184,3 +184,35 @@ Image 1 is the style reference and image 2 is Princess Lili's castle. Create a s
 ## Plus tard — vidéo de lancement
 
 Une fois toutes les images validées et assemblées dans le jeu, on préparera le prompt de la vidéo de lancement à partir des images finales.
+
+## Vidéo de lancement
+
+Faite avec **Gemini Omni** dans l'app Gemini (bouton vidéo), en **3 plans de 10 secondes** enchaînés dans la même conversation avec « prolonger la scène ». Joindre au premier plan les 5 images de référence de `gardiens/gemini/video/` : `ref-1-princesse.png`, `ref-2-chateau.png`, `ref-3-gardiens.png`, `ref-4-mechants.png`, `ref-5-prairie.png`. Pas de texte dans la vidéo : le titre « Les Gardiens de Lili » s'ajoute ensuite par-dessus.
+
+### Plan 1 — Le château en danger
+
+```
+Use the 5 attached images as references and keep every character exactly as drawn there: Image 1 is Princess Lili, Image 2 is her pink castle (with Ellie, the small green robot girl, and Livia, the small pink robot girl, on the walls), Image 3 shows the ten cute guardian creatures, Image 4 shows the villains (the purple masked Chipeurs, their crowned chief and three big bosses), Image 5 is the sunny meadow map with its winding sandy path.
+
+Opening shot of a launch trailer for a cute children's tower defense game. 2D cartoon animation, bright and cheerful, exactly in the art style of the references.
+The camera glides over the sunny flowery meadow from Image 5 and follows the winding sandy path up to Princess Lili's pink castle. Princess Lili waves happily from her balcony, Ellie and Livia wave next to her. Suddenly, at the far end of the path, a group of mischievous purple Chipeurs from Image 4 sneaks in, giggling, carrying loot sacks. Princess Lili looks worried and puts her hands on her cheeks. Ellie points at the Chipeurs.
+Sound: cheerful orchestral adventure music for kids, birds singing, then playful sneaky pizzicato when the Chipeurs appear. No dialogue. No text on screen.
+```
+
+### Plan 2 — Les gardiens entrent en jeu
+
+Dans la même conversation, demander de prolonger la scène :
+
+```
+Continue the scene. Ellie and Livia throw little glowing stars that land along the sides of the path, and with a sparkle each star turns into a guardian from Image 3: Braisou the fire fox shoots fireballs, Gouttine the water otter sprays water jets, Zapic the yellow chick sends lightning bolts that jump between Chipeurs, Givrou the ice bunny throws snowflakes that slow them down, Rocaillou the rock turtle throws a big rock. Each Chipeur that gets hit bursts into a puff of little golden stars and runs away home, comically. Braisou glows and evolves into a bigger, prouder fire creature in a flash of light. Same art style, same characters, fast and fun, nothing scary or violent.
+Sound: the music becomes energetic and heroic, with magical sparkles, whooshes, cute pops and kids cheering. No dialogue. No text on screen.
+```
+
+### Plan 3 — Le grand boss et la victoire
+
+Prolonger encore la scène :
+
+```
+Continue the scene. The ground shakes: the giant grumpy mole boss from Image 4, with his miner's helmet and huge loot sack, stomps along the path towards the castle. All the guardians line up together and attack at the same time in a colourful burst of fire, water, lightning, snow and stars. The mole boss gets dizzy, drops his sack and runs away, crying comically. Princess Lili jumps with joy on her balcony with Ellie and Livia, the guardians cheer around the castle. The camera slowly pulls back up into the sky above the castle at sunset, leaving the top of the sky empty for a title.
+Sound: big triumphant finale of the music, cheering, fireworks. No dialogue. No text on screen.
+```
