@@ -13,7 +13,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 
 1. ✅ **Conception** : ce document.
 2. ✅ **Draft jouable** avec des formes simples (ronds de couleur et emojis) — à tester et à équilibrer.
-3. **Prompts Gemini**, générés à partir de la [liste des images](#liste-des-images-pour-gemini).
+3. ✅ **Prompts Gemini** : `gardiens/gemini/PROMPTS-GEMINI.md` (avec les images guides des maps et les images de référence d'Ellie et Livia).
 4. **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
 5. **Vidéo de lancement** générée par Gemini, une fois le design validé (voir [plus bas](#vidéo-de-lancement)).
 
@@ -25,7 +25,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 
 ## Démarrer
 
-- Écran **« Qui joue ? »** : chaque joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
+- Écran **« Qui joue ? »** : chaque joueur ou joueuse a sa partie (prénom, avatar, niveau), sauvegardée dans le navigateur du téléphone.
 - À la première partie, Ellie et Livia racontent l'histoire et on **choisit son premier gardien** parmi Braisou, Gouttine et Feuillou, puis on le fait glisser sur la map.
 - Écran **🗺️ Choisis ton monde** : progression de chaque monde, mondes suivants verrouillés tant que le précédent n'est pas réussi.
 
@@ -107,7 +107,7 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 
 ## Niveaux de jeu
 
-Chaque joueuse choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
+Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 
 | Niveau | Pour qui | Différence |
 |---|---|---|
@@ -123,7 +123,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 
 ## Écran et téléphone
 
-- Téléphone **à l'horizontale** : infos à gauche (cœurs, L$, vague, monde, joueuse), map 16:9 au centre, boutons à droite. En portrait, Livia demande de tourner le téléphone.
+- Téléphone **à l'horizontale** : infos à gauche (cœurs, L$, vague, monde, joueur), map 16:9 au centre, boutons à droite. En portrait, Livia demande de tourner le téléphone.
 - Dessin net à toutes les tailles (jusqu'à ×3 de densité de pixels). L'écran reste allumé pendant le jeu ; quand on quitte l'app pendant une vague, le jeu se met en pause.
 - **Mode test** : ajouter `#dev` à l'adresse affiche trois boutons (+ argent, vague +5, gagner la vague).
 
@@ -135,7 +135,7 @@ Constantes en haut du script de `index.html` :
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
 - **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
-- Sauvegardes : `gardiens-profiles` (liste des joueuses), `gardiens-<id>` (partie de chaque joueuse), `gardiens-last`.
+- Sauvegardes : `gardiens-profiles` (liste des joueurs), `gardiens-<id>` (partie de chaque joueur), `gardiens-last`.
 - **Après chaque modification** : incrémenter `VERSION` dans `gardiens/sw.js` et mettre à jour ce document.
 - **Mise en ligne** : ajouter une ligne dans `JEUX` (`assets/menu.js`) quand le jeu est prêt pour le menu Détente.
 
@@ -170,5 +170,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 
 ## Historique des versions
 
-- **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueuses. Formes simples en attendant les images.
-- **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss).
+- **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueurs. Formes simples en attendant les images.
+- **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
