@@ -2,6 +2,14 @@
 
 Prompts pour générer les images du jeu avec Gemini (Nano Banana). Ils sont **en anglais** : le modèle suit un peu plus fidèlement les consignes techniques (fond uni, cadrage, « no text ») en anglais. Les noms des personnages restent en français.
 
+## Avancement
+
+- ✅ Étape 1 — planche de style (`sources/planche-de-style.jpg`)
+- ✅ Étape 2 — princesse Lili
+- ✅ Étape 3 — château
+- Étape 4 — gardiens : ✅ Braisou, ✅ Gouttine, ✅ Feuillou ; reste Zapic, Givrou, Plumo, Rocaillou, Étoilette, Lunette, Sousou
+- Étapes 5 à 8 — à faire (les images guides des maps ont été refaites le 24/11 : utiliser les versions actuelles)
+
 ## Méthode
 
 1. **Une seule conversation Gemini par étape**, dans l'ordre ci-dessous. On commence par la **planche de style** et on la refait jusqu'à ce qu'elle plaise : c'est elle qui fixe le style de tout le reste.

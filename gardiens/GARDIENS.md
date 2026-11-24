@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v1). Gardiens et méchants dessinés en formes simples, en attendant les images de Gemini.
+- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, Braisou, Gouttine et Feuillou sont intégrés ; les autres gardiens et les méchants sont encore en formes simples.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -14,7 +14,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 1. ✅ **Conception** : ce document.
 2. ✅ **Draft jouable** avec des formes simples (ronds de couleur et emojis) — à tester et à équilibrer.
 3. ✅ **Prompts Gemini** : `gardiens/gemini/PROMPTS-GEMINI.md` (avec les images guides des maps et les images de référence d'Ellie et Livia).
-4. **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
+4. **Assemblage** (en cours) : les images remplacent les formes, le chemin est calé sur chaque fond de map.
 5. **Vidéo de lancement** générée par Gemini, une fois le design validé (voir [plus bas](#vidéo-de-lancement)).
 
 ## L'histoire
@@ -135,6 +135,8 @@ Constantes en haut du script de `index.html` :
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
 - **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
+- **Images** : `ART` liste les gardiens qui ont leurs images (`img/g/<id>-<forme>.webp`, 320 px) ; les autres restent en ronds de couleur. Château : `img/chateau.webp`, placé par `CASTLE` (sa porte, à 27 % de la largeur et 82 % de la hauteur, est au bout du chemin, en x = 1 390). Princesse : `img/princesse-contente|inquiete|victoire.webp` (« Qui joue ? », annonces de boss, défaite, victoire).
+- **Préparer une image Gemini** : `python3 gemini/cut.py <source.jpg> <green|magenta|blue> <nombre de personnages> <taille max> <sorties…>` retire le fond uni, découpe la planche en personnages et enregistre des `.webp`. Les originaux sont gardés dans `gemini/sources/`.
 - Sauvegardes : `gardiens-profiles` (liste des joueurs), `gardiens-<id>` (partie de chaque joueur), `gardiens-last`.
 - **Après chaque modification** : incrémenter `VERSION` dans `gardiens/sw.js` et mettre à jour ce document.
 - **Mise en ligne** : ajouter une ligne dans `JEUX` (`assets/menu.js`) quand le jeu est prêt pour le menu Détente.
@@ -171,4 +173,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 ## Historique des versions
 
 - **v0 (draft)** — 3 mondes de 50 vagues, 10 gardiens avec 3 jauges et 2 évolutions, 6 méchants + boss, recrutement après les boss, points de reprise, mode Auto, vitesse ×3, niveaux de jeu, joueurs. Formes simples en attendant les images.
+- **v2** — premières images Gemini : château (au bout du chemin, qui s'arrête maintenant en x = 1 390 ; chemin du monde 3 retouché), princesse Lili dans les fenêtres, Braisou, Gouttine et Feuillou dans leurs 3 formes.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
