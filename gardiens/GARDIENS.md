@@ -15,7 +15,7 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 2. ✅ **Draft jouable** avec des formes simples (ronds de couleur et emojis) — à tester et à équilibrer.
 3. ✅ **Prompts Gemini** : `gardiens/gemini/PROMPTS-GEMINI.md` (avec les images guides des maps et les images de référence d'Ellie et Livia).
 4. ✅ **Assemblage** : les images remplacent les formes, le chemin est calé sur chaque fond de map.
-5. **Vidéo de lancement** générée par Gemini, une fois le design validé (voir [plus bas](#vidéo-de-lancement)).
+5. ✅ **Vidéo de lancement** générée par Gemini (voir [plus bas](#vidéo-de-lancement)).
 
 ## L'histoire
 
@@ -163,7 +163,7 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 
 ## Vidéo de lancement
 
-Une fois le design validé (images assemblées), on demandera à Gemini une **vidéo de lancement** du jeu, à partir des images finales (princesse, château, gardiens, Chipeurs). Prompt à préparer à ce moment-là.
+**`gardiens/video/lancement.mp4`** — https://lilirobot.com/gardiens/video/lancement.mp4 (30 s, 1 280 × 720, avec musique et bruitages). Générée par Gemini Omni en 3 plans de 10 s (le château en danger, les gardiens entrent en jeu, le grand boss et la victoire) avec les prompts de `gemini/PROMPTS-GEMINI.md`. Le titre « Les Gardiens de Lili » et l'adresse lilirobot.com/gardiens sont ajoutés par-dessus dans les 4 dernières secondes (`gemini/video/titre.png`, police Baloo 2). Original sans titre : `gemini/sources/video-lancement-gemini.mp4`. La vidéo n'est pas mise en cache hors connexion.
 
 ## Questions ouvertes
 
@@ -180,4 +180,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 - **v5** — images des 3 grands boss (Grosse Taupe Grognon, Yéti Ronchon, Dragon de Grognon).
 - **v6** — fonds de maps Gemini pour les 3 mondes, chemins recalés dessus, château plus petit dans le monde 3.
 - **v7** — icône de l'application (Gemini) ; toutes les images du jeu sont en place.
+- **v8** — vidéo de lancement (`video/lancement.mp4`).
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
