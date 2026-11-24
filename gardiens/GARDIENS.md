@@ -5,7 +5,7 @@
 
 - **Adresse prévue** : https://lilirobot.com/gardiens/ (installable sur téléphone, hors connexion, comme Lili Parc)
 - **Code** : `gardiens/index.html` (tout le jeu tient dans ce fichier), `gardiens/sw.js` (hors connexion), `gardiens/manifest.webmanifest`, `gardiens/img/` (Ellie et Livia), icônes provisoires
-- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs et les 3 grands boss sont intégrés ; restent les fonds de maps et l'icône.
+- **Statut** : draft jouable (v2). Images Gemini en cours : château, princesse Lili, les 10 gardiens (3 formes chacun), les 6 Chipeurs, le Chef des Chipeurs, les 3 grands boss et les 3 fonds de maps sont intégrés ; reste l'icône.
 
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
@@ -134,7 +134,7 @@ Constantes en haut du script de `index.html` :
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
-- **Décor provisoire** : dessiné par `buildBg()` (sera remplacé par les images de Gemini).
+- **Fonds de maps** : `img/map-1|2|3.webp` (1 920 × 1 080, dessinés par Gemini), affichés par `buildBg()` ; le décor dessiné par le code ne sert plus que pendant le chargement. Le tracé `path` de chaque monde a été recalé sur le chemin dessiné. Dans le monde 3, le chemin descend tout près du bord droit : le château y est réduit à 82 % (`cs:0.82` dans `WORLDS`) pour ne pas le cacher.
 - **Images** : `ART` liste les gardiens qui ont leurs images (`img/g/<id>-<forme>.webp`, 320 px) ; les autres restent en ronds de couleur. Château : `img/chateau.webp`, placé par `CASTLE` (sa porte, à 27 % de la largeur et 82 % de la hauteur, est au bout du chemin, en x = 1 390). Princesse : `img/princesse-contente|inquiete|victoire.webp` (« Qui joue ? », annonces de boss, défaite, victoire).
 - **Méchants** : `img/f/<type>.webp` (chipeur, fusee, costaud, casque, volant, fantome, chef), dessinés de profil tournés vers la droite ; le jeu les retourne quand ils vont vers la gauche. Un Casqué dont le casque est cassé affiche 💥. Grands boss : `img/f/boss-taupe|yeti|dragon.webp` ; la taupe et le dragon sont dessinés tournés vers la gauche, ce qu'indique `FOE_FACE` pour que le jeu les tourne dans le bon sens.
 - **Préparer une image Gemini** : `python3 gemini/cut.py <source.jpg> <green|magenta|blue> <nombre de personnages> <taille max> <sorties…>` retire le fond uni, découpe la planche en personnages et enregistre des `.webp`. Les originaux sont gardés dans `gemini/sources/`. Si des personnages se chevauchent en colonnes (un volant au-dessus d'un autre), utiliser `gemini/cut_blobs.py` (mêmes arguments), qui sépare par taches et retire aussi les ombres vert foncé.
@@ -178,4 +178,5 @@ Une fois le design validé (images assemblées), on demandera à Gemini une **vi
 - **v3** — images de Zapic, Givrou et Plumo (3 formes chacun).
 - **v4** — images de Rocaillou, Étoilette, Lunette et Sousou ; images des 6 Chipeurs et du Chef des Chipeurs, qui se tournent dans le sens de la marche.
 - **v5** — images des 3 grands boss (Grosse Taupe Grognon, Yéti Ronchon, Dragon de Grognon).
+- **v6** — fonds de maps Gemini pour les 3 mondes, chemins recalés dessus, château plus petit dans le monde 3.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

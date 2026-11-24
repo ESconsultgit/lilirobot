@@ -208,11 +208,11 @@ const INTRO={chipeur:[1,1,4],fusee:[1,3,2],costaud:[1,6,1.5],casque:[2,2,2],vola
 // ---------- Les mondes ----------
 const WORLDS=[
   {id:1,name:'La Prairie fleurie',em:'🌸',theme:'prairie',boss:{art:'boss-taupe',name:'La Grosse Taupe Grognon',em:'🦫',col:'#8B6B4A'},
-   path:[[-40,170],[300,170],[300,700],[660,700],[660,240],[1010,240],[1010,690],[1300,690],[1300,450],[1390,450]]},
+   path:[[-40,165],[302,165],[302,705],[658,705],[658,240],[1012,240],[1012,692],[1302,692],[1302,452],[1390,452]]},
   {id:2,name:'La Forêt enneigée',em:'❄️',theme:'neige',boss:{art:'boss-yeti',name:'Le Yéti Ronchon',em:'🦍',col:'#DDE8F5'},
    path:[[220,-40],[220,400],[560,400],[560,130],[900,130],[900,570],[420,570],[420,790],[1180,790],[1180,330],[1390,330]]},
   {id:3,name:'Le Volcan',em:'🌋',theme:'volcan',boss:{art:'boss-dragon',name:'Le Dragon de Grognon',em:'🐉',col:'#D2452F'},
-   path:[[-40,770],[340,770],[340,200],[740,200],[740,650],[1090,650],[1090,170],[1240,170],[1240,560],[1390,560]]}
+   path:[[-40,768],[340,768],[340,202],[740,202],[740,652],[1090,652],[1090,170],[1338,170],[1338,558],[1442,558]],cs:0.82}
 ];
 // Sens dans lequel regarde chaque image de méchant (1 = vers la droite, -1 = vers la gauche)
 const FOE_FACE={'boss-taupe':-1,'boss-dragon':-1};
@@ -263,9 +263,9 @@ function genSpots(p,castle){
 }
 // Château (image de Gemini) : la porte (27 % de la largeur, 82 % de la hauteur) est au bout du chemin
 const CASTLE={w:280,h:296,gx:0.272,gy:0.82};
-function castleRect(c){return{x:c.x-CASTLE.w*CASTLE.gx,y:c.y-CASTLE.h*CASTLE.gy,w:CASTLE.w,h:CASTLE.h};}
+function castleRect(c){const k=c.s||1,w=CASTLE.w*k,h=CASTLE.h*k;return{x:c.x-w*CASTLE.gx,y:c.y-h*CASTLE.gy,w,h};}
 function inCastle(c,x,y,m){const r=castleRect(c);return x>r.x-m&&x<r.x+r.w+m&&y>r.y-m&&y<r.y+r.h+m;}
-WORLDS.forEach(w=>{const e=w.path[w.path.length-1];w.castle={x:e[0],y:e[1]};w.P=buildPath(w.path);w.spots=genSpots(w.P,w.castle);});
+WORLDS.forEach(w=>{const e=w.path[w.path.length-1];w.castle={x:e[0],y:e[1],s:w.cs||1};w.P=buildPath(w.path);w.spots=genSpots(w.P,w.castle);});
 
 // ---------- Joueurs et sauvegarde ----------
 const PKEY='gardiens-profiles';
@@ -739,6 +739,10 @@ function buildBg(){
   if(!P)return;
   const wd=WORLDS[G.world-1],th=THEMES[wd.theme],c=document.createElement('canvas');
   c.width=cv.width;c.height=cv.height;const x=c.getContext('2d');x.scale(K,K);
+  // Fond de map dessiné par Gemini (img/map-<monde>.webp) ; sinon décor dessiné par le code
+  const mi=img('map-'+wd.id);
+  if(mi.complete&&mi.naturalWidth){x.drawImage(mi,0,0,W,H);BG=c;return;}
+  if(!mi.complete&&!mi.dataset.wait){mi.dataset.wait=1;mi.addEventListener('load',()=>buildBg());}
   const gr=x.createLinearGradient(0,0,0,H);gr.addColorStop(0,th.bg1);gr.addColorStop(1,th.bg2);x.fillStyle=gr;x.fillRect(0,0,W,H);
   const R=rng(wd.id*77);
   const free=(px,py,m)=>distPath(wd.P,px,py)>m&&wd.spots.every(s=>Math.hypot(s.x-px,s.y-py)>46)&&!inCastle(wd.castle,px,py,10);
