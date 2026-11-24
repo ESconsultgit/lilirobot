@@ -239,7 +239,7 @@ function genSpots(p){
 }
 WORLDS.forEach(w=>{w.P=buildPath(w.path);w.spots=genSpots(w.P);const e=w.path[w.path.length-1];w.castle={x:e[0],y:e[1]};});
 
-// ---------- Joueuses et sauvegarde ----------
+// ---------- Joueurs et sauvegarde ----------
 const PKEY='gardiens-profiles';
 let PROFILES=LS.get(PKEY)||[];
 let PID=null,P=null;
@@ -391,7 +391,7 @@ function bench(){const placed=G.towers.map(t=>t.gid);return P.owned.filter(g=>!p
 function towerAtSpot(i){return G.towers.find(t=>t.spot===i);}
 function placeGuard(gid,spot){
   P.place[G.world][spot]=gid;save();buildTowers();closeModal();
-  if(!P.tips.wave){P.tips.wave=1;save();tip('lili-idee','Bravo ! Quand tu es prête, appuie sur ▶ Vague. Les Chipeurs arrivent par le chemin !',7000);}
+  if(!P.tips.wave){P.tips.wave=1;save();tip('lili-idee','Bravo ! Quand tu es prêt, appuie sur ▶ Vague. Les Chipeurs arrivent par le chemin !',7000);}
 }
 function chooseForSpot(i){
   const b=bench();
@@ -477,21 +477,21 @@ function showWho(){
   PROFILES=LS.get(PKEY)||[];
   const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
   openModal(`<h2>🏰 Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
-    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouvelle joueuse</button></div>`,'duo-equipe',true);
+    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button></div>`,'duo-equipe',true);
 }
 let NP={av:AVATARS[0],diff:2};
 function newProfile(){
   NP={av:AVATARS[0],diff:2};
   const avs=AVATARS.map(a=>`<button class="${a===NP.av?'sel':''}" onclick="NP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${a}</button>`).join('');
   const diffs=[1,2,3].map(d=>`<button class="${d===NP.diff?'sel':''}" onclick="NP.diff=${d};[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${DIFF[d].stars} <b>${DIFF[d].name}</b> <small>(${DIFF[d].age}) — ${DIFF[d].txt}</small></button>`).join('');
-  openModal(`<h2>Nouvelle joueuse</h2>
+  openModal(`<h2>Nouveau joueur</h2>
     <p>Ton prénom :</p><input class="txt" id="npName" maxlength="14" autocomplete="off">
     <p>Ton avatar :</p><div class="avs">${avs}</div>
     <p>Ton niveau :</p><div class="diffs">${diffs}</div>
     <div class="right"><button onclick="showWho()">⬅️ Retour</button><button class="b-pink" onclick="createProfile()">C'est parti !</button></div>`,null,true);
 }
 function createProfile(){
-  const name=($('npName').value||'').trim()||'Joueuse';
+  const name=($('npName').value||'').trim()||'Joueur';
   const id=Date.now().toString(36);
   PROFILES.push({id,name,av:NP.av});LS.set(PKEY,PROFILES);
   LS.set('gardiens-'+id,newSave(name,NP.av,NP.diff));selectProfile(id);
@@ -522,7 +522,7 @@ function showWorlds(){
     return `<div class="card ${lock?'locked':''}" ${lock?'':`onclick="closeModal();enterWorld(${n})"`}><span style="font-size:44px">${w.em}</span><b>${n}. ${w.name}</b><small>${info}</small></div>`;
   }).join('');
   openModal(`<h2>🗺️ Choisis ton monde</h2><div class="cards">${cards}</div>
-    <div class="right"><button onclick="showWho()">👥 Changer de joueuse</button></div>`,null,!G.towers.length&&!P.runs[G.world],true);
+    <div class="right"><button onclick="showWho()">👥 Changer de joueur</button></div>`,null,!G.towers.length&&!P.runs[G.world],true);
 }
 function showMenu(){
   const diffs=[1,2,3].map(d=>`<button class="${d===P.diff?'sel':''}" onclick="setDiff(${d})">${DIFF[d].stars} <b>${DIFF[d].name}</b> <small>(${DIFF[d].age}) — ${DIFF[d].txt}</small></button>`).join('');
@@ -530,7 +530,7 @@ function showMenu(){
     <p><b>Niveau</b></p><div class="diffs">${diffs}</div>
     <div class="right" style="justify-content:flex-start">
       <button onclick="showWorlds()">🗺️ Les mondes</button>
-      <button onclick="showWho()">👥 Changer de joueuse</button>
+      <button onclick="showWho()">👥 Changer de joueur</button>
       <button onclick="fullscreen()">⛶ Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
