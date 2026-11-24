@@ -10,7 +10,7 @@
 _Ce document est à mettre à jour à chaque évolution du jeu._
 
 ## Sommaire
-- [Démarrer : joueuses et niveaux](#démarrer--joueuses-et-niveaux)
+- [Démarrer : joueurs et niveaux](#démarrer--joueurs-et-niveaux)
 - [Une journée au parc](#une-journée-au-parc)
 - [L'argent](#largent)
 - [Les attractions](#les-attractions)
@@ -30,9 +30,9 @@ _Ce document est à mettre à jour à chaque évolution du jeu._
 - [Réglages techniques](#réglages-techniques)
 - [Historique des versions](#historique-des-versions)
 
-## Démarrer : joueuses et niveaux
+## Démarrer : joueurs et niveaux
 
-Au lancement, l'écran **« Qui joue ? »** liste les joueuses. Chacune a **sa propre fête foraine**, sauvegardée dans le navigateur du téléphone (`localStorage`, une clé par joueuse), et reprend là où elle s'était arrêtée. On peut créer une joueuse (prénom + avatar), la supprimer (🗑️), et changer de joueuse depuis le menu ⚙️. Le menu permet aussi de modifier son prénom et son avatar.
+Au lancement, l'écran **« Qui joue ? »** liste les joueurs. Chacun a **sa propre fête foraine**, sauvegardée dans le navigateur du téléphone (`localStorage`, une clé par joueur), et reprend là où il s'était arrêté. On peut créer un joueur ou une joueuse (prénom + avatar), le supprimer (🗑️), et changer de joueur depuis le menu ⚙️. Le menu permet aussi de modifier son prénom et son avatar.
 
 Le **niveau de jeu** se choisit au début de chaque partie et peut être changé à tout moment dans le menu ⚙️ :
 
@@ -240,7 +240,7 @@ Menu ⚙️ → **📤 Envoyer ma partie** : le jeu affiche un **QR code** et un
 
 - **Android** : scanner le QR code avec l'appareil photo de l'autre téléphone ; le lien ouvre Lili Parc et propose d'importer la partie.
 - **iPhone** (l'app installée sur l'écran d'accueil ne partage pas ses données avec Safari) : **📋 Copier le code**, l'envoyer (message, mail…), puis dans le jeu de l'autre téléphone : « Qui joue ? » → **📥 J'ai un code**, coller, Récupérer.
-- À l'import, on choisit : **➕ Nouvelle joueuse** ou **♻️ Remplacer** une joueuse existante.
+- À l'import, on choisit : **➕ Nouveau joueur** ou **♻️ Remplacer** un joueur existant.
 - Le code est une photo de la partie à cet instant : les deux téléphones continuent ensuite chacun de leur côté.
 - Technique : JSON → compression `deflate-raw` → base64url, préfixe `LP1.` ; lien `…/liliparc/#import=<code>` ; QR code généré localement (`liliparc/qrcode.js`, bibliothèque qrcode-generator, licence MIT).
 
@@ -256,7 +256,7 @@ Constantes en haut du script de `index.html` :
 - **Ajouter un badge** : une ligne dans `BADGES` + son image ronde `badges/<id>.webp` (à ajouter aussi dans `SHELL` de `sw.js`).
 - **Ajouter un jeu au menu Détente du site** : une ligne dans `JEUX` (`assets/menu.js`), avec `icon:APP("/<jeu>/icon-192.png")` pour afficher le logo de l'application.
 - **Après chaque modification** : incrémenter `VERSION` dans `liliparc/sw.js` pour que l'app installée se mette à jour, et mettre à jour ce document.
-- Sauvegardes : `lilipark-profiles` (liste des joueuses), `lilipark-<id>` (partie de chaque joueuse). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueuse 1 ».
+- Sauvegardes : `lilipark-profiles` (liste des joueurs), `lilipark-<id>` (partie de chaque joueur). L'ancienne clé `lilipark-v1` est reprise automatiquement comme « Joueur 1 ».
 
 ## Historique des versions
 
@@ -267,10 +267,11 @@ Constantes en haut du script de `index.html` :
 - **PR #5** — événements plus rentables, 3 nouvelles attractions, démolition.
 - **PR #6** — entretien à choisir (fermetures, destruction), postes de sécurité et de secours.
 - **PR #7** — niveaux de jeu, propreté, personnel, espaces verts, santé du parc, météo, badges, 3 méga-attractions.
-- **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueuses, cette documentation.
+- **PR #8** — échelle réaliste (groupes de 8 visiteurs, prix ×8, ratios de personnel réalistes), mode pixel art, jour/nuit, neige et orage, profils de joueurs, cette documentation.
 - **PR #9** — nouveau logo (grande roue derrière Ellie et Livia) ; niveau 1 en petits montants (÷8).
 - **PR #12** — anniversaires du parc (100 jours, 200…, 1 an) ; transfert de partie par QR code ou code.
 - **PR #15** — vraies images pixel art pour les 22 attractions, panneaux nets en mode pixel.
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
 - **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #18** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
+- **PR #19** — « joueur » à la place de « joueuse » (le jeu est pour tout le monde).

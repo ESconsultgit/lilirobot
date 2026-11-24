@@ -490,7 +490,7 @@ function initLevel(){
 }
 function setLevel(n){ S.level=n; initLevel(); visitors=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); save(); updateHUD(); openMenu(); }
 function resetDay(){ day={shown:{},refFear:0,refHealth:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
-// ---- Profils : chaque joueuse a sa propre partie sur le même téléphone ----
+// ---- Profils : chaque joueur a sa propre partie sur le même téléphone ----
 let PROFILES=[], CUR=null;
 const AVATARS=['🦄','🐱','🐶','🦊','🐼','🐸','🐰','🐯','🐵','🤖'];
 const keyOf=id=>'lilipark-'+id;
@@ -498,7 +498,7 @@ function saveProfiles(){ try{ localStorage.setItem('lilipark-profiles',JSON.stri
 function loadProfiles(){
   try{ PROFILES=JSON.parse(localStorage.getItem('lilipark-profiles')||'[]')||[]; }catch(e){ PROFILES=[]; }
   try{ if(!PROFILES.length){ const old=localStorage.getItem(SAVE_KEY); // ancienne partie (avant les profils) : on la garde
-      if(old){ const id='p'+Date.now(); PROFILES=[{id,name:'Joueuse 1',av:'🦄'}]; localStorage.setItem(keyOf(id),old); saveProfiles(); } } }catch(e){}
+      if(old){ const id='p'+Date.now(); PROFILES=[{id,name:'Joueur 1',av:'🦄'}]; localStorage.setItem(keyOf(id),old); saveProfiles(); } } }catch(e){}
 }
 const curProfile=()=>PROFILES.find(p=>p.id===CUR);
 // ---- Transfert vers un autre téléphone : code (et QR code) contenant la partie compressée ----
@@ -514,7 +514,7 @@ async function unpackSave(code){ code=String(code||'').trim(); const h=code.inde
   const o=JSON.parse(txt); if(!o||!o.save||!o.save.plots) throw new Error('code'); return o; }
 function loadQR(){ return window.qrcode?Promise.resolve():new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src='qrcode.js'; sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); }); }
 async function openExport(){
-  save(); const pr=curProfile()||{name:'Joueuse',av:'🦄'};
+  save(); const pr=curProfile()||{name:'Joueur',av:'🦄'};
   const code=await packSave({v:1,prof:{name:pr.name,av:pr.av},save:S}), url=location.origin+location.pathname+'#import='+code;
   openModal(`<h2>📤 Envoyer ma partie sur un autre téléphone</h2>
     <div class="xfer"><div id="qrBox" class="qrbox">⏳</div><div class="xright">
@@ -539,14 +539,14 @@ async function doImport(code){
   try{ pendingImport=await unpackSave(code); }catch(e){ openImport("Ce code ne marche pas. Vérifie qu'il est complet."); return; }
   const o=pendingImport, sv=o.save, pr=o.prof||{};
   openModal(`<h2>📥 Partie trouvée !</h2>
-    <p><b>${pr.av||'🦄'} ${(pr.name||'Joueuse').replace(/</g,'&lt;')}</b> · ${(sv.name||'Lili Parc').replace(/</g,'&lt;')} · jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)} · ${fmt(sv.money)} L$</p>
+    <p><b>${pr.av||'🦄'} ${(pr.name||'Joueur').replace(/</g,'&lt;')}</b> · ${(sv.name||'Lili Parc').replace(/</g,'&lt;')} · jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)} · ${fmt(sv.money)} L$</p>
     <p class="small">Sur ce téléphone, tu veux la mettre…</p>
-    <div class="row"><button class="main" onclick="importAs('new')">➕ Nouvelle joueuse</button>${PROFILES.map(p=>`<button onclick="importAs('${p.id}')">♻️ Remplacer ${p.av} ${p.name.replace(/</g,'&lt;')}</button>`).join('')}</div>
+    <div class="row"><button class="main" onclick="importAs('new')">➕ Nouveau joueur</button>${PROFILES.map(p=>`<button onclick="importAs('${p.id}')">♻️ Remplacer ${p.av} ${p.name.replace(/</g,'&lt;')}</button>`).join('')}</div>
     <div class="right"><button onclick="whoPlays()">Annuler</button></div>`,'duo-victoire');
   $('box').dataset.lock='1';
 }
 function importAs(target){ const o=pendingImport; if(!o) return; let id=target;
-  if(target==='new'){ id='p'+Date.now(); PROFILES.push({id,name:(o.prof&&o.prof.name)||'Joueuse',av:(o.prof&&o.prof.av)||'🦄'}); saveProfiles(); }
+  if(target==='new'){ id='p'+Date.now(); PROFILES.push({id,name:(o.prof&&o.prof.name)||'Joueur',av:(o.prof&&o.prof.av)||'🦄'}); saveProfiles(); }
   try{ localStorage.setItem(keyOf(id),JSON.stringify(o.save)); }catch(e){}
   pendingImport=null; tada(); choosePlayer(id); }
 function save(){ if(!CUR||!S) return; try{ localStorage.setItem(keyOf(CUR), JSON.stringify(S)); }catch(e){} }
@@ -1615,7 +1615,7 @@ function openMenu(){
     <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
       ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${a}</button>`).join('')}
       <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
-    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">👥 Changer de joueuse</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">👥 Changer de joueur</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
     <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
     <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
@@ -1643,18 +1643,18 @@ function whoPlays(){
     return `<div class="who"><button class="whob" onclick="choosePlayer('${p.id}')"><span class="wav">${p.av}</span><b>${p.name.replace(/</g,'&lt;')}</b>
       <small>${sv?`Jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)}<br>${(sv.name||'').replace(/</g,'&lt;')}`:'Nouvelle partie'}</small></button>
       <button class="whodel" title="Supprimer" onclick="askDelPlayer('${p.id}')">🗑️</button></div>`; }).join('');
-  openModal(`<h2>👋 Qui joue ?</h2><p class="small">Chaque joueuse a sa propre fête foraine et reprend là où elle s'était arrêtée.</p>
-    <div class="whos">${cards}<button class="who whonew" onclick="openImport()"><span class="wav">📥</span><b>J'ai un code</b><small>récupérer une partie</small></button><button class="who whonew" onclick="newPlayerForm()"><span class="wav">➕</span><b>Nouvelle joueuse</b><small>ou nouveau joueur</small></button></div>`,'duo-equipe');
+  openModal(`<h2>👋 Qui joue ?</h2><p class="small">Chaque joueur a sa propre fête foraine et reprend là où il s'était arrêté.</p>
+    <div class="whos">${cards}<button class="who whonew" onclick="openImport()"><span class="wav">📥</span><b>J'ai un code</b><small>récupérer une partie</small></button><button class="who whonew" onclick="newPlayerForm()"><span class="wav">➕</span><b>Nouveau joueur</b><small>fille ou garçon</small></button></div>`,'duo-equipe');
   $('box').dataset.lock='1';
 }
 function newPlayerForm(){
   window.pickAv=AVATARS[PROFILES.length%AVATARS.length];
-  openModal(`<h2>➕ Nouvelle joueuse</h2><p>Comment tu t'appelles ?</p><input type="text" id="pnm" maxlength="16" placeholder="Ton prénom">
+  openModal(`<h2>➕ Nouveau joueur</h2><p>Comment tu t'appelles ?</p><input type="text" id="pnm" maxlength="16" placeholder="Ton prénom">
     <p>Choisis ton avatar :</p><div class="avs">${AVATARS.map(a=>`<button class="av ${a===window.pickAv?'sel':''}" onclick="window.pickAv='${a}';document.querySelectorAll('.av').forEach(b=>b.classList.toggle('sel',b===this))">${a}</button>`).join('')}</div>
     <div class="right">${PROFILES.length?'<button onclick="whoPlays()">Retour</button>':''}<button class="main" onclick="createPlayer()">C'est moi ! ✨</button></div>`,'lili-coucou');
   $('box').dataset.lock='1';
 }
-function createPlayer(){ const nm=(document.getElementById('pnm').value||'').trim()||('Joueuse '+(PROFILES.length+1));
+function createPlayer(){ const nm=(document.getElementById('pnm').value||'').trim()||('Joueur '+(PROFILES.length+1));
   const id='p'+Date.now(); PROFILES.push({id,name:nm,av:window.pickAv||'🦄'}); saveProfiles(); CUR=id; newGameScreen(); }
 function askDelPlayer(id){ const p=PROFILES.find(x=>x.id===id);
   openModal(`<h2>🗑️ Supprimer ${p.av} ${p.name.replace(/</g,'&lt;')} ?</h2><p>Sa fête foraine sera effacée pour toujours.</p>
