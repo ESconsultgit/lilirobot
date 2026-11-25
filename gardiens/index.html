@@ -84,8 +84,13 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .gico{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:4px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);flex:none}
 .row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed #e4dcef}
 .row:last-child{border-bottom:none}
-.row .lab{width:118px;font-weight:800}
+.row .lab{width:132px;font-weight:800}
 .row .val{width:78px;text-align:right;font-family:'Baloo 2';font-weight:800}
+.tech{width:100%;border-collapse:collapse;margin:6px 0;font-size:14px}
+.tech td{padding:4px 6px;border-bottom:1px dashed #e4dcef}.tech td:nth-child(even){text-align:right;font-family:'Baloo 2';font-weight:800;white-space:nowrap}
+.role{display:inline-block;background:#EEE6F6;border-radius:10px;padding:2px 8px;font-weight:800;margin-right:4px}
+#modal p.fx{font-size:14px;background:#FFF7E6;border-radius:12px;padding:8px 10px}
+.tgt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}.tgt button{font-size:14px;padding:6px 10px}
 .bar{flex:1;height:12px;background:#EEE6F6;border-radius:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--pink))}
 .who{display:flex;flex-direction:column;gap:8px;margin-top:8px}
@@ -169,7 +174,8 @@ const CFG={
   PW:1.12,                           // puissance × 1,12 par amélioration
   RG:0.04,                           // portée +4 % par amélioration
   SP:1.035,                          // vitesse × 1,035 par amélioration
-  MAX:{pw:100,rg:25,sp:40},           // maximum de chaque jauge
+  MAX:{pw:100,rg:25,sp:40,ca:40},    // maximum de chaque jauge (ca = casse-armure, niveaux ⭐⭐ et ⭐⭐⭐)
+  CA:0.06,                           // casse-armure : +6 % de dégâts sur l'armure par amélioration
   EVO:[10,25],                       // niveaux d'évolution (forme 2, forme 3)
   EVO_DMG:1.35, EVO_RG:1.08, EVO_SP:1.1,
   AUTO_DELAY:2.5,                    // secondes entre deux vagues en mode Auto
@@ -195,6 +201,24 @@ const GUARD={
   sousou:   {name:'Sousou',   em:'🪙',col:'#F2C230',elem:'Pièce',      pow:'N\'attaque pas : fait gagner des LiliDollars à chaque vague.',kind:'coin',gold:12}
 };
 const STARTERS=['braisou','gouttine','feuillou'];
+// Fiche technique : efficacité contre l'armure (arm) et contre la vie (life) — utilisée aux niveaux ⭐⭐ et ⭐⭐⭐ —,
+// rôle, forces, faiblesses et astuce affichés dans la fiche du gardien.
+const SPEC={
+  braisou:  {arm:0.5,life:1.4, role:'🔥 Dégâts sur la vie',fort:'Costauds, Fusées, Chef des Chipeurs… une fois l\'armure cassée',faible:'les armures : le feu glisse sur le métal',astuce:'Place-le après Rocaillou ou Zapic : ils cassent l\'armure, Braisou finit le travail. Sa brûlure continue à faire mal pendant 2 secondes.'},
+  gouttine: {arm:1.3,life:0.8, role:'💧 Rouille les armures, touche une zone',fort:'les groupes de Chipeurs, les Casqués (l\'eau fait rouiller le métal)',faible:'les boss : petits dégâts à chaque tir',astuce:'Très efficace au début du chemin, là où les Chipeurs arrivent groupés.'},
+  feuillou: {arm:0.4,life:1.1, role:'🌿 Ralentit',fort:'les Fusées et les Costauds, qu\'il ralentit',faible:'les armures, les Volants (ils passent au-dessus des lianes)',astuce:'Mets-le juste avant un gardien qui fait beaucoup de dégâts : les Chipeurs restent plus longtemps à portée.'},
+  zapic:    {arm:1.6,life:0.9, role:'⚡ Casse-armure, touche plusieurs méchants',fort:'les Casqués et le Dragon (l\'éclair passe dans le métal), les groupes',faible:'un boss tout seul : l\'éclair n\'a personne sur qui sauter',astuce:'Chaque évolution ajoute un saut à son éclair.'},
+  givrou:   {arm:0.7,life:1.0, role:'❄️ Ralentit beaucoup, en zone',fort:'les Fusées, les groupes, les boss (même ralentis à moitié)',faible:'les Volants (pas ralentis), petits dégâts',astuce:'Avec Feuillou ou Plumo, les Chipeurs n\'avancent presque plus.'},
+  plumo:    {arm:0.3,life:1.0, role:'🌬️ Fait reculer',fort:'tous ceux qui marchent : ils doivent refaire du chemin',faible:'les Volants, les armures, petits dégâts',astuce:'Place-le près d\'un virage, juste avant tes gardiens les plus forts. Un même méchant ne recule qu\'une fois toutes les 3 secondes.'},
+  rocaillou:{arm:2.5,life:0.7, role:'🪨 Casse-armure, touche une zone',fort:'les Casqués, la Grosse Taupe, le Dragon : il écrase les armures',faible:'les méchants sans armure ; il tire lentement',astuce:'Le meilleur pour ouvrir les armures avant Braisou ou Lunette. Règle sa cible sur « les armures ».'},
+  etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien et éclaireuse',fort:'les Fantômes (elle les rend visibles), ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Mets-la au milieu de tes gardiens les plus forts.'},
+  lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds, les Fantômes (elle les voit)',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
+  sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
+};
+const KIND_G={fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
+const TARGETS={first:'🏃 Le premier',strong:'💪 Le plus costaud',armor:'🛡️ Les armures'};
+function armorOn(){return P&&P.diff>=2;}   // niveau ⭐ : pas de barre d'armure (règle simple d'origine)
+function targetOf(gid){return (armorOn()&&P.tgt&&P.tgt[gid])||(GUARD[gid].kind==='snipe'?'strong':'first');}
 // Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
 const SHOP={braisou:150,gouttine:150,feuillou:150,sousou:400,zapic:700,givrou:1200};
 // Gardiens libérés par les boss : clé « monde-vague »
@@ -211,7 +235,7 @@ const FOES={
   chipeur:{name:'Chipeur',em:'😠',col:'#8E5BD0',hp:20,spd:55, rew:3,r:20},
   fusee:  {name:'Fusée',  em:'💨',col:'#E8505B',hp:10,spd:105,rew:2,r:16},
   costaud:{name:'Costaud',em:'🐻',col:'#7A5230',hp:75,spd:34, rew:7,r:28},
-  casque: {name:'Casqué', em:'⛑️',col:'#5E6B7A',hp:35,spd:50, rew:5,r:22,armor:true},
+  casque: {name:'Casqué', em:'⛑️',col:'#5E6B7A',hp:35,spd:50, rew:5,r:22,armor:true,armorK:1.2},
   volant: {name:'Volant', em:'🦇',col:'#4A3A7A',hp:24,spd:72, rew:4,r:20,fly:true},
   fantome:{name:'Fantôme',em:'👻',col:'#C9D3F0',hp:30,spd:58, rew:5,r:20,ghost:true}
 };
@@ -220,11 +244,11 @@ const INTRO={chipeur:[1,1,4],fusee:[1,3,2],costaud:[1,6,1.5],casque:[2,2,2],vola
 
 // ---------- Les mondes ----------
 const WORLDS=[
-  {id:1,name:'La Prairie fleurie',em:'🌸',theme:'prairie',boss:{art:'boss-taupe',name:'La Grosse Taupe Grognon',em:'🦫',col:'#8B6B4A'},
+  {id:1,name:'La Prairie fleurie',em:'🌸',theme:'prairie',boss:{armorK:0.8,art:'boss-taupe',name:'La Grosse Taupe Grognon',em:'🦫',col:'#8B6B4A'},
    path:[[-40,165],[302,165],[302,705],[658,705],[658,240],[1012,240],[1012,692],[1302,692],[1302,452],[1390,452]]},
   {id:2,name:'La Forêt enneigée',em:'❄️',theme:'neige',boss:{art:'boss-yeti',name:'Le Yéti Ronchon',em:'🦍',col:'#DDE8F5'},
    path:[[220,-40],[220,400],[560,400],[560,130],[900,130],[900,570],[420,570],[420,790],[1180,790],[1180,330],[1390,330]]},
-  {id:3,name:'Le Volcan',em:'🌋',theme:'volcan',boss:{art:'boss-dragon',name:'Le Dragon de Grognon',em:'🐉',col:'#D2452F'},
+  {id:3,name:'Le Volcan',em:'🌋',theme:'volcan',boss:{armorK:1,art:'boss-dragon',name:'Le Dragon de Grognon',em:'🐉',col:'#D2452F'},
    path:[[-40,768],[340,768],[340,202],[740,202],[740,652],[1090,652],[1090,170],[1338,170],[1338,558],[1442,558]],cs:0.82}
 ];
 // Sens dans lequel regarde chaque image de méchant (1 = vers la droite, -1 = vers la gauche)
@@ -290,18 +314,18 @@ function newSave(name,av,diff){
     runs:{},place:{1:{},2:{},3:{}},tips:{},auto:false};
 }
 function save(){if(PID&&P)LS.set('gardiens-'+PID,P);}
-function up(gid){return P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0});}
+function up(gid){const u=P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0,ca:0});if(u.ca===undefined)u.ca=0;return u;}
 
 // ---------- Statistiques d'un gardien ----------
-function level(gid){const u=up(gid);return u.pw+u.rg+u.sp;}
+function level(gid){const u=up(gid);return u.pw+u.rg+u.sp+u.ca;}
 function formOf(lv){return lv>=CFG.EVO[1]?3:lv>=CFG.EVO[0]?2:1;}
 function stats(gid){
-  const g=GUARD[gid],u=up(gid),lv=u.pw+u.rg+u.sp,form=formOf(lv),ev=form-1;
+  const g=GUARD[gid],u=up(gid),lv=u.pw+u.rg+u.sp+u.ca,form=formOf(lv),ev=form-1;
   if(g.kind==='coin')return{lv,form,gold:g.gold*(1+0.35*lv)*(1+0.5*ev)};
   return{lv,form,
     dmg:g.dmg*Math.pow(CFG.PW,u.pw)*Math.pow(CFG.EVO_DMG,ev),
     rg:g.rg*(1+CFG.RG*u.rg)*Math.pow(CFG.EVO_RG,ev),
-    rate:g.rate*Math.pow(CFG.SP,u.sp)*Math.pow(CFG.EVO_SP,ev)};
+    rate:g.rate*Math.pow(CFG.SP,u.sp)*Math.pow(CFG.EVO_SP,ev),ca:u.ca};
 }
 function upCost(gid){return Math.round(CFG.COST_BASE*Math.pow(CFG.COST_GROWTH,level(gid)));}
 function dIndex(world,w){return w-1+CFG.WORLD_OFFSET*(world-1);}
@@ -364,13 +388,15 @@ function startWave(){
 function spawn(s){
   const wd=WORLDS[G.world-1];
   if(s.type==='boss'){
-    const b=s.boss;G.enemies.push({type:'boss',art:s.final?b.art:'chef',name:b.name,em:b.em,col:b.col,hp:s.hp,max:s.hp,spd:28,rew:s.rew,r:s.final?46:36,hearts:CFG.BOSS_HEARTS,boss:true,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
+    const b=s.boss;if(armorOn()&&b.armorK&&s.final)tipOnce('armorboss','lili-mission',`${b.name} a une armure ! Casse-la d'abord avec Rocaillou ou Zapic.`,7000);
+    G.enemies.push({type:'boss',art:s.final?b.art:'chef',name:b.name,em:b.em,col:b.col,hp:s.hp,max:s.hp,spd:28,rew:s.rew,r:s.final?46:36,hearts:CFG.BOSS_HEARTS,boss:true,ap:armorOn()?s.hp*(b.armorK||0):0,apMax:armorOn()?s.hp*(b.armorK||0):0,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
     return;
   }
   const f=FOES[s.type];
   G.enemies.push({type:s.type,art:s.type,name:f.name,em:f.em,col:f.col,hp:s.hp,max:s.hp,spd:f.spd*(0.95+Math.random()*0.1),rew:s.rew,r:f.r,hearts:1,
-    armor:!!f.armor,fly:!!f.fly,ghost:!!f.ghost,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
-  if(f.armor)tipOnce('armor','lili-idee','Les Casqués ont un casque : tes gardiens leur font moitié moins mal. Rocaillou peut casser leur casque !');
+    armor:!armorOn()&&!!f.armor,ap:armorOn()?s.hp*(f.armorK||0):0,apMax:armorOn()?s.hp*(f.armorK||0):0,fly:!!f.fly,ghost:!!f.ghost,dist:0,slowF:1,slowT:0,burn:0,burnT:0,ph:Math.random()*6});
+  if(f.armor&&!armorOn())tipOnce('armor','lili-idee','Les Casqués ont un casque : tes gardiens leur font moitié moins mal. Rocaillou peut casser leur casque !');
+  if(f.armor&&armorOn())tipOnce('armor2','lili-idee','Les Casqués ont une <b>armure</b> (la barre bleue) : il faut la casser avant qu\'ils perdent de la vie. Rocaillou, Zapic et Gouttine cassent bien les armures ; Braisou et Lunette enlèvent bien la vie. Regarde la fiche de chaque gardien !',9000);
   if(f.fly)tipOnce('fly','livia-idee','Les Volants passent au-dessus des lianes, de la glace et du vent : ils ne sont ni ralentis ni repoussés.');
   if(f.ghost)tipOnce('ghost','lili-explique','Les Fantômes sont invisibles ! Place Étoilette ou Lunette près du chemin pour que tes gardiens les voient.');
 }
@@ -484,28 +510,56 @@ function chooseForSpot(i){
     <div class="right"><button onclick="closeModal()">Annuler</button></div>`);
 }
 function bar(v,max){return `<div class="bar"><i style="width:${Math.min(100,v/max*100)}%"></i></div>`;}
+function effet(gid,s){
+  const g=GUARD[gid],pc=v=>Math.round(v*100)+' %',sec=v=>String(v).replace('.',',')+' s';
+  switch(g.kind){
+    case 'fire':return`brûlure : ${fmt(s.dmg*0.25)} dégâts par seconde pendant 2 s`;
+    case 'splash':return`éclabousse autour (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))}) : la moitié des dégâts`;
+    case 'vine':return`ralentit de ${pc(g.slow)} pendant ${sec(g.slowT)} (pas les Volants)`;
+    case 'chain':return`l'éclair saute sur ${g.chain+s.form-1} méchants (−20 % à chaque saut)`;
+    case 'ice':return`ralentit de ${pc(g.slow)} pendant ${sec(g.slowT)}, en zone (pas les Volants)`;
+    case 'wind':return`fait reculer de ${fmt(g.push*(1+0.15*(s.form-1)))} tous les méchants à portée, chacun au plus toutes les 3 s (pas les Volants ; les boss reculent moins)`;
+    case 'rock':return`écrase une zone (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))})`;
+    case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; voit les Fantômes`;
+    case 'snipe':return`voit les Fantômes`;
+  }
+  return '';
+}
+function effBar(v,lab){const w=Math.min(100,v/2.5*100),c=v>=1.2?'#3FA34D':v>=0.9?'#E0A21B':'#D9534F';
+  return `<div class="row"><span class="lab">${lab}</span><div class="bar"><i style="width:${w}%;background:${c}"></i></div><span class="val">×${String(Math.round(v*100)/100).replace('.',',')}</span></div>`;}
 function showGuard(gid,fromTeam){
-  const g=GUARD[gid],s=stats(gid),u=up(gid),cost=upCost(gid),t=G.towers.find(t=>t.gid===gid);
+  const g=GUARD[gid],s=stats(gid),u=up(gid),cost=upCost(gid),t=G.towers.find(t=>t.gid===gid),sp=SPEC[gid],arm=armorOn();
   G.sel=t||null;
-  const next=s.form<3?`Évolue au niveau <b>${CFG.EVO[s.form-1]}</b> ✨`:'Forme finale atteinte 🌟';
+  const next=s.form<3?`Évolue au niveau <b>${CFG.EVO[s.form-1]}</b> ✨ (encore ${CFG.EVO[s.form-1]-s.lv} amélioration${CFG.EVO[s.form-1]-s.lv>1?'s':''})`:'Forme finale atteinte 🌟';
   const can=k=>P.money>=cost&&u[k]<CFG.MAX[k];
   const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${fromTeam?1:0})">+ ${fmt(cost)} L$</button>`;
-  let rows;
+  let rows,tech='';
   if(g.kind==='coin'){
     rows=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
   }else{
+    const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
+    tech=`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
+      <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td><td>🎯 Portée</td><td>${fmt(s.rg)}</td></tr>
+      <tr><td colspan="4">✨ ${effet(gid,s)}</td></tr></table>`;
+    if(arm)tech+=effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Contre l\'armure')+effBar(sp.life,'❤️ Contre la vie');
     rows=`<div class="row"><span class="lab">💪 Puissance</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.dmg)}</span>${btn('pw')}</div>
       <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)}</span>${btn('rg')}</div>
-      <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`;
+      <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`+
+      (arm?`<div class="row"><span class="lab">🔨 Casse-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'');
   }
+  const cible=arm&&g.kind!=='coin'&&g.kind!=='wind'?`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${fromTeam?1:0})">${TARGETS[m]}</button>`).join('')}</div>`:'';
   const foot=t?`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser pour le déplacer.</span><button onclick="unplace('${gid}')">🏰 Rentrer au château</button>`
               :`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser depuis la barre du bas sur un cercle ➕ libre.</span>`;
   openModal(`<div class="hasimg" style="align-items:center">${gIcon(gid,84)}<div><h2>${g.name} <small style="font-size:16px;color:#777">${FORMS[s.form]} · niveau ${s.lv}</small></h2>
-      <p>${g.elem} — ${g.pow}</p><p>${next}</p></div></div>
+      <p><span class="role">${sp.role}</span> ${g.elem}</p><p>${next}</p></div></div>
+    ${tech}
+    <p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<br>💡 ${sp.astuce}</p>
+    ${cible}
     <div style="margin-top:6px">${rows}</div>
     <p style="text-align:right;font-weight:800">💰 Tu as ${fmt(P.money)} L$</p>
     <div class="right">${foot}${fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':''}<button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
+function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam);}
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
@@ -649,9 +703,21 @@ function seenBy(e){
   const p=posAt(WORLDS[G.world-1].P,e.dist);
   return G.towers.some(t=>GUARD[t.gid].sees&&Math.hypot(t.x-p.x,t.y-p.y)<=stats(t.gid).rg+e.r);
 }
-function hurt(e,amount,src){
+function hurt(e,amount,src,ca){
   if(e.hp<=0)return;
-  if(e.armor){if(src==='rock'){e.armor=false;addText(e.x,e.y-30,'Casque cassé !','#5E6B7A',18);}else amount*=0.5;}
+  if(!armorOn()){
+    // niveau ⭐ : règle simple, le casque divise les dégâts par 2, Rocaillou le casse
+    if(e.armor){if(src==='rock'){e.armor=false;addText(e.x,e.y-30,'Casque cassé !','#5E6B7A',18);}else amount*=0.5;}
+  }else{
+    // niveaux ⭐⭐ et ⭐⭐⭐ : l'armure (barre bleue) prend les coups en premier, chaque gardien a son efficacité
+    const sp=SPEC[KIND_G[src]]||{arm:1,life:1};
+    if(e.ap>0){
+      const am=sp.arm*(1+CFG.CA*(ca||0)),a=amount*am;
+      if(a<e.ap){e.ap-=a;return;}
+      amount=(a-e.ap)/am;e.ap=0;addText(e.x,e.y-34,'Armure cassée !','#3D6FB0',18);
+    }
+    amount*=sp.life;
+  }
   e.hp-=amount;
   if(e.hp<=0){
     P.money+=e.rew;addText(e.x,e.y-20,'+'+fmt(e.rew),'#B07A00');burst(e.x,e.y,'#FFD93D',e.boss?30:8);
@@ -676,7 +742,7 @@ function update(dt){
   // Méchants
   for(const e of G.enemies){
     if(e.slowT>0){e.slowT-=dt;if(e.slowT<=0)e.slowF=1;}
-    if(e.burnT>0){e.burnT-=dt;hurt(e,e.burn*dt,'burn');}
+    if(e.burnT>0){e.burnT-=dt;hurt(e,e.burn*dt,'burn',e.burnCa);}
     if(e.hp<=0)continue;
     e.dist+=e.spd*e.slowF*dt;e.ph+=dt*8*e.slowF;
     const p=posAt(path,e.dist);if(e.x!==undefined){const dx=p.x-e.x;if(Math.abs(dx)>0.01)e.face=dx<0?-1:1;}e.x=p.x;e.y=p.y;e.seen=seenBy(e);
@@ -698,22 +764,24 @@ function update(dt){
     const inR=G.enemies.filter(e=>e.seen&&Math.hypot(e.x-t.x,e.y-t.y)<=s.rg+e.r);
     if(!inR.length){t.cd=0;continue;}
     t.cd=1;t.kick=1;
-    let tg=g.kind==='snipe'?inR.reduce((a,b)=>b.hp>a.hp?b:a):inR.reduce((a,b)=>b.dist>a.dist?b:a);
+    const mode=targetOf(t.gid),first=l=>l.reduce((a,b)=>b.dist>a.dist?b:a);
+    let tg=mode==='strong'?inR.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a)
+          :mode==='armor'?first(inR.some(e=>e.ap>0||e.armor)?inR.filter(e=>e.ap>0||e.armor):inR):first(inR);
     if(g.kind==='wind'){
       G.fx.push({k:'ring',x:t.x,y:t.y,r:s.rg,t:0,life:0.45,col:'#ffffff'});
-      for(const e of inR){hurt(e,s.dmg,'wind');
+      for(const e of inR){hurt(e,s.dmg,'wind',s.ca);
         // recul : au plus une fois toutes les 3 s par méchant (sinon un Plumo rapide bloque tout, même les boss)
         if(!e.fly&&!(e.pushT>G.anim)){e.dist=Math.max(0,e.dist-g.push*(e.boss?0.4:1)*(1+0.15*(s.form-1)));e.pushT=G.anim+(e.boss?5:3);}}
     }else if(g.kind==='chain'){
       let cur=tg,hit=[],from={x:t.x,y:t.y},d=s.dmg;
       for(let i=0;i<g.chain+(s.form-1)&&cur;i++){
-        hurt(cur,d,'chain');hit.push(cur);G.fx.push({k:'bolt',x1:from.x,y1:from.y,x2:cur.x,y2:cur.y,t:0,life:0.15});
+        hurt(cur,d,'chain',s.ca);hit.push(cur);G.fx.push({k:'bolt',x1:from.x,y1:from.y,x2:cur.x,y2:cur.y,t:0,life:0.15});
         from=cur;d*=0.8;
         cur=G.enemies.filter(e=>e.seen&&e.hp>0&&!hit.includes(e)&&Math.hypot(e.x-from.x,e.y-from.y)<130).sort((a,b)=>Math.hypot(a.x-from.x,a.y-from.y)-Math.hypot(b.x-from.x,b.y-from.y))[0];
       }
     }else{
       const sp=g.kind==='snipe'?1100:g.kind==='rock'?480:650;
-      G.projs.push({x:t.x,y:t.y-10,tg,tx:tg.x,ty:tg.y,sp,dmg:s.dmg,kind:g.kind,col:g.col,g,form:s.form,sx:t.x,sy:t.y,trav:0});
+      G.projs.push({x:t.x,y:t.y-10,tg,tx:tg.x,ty:tg.y,sp,dmg:s.dmg,ca:s.ca,kind:g.kind,col:g.col,g,form:s.form,sx:t.x,sy:t.y,trav:0});
     }
   }
   // Projectiles
@@ -734,14 +802,14 @@ function impact(p){
   const g=p.g,splash=g.splash?g.splash*(1+0.1*(p.form-1)):0;
   const main=p.tg&&p.tg.hp>0&&Math.hypot(p.tg.x-p.tx,p.tg.y-p.ty)<40?p.tg:null;
   if(main){
-    hurt(main,p.dmg,p.kind);
-    if(p.kind==='fire'){main.burn=p.dmg*0.25;main.burnT=2;}
+    hurt(main,p.dmg,p.kind,p.ca);
+    if(p.kind==='fire'){main.burn=p.dmg*0.25;main.burnT=2;main.burnCa=p.ca;}
     if(p.kind==='vine'||p.kind==='ice')slow(main,g.slow,g.slowT);
   }
   if(splash){
     G.fx.push({k:'ring',x:p.tx,y:p.ty,r:splash,t:0,life:0.3,col:g.col});
     for(const e of G.enemies)if(e!==main&&e.hp>0&&e.seen&&Math.hypot(e.x-p.tx,e.y-p.ty)<=splash+e.r){
-      hurt(e,p.dmg*(p.kind==='rock'?0.8:0.5),p.kind);if(p.kind==='ice')slow(e,g.slow,g.slowT);
+      hurt(e,p.dmg*(p.kind==='rock'?0.8:0.5),p.kind,p.ca);if(p.kind==='ice')slow(e,g.slow,g.slowT);
     }
   }
 }
@@ -839,9 +907,9 @@ function drawFoe(e){
     ctx.save();ctx.translate(e.x,y+h*0.42);ctx.rotate(Math.sin(e.ph)*0.07);ctx.scale((e.face||1)*(FOE_FACE[e.art]||1),1);
     ctx.drawImage(im,-w/2,-h,w,h);ctx.restore();
     if(e.burnT>0){ctx.font=`${e.r*0.8}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🔥',e.x+(Math.sin(G.anim*12)*4),y-h*0.45);}
-    if(e.type==='casque'&&!e.armor){ctx.font=`${e.r*0.7}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💥',e.x,y-h*0.42);}
+    if(e.type==='casque'&&(armorOn()?e.ap<=0:!e.armor)){ctx.font=`${e.r*0.7}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💥',e.x,y-h*0.42);}
     ctx.globalAlpha=1;
-    if(e.hp<e.max&&(!e.ghost||e.seen)){const bw=e.r*2,hy=y-h*0.62-8;ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(e.x-bw/2,hy,bw,6);ctx.fillStyle=e.hp/e.max>0.4?'#6BD86B':'#FF6B6B';ctx.fillRect(e.x-bw/2,hy,bw*Math.max(0,e.hp/e.max),6);}
+    if(!e.ghost||e.seen)lifeBars(e,y-h*0.62-8);
     return;
   }
   ctx.fillStyle=e.col;ctx.beginPath();ctx.arc(e.x,y,e.r,0,7);ctx.fill();
@@ -851,7 +919,13 @@ function drawFoe(e){
   if(e.armor){ctx.font=`${e.r*0.8}px serif`;ctx.fillText('⛑️',e.x,y-e.r*0.9);}
   if(e.boss){ctx.font=`${e.r*0.7}px serif`;ctx.fillText('👑',e.x,y-e.r-6);}
   ctx.globalAlpha=1;
-  if(e.hp<e.max&&(!e.ghost||e.seen)){const w=e.r*2,hy=y-e.r-(e.boss?26:10);ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(e.x-w/2,hy,w,6);ctx.fillStyle=e.hp/e.max>0.4?'#6BD86B':'#FF6B6B';ctx.fillRect(e.x-w/2,hy,w*Math.max(0,e.hp/e.max),6);}
+  if(!e.ghost||e.seen)lifeBars(e,y-e.r-(e.boss?26:10));
+}
+// Barre de vie (verte) et, au-dessus, barre d'armure (bleue) qui diminue en premier
+function lifeBars(e,hy){
+  const w=Math.max(34,e.r*2),x=e.x-w/2,arm=e.apMax>0;
+  if(e.hp<e.max||arm){ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(x,hy,w,6);ctx.fillStyle=e.hp/e.max>0.4?'#6BD86B':'#FF6B6B';ctx.fillRect(x,hy,w*Math.max(0,e.hp/e.max),6);}
+  if(arm&&e.ap>0){ctx.fillStyle='rgba(0,0,0,.45)';ctx.fillRect(x,hy-7,w,5);ctx.fillStyle='#5B9BE6';ctx.fillRect(x,hy-7,w*e.ap/e.apMax,5);ctx.fillStyle='rgba(255,255,255,.55)';ctx.fillRect(x,hy-7,w*e.ap/e.apMax,1.5);}
 }
 function drawProj(p){
   ctx.fillStyle=p.col;ctx.strokeStyle='#fff';ctx.lineWidth=2;

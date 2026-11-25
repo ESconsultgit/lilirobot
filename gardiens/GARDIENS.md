@@ -85,9 +85,35 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 
 Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 
+### Fiches techniques des gardiens
+
+Toucher un gardien (sur la map ou dans la barre du bas) ouvre sa **fiche technique** : son rôle, ses dégâts par tir, ses tirs par seconde, ses **dégâts par seconde**, sa portée, son effet spécial, ce contre quoi il est fort ou faible, une astuce, son évolution suivante et ses améliorations. Aux niveaux ⭐⭐ et ⭐⭐⭐, elle montre aussi son efficacité **contre l'armure** et **contre la vie**, la jauge **🔨 Casse-armure** et le choix de sa **cible**.
+
+| Gardien | Rôle | Contre l'armure | Contre la vie | Fort contre | Faible contre |
+|---|---|--:|--:|---|---|
+| 🔥 **Braisou** | dégâts sur la vie, brûlure | ×0,5 | ×1,4 | Costauds, Fusées, Chef des Chipeurs (armure cassée) | armures |
+| 💧 **Gouttine** | rouille les armures, zone | ×1,3 | ×0,8 | groupes, Casqués | boss |
+| 🌿 **Feuillou** | ralentit | ×0,4 | ×1,1 | Fusées, Costauds | armures, Volants |
+| ⚡ **Zapic** | casse-armure, plusieurs méchants | ×1,6 | ×0,9 | Casqués, Dragon, groupes | un boss seul |
+| ❄️ **Givrou** | ralentit beaucoup, zone | ×0,7 | ×1,0 | Fusées, groupes, boss | Volants |
+| 🌬️ **Plumo** | fait reculer | ×0,3 | ×1,0 | tous ceux qui marchent | Volants, armures |
+| 🪨 **Rocaillou** | casse-armure, zone | ×2,5 | ×0,7 | Casqués, Grosse Taupe, Dragon | sans armure ; lent |
+| ⭐ **Étoilette** | soutien, éclaireuse | ×0,8 | ×1,0 | Fantômes, aide ses voisins | petits dégâts |
+| 🌙 **Lunette** | tir de très loin | ×1,0 | ×1,25 | boss, Costauds, Fantômes | groupes ; lente |
+| 🪙 **Sousou** | tirelire | — | — | rapporte des L$ à chaque vague | n'attaque pas, prend une place |
+
+**Cible** (⭐⭐ et ⭐⭐⭐, sauf Plumo et Sousou) : 🏃 **le premier** (le plus avancé sur le chemin, par défaut), 💪 **le plus costaud** (le plus de vie + armure ; par défaut pour Lunette) ou 🛡️ **les armures** (les méchants qui ont encore une armure d'abord). Le choix est gardé pour chaque gardien.
+
+### Armure (⭐⭐ et ⭐⭐⭐)
+
+- Les **Casqués** (armure = 1,2 × leurs PV), la **Grosse Taupe Grognon** (casque de mineur, 0,8 × PV) et le **Dragon de Grognon** (écailles, 1 × PV) ont une **armure**.
+- Elle s'affiche en **barre bleue** au-dessus de la barre de vie verte, et c'est **elle qui diminue en premier** : tant qu'elle n'est pas cassée, le méchant ne perd pas de vie.
+- Chaque coup touche l'armure avec l'efficacité « contre l'armure » du gardien (× la jauge Casse-armure : +6 % par amélioration), puis la vie avec son efficacité « contre la vie ». Quand l'armure casse au milieu d'un coup, le reste du coup passe sur la vie. « Armure cassée ! » s'affiche, et le Casqué montre un 💥.
+- Au niveau ⭐ **rien ne change** pour les plus jeunes : pas de barre d'armure, le casque des Casqués divise simplement les dégâts par 2 et Rocaillou le casse. Toutes les efficacités valent ×1.
+
 ### Améliorer et évoluer
 
-- Toucher un gardien ouvre sa fiche, avec trois jauges : **💪 Puissance** (×1,12 par amélioration, max 100), **🎯 Portée** (+4 %, max 25), **⏱️ Vitesse** (×1,035, max 40). Sousou n'a qu'une jauge : **💰 Pièces**.
+- Toucher un gardien ouvre sa fiche, avec trois jauges : **💪 Puissance** (×1,12 par amélioration, max 100), **🎯 Portée** (+4 %, max 25), **⏱️ Vitesse** (×1,035, max 40), plus **🔨 Casse-armure** (+6 % contre l'armure par amélioration, max 40) aux niveaux ⭐⭐ et ⭐⭐⭐. Sousou n'a qu'une jauge : **💰 Pièces**.
 - Le **niveau** du gardien est le nombre total d'améliorations. Une amélioration coûte **12 × 1,09^niveau** L$, quelle que soit la jauge.
 - Au **niveau 10**, il **évolue** (forme 2 « grand ») ; au **niveau 25**, il évolue encore (forme 3 « super »). Chaque évolution donne ×1,35 de dégâts, +8 % de portée et +10 % de vitesse, avec un écran « Waouh ! … évolue ! ».
 
@@ -98,7 +124,7 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 | 😠 | **Chipeur** | 20 | 55 | 3 | normal |
 | 💨 | **Fusée** | 10 | 105 | 2 | petit et très rapide |
 | 🐻 | **Costaud** | 75 | 34 | 7 | lent, beaucoup de PV |
-| ⛑️ | **Casqué** | 35 | 50 | 5 | casque : dégâts ÷2, sauf Rocaillou qui casse le casque |
+| ⛑️ | **Casqué** | 35 | 50 | 5 | casque : en ⭐, dégâts ÷2 sauf Rocaillou qui casse le casque ; en ⭐⭐ et ⭐⭐⭐, **armure** = 1,2 × ses PV |
 | 🦇 | **Volant** | 24 | 72 | 4 | vole : ni ralenti ni repoussé |
 | 👻 | **Fantôme** | 30 | 58 | 5 | invisible, sauf à portée d'Étoilette ou de Lunette |
 | 😤 | **Chef des Chipeurs** | 40 × Chipeur | 28 | 40 | mini-boss, enlève 5 cœurs |
@@ -118,7 +144,7 @@ Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 | ⭐⭐ Gardien malin | dès 8 ans | réglages normaux, 20 cœurs, 6 gardiens sur la map |
 | ⭐⭐⭐ Grand gardien | dès 10 ans | méchants avec +40 % de PV, 10 cœurs, 5 gardiens sur la map |
 
-Équilibrage (25/11) testé avec un joueur automatique qui place les meilleurs gardiens permis et dépense tout son argent sur eux : en ⭐⭐⭐ il perd 2 fois dans le monde 1 et 3 fois dans le monde 3, et les grands boss avancent loin (70 % du chemin dans le monde 1, jusqu'au château dans les mondes 2 et 3) ; en ⭐⭐ il ne perd pas mais le boss du monde 3 arrive presque au château ; en ⭐ c'est confortable. Un enfant, qui dépense moins bien, rencontrera plus de murs. Avant, un Plumo bien amélioré repoussait le boss en continu (il n'avançait presque pas) : c'est corrigé.
+Équilibrage (25/11, avec l'armure) testé avec un joueur automatique qui place les meilleurs gardiens permis et dépense tout son argent sur eux : en ⭐⭐⭐ il perd 1 fois dans le monde 1, 1 fois dans le monde 2 et 17 fois dans le monde 3 (il faut améliorer et bien choisir son équipe), et les grands boss arrivent jusqu'au château ; en ⭐⭐ il perd 3 fois dans le monde 3 ; en ⭐ rien ne change, c'est confortable. Un enfant, qui dépense moins bien, rencontrera plus de murs. Avant, un Plumo bien amélioré repoussait le boss en continu (il n'avançait presque pas) : c'est corrigé.
 
 ## Conseils d'Ellie et Livia
 
@@ -134,6 +160,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 
 Constantes en haut du script de `index.html` :
 
+- `SPEC` : fiche technique de chaque gardien (efficacité contre l'armure `arm` et contre la vie `life`, rôle, forces, faiblesses, astuce) ; `KIND_G` relie le type de tir au gardien ; `TARGETS` : les choix de cible. Armure des méchants : `armorK` dans `FOES` et dans les boss de `WORLDS` (× leurs PV).
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
@@ -186,4 +213,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v8** — vidéo de lancement (`video/lancement.mp4`).
 - **v9** — la vidéo de lancement passe au démarrage du jeu, avec les boutons « Activer le son » et « Passer ».
 - **v10** — équilibrage : vagues plus longues (10 + vague × 0,9 méchants), PV de base × 2, boss plus costauds (40 et 120 Chipeurs), croissance des PV et des prix revue ; nombre de gardiens sur la map limité selon le niveau (8 / 6 / 5) ; Plumo ne peut plus bloquer un méchant en continu ; emplacements sombres sur la map neige.
+- **v11** — armure (barre bleue qui diminue en premier) pour les Casqués, la Grosse Taupe et le Dragon en ⭐⭐ et ⭐⭐⭐ ; efficacité de chaque gardien contre l'armure et contre la vie ; jauge Casse-armure ; choix de la cible ; fiche technique complète de chaque gardien. Le niveau ⭐ ne change pas.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
