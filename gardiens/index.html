@@ -234,8 +234,8 @@ const GUARD={
   givrou:   {name:'Givrou',   em:'❄️',col:'#8FD8F5',elem:'Glace',      pow:'Flocons qui ralentissent beaucoup.',kind:'ice',   dmg:3, rg:150,rate:1.1,slow:0.55,slowT:1.6,splash:45},
   plumo:    {name:'Plumo',    em:'🌬️',col:'#B9C7E8',elem:'Vent',       pow:'Une rafale qui fait reculer les méchants.',kind:'wind',  dmg:3, rg:140,rate:0.5,push:45},
   rocaillou:{name:'Rocaillou',em:'🪨',col:'#9A7B5B',elem:'Roche',      pow:'Un gros rocher qui touche une zone et casse les casques.',kind:'rock',dmg:22,rg:120,rate:0.5,splash:70},
-  etoilette:{name:'Étoilette',em:'⭐',col:'#F7A8D8',elem:'Étoile',     pow:'Rend ses voisins plus rapides et voit les fantômes.',kind:'star',dmg:4,rg:150,rate:1.2,aura:0.25,auraRg:190,sees:true},
-  lunette:  {name:'Lunette',  em:'🌙',col:'#6C4AB6',elem:'Lune',       pow:'Tire de très loin sur le plus costaud, voit les fantômes.',kind:'snipe',dmg:28,rg:270,rate:0.45,sees:true},
+  etoilette:{name:'Étoilette',em:'⭐',col:'#F7A8D8',elem:'Étoile',     pow:'Rend ses voisins plus rapides. Seule à voir les Fantômes : dès qu\'elle en touche un, tout le monde le voit.',kind:'star',dmg:4,rg:150,rate:1.2,aura:0.25,auraRg:190,sees:true},
+  lunette:  {name:'Lunette',  em:'🌙',col:'#6C4AB6',elem:'Lune',       pow:'Tire de très loin sur le plus costaud.',kind:'snipe',dmg:28,rg:270,rate:0.45},
   sousou:   {name:'Sousou',   em:'🪙',col:'#F2C230',elem:'Pièce',      pow:'N\'attaque pas : fait gagner des LiliDollars à chaque vague.',kind:'coin',gold:12}
 };
 const STARTERS=['braisou','gouttine','feuillou'];
@@ -249,8 +249,8 @@ const SPEC={
   givrou:   {arm:0.7,life:1.0, role:'❄️ Ralentit beaucoup, en zone',fort:'les Fusées, les groupes, les boss (même ralentis à moitié)',faible:'les Volants (pas ralentis), petits dégâts',astuce:'Avec Feuillou ou Plumo, les Chipeurs n\'avancent presque plus.'},
   plumo:    {arm:0.3,life:1.0, role:'🌬️ Fait reculer',fort:'tous ceux qui marchent : ils doivent refaire du chemin',faible:'les Volants, les armures, petits dégâts',astuce:'Place-le près d\'un virage, juste avant tes gardiens les plus forts. Un même méchant ne recule qu\'une fois toutes les 3 secondes.'},
   rocaillou:{arm:2.5,life:0.7, role:'🪨 Casse-armure, touche une zone',fort:'les Casqués, la Grosse Taupe, le Dragon : il écrase les armures',faible:'les méchants sans armure ; il tire lentement',astuce:'Le meilleur pour ouvrir les armures avant Braisou ou Lunette. Règle sa cible sur « les armures ».'},
-  etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien et éclaireuse',fort:'les Fantômes (elle les rend visibles), ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Mets-la au milieu de tes gardiens les plus forts.'},
-  lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds, les Fantômes (elle les voit)',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
+  etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien, seule à voir les Fantômes',fort:'les Fantômes : elle est la seule à les voir, et dès qu\'elle en touche un, tous tes gardiens peuvent l\'attaquer ; ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Dans le Volcan, ne l\'oublie pas ! Mets-la au début du chemin pour démasquer les Fantômes tôt, au milieu de tes gardiens les plus forts.'},
+  lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
   sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
 };
 // Bonus et malus selon la map (le décor aide ou gêne certains gardiens) : pw = puissance, rg = portée
@@ -458,7 +458,7 @@ function spawn(s){
   if(f.armor&&!armorOn())tipOnce('armor','lili-idee','Les Casqués ont un casque : tes gardiens leur font moitié moins mal. Rocaillou peut casser leur casque !');
   if(f.armor&&armorOn())tipOnce('armor2','lili-idee','Les Casqués ont une <b>armure</b> (la barre bleue) : il faut la casser avant qu\'ils perdent de la vie. Rocaillou, Zapic et Gouttine cassent bien les armures ; Braisou et Lunette enlèvent bien la vie. Regarde la fiche de chaque gardien !',9000);
   if(f.fly)tipOnce('fly','livia-idee','Les Volants passent au-dessus des lianes, de la glace et du vent : ils ne sont ni ralentis ni repoussés.');
-  if(f.ghost)tipOnce('ghost','lili-explique','Les Fantômes sont invisibles ! Place Étoilette ou Lunette près du chemin pour que tes gardiens les voient.');
+  if(f.ghost)tipOnce('ghost','lili-explique','Les Fantômes sont invisibles ! Seule <b>Étoilette</b> peut les voir : dès qu\'elle touche un Fantôme, tous tes gardiens peuvent l\'attaquer.',8000);
 }
 function waveClear(){
   const w=G.wave,rw=rewMul(G.world,w);
@@ -581,8 +581,8 @@ function effet(gid,s){
     case 'ice':return`ralentit de ${pc(g.slow)} pendant ${sec(g.slowT)}, en zone (pas les Volants)`;
     case 'wind':return`fait reculer de ${fmt(g.push*(1+0.15*(s.form-1)))} tous les méchants à portée, chacun au plus toutes les 3 s (pas les Volants ; les boss reculent moins)`;
     case 'rock':return`écrase une zone (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))})`;
-    case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; voit les Fantômes`;
-    case 'snipe':return`voit les Fantômes`;
+    case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; seule à voir les Fantômes, et un Fantôme qu'elle touche devient visible pour tous`;
+    case 'snipe':return`vise d'abord le méchant le plus costaud (réglable)`;
   }
   return '';
 }
@@ -771,13 +771,12 @@ function refreshHUD(){
 }
 
 // ---------- Simulation ----------
-function seenBy(e){
-  if(!e.ghost)return true;
-  const p=posAt(WORLDS[G.world-1].P,e.dist);
-  return G.towers.some(t=>GUARD[t.gid].sees&&Math.hypot(t.x-p.x,t.y-p.y)<=stats(t.gid).rg+e.r);
-}
+// Fantômes : invisibles pour tous, sauf pour Étoilette ; dès qu'elle en touche un, il devient visible pour tous
+function seenBy(e){return !e.ghost||!!e.revealed;}
+function starSees(e){if(!e.ghost||e.revealed)return false;return G.towers.some(t=>GUARD[t.gid].sees&&Math.hypot(t.x-e.x,t.y-e.y)<=stats(t.gid).rg+e.r);}
 function hurt(e,amount,src,ca){
   if(e.hp<=0)return;
+  if(e.ghost&&!e.revealed&&src==='star'){e.revealed=true;e.seen=true;addText(e.x,e.y-30,'Démasqué !','#C2367A',18);}
   if(!armorOn()){
     // niveau ⭐ : règle simple, le casque divise les dégâts par 2, Rocaillou le casse
     if(e.armor){if(src==='rock'){e.armor=false;addText(e.x,e.y-30,'Casque cassé !','#5E6B7A',18);}else amount*=0.5;}
@@ -834,7 +833,9 @@ function update(dt){
     if(g.kind==='coin')continue;
     const s=stats(t.gid);t.cd-=dt*s.rate*auraOf(t);
     if(t.cd>0)continue;
-    const inR=G.enemies.filter(e=>e.seen&&Math.hypot(e.x-t.x,e.y-t.y)<=s.rg+e.r);
+    let inR=G.enemies.filter(e=>(e.seen||(g.sees&&e.ghost))&&Math.hypot(e.x-t.x,e.y-t.y)<=s.rg+e.r);
+    // Étoilette vise d'abord les Fantômes encore cachés
+    if(g.sees){const hid=inR.filter(e=>e.ghost&&!e.revealed);if(hid.length)inR=hid;}
     if(!inR.length){t.cd=0;continue;}
     t.cd=1;t.kick=1;
     const mode=targetOf(t.gid),first=l=>l.reduce((a,b)=>b.dist>a.dist?b:a);
@@ -969,7 +970,7 @@ function drawGuard(t,sel){
 }
 function drawFoe(e){
   const fl=e.fly?22:0,b=Math.abs(Math.sin(e.ph))*(e.fly?3:6);
-  if(e.ghost&&!e.seen){ctx.globalAlpha=0.1+0.05*Math.sin(G.anim*6);}
+  if(e.ghost&&!e.seen){ctx.globalAlpha=starSees(e)?0.35:0.1+0.05*Math.sin(G.anim*6);}
   else if(e.ghost)ctx.globalAlpha=0.6;
   ctx.fillStyle='rgba(0,0,0,.22)';ctx.beginPath();ctx.ellipse(e.x,e.y+e.r*0.85,e.r*(e.fly?0.6:0.9),e.r*0.28,0,0,7);ctx.fill();
   const y=e.y-fl-b,im=e.art?img('f/'+e.art):null;

@@ -79,8 +79,8 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 | ❄️ | **Givrou** | glace | flocons qui ralentissent de 55 % pendant 1,6 s, en zone | 3 | 150 | 1,1 |
 | 🌬️ | **Plumo** | vent | rafale qui fait reculer les méchants à portée (chacun au plus une fois toutes les 3 s, 5 s pour les boss) | 3 | 140 | 0,5 |
 | 🪨 | **Rocaillou** | roche | rocher en zone (rayon 70), casse les casques | 22 | 120 | 0,5 |
-| ⭐ | **Étoilette** | étoile | voisins proches +25 % de vitesse (+10 % par évolution), voit les fantômes | 4 | 150 | 1,2 |
-| 🌙 | **Lunette** | lune | tir de très loin sur le méchant qui a le plus de PV, voit les fantômes | 28 | 270 | 0,45 |
+| ⭐ | **Étoilette** | étoile | voisins proches +25 % de vitesse (+10 % par évolution) ; seule à voir les Fantômes, elle les démasque pour tous | 4 | 150 | 1,2 |
+| 🌙 | **Lunette** | lune | tir de très loin sur le méchant qui a le plus de PV | 28 | 270 | 0,45 |
 | 🪙 | **Sousou** | pièce | n'attaque pas : fait gagner des LiliDollars à chaque vague | — | — | — |
 
 Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
@@ -98,8 +98,8 @@ Toucher un gardien (sur la map ou dans la barre du bas) ouvre sa **fiche**, une 
 | ❄️ **Givrou** | ralentit beaucoup, zone | ×0,7 | ×1,0 | Fusées, groupes, boss | Volants |
 | 🌬️ **Plumo** | fait reculer | ×0,3 | ×1,0 | tous ceux qui marchent | Volants, armures |
 | 🪨 **Rocaillou** | casse-armure, zone | ×2,5 | ×0,7 | Casqués, Grosse Taupe, Dragon | sans armure ; lent |
-| ⭐ **Étoilette** | soutien, éclaireuse | ×0,8 | ×1,0 | Fantômes, aide ses voisins | petits dégâts |
-| 🌙 **Lunette** | tir de très loin | ×1,0 | ×1,25 | boss, Costauds, Fantômes | groupes ; lente |
+| ⭐ **Étoilette** | soutien, seule à voir les Fantômes | ×0,8 | ×1,0 | Fantômes (elle les démasque), aide ses voisins | petits dégâts |
+| 🌙 **Lunette** | tir de très loin | ×1,0 | ×1,25 | boss, Costauds | groupes ; lente |
 | 🪙 **Sousou** | tirelire | — | — | rapporte des L$ à chaque vague | n'attaque pas, prend une place |
 
 **Cible** (⭐⭐ et ⭐⭐⭐, sauf Plumo et Sousou) : 🏃 **le premier** (le plus avancé sur le chemin, par défaut), 💪 **le plus costaud** (le plus de vie + armure ; par défaut pour Lunette) ou 🛡️ **les armures** (les méchants qui ont encore une armure d'abord). Le choix est gardé pour chaque gardien.
@@ -151,7 +151,7 @@ Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du b
 | 🐻 | **Costaud** | 75 | 34 | 7 | lent, beaucoup de PV |
 | ⛑️ | **Casqué** | 35 | 50 | 5 | casque : en ⭐, dégâts ÷2 sauf Rocaillou qui casse le casque ; en ⭐⭐ et ⭐⭐⭐, **armure** = 1,2 × ses PV |
 | 🦇 | **Volant** | 24 | 72 | 4 | vole : ni ralenti ni repoussé |
-| 👻 | **Fantôme** | 30 | 58 | 5 | invisible, sauf à portée d'Étoilette ou de Lunette |
+| 👻 | **Fantôme** | 30 | 58 | 5 | invisible : seule **Étoilette** le voit ; dès qu'elle le touche une fois (« Démasqué ! »), il est visible pour tous les gardiens |
 | 😤 | **Chef des Chipeurs** | 40 × Chipeur | 28 | 40 | mini-boss, enlève 5 cœurs |
 | 👑 | **Grand boss** | 120 × Chipeur | 28 | 120 | un par monde, enlève 5 cœurs |
 
@@ -242,4 +242,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v11** — armure (barre bleue qui diminue en premier) pour les Casqués, la Grosse Taupe et le Dragon en ⭐⭐ et ⭐⭐⭐ ; efficacité de chaque gardien contre l'armure et contre la vie ; jauge Casse-armure ; choix de la cible ; fiche technique complète de chaque gardien. Le niveau ⭐ ne change pas.
 - **v12** — fiche plus petite sur le côté avec le gardien en grand, portée dessinée sur la map (actuelle et après une amélioration), onglets Améliorer / Fiche technique ; bonus et malus des maps selon le gardien.
 - **v13** — évolutions plus lentes et propres à chaque gardien (ex. Braisou 20 et 60, Feuillou 25 et 70, Rocaillou 30 et 80) ; les 3 évolutions affichées dans la fiche technique, la forme actuelle en surbrillance.
+- **v14** — Fantômes : seule Étoilette les voit (elle vise d'abord ceux qui sont cachés) ; dès qu'elle en touche un, il est visible pour tous. Lunette ne les voit plus.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
