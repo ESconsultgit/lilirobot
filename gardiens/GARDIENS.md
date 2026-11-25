@@ -125,7 +125,22 @@ Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du b
 
 - Toucher un gardien ouvre sa fiche, avec trois jauges : **💪 Puissance** (×1,12 par amélioration, max 100), **🎯 Portée** (+4 %, max 25), **⏱️ Vitesse** (×1,035, max 40), plus **🔨 Casse-armure** (+6 % contre l'armure par amélioration, max 40) aux niveaux ⭐⭐ et ⭐⭐⭐. Sousou n'a qu'une jauge : **💰 Pièces**.
 - Le **niveau** du gardien est le nombre total d'améliorations. Une amélioration coûte **12 × 1,09^niveau** L$, quelle que soit la jauge.
-- Au **niveau 10**, il **évolue** (forme 2 « grand ») ; au **niveau 25**, il évolue encore (forme 3 « super »). Chaque évolution donne ×1,35 de dégâts, +8 % de portée et +10 % de vitesse, avec un écran « Waouh ! … évolue ! ».
+- Chaque gardien **évolue à son rythme** (forme 2 « grand », puis forme 3 « super »). Chaque évolution donne ×1,35 de dégâts, +8 % de portée et +10 % de vitesse, avec un écran « Waouh ! … évolue ! ».
+
+| Gardien | Forme 2 | Forme 3 |
+|---|--:|--:|
+| 🪙 Sousou | niveau 15 | niveau 45 |
+| 🌬️ Plumo | 18 | 50 |
+| 💧 Gouttine | 20 | 55 |
+| 🔥 Braisou | 20 | 60 |
+| ⭐ Étoilette | 20 | 60 |
+| ⚡ Zapic | 22 | 65 |
+| 🌿 Feuillou | 25 | 70 |
+| ❄️ Givrou | 25 | 70 |
+| 🪨 Rocaillou | 30 | 80 |
+| 🌙 Lunette | 30 | 80 |
+
+- L'onglet **📋 Fiche technique** montre les **3 évolutions** côte à côte avec le niveau de chacune ; la forme actuelle est en surbrillance (cadre jaune), les autres sont grisées.
 
 ## Les méchants : les Chipeurs
 
@@ -171,6 +186,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 Constantes en haut du script de `index.html` :
 
 - `SPEC` : fiche technique de chaque gardien (efficacité contre l'armure `arm` et contre la vie `life`, rôle, forces, faiblesses, astuce) ; `KIND_G` relie le type de tir au gardien ; `TARGETS` : les choix de cible. `BIOME` : bonus et malus de chaque map (`pw` puissance, `rg` portée, avec la phrase d'explication). Armure des méchants : `armorK` dans `FOES` et dans les boss de `WORLDS` (× leurs PV).
+- `EVO` : niveaux d'évolution de chaque gardien.
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
@@ -225,4 +241,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v10** — équilibrage : vagues plus longues (10 + vague × 0,9 méchants), PV de base × 2, boss plus costauds (40 et 120 Chipeurs), croissance des PV et des prix revue ; nombre de gardiens sur la map limité selon le niveau (8 / 6 / 5) ; Plumo ne peut plus bloquer un méchant en continu ; emplacements sombres sur la map neige.
 - **v11** — armure (barre bleue qui diminue en premier) pour les Casqués, la Grosse Taupe et le Dragon en ⭐⭐ et ⭐⭐⭐ ; efficacité de chaque gardien contre l'armure et contre la vie ; jauge Casse-armure ; choix de la cible ; fiche technique complète de chaque gardien. Le niveau ⭐ ne change pas.
 - **v12** — fiche plus petite sur le côté avec le gardien en grand, portée dessinée sur la map (actuelle et après une amélioration), onglets Améliorer / Fiche technique ; bonus et malus des maps selon le gardien.
+- **v13** — évolutions plus lentes et propres à chaque gardien (ex. Braisou 20 et 60, Feuillou 25 et 70, Rocaillou 30 et 80) ; les 3 évolutions affichées dans la fiche technique, la forme actuelle en surbrillance.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

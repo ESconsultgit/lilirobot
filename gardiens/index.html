@@ -125,9 +125,16 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 .sheet p{margin:4px 0;font-size:14px;line-height:1.3}
 .sheet .row{padding:3px 0}.sheet .row .lab{width:112px;font-size:14px}.sheet .row .val{width:84px;font-size:14px}
 .sheet .row button{font-size:13px;padding:5px 8px}
-.tabs{display:flex;gap:6px;margin:6px 0}.tabs button{flex:1;font-size:14px;padding:6px}
+.tabs{display:flex;gap:6px;margin:6px 0;clear:both}.tabs button{flex:1;font-size:14px;padding:6px}
 .biome{border-radius:10px;padding:5px 8px}.biome.up{background:#E4F6E1}.biome.down{background:#FDE5E5}
 .rgnote{font-size:13px;opacity:.8}
+.evos{display:flex;align-items:flex-end;justify-content:center;gap:4px;margin:6px 0 2px}
+.evo{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:14px;padding:4px 2px;opacity:.55;filter:grayscale(.5);border:3px solid transparent}
+.evo img{width:100%;max-width:92px;height:72px;object-fit:contain}
+.evo b{font-family:'Baloo 2';font-size:14px;line-height:1}.evo small{font-size:11px}
+.evo.on{opacity:1;filter:none;background:#FFF3C4;border-color:var(--yellow);box-shadow:0 0 12px rgba(242,194,48,.7)}
+.arr{align-self:center;color:#B9A9D6;font-weight:900}
+@media (max-height:520px){.evo img{height:52px}.evo b{font-size:12px}.evo small{font-size:10px}}
 /* petit écran (téléphone) : fenêtre plus étroite, le gardien passe dans l'en-tête */
 .smallG{display:none;float:right;width:64px;height:64px;object-fit:contain;margin:-4px 0 0 6px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
 @media (max-height:520px){
@@ -367,9 +374,12 @@ function up(gid){const u=P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0,ca:0});if(u.ca===
 
 // ---------- Statistiques d'un gardien ----------
 function level(gid){const u=up(gid);return u.pw+u.rg+u.sp+u.ca;}
-function formOf(lv){return lv>=CFG.EVO[1]?3:lv>=CFG.EVO[0]?2:1;}
+// Niveaux d'évolution de chaque gardien (forme 2 « grand », forme 3 « super ») : chacun évolue à son rythme
+const EVO={braisou:[20,60],gouttine:[20,55],feuillou:[25,70],zapic:[22,65],givrou:[25,70],plumo:[18,50],rocaillou:[30,80],etoilette:[20,60],lunette:[30,80],sousou:[15,45]};
+function evoOf(gid){return EVO[gid]||CFG.EVO;}
+function formOf(lv,gid){const e=evoOf(gid);return lv>=e[1]?3:lv>=e[0]?2:1;}
 function stats(gid){
-  const g=GUARD[gid],u=up(gid),lv=u.pw+u.rg+u.sp+u.ca,form=formOf(lv),ev=form-1;
+  const g=GUARD[gid],u=up(gid),lv=u.pw+u.rg+u.sp+u.ca,form=formOf(lv,gid),ev=form-1;
   if(g.kind==='coin')return{lv,form,gold:g.gold*(1+0.35*lv)*(1+0.5*ev)};
   const bi=biomeOf(gid)||{};
   return{lv,form,
@@ -522,7 +532,7 @@ function renderBench(){
   const full=placed.length>=teamMax();
   $('bench').innerHTML=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}</div>`+BENCH_ORDER.map(gid=>{
     const own=P.owned.includes(gid);let cls='bi',tag;
-    if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid)))+' '+level(gid);}
+    if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid),gid))+' '+level(gid);}
     else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
     else{const gf=giftOf(gid);cls+=' lock';tag='🔒 '+gf.world+'-'+gf.wave;}
     const bi=biomeOf(gid),bb=bi?((bi.pw||1)*(bi.rg||1)>=1?'<i class="bb up" title="Bonus de la map">▲</i>':'<i class="bb down" title="Malus de la map">▼</i>'):'';
@@ -532,7 +542,7 @@ function renderBench(){
     tipOnce('shop','livia-idee','Tu as assez de LiliDollars pour acheter un nouveau gardien ! Touche-le dans la barre du bas.');
 }
 function gIcon(gid,size,form){
-  const g=GUARD[gid];form=form||formOf(level(gid));const s=size*(0.8+0.12*form);
+  const g=GUARD[gid];form=form||formOf(level(gid),gid);const s=size*(0.8+0.12*form);
   if(ART[gid])return `<span class="gico" style="width:${s}px;height:${s}px;background:radial-gradient(circle,#fff 55%,${g.col}55);border-color:${g.col}"><img src="img/g/${gid}-${form}.webp" alt="" style="width:88%;height:88%;object-fit:contain"></span>`;
   return `<span class="gico" style="width:${s}px;height:${s}px;background:${g.col};font-size:${s*0.5}px">${g.em}</span>`;
 }
@@ -582,7 +592,7 @@ function showGuard(gid,fromTeam,tab){
   const g=GUARD[gid],s=stats(gid),u=up(gid),cost=upCost(gid),t=G.towers.find(t=>t.gid===gid),sp=SPEC[gid],arm=armorOn();
   G.sel=t||null;G.sheetTab=tab||G.sheetTab||'up';if(g.kind==='coin')G.sheetTab='up';
   const ft=fromTeam?1:0,tb=G.sheetTab;
-  const next=s.form<3?`Évolue au niveau <b>${CFG.EVO[s.form-1]}</b> ✨ (encore ${CFG.EVO[s.form-1]-s.lv})`:'Forme finale 🌟';
+  const ev=evoOf(gid),next=s.form<3?`Évolue au niveau <b>${ev[s.form-1]}</b> ✨ (encore ${ev[s.form-1]-s.lv})`:'Forme finale 🌟';
   const can=k=>P.money>=cost&&u[k]<CFG.MAX[k];
   const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})">+ ${fmt(cost)} L$</button>`;
   // valeur après la prochaine amélioration de portée
@@ -602,7 +612,8 @@ function showGuard(gid,fromTeam,tab){
     body+=`<p style="text-align:right;font-weight:800">💰 ${fmt(P.money)} L$</p>`;
   }else{
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
-    body=`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
+    const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'niveau 0':'niveau '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
+    body=evs+`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
       <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td></tr><tr><td>🎯 Portée (rayon)</td><td>${fmt(s.rg)}</td></tr>
       <tr><td colspan="2">✨ ${effet(gid,s)}</td></tr></table>`+
       (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'')+
@@ -618,8 +629,8 @@ function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
-  const f0=formOf(level(gid));P.money-=cost;u[k]++;save();refreshHUD();
-  const f1=formOf(level(gid));
+  const f0=formOf(level(gid),gid);P.money-=cost;u[k]++;save();refreshHUD();
+  const f1=formOf(level(gid),gid);
   if(f1>f0){
     const t=G.towers.find(t=>t.gid===gid);if(t)burst(t.x,t.y,GUARD[gid].col,24);
     openModal(`<div style="text-align:center"><h2>✨ Waouh ! ${GUARD[gid].name} évolue ! ✨</h2>
@@ -817,7 +828,7 @@ function update(dt){
   G.enemies=G.enemies.filter(e=>e.hp>0);
   if(G.state==='wave'&&G.hearts<=0){defeat();return;}
   // Gardiens
-  const auraOf=t=>{let m=1;for(const o of G.towers){if(o!==t&&GUARD[o.gid].kind==='star'&&Math.hypot(o.x-t.x,o.y-t.y)<=GUARD.etoilette.auraRg){const f=formOf(level(o.gid));m=Math.max(m,1+GUARD.etoilette.aura+0.1*(f-1));}}return m;};
+  const auraOf=t=>{let m=1;for(const o of G.towers){if(o!==t&&GUARD[o.gid].kind==='star'&&Math.hypot(o.x-t.x,o.y-t.y)<=GUARD.etoilette.auraRg){const f=formOf(level(o.gid),o.gid);m=Math.max(m,1+GUARD.etoilette.aura+0.1*(f-1));}}return m;};
   for(const t of G.towers){
     const g=GUARD[t.gid];t.anim+=dt;t.kick=Math.max(0,t.kick-dt*4);
     if(g.kind==='coin')continue;
