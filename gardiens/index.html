@@ -464,9 +464,9 @@ function enterWorld(n){
 }
 function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.autoT=0;}
 // Places sur la map : base selon le niveau + places achetées (gardées pour toujours), avec un plafond par niveau
-const SLOT_MAX={1:10,2:8,3:7},SLOT_PRICE=[2000,10000,50000,250000,1000000];
+const SLOT_MAX={1:10,2:8,3:7},SLOT_PRICE={1:[2000,10000],2:[50000,200000],3:[200000,500000]};
 function teamMax(){return Math.min(SLOT_MAX[P.diff],DIFF[P.diff].team+(P.slots||0));}
-function slotPrice(){return SLOT_PRICE[Math.min(P.slots||0,SLOT_PRICE.length-1)];}
+function slotPrice(){const l=SLOT_PRICE[P.diff];return l[Math.min(P.slots||0,l.length-1)];}
 function showSlotShop(){
   const max=SLOT_MAX[P.diff],cur=teamMax(),full=cur>=max,pr=slotPrice(),ok=P.money>=pr;
   openModal(`<h2>🛡️ Une place de plus sur la map</h2>
