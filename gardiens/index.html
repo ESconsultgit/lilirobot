@@ -42,6 +42,8 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #bench{flex:none;display:flex;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,255,255,.75);border-radius:14px;padding:4px 6px;overflow-x:auto;align-self:center;max-width:100%}
 .bi{flex:none;width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Baloo 2';font-weight:800;font-size:12px;line-height:1.1;touch-action:none;cursor:grab;border-radius:10px;padding:2px 0}
 .bi .gico{pointer-events:none}
+.bcount{flex:none;align-self:center;font-family:'Baloo 2';font-weight:800;font-size:14px;line-height:1.1;text-align:center;padding:2px 8px;border-radius:10px;background:#EEE6F6}
+.bcount.full{background:#FFD3E4;color:var(--pink)}
 .bi.placed{opacity:.4}
 .bi.shop{cursor:pointer}.bi.shop .gico{filter:grayscale(.7) opacity(.8)}
 .bi.shop.afford{background:#FFF3C4}.bi.shop.afford .gico{filter:none}
@@ -157,10 +159,13 @@ const W=1600,H=900;                 // taille logique de la map (16:9)
 const CFG={
   START_MONEY:60,                    // LiliDollars au départ
   WAVES:50,                          // vagues par monde
-  HP_GROWTH:1.09,                    // PV des méchants × 1,09 à chaque vague
-  REW_GROWTH:1.075,                  // récompenses × 1,075 à chaque vague
+  HP_GROWTH:1.075,                   // PV des méchants × 1,075 à chaque vague
+  REW_GROWTH:1.07,                   // récompenses × 1,07 à chaque vague
+  HP_BASE:2,                         // multiplicateur des PV de tous les méchants
+  N_BASE:10, N_PER:0.9,              // méchants par vague = 10 + vague × 0,9
+  MINI_HP:40, BOSS_HP:120,            // PV du Chef des Chipeurs et du grand boss, en Chipeurs
   WORLD_OFFSET:45,                   // le monde 2 commence comme la vague 46 du monde 1, etc.
-  COST_BASE:12, COST_GROWTH:1.11,    // prix d'une amélioration = 12 × 1,11^niveau
+  COST_BASE:12, COST_GROWTH:1.09,    // prix d'une amélioration = 12 × 1,09^niveau
   PW:1.12,                           // puissance × 1,12 par amélioration
   RG:0.04,                           // portée +4 % par amélioration
   SP:1.035,                          // vitesse × 1,035 par amélioration
@@ -171,9 +176,9 @@ const CFG={
   BOSS_HEARTS:5
 };
 const DIFF={
-  1:{name:'Petit gardien',stars:'⭐',age:'dès 6 ans',hp:0.6,hearts:30,txt:'méchants plus faibles, 30 cœurs'},
-  2:{name:'Gardien malin',stars:'⭐⭐',age:'dès 8 ans',hp:1,hearts:20,txt:'réglages normaux, 20 cœurs'},
-  3:{name:'Grand gardien',stars:'⭐⭐⭐',age:'dès 10 ans',hp:1.4,hearts:10,txt:'méchants plus forts, 10 cœurs'}
+  1:{name:'Petit gardien',stars:'⭐',age:'dès 6 ans',hp:0.6,hearts:30,team:8,txt:'méchants plus faibles, 30 cœurs, 8 gardiens sur la map'},
+  2:{name:'Gardien malin',stars:'⭐⭐',age:'dès 8 ans',hp:1,hearts:20,team:6,txt:'réglages normaux, 20 cœurs, 6 gardiens sur la map'},
+  3:{name:'Grand gardien',stars:'⭐⭐⭐',age:'dès 10 ans',hp:1.4,hearts:10,team:5,txt:'méchants plus forts, 10 cœurs, 5 gardiens sur la map'}
 };
 
 // ---------- Les gardiens ----------
@@ -315,25 +320,32 @@ function enterWorld(n){
   else if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
 function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.autoT=0;}
+function teamMax(){return DIFF[P.diff].team;}
 function buildTowers(){
   const pl=P.place[G.world];G.towers=[];
-  for(const k in pl){const s=WORLDS[G.world-1].spots[k];if(s&&P.owned.includes(pl[k]))G.towers.push({gid:pl[k],spot:+k,x:s.x,y:s.y,cd:0.3,anim:Math.random()*6,kick:0});}
+  for(const k in pl){const s=WORLDS[G.world-1].spots[k];if(!s||!P.owned.includes(pl[k]))continue;
+    // au-delà du nombre de gardiens permis par le niveau, les derniers rentrent au château
+    if(G.towers.length>=teamMax()){delete pl[k];continue;}
+    G.towers.push({gid:pl[k],spot:+k,x:s.x,y:s.y,cd:0.3,anim:Math.random()*6,kick:0});}
+}
+function teamFull(){
+  tip('lili-explique',`Pas plus de <b>${teamMax()} gardiens</b> sur la map au niveau ${DIFF[P.diff].name} ! Fais glisser un gardien vers la barre du bas pour le rentrer au château, puis place celui que tu veux.`,6500);
 }
 function saveRun(){P.runs[G.world]={wave:G.wave,hearts:G.hearts};save();}
 
 // ---------- Construction des vagues ----------
 function makeWave(world,w){
-  const R=rng(world*1000+w),d=dIndex(world,w),hpM=Math.pow(CFG.HP_GROWTH,d)*DIFF[P.diff].hp,rw=rewMul(world,w);
+  const R=rng(world*1000+w),d=dIndex(world,w),hpM=CFG.HP_BASE*Math.pow(CFG.HP_GROWTH,d)*DIFF[P.diff].hp,rw=rewMul(world,w);
   const pool=Object.keys(INTRO).filter(k=>{const[iw,iv]=INTRO[k];return world>iw||(world===iw&&w>=iv);});
   const pick=()=>{const tot=pool.reduce((a,k)=>a+INTRO[k][2],0);let x=R()*tot;for(const k of pool){x-=INTRO[k][2];if(x<=0)return k;}return pool[0];};
   const q=[];let t=0;const gap=Math.max(0.35,0.95-w*0.011);
   const mk=(type,extra)=>{const f=FOES[type];return Object.assign({type,hp:f.hp*hpM,rew:Math.max(1,Math.round(f.rew*rw)),t},extra||{});};
-  let n=6+Math.floor(w*0.45);
+  let n=CFG.N_BASE+Math.floor(w*CFG.N_PER);
   if(w%10===0){
     const fin=w===CFG.WAVES,wb=WORLDS[world-1].boss,b=fin?wb:MINIBOSS;
     for(let i=0;i<Math.floor(n/2);i++){q.push(mk(pick()));t+=gap;}
     t+=1.2;
-    q.push({type:'boss',boss:b,final:fin,hp:FOES.chipeur.hp*hpM*(fin?70:24),rew:Math.round(40*rw*(fin?3:1)),t});
+    q.push({type:'boss',boss:b,final:fin,hp:FOES.chipeur.hp*hpM*(fin?CFG.BOSS_HP:CFG.MINI_HP),rew:Math.round(40*rw*(fin?3:1)),t});
     t+=2;for(let i=0;i<Math.floor(n/2);i++){q.push(mk(pick()));t+=gap;}
   }else if(w%5===0&&w>=5){
     n=Math.round(n*1.6);for(let i=0;i<n;i++){q.push(mk('fusee'));t+=gap*0.55;}
@@ -431,7 +443,8 @@ function benchTap(gid){
 function renderBench(){
   if(!P)return;
   const placed=G.towers.map(t=>t.gid);
-  $('bench').innerHTML=BENCH_ORDER.map(gid=>{
+  const full=placed.length>=teamMax();
+  $('bench').innerHTML=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}</div>`+BENCH_ORDER.map(gid=>{
     const own=P.owned.includes(gid);let cls='bi',tag;
     if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid)))+' '+level(gid);}
     else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
@@ -457,6 +470,7 @@ function towerAtSpot(i){return G.towers.find(t=>t.spot===i);}
 function placeGuard(gid,spot){
   const pl=P.place[G.world];let from=null;for(const k in pl)if(pl[k]===gid)from=k;
   const occ=pl[spot];if(occ===gid){closeModal();return;}
+  if(from===null&&!occ&&G.towers.length>=teamMax()){closeModal();teamFull();return;}
   if(from!==null){delete pl[from];if(occ)pl[from]=occ;}
   pl[spot]=gid;save();buildTowers();closeModal();
   if(!P.tips.wave){P.tips.wave=1;save();tip('lili-idee','Bravo ! Quand tu veux, appuie sur ▶ Vague. Les Chipeurs arrivent par le chemin !',7000);}
@@ -464,6 +478,7 @@ function placeGuard(gid,spot){
 function chooseForSpot(i){
   const b=bench();
   if(!b.length){tip('lili-explique','Tous tes gardiens sont déjà placés. Touche un gardien pour l\'améliorer ou le déplacer.',4500);return;}
+  if(G.towers.length>=teamMax()){teamFull();return;}
   if(b.length===1){placeGuard(b[0],i);return;}
   openModal(`<h2>Quel gardien places-tu ici ?</h2><div class="cards">${b.map(g=>`<div class="card" onclick="placeGuard('${g}',${i})">${gIcon(g,56)}<b>${GUARD[g].name}</b><small>niveau ${level(g)}</small></div>`).join('')}</div>
     <div class="right"><button onclick="closeModal()">Annuler</button></div>`);
@@ -601,7 +616,7 @@ function showMenu(){
       <button onclick="fullscreen()">⛶ Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
-function setDiff(d){P.diff=d;if(G.state!=='wave')G.hearts=Math.min(G.hearts,maxHearts());save();showMenu();refreshHUD();}
+function setDiff(d){P.diff=d;buildTowers();if(G.state!=='wave')G.hearts=Math.min(G.hearts,maxHearts());save();showMenu();refreshHUD();}
 function fullscreen(){const d=document.documentElement;try{(d.requestFullscreen||d.webkitRequestFullscreen).call(d);}catch(e){}closeModal();}
 
 // ---------- Boutons ----------
@@ -686,7 +701,9 @@ function update(dt){
     let tg=g.kind==='snipe'?inR.reduce((a,b)=>b.hp>a.hp?b:a):inR.reduce((a,b)=>b.dist>a.dist?b:a);
     if(g.kind==='wind'){
       G.fx.push({k:'ring',x:t.x,y:t.y,r:s.rg,t:0,life:0.45,col:'#ffffff'});
-      for(const e of inR){hurt(e,s.dmg,'wind');if(!e.fly){e.dist=Math.max(0,e.dist-g.push*(e.boss?0.4:1)*(1+0.15*(s.form-1)));}}
+      for(const e of inR){hurt(e,s.dmg,'wind');
+        // recul : au plus une fois toutes les 3 s par méchant (sinon un Plumo rapide bloque tout, même les boss)
+        if(!e.fly&&!(e.pushT>G.anim)){e.dist=Math.max(0,e.dist-g.push*(e.boss?0.4:1)*(1+0.15*(s.form-1)));e.pushT=G.anim+(e.boss?5:3);}}
     }else if(g.kind==='chain'){
       let cur=tg,hit=[],from={x:t.x,y:t.y},d=s.dmg;
       for(let i=0;i<g.chain+(s.form-1)&&cur;i++){
@@ -855,7 +872,9 @@ function draw(){
   // emplacements libres
   wd.spots.forEach((s,i)=>{if(towerAtSpot(i))return;
     const pulse=((DR&&DR.active)||!G.towers.length)?Math.sin(G.anim*4)*4:0;
-    ctx.fillStyle='rgba(255,255,255,.28)';ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=3;ctx.setLineDash([8,6]);
+    // sur la neige, les cercles blancs ne se voient pas : cercles sombres
+    const dark=wd.theme==='neige';
+    ctx.fillStyle=dark?'rgba(20,24,40,.55)':'rgba(255,255,255,.28)';ctx.strokeStyle=dark?'rgba(20,24,40,.95)':'rgba(255,255,255,.9)';ctx.lineWidth=3;ctx.setLineDash(dark?[]:[8,6]);
     ctx.beginPath();ctx.arc(s.x,s.y,30+pulse,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);
     ctx.font='800 30px "Baloo 2",sans-serif';ctx.fillStyle='rgba(255,255,255,.95)';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('+',s.x,s.y+2);});
   if(DR&&DR.active&&DR.spot>=0&&GUARD[DR.gid].kind!=='coin'){const s=wd.spots[DR.spot],rg=stats(DR.gid).rg;

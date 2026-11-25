@@ -66,7 +66,9 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 - gardien à acheter : grisé avec son prix (surligné en jaune quand on a assez de L$) ; le toucher ouvre la fenêtre d'achat ;
 - gardien prisonnier : sombre, avec 🔒 et le monde-vague du boss qui le libère.
 
-**Glisser-déposer** : on fait glisser un gardien de la barre du bas vers un **emplacement** (cercle ➕ près du chemin, 14 par map) ; pendant le glisser, sa portée s'affiche sur l'emplacement visé. Sur la map, on fait glisser un gardien vers un autre emplacement pour le déplacer (si l'emplacement est pris, les deux gardiens échangent leur place), ou vers la barre du bas pour le rentrer au château. Un simple toucher sur un gardien ouvre sa fiche ; toucher un cercle libre propose les gardiens disponibles. Chaque gardien est unique et ne se place qu'une fois par map.
+**Glisser-déposer** : on fait glisser un gardien de la barre du bas vers un **emplacement** (cercle ➕ près du chemin, 14 par map ; cercles sombres sur la neige pour bien les voir) ; pendant le glisser, sa portée s'affiche sur l'emplacement visé. Sur la map, on fait glisser un gardien vers un autre emplacement pour le déplacer (si l'emplacement est pris, les deux gardiens échangent leur place), ou vers la barre du bas pour le rentrer au château. Un simple toucher sur un gardien ouvre sa fiche ; toucher un cercle libre propose les gardiens disponibles. Chaque gardien est unique et ne se place qu'une fois par map.
+
+**Nombre de gardiens sur la map** selon le niveau : **8** (⭐), **6** (⭐⭐), **5** (⭐⭐⭐). Le compteur 🛡️ au début de la barre du bas l'affiche (en rose quand c'est plein). Quand c'est plein, il faut rentrer un gardien au château pour en placer un autre : on choisit son équipe selon les méchants du monde. Les gardiens au château peuvent quand même être améliorés.
 
 | | Gardien | Élément | Pouvoir | Dégâts | Portée | Tirs/s |
 |---|---|---|---|--:|--:|--:|
@@ -75,7 +77,7 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 | 🌿 | **Feuillou** | plante | lianes qui ralentissent de 30 % pendant 1,2 s | 8 | 150 | 1,1 |
 | ⚡ | **Zapic** | électricité | éclair qui saute sur 3 méchants (−20 % à chaque saut ; +1 saut par évolution) | 9 | 150 | 1,0 |
 | ❄️ | **Givrou** | glace | flocons qui ralentissent de 55 % pendant 1,6 s, en zone | 3 | 150 | 1,1 |
-| 🌬️ | **Plumo** | vent | rafale qui fait reculer tous les méchants à portée | 3 | 140 | 0,5 |
+| 🌬️ | **Plumo** | vent | rafale qui fait reculer les méchants à portée (chacun au plus une fois toutes les 3 s, 5 s pour les boss) | 3 | 140 | 0,5 |
 | 🪨 | **Rocaillou** | roche | rocher en zone (rayon 70), casse les casques | 22 | 120 | 0,5 |
 | ⭐ | **Étoilette** | étoile | voisins proches +25 % de vitesse (+10 % par évolution), voit les fantômes | 4 | 150 | 1,2 |
 | 🌙 | **Lunette** | lune | tir de très loin sur le méchant qui a le plus de PV, voit les fantômes | 28 | 270 | 0,45 |
@@ -86,7 +88,7 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 ### Améliorer et évoluer
 
 - Toucher un gardien ouvre sa fiche, avec trois jauges : **💪 Puissance** (×1,12 par amélioration, max 100), **🎯 Portée** (+4 %, max 25), **⏱️ Vitesse** (×1,035, max 40). Sousou n'a qu'une jauge : **💰 Pièces**.
-- Le **niveau** du gardien est le nombre total d'améliorations. Une amélioration coûte **12 × 1,11^niveau** L$, quelle que soit la jauge.
+- Le **niveau** du gardien est le nombre total d'améliorations. Une amélioration coûte **12 × 1,09^niveau** L$, quelle que soit la jauge.
 - Au **niveau 10**, il **évolue** (forme 2 « grand ») ; au **niveau 25**, il évolue encore (forme 3 « super »). Chaque évolution donne ×1,35 de dégâts, +8 % de portée et +10 % de vitesse, avec un écran « Waouh ! … évolue ! ».
 
 ## Les méchants : les Chipeurs
@@ -99,12 +101,12 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 | ⛑️ | **Casqué** | 35 | 50 | 5 | casque : dégâts ÷2, sauf Rocaillou qui casse le casque |
 | 🦇 | **Volant** | 24 | 72 | 4 | vole : ni ralenti ni repoussé |
 | 👻 | **Fantôme** | 30 | 58 | 5 | invisible, sauf à portée d'Étoilette ou de Lunette |
-| 😤 | **Chef des Chipeurs** | 24 × Chipeur | 28 | 40 | mini-boss, enlève 5 cœurs |
-| 👑 | **Grand boss** | 70 × Chipeur | 28 | 120 | un par monde, enlève 5 cœurs |
+| 😤 | **Chef des Chipeurs** | 40 × Chipeur | 28 | 40 | mini-boss, enlève 5 cœurs |
+| 👑 | **Grand boss** | 120 × Chipeur | 28 | 120 | un par monde, enlève 5 cœurs |
 
-- Les PV sont multipliés par **1,09 à chaque vague**, et les récompenses par **1,075**. Le monde 2 commence comme la vague 46 du monde 1, le monde 3 comme la vague 91.
-- Nombre de méchants par vague : 6 + vague × 0,45.
-- Les boss ne subissent que la moitié des ralentissements et 40 % du recul.
+- PV : PV de base × 2, puis multipliés par **1,075 à chaque vague** ; les récompenses par **1,07**. Le monde 2 commence comme la vague 46 du monde 1, le monde 3 comme la vague 91.
+- Nombre de méchants par vague : **10 + vague × 0,9** (10 à la vague 1, 55 à la vague 50).
+- Les boss ne subissent que la moitié des ralentissements et 40 % du recul (une rafale de Plumo toutes les 5 s au plus).
 
 ## Niveaux de jeu
 
@@ -112,11 +114,11 @@ Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
 
 | Niveau | Pour qui | Différence |
 |---|---|---|
-| ⭐ Petit gardien | dès 6 ans | méchants avec −40 % de PV, 30 cœurs |
-| ⭐⭐ Gardien malin | dès 8 ans | réglages normaux, 20 cœurs |
-| ⭐⭐⭐ Grand gardien | dès 10 ans | méchants avec +40 % de PV, 10 cœurs |
+| ⭐ Petit gardien | dès 6 ans | méchants avec −40 % de PV, 30 cœurs, 8 gardiens sur la map |
+| ⭐⭐ Gardien malin | dès 8 ans | réglages normaux, 20 cœurs, 6 gardiens sur la map |
+| ⭐⭐⭐ Grand gardien | dès 10 ans | méchants avec +40 % de PV, 10 cœurs, 5 gardiens sur la map |
 
-Équilibrage testé avec un joueur automatique qui dépense tout son argent au mieux : il finit les 3 mondes à tous les niveaux, avec quelques défaites dans le monde 3 en ⭐⭐⭐. Un enfant, qui dépense moins bien, devrait rencontrer des murs et devoir s'améliorer pour passer (comme dans PokéPath). À affiner avec les vraies parties.
+Équilibrage (25/11) testé avec un joueur automatique qui place les meilleurs gardiens permis et dépense tout son argent sur eux : en ⭐⭐⭐ il perd 2 fois dans le monde 1 et 3 fois dans le monde 3, et les grands boss avancent loin (70 % du chemin dans le monde 1, jusqu'au château dans les mondes 2 et 3) ; en ⭐⭐ il ne perd pas mais le boss du monde 3 arrive presque au château ; en ⭐ c'est confortable. Un enfant, qui dépense moins bien, rencontrera plus de murs. Avant, un Plumo bien amélioré repoussait le boss en continu (il n'avançait presque pas) : c'est corrigé.
 
 ## Conseils d'Ellie et Livia
 
@@ -183,4 +185,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v7** — icône de l'application (Gemini) ; toutes les images du jeu sont en place.
 - **v8** — vidéo de lancement (`video/lancement.mp4`).
 - **v9** — la vidéo de lancement passe au démarrage du jeu, avec les boutons « Activer le son » et « Passer ».
+- **v10** — équilibrage : vagues plus longues (10 + vague × 0,9 méchants), PV de base × 2, boss plus costauds (40 et 120 Chipeurs), croissance des PV et des prix revue ; nombre de gardiens sur la map limité selon le niveau (8 / 6 / 5) ; Plumo ne peut plus bloquer un méchant en continu ; emplacements sombres sur la map neige.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
