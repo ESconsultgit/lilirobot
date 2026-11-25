@@ -38,7 +38,7 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #topbar{position:absolute;top:8px;left:8px;right:62px;display:flex;gap:6px;align-items:center;pointer-events:none}
 #topbar>*{pointer-events:auto}
 #hud{position:static;flex:none;display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:4px 10px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2';font-weight:800;font-size:16px;white-space:nowrap;pointer-events:none}
-#hud span+span::before{content:'·';margin:0 6px;opacity:.35}
+#hud span+span::before{content:'·';margin:0 5px;opacity:.35}
 #menuWrap{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 #bMore{position:static;width:42px;height:42px;padding:0;font-size:20px}
 #moreList{display:none;flex-direction:column;gap:6px;align-items:stretch;background:rgba(255,253,248,.96);padding:8px;border-radius:16px;box-shadow:0 6px 18px rgba(42,31,61,.3);min-width:150px}
@@ -208,6 +208,11 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 #nextW img{flex:none}#nextW .n,#nextW .lbl{flex:none}
 #nextW img{height:26px;width:auto;vertical-align:middle}
 #nextW .n{font-family:'Baloo 2';font-weight:800;margin-right:4px}
+#nextW{gap:2px!important;padding:3px 8px!important}
+#nextW .fq{position:relative;flex:none;display:inline-flex}
+#nextW .fq{align-items:center;gap:1px}#nextW .fq b{font:800 14px/1 'Baloo 2';color:var(--violet)}
+@media (max-height:520px){#nextW .fq b{font-size:12px}}
+#nextW .fq+.fq{margin-left:7px}
 #nextW .lbl{font-family:'Baloo 2';font-weight:800;color:var(--violet);margin-right:2px}
 .wl{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .box.sheet.wide2{width:600px}
@@ -399,6 +404,7 @@ const MINIBOSS={name:'Chef des Chipeurs',em:'😤',col:'#B0306A'};
 
 // ---------- Outils ----------
 const $=id=>document.getElementById(id);
+const short=n=>n>=1e6?(Math.floor(n/1e5)/10).toLocaleString('fr-FR')+' M':n>=1e5?Math.floor(n/1e3).toLocaleString('fr-FR')+' k':fmt(n);
 const fmt=n=>Math.round(n).toLocaleString('fr-FR');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const LS={
@@ -562,7 +568,7 @@ function speedTxt(type){if(type==='boss')return 'très lent';const v=FOES[type].
 function renderNextStrip(){
   const el=$('nextW');if(!P){el.style.display='none';return;}
   const gs=waveSummary(G.world,G.wave);
-  el.innerHTML=`<span class="lbl">${G.state==='wave'?'⚔️ ':''}Vague ${G.wave}</span>`+gs.map(g=>`<img src="img/f/${g.art}.webp" alt=""><span class="n">×${g.n}</span>`).join('')+'👀';
+  el.innerHTML=(G.state==='wave'?'<span class="lbl">⚔️</span>':'')+gs.map(g=>`<span class="fq"><img src="img/f/${g.art}.webp" alt=""><b>${g.n}</b></span>`).join('');
   el.style.display='flex';
 }
 function showNextWave(){
@@ -915,7 +921,7 @@ function refreshHUD(){
   renderNextStrip();
   const wd=WORLDS[G.world-1];
   $('sHearts').textContent=`❤️ ${G.hearts}`;
-  $('sMoney').textContent=`💰 ${fmt(P.money)}`;
+  $('sMoney').textContent=`💰 ${short(P.money)}`;
   $('sWave').textContent=`🌊 ${G.wave}/${CFG.WAVES}`;
   $('sWorld').textContent=wd.em;$('sWorld').title=wd.name;
   $('sPlayer').innerHTML=`${P.av} ${esc(P.name)} · ${wd.name}`;

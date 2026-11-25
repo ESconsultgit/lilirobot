@@ -263,4 +263,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v24** — barre du haut sans chevauchement : la bulle d'infos et le bandeau de la vague sont côte à côte (le bandeau se réduit si la place manque), le menu ☰ garde sa place à droite.
 - **v25** — monde 4 « Le Marais enchanté » avec deux chemins (débloqué après le Volcan) ; nouveau gardien Gloupi (poison qui passe sous l'armure), libéré au monde 3 vague 20 ; bonus du marais (Gloupi, Feuillou, Zapic ; malus Braisou). 
 - **v26** — images Gemini du monde 4 : fond du Marais enchanté (chemins recalés dessus), Gloupi dans ses 3 formes, la Reine Grenouille Grognon.
+- **v27** — barre du haut plus compacte : le bandeau de la vague ne montre plus que les méchants et leur nombre (le numéro de vague est dans les infos), argent abrégé dans les infos (7,9 M, 823 k).
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
