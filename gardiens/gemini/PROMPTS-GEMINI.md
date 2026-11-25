@@ -11,7 +11,8 @@ Prompts pour générer les images du jeu avec Gemini (Nano Banana). Ils sont **e
 - ✅ Étape 5 — Chipeurs
 - ✅ Étape 6 — grands boss
 - ✅ Étape 7 — fonds de maps
-- ✅ Étape 8 — icône (les images guides des maps ont été refaites le 24/11 : utiliser les versions actuelles)
+- ✅ Étape 8 — icône
+- ✅ Monde 4 : fond du Marais, Reine Grenouille, Gloupi (les images guides des maps ont été refaites le 24/11 : utiliser les versions actuelles)
 
 ## Méthode
 

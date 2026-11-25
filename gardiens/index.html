@@ -365,7 +365,7 @@ const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','pl
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
-const ART={braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1};
+const ART={gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1};
 function gImg(gid,form){return ART[gid]?img('g/'+gid+'-'+form):null;}
 
 // ---------- Les méchants ----------
@@ -390,8 +390,8 @@ const WORLDS=[
    path:[[-40,768],[340,768],[340,202],[740,202],[740,652],[1090,652],[1090,170],[1338,170],[1338,558],[1442,558]],cs:0.82},
   // Monde 4 : le chemin se sépare en deux au milieu puis se rejoint avant le château ; les Chipeurs prennent l'un ou l'autre
   {id:4,name:'Le Marais enchanté',em:'🐸',theme:'marais',boss:{armorK:0.5,art:'boss-grenouille',name:'La Reine Grenouille Grognon',em:'🐸',col:'#5A9E3A'},
-   paths:[[[-40,450],[250,450],[250,150],[620,150],[620,300],[900,300],[900,150],[1150,150],[1150,450],[1390,450]],
-          [[-40,450],[250,450],[250,750],[560,750],[560,600],[860,600],[860,760],[1150,760],[1150,450],[1390,450]]]}
+   paths:[[[-40,442],[262,442],[262,142],[630,142],[630,305],[905,305],[905,142],[1160,142],[1160,442],[1390,442]],
+          [[-40,442],[262,442],[262,762],[560,762],[560,590],[865,590],[865,765],[1160,765],[1160,442],[1390,442]]]}
 ];
 // Sens dans lequel regarde chaque image de méchant (1 = vers la droite, -1 = vers la gauche)
 const FOE_FACE={'boss-taupe':-1,'boss-dragon':-1};
