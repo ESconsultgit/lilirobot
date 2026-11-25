@@ -124,6 +124,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 .sheet h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:21px;line-height:1.1}.sheet h2 small{font-size:14px;color:#777}
 .shf{align-items:center;margin-top:6px}.shf .money{margin-right:auto;font-family:'Baloo 2';font-weight:800}
 .shg{display:block}
+.stk{display:grid}.stk>.pane{grid-area:1/1;visibility:hidden}.stk>.pane.on{visibility:visible}
 .sheet p{margin:4px 0;font-size:14px;line-height:1.3}
 .sheet .row{padding:3px 0}.sheet .row .lab{width:112px;font-size:14px}.sheet .row .val{width:84px;font-size:14px}
 .sheet .row button{font-size:13px;padding:5px 8px}
@@ -607,8 +608,8 @@ function showGuard(gid,fromTeam,tab){
   const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})">+ ${fmt(cost)} L$</button>`;
   // valeur après la prochaine amélioration de portée
   const rgNext=g.kind==='coin'?0:s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
-  let body='',side='';
-  if(tb==='up'){
+  let body='',side='',bUp='',sUp='',bInfo='',sInfo='';
+  {
     if(g.kind==='coin'){
       body=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
     }else{
@@ -619,7 +620,9 @@ function showGuard(gid,fromTeam,tab){
         `<p class="rgnote">${t?'🎯 Cercle blanc sur la map = sa portée. Pointillés jaunes = sa portée après une amélioration 🎯 de plus.':'🎯 Place-le sur la map pour voir sa portée (le cercle s\'affiche pendant que tu le fais glisser).'}</p>`;
       if(arm&&g.kind!=='wind')body+=`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`;
     }
-  }else{
+  }
+  bUp=body;sUp=side;body='';side='';
+  if(g.kind!=='coin'){
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
     const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'niveau 0':'niveau '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
     body=evs+`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
@@ -628,14 +631,20 @@ function showGuard(gid,fromTeam,tab){
       (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'');
     side=`<p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<span class="astuce"><br>💡 ${sp.astuce}</span></p>`;
   }
-  const tabs=g.kind==='coin'?'':`<div class="tabs"><button class="${tb==='up'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'up')">⬆️ Améliorer</button><button class="${tb==='info'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'info')">📋 Fiche technique</button></div>`;
+  bInfo=body;sInfo=side;
+  const tabs=g.kind==='coin'?'':`<div class="tabs"><button class="${tb==='up'?'b-pink':''}" onclick="sheetTab('up')">⬆️ Améliorer</button><button class="${tb==='info'?'b-pink':''}" onclick="sheetTab('info')">📋 Fiche technique</button></div>`;
   const foot=(t?`<button onclick="unplace('${gid}')">🏰 Rentrer</button>`:'')+(fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':'')+'<button class="b-pink" onclick="closeModal()">OK</button>';
   // deux colonnes sur petit écran (téléphone à l'horizontale) pour que tout tienne sans faire défiler
   openSheet(`<div class="shg"><div class="shl"><h2>${g.name} <small>${FORMS[s.form]} · niv. ${s.lv}</small></h2>
-    <p><span class="role">${sp.role}</span> ${next}</p>${biomeTxt(gid)}${tabs}${side}</div>
-    <div class="shr">${body}</div></div>
+    <p><span class="role">${sp.role}</span> ${next}</p>${biomeTxt(gid)}${tabs}<div class="stk"><div class="pane" data-t="up">${sUp}</div><div class="pane" data-t="info">${sInfo}</div></div></div>
+    <div class="shr stk"><div class="pane" data-t="up">${bUp}</div><div class="pane" data-t="info">${bInfo}</div></div></div>
     <div class="right shf"><span class="money">💰 ${fmt(P.money)} L$</span>${foot}</div>`,gid,s.form,t&&t.x>W/2?'left':'right');
+  sheetTab(tb);
 }
+// Les deux onglets sont dans la page en même temps (l'un caché) : la fenêtre garde la même taille quand on change d'onglet
+function sheetTab(t){G.sheetTab=t;const b=$('sbox');
+  b.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.dataset.t===t));
+  b.querySelectorAll('.tabs button').forEach((x,i)=>x.className=(i===0)===(t==='up')?'b-pink':'');}
 function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
