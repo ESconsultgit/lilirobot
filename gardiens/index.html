@@ -29,17 +29,29 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .b-pink{background:var(--pink);color:#fff}.b-violet{background:var(--violet);color:#fff}.b-green{background:var(--green);color:#fff}
 .b-yellow{background:var(--yellow)}.b-red{background:var(--red);color:#fff}.b-on{background:var(--lime);color:#1d351b}
 
-/* ---------- Mise en page ---------- */
-.app{display:flex;height:100dvh;gap:8px;padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}
-.panel{flex:none;width:118px;display:flex;flex-direction:column;gap:6px;justify-content:center}
-.stat{background:#fff;border-radius:14px;padding:6px 8px;font-family:'Baloo 2';font-weight:800;font-size:20px;box-shadow:0 3px 0 rgba(42,31,61,.15);text-align:center;line-height:1.1}
-.stat small{display:block;font-size:12px;font-weight:600;opacity:.7}
-.stat.sm{font-size:14px}
-.panel button{width:100%}
-#bWave{font-size:19px;padding:10px 6px}
-#stage{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:6px}
-#cvWrap{flex:1 1 auto;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
-#bench{flex:none;display:flex;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,255,255,.75);border-radius:14px;padding:4px 6px;overflow-x:auto;align-self:center;max-width:100%}
+/* ---------- Mise en page : la map prend tout l'écran, tout le reste flotte par-dessus ---------- */
+.app{height:100dvh;background:#2A1F3D}
+#cvWrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#ov{position:absolute;pointer-events:none;z-index:3}
+#ov>*{pointer-events:auto}
+.fab{position:absolute;border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 3px 10px rgba(42,31,61,.3);font-size:16px;padding:8px 14px}
+#hud{position:absolute;top:8px;left:8px;display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:4px 10px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2';font-weight:800;font-size:16px;white-space:nowrap;pointer-events:none}
+#hud span+span::before{content:'·';margin:0 6px;opacity:.35}
+#menuWrap{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+#bMore{position:static;width:42px;height:42px;padding:0;font-size:20px}
+#moreList{display:none;flex-direction:column;gap:6px;align-items:stretch;background:rgba(255,253,248,.96);padding:8px;border-radius:16px;box-shadow:0 6px 18px rgba(42,31,61,.3);min-width:150px}
+#moreList.open{display:flex}
+#moreList button{box-shadow:none;background:#F1ECF7;text-align:left}
+#moreList button.b-on{background:var(--lime)}#moreList button.b-yellow{background:var(--yellow)}
+#sPlayer{font-family:'Baloo 2';font-weight:800;font-size:14px;text-align:center;opacity:.8}
+#bWave{right:8px;bottom:8px;font-size:20px;padding:10px 20px;background:var(--pink);color:#fff}
+#bWave:disabled{opacity:.75;background:#9C8AB8}
+#bBench{left:8px;bottom:8px}
+#bBench.on{background:var(--violet);color:#fff}
+#bench{position:absolute;left:50%;transform:translateX(-50%);bottom:58px;display:none;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,253,248,.95);border-radius:16px;padding:6px 8px;overflow-x:auto;max-width:calc(100% - 16px);box-shadow:0 6px 18px rgba(42,31,61,.3)}
+#bench.open{display:flex}
+#ov.bopen #tip{bottom:142px}
+@media (max-height:520px){#ov.bopen #tip{bottom:112px}}
 .bi{flex:none;width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Baloo 2';font-weight:800;font-size:12px;line-height:1.1;touch-action:none;cursor:grab;border-radius:10px;padding:2px 0}
 .bi .gico{pointer-events:none}
 .bi{position:relative}.bb{position:absolute;top:-2px;right:2px;font-style:normal;font-size:13px;font-weight:900;pointer-events:none;text-shadow:0 0 3px #fff}.bb.up{color:#2E9B3A}.bb.down{color:#D9342B}
@@ -51,18 +63,21 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .bi.shop.afford{background:#FFF3C4}.bi.shop.afford .gico{filter:none}
 .bi.lock{cursor:pointer}.bi.lock .gico{filter:grayscale(1) brightness(.55)}
 .dragGhost{position:fixed;z-index:30;pointer-events:none;transform:translate(-50%,-60%) scale(1.15);filter:drop-shadow(0 6px 8px rgba(0,0,0,.35))}
-@media (max-height:520px){.bi{width:46px;font-size:10px}}
-#cv{display:block;border-radius:16px;box-shadow:0 8px 24px rgba(42,31,61,.25);touch-action:none;background:#9ED36A}
 #dev{display:none;flex-direction:column;gap:4px}
 #dev button{font-size:12px;padding:4px}
 @media (max-height:520px){
-  .panel{width:96px;gap:4px}
-  .stat{font-size:16px;padding:4px 6px}.stat.sm{font-size:12px}.stat small{font-size:10px}
-  button{font-size:13px;padding:6px 8px}#bWave{font-size:15px;padding:8px 4px}
+  .bi{width:46px;font-size:10px}
+  .fab{font-size:14px;padding:6px 11px}#bWave{font-size:16px;padding:7px 14px}#bMore{width:36px;height:36px;font-size:17px}
+  #hud{font-size:13px;padding:2px 8px;top:6px;left:6px}#menuWrap{top:6px;right:6px}#bWave{right:6px;bottom:6px}#bBench{left:6px;bottom:6px}
+  #bench{bottom:46px;padding:4px 6px}
+  #moreList{padding:6px;gap:4px;min-width:130px}#moreList button{font-size:13px;padding:5px 8px}
 }
+#cv{display:block;touch-action:none;background:#9ED36A}
+#dev{display:none;flex-direction:column;gap:4px}
+#dev button{font-size:12px;padding:4px}
 
 /* ---------- Bulle d'Ellie et Livia ---------- */
-#tip{position:absolute;left:10px;bottom:10px;display:none;align-items:flex-end;gap:6px;max-width:min(470px,70%);pointer-events:auto;z-index:5}
+#tip{position:absolute;left:10px;bottom:56px;display:none;align-items:flex-end;gap:6px;max-width:min(470px,70%);pointer-events:auto;z-index:5}
 #tip img{width:72px;height:auto;flex:none;filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
 #tip .bub{background:#fff;border-radius:16px 16px 16px 4px;padding:8px 12px;font-weight:700;font-size:15px;box-shadow:0 4px 12px rgba(42,31,61,.25);margin-bottom:24px}
 @media (max-height:520px){#tip img{width:54px}#tip .bub{font-size:13px;padding:6px 10px}}
@@ -186,7 +201,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
   .sh-foot{padding-top:6px}.sh-foot .money{font-size:13px}
 }
 /* ---------- Prochaine vague ---------- */
-#nextW{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:999px;background:rgba(255,253,248,.92);box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px;z-index:4;white-space:nowrap;max-width:calc(100% - 16px)}
+#nextW{position:absolute;top:8px;left:50%;pointer-events:auto;transform:translateX(-50%);display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:999px;background:rgba(255,253,248,.92);box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px;z-index:4;white-space:nowrap;max-width:calc(100% - 16px)}
 #nextW:active{transform:translateX(-50%) translateY(1px)}
 #nextW img{height:26px;width:auto;vertical-align:middle}
 #nextW .n{font-family:'Baloo 2';font-weight:800;margin-right:4px}
@@ -210,33 +225,32 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 </head>
 <body>
 <div class="app">
-  <div class="panel">
-    <div class="stat" id="sHearts">❤️ 20<small>château</small></div>
-    <div class="stat" id="sMoney">💰 0<small>LiliDollars</small></div>
-    <div class="stat" id="sWave">🌊 1<small>sur 50</small></div>
-    <div class="stat sm" id="sWorld">🌸</div>
-    <div class="stat sm" id="sPlayer"></div>
-  </div>
-  <div id="stage">
-    <div id="cvWrap">
-      <canvas id="cv"></canvas>
+  <div id="cvWrap">
+    <canvas id="cv"></canvas>
+    <!-- Couche posée exactement sur la map : infos, vague, boutons -->
+    <div id="ov">
+      <div id="hud"><span id="sWorld"></span><span id="sHearts"></span><span id="sMoney"></span><span id="sWave"></span></div>
+      <button id="nextW" title="Voir les méchants de la vague"></button>
+      <div id="menuWrap">
+        <button id="bMore" class="fab" aria-label="Boutons">☰</button>
+        <div id="moreList">
+          <div id="sPlayer"></div>
+          <button id="bAuto">🔁 Auto</button>
+          <button id="bSpeed">⏩ ×1</button>
+          <button id="bPause">⏸ Pause</button>
+          <button id="bTeam">🛡️ Équipe</button>
+          <button id="bMenu">⚙️ Menu</button>
+          <div id="dev">
+            <button onclick="devMoney()">+ argent</button>
+            <button onclick="devSkip(5)">Vague +5</button>
+            <button onclick="devWin()">Gagner la vague</button>
+          </div>
+        </div>
+      </div>
       <div id="tip"><img id="tipImg" alt=""><div class="bub" id="tipTxt"></div></div>
-      <button id="nextW" title="Voir les méchants de la prochaine vague"></button>
-    </div>
-    <div id="bench"></div>
-  </div>
-  <div class="panel">
-    <button id="bWave" class="b-pink">▶<br>Vague 1</button>
-    <button id="bAuto">🔁 Auto</button>
-    <button id="bSpeed">⏩ ×1</button>
-    <button id="bPause">⏸ Pause</button>
-    <button id="bTeam">🛡️ Équipe</button>
-    <button id="bNext">👀 Vague</button>
-    <button id="bMenu">⚙️ Menu</button>
-    <div id="dev">
-      <button onclick="devMoney()">+ argent</button>
-      <button onclick="devSkip(5)">Vague +5</button>
-      <button onclick="devWin()">Gagner la vague</button>
+      <button id="bBench" class="fab wide">🛡️ Gardiens</button>
+      <div id="bench"></div>
+      <button id="bWave" class="fab b-pink">▶ Vague 1</button>
     </div>
   </div>
 </div>
@@ -459,7 +473,8 @@ function enterWorld(n){
   G.world=n;const r=P.runs[n];
   G.wave=r?r.wave:P.worlds[n].cp;G.hearts=r?r.hearts:maxHearts();
   resetField();buildTowers();buildBg();save();refreshHUD();
-  if(!P.tips.place)setTimeout(()=>tipOnce('place','lili-explique',`Fais glisser ${GUARD[P.starter].name} depuis la barre du bas jusqu'à un cercle ➕ près du chemin. Il attaquera les Chipeurs tout seul !`,10000),400);
+  if(!G.towers.length)benchOpen(true);
+  if(!P.tips.place)setTimeout(()=>tipOnce('place','lili-explique',`Fais glisser ${GUARD[P.starter].name} depuis la liste des gardiens jusqu'à un cercle ➕ près du chemin. Il attaquera les Chipeurs tout seul !`,10000),400);
   else if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
 function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.autoT=0;}
@@ -484,7 +499,7 @@ function buildTowers(){
     G.towers.push({gid:pl[k],spot:+k,x:s.x,y:s.y,cd:0.3,anim:Math.random()*6,kick:0});}
 }
 function teamFull(){
-  tip('lili-explique',`Pas plus de <b>${teamMax()} gardiens</b> sur la map au niveau ${DIFF[P.diff].name} ! Fais glisser un gardien vers la barre du bas pour le rentrer au château, ou achète une place de plus avec le <b>+</b> du compteur 🛡️.`,6500);
+  tip('lili-explique',`Pas plus de <b>${teamMax()} gardiens</b> sur la map au niveau ${DIFF[P.diff].name} ! Ouvre 🛡️ Gardiens et fais glisser un gardien dans la liste pour le rentrer au château, ou achète une place de plus avec le <b>+</b> du compteur 🛡️.`,6500);
 }
 function saveRun(){P.runs[G.world]={wave:G.wave,hearts:G.hearts};save();}
 
@@ -531,9 +546,9 @@ function waveSummary(world,w){
 }
 function speedTxt(type){if(type==='boss')return 'très lent';const v=FOES[type].spd;return v>=90?'très rapide':v>=65?'rapide':v<=40?'lent':'normal';}
 function renderNextStrip(){
-  const el=$('nextW');if(!P||G.state!=='idle'||modalOpen){el.style.display='none';return;}
+  const el=$('nextW');if(!P){el.style.display='none';return;}
   const gs=waveSummary(G.world,G.wave);
-  el.innerHTML=`<span class="lbl">Vague ${G.wave}</span>`+gs.map(g=>`<img src="img/f/${g.art}.webp" alt=""><span class="n">×${g.n}</span>`).join('')+'👀';
+  el.innerHTML=`<span class="lbl">${G.state==='wave'?'⚔️ ':''}Vague ${G.wave}</span>`+gs.map(g=>`<img src="img/f/${g.art}.webp" alt=""><span class="n">×${g.n}</span>`).join('')+'👀';
   el.style.display='flex';
 }
 function showNextWave(){
@@ -619,7 +634,7 @@ function bossGift(gid){
     <div class="right"><button class="b-pink" onclick="closeGift()">Bienvenue !</button></div>`,'lili-contente',true);
 }
 function closeGift(){
-  closeModal();tip('livia-idee','Fais glisser ton nouveau gardien depuis la barre du bas sur un cercle ➕ libre.',6000);
+  closeModal();benchOpen(true);tip('livia-idee','Ouvre 🛡️ Gardiens et fais glisser ton nouveau gardien sur un cercle ➕ libre.',6000);
   if(P.auto)G.autoT=CFG.AUTO_DELAY+3;
 }
 function buyGuard(gid){
@@ -769,7 +784,7 @@ function showTeam(){
   openModal(`<h2>🛡️ Ton équipe (${P.owned.length}/${nb})</h2>
     <p>Touche un gardien pour l'améliorer. Les améliorations restent pour toujours, même si tu perds.</p>
     <div class="team">${list}</div>
-    <p style="opacity:.75">${P.owned.length<nb?'Les autres gardiens s\'achètent avec des LiliDollars ou sont libérés en battant le Chef des Chipeurs (barre du bas).':'Tu as tous les gardiens !'}</p>
+    <p style="opacity:.75">${P.owned.length<nb?'Les autres gardiens s\'achètent avec des LiliDollars ou sont libérés en battant le Chef des Chipeurs (bouton 🛡️ Gardiens).':'Tu as tous les gardiens !'}</p>
     <div class="right"><button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
 
@@ -872,19 +887,23 @@ $('bAuto').onclick=()=>{P.auto=!P.auto;save();if(P.auto&&G.state==='idle')G.auto
 $('bSpeed').onclick=()=>{G.speed=G.speed>=3?1:G.speed+1;refreshHUD();};
 $('bPause').onclick=()=>{G.paused=!G.paused;refreshHUD();};
 $('bTeam').onclick=()=>showTeam();
-$('bNext').onclick=()=>showNextWave();
+$('bMore').onclick=()=>$('moreList').classList.toggle('open');
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#menuWrap'))$('moreList').classList.remove('open');});
+function benchOpen(o){$('bench').classList.toggle('open',o);$('bBench').classList.toggle('on',o);$('ov').classList.toggle('bopen',o);}
+$('bBench').onclick=()=>benchOpen(!$('bench').classList.contains('open'));
 $('nextW').onclick=()=>showNextWave();
 $('bMenu').onclick=()=>showMenu();
 function refreshHUD(){
   if(!P)return;
   renderNextStrip();
   const wd=WORLDS[G.world-1];
-  $('sHearts').innerHTML=`❤️ ${G.hearts}<small>château</small>`;
-  $('sMoney').innerHTML=`💰 ${fmt(P.money)}<small>LiliDollars</small>`;
-  $('sWave').innerHTML=`🌊 ${G.wave}<small>sur ${CFG.WAVES}</small>`;
-  $('sWorld').innerHTML=`${wd.em} ${wd.name}`;
-  $('sPlayer').innerHTML=`${P.av} ${esc(P.name)}`;
-  $('bWave').innerHTML=G.state==='wave'?'⚔️<br>En cours':`▶<br>Vague ${G.wave}`;
+  $('sHearts').textContent=`❤️ ${G.hearts}`;
+  $('sMoney').textContent=`💰 ${fmt(P.money)}`;
+  $('sWave').textContent=`🌊 ${G.wave}/${CFG.WAVES}`;
+  $('sWorld').textContent=wd.em;$('sWorld').title=wd.name;
+  $('sPlayer').innerHTML=`${P.av} ${esc(P.name)} · ${wd.name}`;
+  $('bWave').innerHTML=G.state==='wave'?'⚔️ En cours':`▶ Vague ${G.wave}`;
+  $('bBench').innerHTML=`🛡️ Gardiens ${G.towers.length}/${teamMax()}`;
   $('bWave').disabled=G.state!=='idle';
   $('bAuto').className=P.auto?'b-on':'';
   $('bSpeed').textContent=`⏩ ×${G.speed}`;
@@ -1035,7 +1054,7 @@ function resize(){
   const dpr=Math.min(3,window.devicePixelRatio||1);
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
   K=cv.width/W;buildBg();
-  const nw=$('nextW');if(nw)nw.style.top=(cv.offsetTop+(window.innerHeight<=520?4:8))+'px';
+  const o=$('ov');o.style.left=cv.offsetLeft+'px';o.style.top=cv.offsetTop+'px';o.style.width=cw+'px';o.style.height=ch+'px';
 }
 const THEMES={
   prairie:{bg1:'#A8DA72',bg2:'#8CC95A',road:'#E6C88E',edge:'#B8955A'},

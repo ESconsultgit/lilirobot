@@ -61,7 +61,7 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 | 🛒 **Achat en LiliDollars** | les 2 gardiens de départ non choisis (150 L$ chacun), Sousou (400 L$), Zapic (700 L$), Givrou (1 200 L$) |
 | 👑 **Libérés par le Chef des Chipeurs** (la première fois qu'on le bat) | Plumo (monde 1, vague 20), Rocaillou (monde 1, vague 40), Étoilette (monde 2, vague 20), Lunette (monde 2, vague 40) |
 
-**La barre du bas**, sous la map, montre les 10 gardiens :
+**La liste des gardiens** (bouton **🛡️ Gardiens** en bas à gauche, qui affiche aussi « placés / places ») s'ouvre par-dessus la map et montre les 10 gardiens :
 - gardien de l'équipe : en couleur, avec ses étoiles et son niveau (pâle s'il est déjà sur la map) ;
 - gardien à acheter : grisé avec son prix (surligné en jaune quand on a assez de L$) ; le toucher ouvre la fenêtre d'achat ;
 - gardien prisonnier : sombre, avec 🔒 et le monde-vague du boss qui le libère.
@@ -257,4 +257,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v20** — dégâts de zone bien visibles : onde de choc qui s'étend jusqu'au bord de la zone touchée (disque coloré, bord lumineux, second anneau, éclaboussures) pour Gouttine (bleu), Givrou (bleu glacé), Rocaillou (brun) ; rafale de Plumo avec des traits de vent qui tournent. Réglage : `WAVE_STYLE`.
 - **v21** — places sur la map à acheter (plafond 10 / 8 / 7) ; les Fantômes démasqués se transforment en vrai méchant (Chipeur en ⭐, surprise en ⭐⭐ et ⭐⭐⭐).
 - **v22** — places plus chères selon le niveau (⭐⭐⭐ : 200 000 puis 500 000 L$).
+- **v23** — la map prend tout l'écran ; tout flotte par-dessus : infos (monde, cœurs, L$, vague) en haut à gauche, prochaine vague toujours affichée en haut au milieu (le bouton 👀 Vague est supprimé), menu déroulant ☰ en haut à droite (Auto, vitesse, pause, équipe, menu), ▶ Vague en bas à droite, et la liste des gardiens qui s'ouvre avec le bouton 🛡️ Gardiens en bas à gauche.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
