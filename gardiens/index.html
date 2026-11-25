@@ -121,7 +121,9 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 @keyframes bob{50%{transform:translateY(-8px)}}
 @media (prefers-reduced-motion:reduce){.bigG{animation:none}}
 .box.sheet{background:#FFFDF8;border-radius:20px;width:min(410px,calc(100vw - 150px));max-height:calc(100dvh - 16px);overflow:auto;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.sheet h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:21px;line-height:1.1}
+.sheet h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:21px;line-height:1.1}.sheet h2 small{font-size:14px;color:#777}
+.shf{align-items:center;margin-top:6px}.shf .money{margin-right:auto;font-family:'Baloo 2';font-weight:800}
+.shg{display:block}
 .sheet p{margin:4px 0;font-size:14px;line-height:1.3}
 .sheet .row{padding:3px 0}.sheet .row .lab{width:112px;font-size:14px}.sheet .row .val{width:84px;font-size:14px}
 .sheet .row button{font-size:13px;padding:5px 8px}
@@ -139,7 +141,15 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 .smallG{display:none;float:right;width:64px;height:64px;object-fit:contain;margin:-4px 0 0 6px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
 @media (max-height:520px){
   .bigG{display:none}.smallG{display:block}
-  .box.sheet{width:min(330px,calc(100vw - 20px));padding:8px 10px;border-radius:16px}
+  .box.sheet{width:min(560px,calc(100vw - 16px));padding:8px 10px;border-radius:16px}
+  .smallG{width:54px;height:54px}
+  .shg{display:grid;grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);gap:10px;align-items:start}
+  .shr .row:first-child{padding-top:0}
+  .sheet .shf{margin-top:4px}.shf .money{font-size:13px}
+  .rgnote{display:none}
+  .sheet .fx{font-size:11px;line-height:1.25}
+  .evos{margin-top:0}.evo img{height:44px}.evo{padding:2px}
+  .astuce{display:none}
   .sheet h2{font-size:17px}.sheet p{font-size:12px;margin:2px 0}.role{padding:1px 6px}
   .sheet .row{padding:1px 0;gap:6px}.sheet .row .lab{width:92px;font-size:12px}.sheet .row .val{width:64px;font-size:12px}
   .sheet .row button{font-size:12px;padding:4px 6px}.sheet .bar{height:8px}
@@ -270,9 +280,9 @@ const BIOME={
 function biomeOf(gid,world){const w=WORLDS[(world||G.world)-1];return (BIOME[w.theme]||{})[gid]||null;}
 function biomeTxt(gid,world){const b=biomeOf(gid,world);if(!b)return '';const w=WORLDS[(world||G.world)-1],pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %';
   const parts=[];if(b.pw)parts.push(`${pc(b.pw)} de puissance`);if(b.rg)parts.push(`${pc(b.rg)} de portée`);
-  const good=(b.pw||1)*(b.rg||1)>=1;return `<p class="biome ${good?'up':'down'}">${w.em} <b>${w.name} :</b> ${parts.join(' et ')} — ${b.txt}.</p>`;}
+  const good=(b.pw||1)*(b.rg||1)>=1;return `<p class="biome ${good?'up':'down'}">${w.em} <b>${parts.join(' et ')}</b> : ${b.txt}.</p>`;}
 const KIND_G={fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
-const TARGETS={first:'🏃 Le premier',strong:'💪 Le plus costaud',armor:'🛡️ Les armures'};
+const TARGETS={first:'🏃 Le premier',strong:'💪 Le costaud',armor:'🛡️ Les armures'};
 function armorOn(){return P&&P.diff>=2;}   // niveau ⭐ : pas de barre d'armure (règle simple d'origine)
 function targetOf(gid){return (armorOn()&&P.tgt&&P.tgt[gid])||(GUARD[gid].kind==='snipe'?'strong':'first');}
 // Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
@@ -597,7 +607,7 @@ function showGuard(gid,fromTeam,tab){
   const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})">+ ${fmt(cost)} L$</button>`;
   // valeur après la prochaine amélioration de portée
   const rgNext=g.kind==='coin'?0:s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
-  let body='';
+  let body='',side='';
   if(tb==='up'){
     if(g.kind==='coin'){
       body=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
@@ -605,25 +615,26 @@ function showGuard(gid,fromTeam,tab){
       body=`<div class="row"><span class="lab">💪 Puissance</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.dmg)}</span>${btn('pw')}</div>
         <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)} → ${fmt(rgNext)}</span>${btn('rg')}</div>
         <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`+
-        (arm?`<div class="row"><span class="lab">🔨 Casse-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'')+
+        (arm?`<div class="row"><span class="lab">🔨 Anti-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'')+
         `<p class="rgnote">${t?'🎯 Cercle blanc sur la map = sa portée. Pointillés jaunes = sa portée après une amélioration 🎯 de plus.':'🎯 Place-le sur la map pour voir sa portée (le cercle s\'affiche pendant que tu le fais glisser).'}</p>`;
       if(arm&&g.kind!=='wind')body+=`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`;
     }
-    body+=`<p style="text-align:right;font-weight:800">💰 ${fmt(P.money)} L$</p>`;
   }else{
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
     const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'niveau 0':'niveau '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
     body=evs+`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
       <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td></tr><tr><td>🎯 Portée (rayon)</td><td>${fmt(s.rg)}</td></tr>
       <tr><td colspan="2">✨ ${effet(gid,s)}</td></tr></table>`+
-      (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'')+
-      `<p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<br>💡 ${sp.astuce}</p>`;
+      (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'');
+    side=`<p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<span class="astuce"><br>💡 ${sp.astuce}</span></p>`;
   }
   const tabs=g.kind==='coin'?'':`<div class="tabs"><button class="${tb==='up'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'up')">⬆️ Améliorer</button><button class="${tb==='info'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'info')">📋 Fiche technique</button></div>`;
   const foot=(t?`<button onclick="unplace('${gid}')">🏰 Rentrer</button>`:'')+(fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':'')+'<button class="b-pink" onclick="closeModal()">OK</button>';
-  openSheet(`<h2>${g.name} <small style="font-size:14px;color:#777">${FORMS[s.form]} · niv. ${s.lv}</small></h2>
-    <p><span class="role">${sp.role}</span></p><p>${next}</p>${biomeTxt(gid)}${tabs}${body}
-    <div class="right">${foot}</div>`,gid,s.form,t&&t.x>W/2?'left':'right');
+  // deux colonnes sur petit écran (téléphone à l'horizontale) pour que tout tienne sans faire défiler
+  openSheet(`<div class="shg"><div class="shl"><h2>${g.name} <small>${FORMS[s.form]} · niv. ${s.lv}</small></h2>
+    <p><span class="role">${sp.role}</span> ${next}</p>${biomeTxt(gid)}${tabs}${side}</div>
+    <div class="shr">${body}</div></div>
+    <div class="right shf"><span class="money">💰 ${fmt(P.money)} L$</span>${foot}</div>`,gid,s.form,t&&t.x>W/2?'left':'right');
 }
 function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 function buyUp(gid,k,fromTeam){
