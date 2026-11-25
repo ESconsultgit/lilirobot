@@ -35,7 +35,9 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #ov{position:absolute;pointer-events:none;z-index:3}
 #ov>*{pointer-events:auto}
 .fab{position:absolute;border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 3px 10px rgba(42,31,61,.3);font-size:16px;padding:8px 14px}
-#hud{position:absolute;top:8px;left:8px;display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:4px 10px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2';font-weight:800;font-size:16px;white-space:nowrap;pointer-events:none}
+#topbar{position:absolute;top:8px;left:8px;right:62px;display:flex;gap:6px;align-items:center;pointer-events:none}
+#topbar>*{pointer-events:auto}
+#hud{position:static;flex:none;display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:4px 10px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2';font-weight:800;font-size:16px;white-space:nowrap;pointer-events:none}
 #hud span+span::before{content:'·';margin:0 6px;opacity:.35}
 #menuWrap{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 #bMore{position:static;width:42px;height:42px;padding:0;font-size:20px}
@@ -68,7 +70,7 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 @media (max-height:520px){
   .bi{width:46px;font-size:10px}
   .fab{font-size:14px;padding:6px 11px}#bWave{font-size:16px;padding:7px 14px}#bMore{width:36px;height:36px;font-size:17px}
-  #hud{font-size:13px;padding:2px 8px;top:6px;left:6px}#menuWrap{top:6px;right:6px}#bWave{right:6px;bottom:6px}#bBench{left:6px;bottom:6px}
+  #hud{font-size:13px;padding:2px 8px}#topbar{top:6px;left:6px;right:50px;gap:4px}#menuWrap{top:6px;right:6px}#bWave{right:6px;bottom:6px}#bBench{left:6px;bottom:6px}
   #bench{bottom:46px;padding:4px 6px}
   #moreList{padding:6px;gap:4px;min-width:130px}#moreList button{font-size:13px;padding:5px 8px}
 }
@@ -201,8 +203,9 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
   .sh-foot{padding-top:6px}.sh-foot .money{font-size:13px}
 }
 /* ---------- Prochaine vague ---------- */
-#nextW{position:absolute;top:8px;left:50%;pointer-events:auto;transform:translateX(-50%);display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:999px;background:rgba(255,253,248,.92);box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px;z-index:4;white-space:nowrap;max-width:calc(100% - 16px)}
-#nextW:active{transform:translateX(-50%) translateY(1px)}
+#nextW{position:static;min-width:0;overflow:hidden;pointer-events:auto;display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:999px;background:rgba(255,253,248,.92);box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px;z-index:4;white-space:nowrap;max-width:calc(100% - 16px)}
+#nextW:active{transform:translateY(1px)}
+#nextW img{flex:none}#nextW .n,#nextW .lbl{flex:none}
 #nextW img{height:26px;width:auto;vertical-align:middle}
 #nextW .n{font-family:'Baloo 2';font-weight:800;margin-right:4px}
 #nextW .lbl{font-family:'Baloo 2';font-weight:800;color:var(--violet);margin-right:2px}
@@ -217,7 +220,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 .wf .best img{width:22px;height:22px}
 .wf.boss{border-color:#F2C230;background:#FFF8E1}
 .wsum{display:flex;gap:6px;flex-wrap:wrap}.wsum span{background:#F1ECF7;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700}
-@media (max-height:520px){.box.sheet.wide2{width:640px}.ftxt{display:none}.wl{gap:4px}.wsum span{font-size:11px;padding:1px 7px}.wf .best{margin-top:0}#nextW{font-size:12px;padding:2px 8px;top:4px}#nextW img{height:20px}.wf{grid-template-columns:40px 1fr auto;padding:4px 6px}.wf img{width:40px;height:34px}.wf .nm{font-size:13px}.wf .st{font-size:11px}.wf .ct{font-size:18px}.wf .best img{width:18px;height:18px}}
+@media (max-height:520px){.box.sheet.wide2{width:640px}.ftxt{display:none}.wl{gap:4px}.wsum span{font-size:11px;padding:1px 7px}.wf .best{margin-top:0}#nextW{font-size:12px;padding:2px 8px}#nextW img{height:20px}.wf{grid-template-columns:40px 1fr auto;padding:4px 6px}.wf img{width:40px;height:34px}.wf .nm{font-size:13px}.wf .st{font-size:11px}.wf .ct{font-size:18px}.wf .best img{width:18px;height:18px}}
 #rotate{position:fixed;inset:0;background:linear-gradient(135deg,#F3ECFF,#FBE1EE);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;padding:20px;font-family:'Baloo 2';font-size:22px;font-weight:700}
 #rotate img{width:150px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
@@ -229,8 +232,8 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
     <canvas id="cv"></canvas>
     <!-- Couche posée exactement sur la map : infos, vague, boutons -->
     <div id="ov">
-      <div id="hud"><span id="sWorld"></span><span id="sHearts"></span><span id="sMoney"></span><span id="sWave"></span></div>
-      <button id="nextW" title="Voir les méchants de la vague"></button>
+      <div id="topbar"><div id="hud"><span id="sWorld"></span><span id="sHearts"></span><span id="sMoney"></span><span id="sWave"></span></div>
+      <button id="nextW" title="Voir les méchants de la vague"></button></div>
       <div id="menuWrap">
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">

@@ -258,4 +258,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v21** — places sur la map à acheter (plafond 10 / 8 / 7) ; les Fantômes démasqués se transforment en vrai méchant (Chipeur en ⭐, surprise en ⭐⭐ et ⭐⭐⭐).
 - **v22** — places plus chères selon le niveau (⭐⭐⭐ : 200 000 puis 500 000 L$).
 - **v23** — la map prend tout l'écran ; tout flotte par-dessus : infos (monde, cœurs, L$, vague) en haut à gauche, prochaine vague toujours affichée en haut au milieu (le bouton 👀 Vague est supprimé), menu déroulant ☰ en haut à droite (Auto, vitesse, pause, équipe, menu), ▶ Vague en bas à droite, et la liste des gardiens qui s'ouvre avec le bouton 🛡️ Gardiens en bas à gauche.
+- **v24** — barre du haut sans chevauchement : la bulle d'infos et le bandeau de la vague sont côte à côte (le bandeau se réduit si la place manque), le menu ☰ garde sa place à droite.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
