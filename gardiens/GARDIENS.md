@@ -142,6 +142,12 @@ Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du b
 
 - L'onglet **📋 Fiche technique** montre les **3 évolutions** côte à côte avec le niveau de chacune ; la forme actuelle est en surbrillance (cadre jaune), les autres sont grisées.
 
+## Prochaine vague
+
+- Entre deux vagues, un **bandeau** en haut de la map montre les méchants de la prochaine vague avec leur nombre (ex. « Vague 20 : 🦇×5 🐻×1 … »).
+- Le toucher (ou le bouton **👀 Vague** à droite) ouvre le détail : nombre total, pastilles (Chef des Chipeurs ou grand boss, ruée de Fusées, volants, fantômes, armures), puis une carte par méchant avec son nombre, sa vie, son armure, sa vitesse, sa particularité et **les gardiens bons contre lui**. Bouton « ▶ Lancer » pour démarrer la vague.
+- Les vagues sont toujours les mêmes pour un monde et un numéro de vague donnés (tirage fixe) : ce qu'on voit est exactement ce qui va arriver. Réglages : `FOE_INFO` (texte et gardiens conseillés).
+
 ## Les méchants : les Chipeurs
 
 | | Méchant | PV de base | Vitesse | Récompense | Particularité |
@@ -247,4 +253,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v16** — la fiche garde la même taille entre les onglets Améliorer et Fiche technique (les deux sont dans la page, l'un caché).
 - **v17** — nouveaux points de reprise : vague 1 jusqu'à la vague 25, puis vague 25, et le grand boss de la vague 50 se rejoue sans reculer.
 - **v18** — fiche redessinée : en-tête (image, nom, rôle, forme et niveau, boutons 🏰 Rentrer et ✕ Fermer), barre de progression vers l'évolution, bonus de la map en pastille, onglets « Améliorer / Infos » en contrôle segmenté ; 4 cartes d'amélioration (toute la carte est le bouton, valeur actuelle → après), cible en contrôle segmenté ; infos : 3 évolutions, 4 chiffres en tuiles, effet, armure/vie, fort/faible ; pied fixe avec tes L$ et le prix d'une amélioration. Tient sans défilement sur téléphone.
+- **v19** — aperçu de la prochaine vague : bandeau en haut de la map et fenêtre détaillée (méchants, nombre, vie, armure, vitesse, gardiens conseillés).
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

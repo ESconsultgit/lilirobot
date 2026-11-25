@@ -171,6 +171,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 .pf{font-size:12px;line-height:1.3;margin:0}.pf b{color:var(--ink)}
 .sh-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #EEE6F6;padding-top:8px;margin-top:auto}
 .sh-foot .money{font-family:'Baloo 2';font-weight:800;font-size:15px}
+.sh-foot button.b-pink{background:var(--pink);color:#fff;font-size:14px;padding:6px 14px}
 .sh-foot .cost{font-size:12px;color:#6B5F80}.sh-foot .cost b{font-family:'Baloo 2';font-size:15px;color:var(--ink)}
 /* téléphone à l'horizontale : plus compact, le grand gardien est déjà dans l'en-tête */
 @media (max-height:520px){
@@ -183,6 +184,24 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
   .pf,.fxline{font-size:11px;line-height:1.25}.eff span{padding:2px;font-size:11px}.sh-head{gap:8px}.evobar{font-size:11px}
   .sh-foot{padding-top:6px}.sh-foot .money{font-size:13px}
 }
+/* ---------- Prochaine vague ---------- */
+#nextW{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:none;align-items:center;gap:6px;padding:4px 10px 4px 12px;border-radius:999px;background:rgba(255,253,248,.92);box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px;z-index:4;white-space:nowrap;max-width:calc(100% - 16px)}
+#nextW:active{transform:translateX(-50%) translateY(1px)}
+#nextW img{height:26px;width:auto;vertical-align:middle}
+#nextW .n{font-family:'Baloo 2';font-weight:800;margin-right:4px}
+#nextW .lbl{font-family:'Baloo 2';font-weight:800;color:var(--violet);margin-right:2px}
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.box.sheet.wide2{width:600px}
+.wf{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:center;background:#fff;border:2px solid #EEE6F6;border-radius:14px;padding:6px 8px}
+.wf img{width:52px;height:44px;object-fit:contain}
+.wf .nm{font-weight:800;font-size:14px;line-height:1.15}.wf .nm small{font-weight:600;color:#6B5F80}
+.wf .st{font-size:12px;color:#4A3F5C;line-height:1.3}
+.wf .ct{font-family:'Baloo 2';font-weight:800;font-size:22px;color:var(--violet)}
+.wf .best{display:flex;gap:2px;align-items:center;font-size:11px;color:#6B5F80;margin-top:2px;flex-wrap:wrap}
+.wf .best img{width:22px;height:22px}
+.wf.boss{border-color:#F2C230;background:#FFF8E1}
+.wsum{display:flex;gap:6px;flex-wrap:wrap}.wsum span{background:#F1ECF7;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700}
+@media (max-height:520px){.box.sheet.wide2{width:640px}.ftxt{display:none}.wl{gap:4px}.wsum span{font-size:11px;padding:1px 7px}.wf .best{margin-top:0}#nextW{font-size:12px;padding:2px 8px;top:4px}#nextW img{height:20px}.wf{grid-template-columns:40px 1fr auto;padding:4px 6px}.wf img{width:40px;height:34px}.wf .nm{font-size:13px}.wf .st{font-size:11px}.wf .ct{font-size:18px}.wf .best img{width:18px;height:18px}}
 #rotate{position:fixed;inset:0;background:linear-gradient(135deg,#F3ECFF,#FBE1EE);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;padding:20px;font-family:'Baloo 2';font-size:22px;font-weight:700}
 #rotate img{width:150px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
@@ -201,6 +220,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
     <div id="cvWrap">
       <canvas id="cv"></canvas>
       <div id="tip"><img id="tipImg" alt=""><div class="bub" id="tipTxt"></div></div>
+      <button id="nextW" title="Voir les méchants de la prochaine vague"></button>
     </div>
     <div id="bench"></div>
   </div>
@@ -210,6 +230,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
     <button id="bSpeed">⏩ ×1</button>
     <button id="bPause">⏸ Pause</button>
     <button id="bTeam">🛡️ Équipe</button>
+    <button id="bNext">👀 Vague</button>
     <button id="bMenu">⚙️ Menu</button>
     <div id="dev">
       <button onclick="devMoney()">+ argent</button>
@@ -475,6 +496,49 @@ function makeWave(world,w){
   }
   return q;
 }
+// ---------- Prochaine vague : quels méchants, combien, et quels gardiens sont bons contre eux ----------
+const FOE_INFO={
+  chipeur:{txt:'Le Chipeur de base.',best:['braisou','gouttine','zapic']},
+  fusee:{txt:'Très rapide, peu de vie : à ralentir !',best:['givrou','feuillou','zapic']},
+  costaud:{txt:'Lent mais beaucoup de vie.',best:['braisou','lunette','rocaillou']},
+  casque:{txt:'Porte une armure : il faut la casser d\'abord.',best:['rocaillou','zapic','gouttine']},
+  volant:{txt:'Vole au-dessus du chemin : pas ralenti, pas repoussé.',best:['zapic','lunette','braisou']},
+  fantome:{txt:'Invisible : seule Étoilette le voit et le démasque.',best:['etoilette']},
+  boss:{txt:'Énorme, enlève 5 cœurs s\'il arrive au château.',best:['lunette','braisou','givrou']}
+};
+function waveSummary(world,w){
+  const q=makeWave(world,w),groups=[];
+  for(const e of q){
+    const key=e.type==='boss'?'boss-'+(e.final?'f':'c'):e.type;let gr=groups.find(x=>x.key===key);
+    if(!gr){const f=e.type==='boss'?e.boss:FOES[e.type],k=(f&&f.armorK)||0;
+      gr={key,type:e.type,n:0,hp:e.hp,ap:armorOn()?e.hp*k:0,name:e.type==='boss'?e.boss.name:f.name,art:e.type==='boss'?(e.final?e.boss.art:'chef'):e.type,final:e.final,first:e.t};groups.push(gr);}
+    gr.n++;
+  }
+  return groups.sort((a,b)=>(a.type==='boss')-(b.type==='boss')||a.first-b.first);
+}
+function speedTxt(type){if(type==='boss')return 'très lent';const v=FOES[type].spd;return v>=90?'très rapide':v>=65?'rapide':v<=40?'lent':'normal';}
+function renderNextStrip(){
+  const el=$('nextW');if(!P||G.state!=='idle'||modalOpen){el.style.display='none';return;}
+  const gs=waveSummary(G.world,G.wave);
+  el.innerHTML=`<span class="lbl">Vague ${G.wave}</span>`+gs.map(g=>`<img src="img/f/${g.art}.webp" alt=""><span class="n">×${g.n}</span>`).join('')+'👀';
+  el.style.display='flex';
+}
+function showNextWave(){
+  if(!P)return;
+  const w=G.wave,gs=waveSummary(G.world,w),tot=gs.reduce((a,g)=>a+g.n,0);
+  const fly=gs.some(g=>g.type==='volant'),gh=gs.some(g=>g.type==='fantome'),ar=gs.some(g=>g.ap>0);
+  const rows=gs.map(g=>{const fi=FOE_INFO[g.type]||FOE_INFO.chipeur,boss=g.type==='boss';
+    const stats=`❤️ ${fmt(g.hp)}${g.ap>0?` · 🛡️ ${fmt(g.ap)}`:''} · 💨 ${speedTxt(g.type)}`;
+    const best=fi.best.map(b=>ART[b]?`<img src="img/g/${b}-1.webp" alt="${GUARD[b].name}" title="${GUARD[b].name}">`:GUARD[b].em).join('');
+    return `<div class="wf${boss?' boss':''}"><img src="img/f/${g.art}.webp" alt=""><div><div class="nm">${g.name}${boss?` <small>${g.final?'grand boss':'mini-boss'}</small>`:''}</div>
+      <div class="st">${stats}<span class="ftxt"><br>${fi.txt}</span></div><div class="best">Bons contre lui : ${best}</div></div><div class="ct">×${g.n}</div></div>`;}).join('');
+  const tags=[`${tot} méchants`,w%10===0?(w===CFG.WAVES?'👑 grand boss':'😤 Chef des Chipeurs'):'',w%5===0&&w%10!==0?'💨 ruée de Fusées':'',fly?'🦇 volants':'',gh?'👻 fantômes : il faut Étoilette':'',ar?'🛡️ armures':''].filter(Boolean);
+  openSheet(`<div class="sh-head"><div class="sh-t"><h2>👀 Vague ${w} sur ${CFG.WAVES}</h2><div class="sh-sub">${WORLDS[G.world-1].em} ${WORLDS[G.world-1].name}</div></div><button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
+    <div class="wsum">${tags.map(t=>`<span>${t}</span>`).join('')}</div>
+    <div class="wl">${rows}</div>
+    <div class="sh-foot"><span class="money" style="font-size:13px">Place tes gardiens, puis lance la vague</span>${G.state==='idle'?`<button class="b-pink" style="box-shadow:none" onclick="closeModal();startWave()">▶ Lancer</button>`:''}</div>`,null,1,'right');
+  $('sbox').classList.add('wide2');
+}
 function startWave(){
   if(G.state!=='idle')return;
   if(!G.towers.length){tip('lili-explique','Place d\'abord un gardien : touche un cercle ➕ près du chemin !',5000);return;}
@@ -706,7 +770,7 @@ function closeModal(){$('modal').style.display='none';$('sheetM').style.display=
 // Fiche d'un gardien : petite fenêtre sur le côté, la map reste visible (portée dessinée dessus)
 function openSheet(html,gid,form,side){
   $('modal').style.display='none';
-  $('sbox').innerHTML=html;$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
+  $('sbox').innerHTML=html;$('sbox').classList.remove('wide2');$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
   const m=$('sheetM');m.className=side==='left'?'left':'right';m.style.display='flex';modalOpen=true;
 }
 $('sheetM').addEventListener('pointerdown',e=>{if(e.target===$('sheetM'))closeModal();});
@@ -794,9 +858,12 @@ $('bAuto').onclick=()=>{P.auto=!P.auto;save();if(P.auto&&G.state==='idle')G.auto
 $('bSpeed').onclick=()=>{G.speed=G.speed>=3?1:G.speed+1;refreshHUD();};
 $('bPause').onclick=()=>{G.paused=!G.paused;refreshHUD();};
 $('bTeam').onclick=()=>showTeam();
+$('bNext').onclick=()=>showNextWave();
+$('nextW').onclick=()=>showNextWave();
 $('bMenu').onclick=()=>showMenu();
 function refreshHUD(){
   if(!P)return;
+  renderNextStrip();
   const wd=WORLDS[G.world-1];
   $('sHearts').innerHTML=`❤️ ${G.hearts}<small>château</small>`;
   $('sMoney').innerHTML=`💰 ${fmt(P.money)}<small>LiliDollars</small>`;
@@ -938,6 +1005,7 @@ function resize(){
   const dpr=Math.min(3,window.devicePixelRatio||1);
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
   K=cv.width/W;buildBg();
+  const nw=$('nextW');if(nw)nw.style.top=(cv.offsetTop+(window.innerHeight<=520?4:8))+'px';
 }
 const THEMES={
   prairie:{bg1:'#A8DA72',bg2:'#8CC95A',road:'#E6C88E',edge:'#B8955A'},
