@@ -112,51 +112,76 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 #introSkip{right:max(14px,env(safe-area-inset-right))}
 #introSound{left:max(14px,env(safe-area-inset-left))}
 
-/* ---------- Fiche d'un gardien ---------- */
-#sheetM{position:fixed;inset:0;z-index:20;display:none;align-items:center;background:rgba(42,31,61,.12);padding:8px}
+/* ---------- Fiche d'un gardien : panneau sur le côté, la map reste visible ---------- */
+#sheetM{position:fixed;inset:0;z-index:20;display:none;align-items:center;background:rgba(42,31,61,.10);padding:8px}
 #sheetM.right{justify-content:flex-end}#sheetM.left{justify-content:flex-start}
-.sheetWrap{display:flex;align-items:center;gap:0;max-height:100%}
+.sheetWrap{display:flex;align-items:center;max-height:100%}
 #sheetM.left .sheetWrap{flex-direction:row-reverse}
-.bigG{width:clamp(110px,22vw,210px);height:auto;flex:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite;pointer-events:none;margin:0 -14px;position:relative;z-index:2}
+.bigG{width:clamp(120px,14vw,220px);height:auto;flex:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite;pointer-events:none;margin:0 -16px;position:relative;z-index:2}
 @keyframes bob{50%{transform:translateY(-8px)}}
 @media (prefers-reduced-motion:reduce){.bigG{animation:none}}
-.box.sheet{background:#FFFDF8;border-radius:20px;width:min(410px,calc(100vw - 150px));max-height:calc(100dvh - 16px);overflow:auto;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
-.sheet h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:21px;line-height:1.1}.sheet h2 small{font-size:14px;color:#777}
-.shf{align-items:center;margin-top:6px}.shf .money{margin-right:auto;font-family:'Baloo 2';font-weight:800}
-.shg{display:block}
-.stk{display:grid}.stk>.pane{grid-area:1/1;visibility:hidden}.stk>.pane.on{visibility:visible}
-.sheet p{margin:4px 0;font-size:14px;line-height:1.3}
-.sheet .row{padding:3px 0}.sheet .row .lab{width:112px;font-size:14px}.sheet .row .val{width:84px;font-size:14px}
-.sheet .row button{font-size:13px;padding:5px 8px}
-.tabs{display:flex;gap:6px;margin:6px 0;clear:both}.tabs button{flex:1;font-size:14px;padding:6px}
-.biome{border-radius:10px;padding:5px 8px}.biome.up{background:#E4F6E1}.biome.down{background:#FDE5E5}
-.rgnote{font-size:13px;opacity:.8}
-.evos{display:flex;align-items:flex-end;justify-content:center;gap:4px;margin:6px 0 2px}
-.evo{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:14px;padding:4px 2px;opacity:.55;filter:grayscale(.5);border:3px solid transparent}
-.evo img{width:100%;max-width:92px;height:72px;object-fit:contain}
-.evo b{font-family:'Baloo 2';font-size:14px;line-height:1}.evo small{font-size:11px}
-.evo.on{opacity:1;filter:none;background:#FFF3C4;border-color:var(--yellow);box-shadow:0 0 12px rgba(242,194,48,.7)}
-.arr{align-self:center;color:#B9A9D6;font-weight:900}
-@media (max-height:520px){.evo img{height:52px}.evo b{font-size:12px}.evo small{font-size:10px}}
-/* petit écran (téléphone) : fenêtre plus étroite, le gardien passe dans l'en-tête */
-.smallG{display:none;float:right;width:64px;height:64px;object-fit:contain;margin:-4px 0 0 6px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+.box.sheet{--gap:10px;background:#FFFDF8;border-radius:20px;width:400px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);overflow:auto;padding:14px;box-shadow:0 12px 40px rgba(42,31,61,.28);display:flex;flex-direction:column;gap:var(--gap)}
+/* en-tête */
+.sh-head{display:flex;align-items:center;gap:10px}
+.sh-av{width:56px;height:56px;flex:none;object-fit:contain;filter:drop-shadow(0 3px 4px rgba(0,0,0,.25))}
+.sh-t{flex:1;min-width:0}
+.sh-t h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:22px;line-height:1.05}
+.sh-sub{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:13px;color:#6B5F80;margin-top:2px}
+.role{display:inline-block;background:#EEE6F6;color:var(--ink);border-radius:999px;padding:1px 8px;font-weight:800;font-size:12px}
+.sh-x{flex:none;width:36px;height:36px;border-radius:50%;padding:0;font-size:18px;line-height:36px;box-shadow:none;background:#F1ECF7}
+/* progression vers l'évolution */
+.evobar{display:flex;align-items:center;gap:8px;font-size:12px;color:#6B5F80}
+.evotrack{flex:1;height:8px;border-radius:8px;background:#EEE6F6;overflow:hidden}.evotrack i{display:block;height:100%;background:linear-gradient(90deg,#F2C230,#C2367A)}
+.evobar b{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:10px;padding:4px 8px;font-size:12px;line-height:1.25}
+.chip.up{background:#E4F6E1}.chip.down{background:#FDE5E5}
+/* onglets en contrôle segmenté */
+.seg{display:flex;background:#F1ECF7;border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;box-shadow:none;background:transparent;border-radius:9px;padding:6px 4px;font-size:14px;white-space:nowrap;color:#6B5F80}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(42,31,61,.18)}
+.seg button:active{transform:none}
+.stk{display:grid}.stk>.pane{grid-area:1/1;visibility:hidden;display:flex;flex-direction:column;gap:var(--gap)}.stk>.pane.on{visibility:visible}
+/* améliorations : 4 cartes, toute la carte est un bouton */
+.price{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#6B5F80}
+.price b{font-family:'Baloo 2';font-size:16px;color:var(--ink)}
+.ups{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ups.one{grid-template-columns:1fr}
+@media (min-height:521px){.sh-av.hasbig{display:none}}
+.upc{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;align-items:center;column-gap:6px;text-align:left;padding:7px 8px;border-radius:14px;background:#fff;border:2px solid #EEE6F6;box-shadow:0 2px 0 rgba(42,31,61,.12);font-family:'Nunito'}
+.upc .ic{grid-row:1/3;font-size:20px}
+.upc .nm{font-weight:800;font-size:13px;line-height:1.1}
+.upc .v{grid-column:2;font-size:12px;color:#6B5F80;white-space:nowrap}.upc .v b{color:var(--ink)}
+.upc .pl{grid-row:1/3;grid-column:3;width:28px;height:28px;border-radius:50%;background:var(--violet);color:#fff;font:800 18px/28px 'Baloo 2';text-align:center}
+.upc .lv{grid-column:1/4;height:4px;border-radius:4px;background:#EEE6F6;margin-top:5px;overflow:hidden}.upc .lv i{display:block;height:100%;background:var(--violet)}
+.upc:disabled{opacity:.5}
+.upc.max .pl{background:#3FA34D}
+.lab2{font-size:12px;font-weight:800;color:#6B5F80;margin-bottom:-4px}
+/* infos */
+.evos{display:flex;align-items:flex-end;justify-content:space-between;gap:4px}
+.evo{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;border-radius:12px;padding:3px 2px;opacity:.5;filter:grayscale(.6);border:2px solid transparent}
+.evo img{width:100%;height:58px;object-fit:contain}
+.evo b{font-family:'Baloo 2';font-size:13px;line-height:1}.evo small{font-size:10px}
+.evo.on{opacity:1;filter:none;background:#FFF3C4;border-color:var(--yellow)}
+.arr{align-self:center;color:#C9BBDF;font-weight:900;font-size:12px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tile{background:#F7F3FB;border-radius:10px;padding:5px 4px;text-align:center}
+.tile b{display:block;font-family:'Baloo 2';font-size:16px;line-height:1.1}.tile small{font-size:10px;color:#6B5F80;line-height:1.1;display:block}
+.fxline{font-size:12px;color:#4A3F5C}
+.eff{display:flex;gap:6px}.eff span{flex:1;text-align:center;border-radius:10px;padding:4px;font-size:12px;font-weight:800}
+.eff .g{background:#E4F6E1;color:#21722C}.eff .m{background:#FFF1D1;color:#8A5A00}.eff .r{background:#FDE5E5;color:#A3261E}
+.pf{font-size:12px;line-height:1.3;margin:0}.pf b{color:var(--ink)}
+.sh-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #EEE6F6;padding-top:8px;margin-top:auto}
+.sh-foot .money{font-family:'Baloo 2';font-weight:800;font-size:15px}
+.sh-foot .cost{font-size:12px;color:#6B5F80}.sh-foot .cost b{font-family:'Baloo 2';font-size:15px;color:var(--ink)}
+/* téléphone à l'horizontale : plus compact, le grand gardien est déjà dans l'en-tête */
 @media (max-height:520px){
-  .bigG{display:none}.smallG{display:block}
-  .box.sheet{width:min(560px,calc(100vw - 16px));padding:8px 10px;border-radius:16px}
-  .smallG{width:54px;height:54px}
-  .shg{display:grid;grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);gap:10px;align-items:start}
-  .shr .row:first-child{padding-top:0}
-  .sheet .shf{margin-top:4px}.shf .money{font-size:13px}
-  .rgnote{display:none}
-  .sheet .fx{font-size:11px;line-height:1.25}
-  .evos{margin-top:0}.evo img{height:44px}.evo{padding:2px}
-  .astuce{display:none}
-  .sheet h2{font-size:17px}.sheet p{font-size:12px;margin:2px 0}.role{padding:1px 6px}
-  .sheet .row{padding:1px 0;gap:6px}.sheet .row .lab{width:92px;font-size:12px}.sheet .row .val{width:64px;font-size:12px}
-  .sheet .row button{font-size:12px;padding:4px 6px}.sheet .bar{height:8px}
-  .tabs{margin:4px 0}.tabs button,.tgt button{font-size:12px;padding:4px 6px}.rgnote{font-size:11px}
-  .tech{font-size:12px}.tech td{padding:2px 4px}#modal .sheet p.fx,.sheet .fx{font-size:12px;padding:5px 8px}
-  .sheet .right button{font-size:13px;padding:6px 10px}
+  .bigG{display:none}
+  .box.sheet{--gap:6px;width:360px;padding:10px 12px;border-radius:16px}
+  .sh-av{width:40px;height:40px}.sh-t h2{font-size:18px}.sh-x{width:30px;height:30px;line-height:30px;font-size:15px}
+  .seg button{padding:4px;font-size:13px}
+  .upc{padding:5px 7px}.upc .ic{font-size:17px}.upc .pl{width:24px;height:24px;line-height:24px;font-size:16px}.upc .lv{margin-top:3px}
+  .evo img{height:30px}.evo b{font-size:12px}.evo{padding:1px}.tile b{font-size:14px}.tile{padding:2px}.tile small{font-size:9px}
+  .pf,.fxline{font-size:11px;line-height:1.25}.eff span{padding:2px;font-size:11px}.sh-head{gap:8px}.evobar{font-size:11px}
+  .sh-foot{padding-top:6px}.sh-foot .money{font-size:13px}
 }
 #rotate{position:fixed;inset:0;background:linear-gradient(135deg,#F3ECFF,#FBE1EE);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;padding:20px;font-family:'Baloo 2';font-size:22px;font-weight:700}
 #rotate img{width:150px}
@@ -284,7 +309,7 @@ function biomeTxt(gid,world){const b=biomeOf(gid,world);if(!b)return '';const w=
   const parts=[];if(b.pw)parts.push(`${pc(b.pw)} de puissance`);if(b.rg)parts.push(`${pc(b.rg)} de portée`);
   const good=(b.pw||1)*(b.rg||1)>=1;return `<p class="biome ${good?'up':'down'}">${w.em} <b>${parts.join(' et ')}</b> : ${b.txt}.</p>`;}
 const KIND_G={fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
-const TARGETS={first:'🏃 Le premier',strong:'💪 Le costaud',armor:'🛡️ Les armures'};
+const TARGETS={first:'🏃 Premier',strong:'💪 Costaud',armor:'🛡️ Armures'};
 function armorOn(){return P&&P.diff>=2;}   // niveau ⭐ : pas de barre d'armure (règle simple d'origine)
 function targetOf(gid){return (armorOn()&&P.tgt&&P.tgt[gid])||(GUARD[gid].kind==='snipe'?'strong':'first');}
 // Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
@@ -604,50 +629,45 @@ function effBar(v,lab){const w=Math.min(100,v/2.5*100),c=v>=1.2?'#3FA34D':v>=0.9
 function showGuard(gid,fromTeam,tab){
   const g=GUARD[gid],s=stats(gid),u=up(gid),cost=upCost(gid),t=G.towers.find(t=>t.gid===gid),sp=SPEC[gid],arm=armorOn();
   G.sel=t||null;G.sheetTab=tab||G.sheetTab||'up';if(g.kind==='coin')G.sheetTab='up';
-  const ft=fromTeam?1:0,tb=G.sheetTab;
-  const ev=evoOf(gid),next=s.form<3?`Évolue au niveau <b>${ev[s.form-1]}</b> ✨ (encore ${ev[s.form-1]-s.lv})`:'Forme finale 🌟';
-  const can=k=>P.money>=cost&&u[k]<CFG.MAX[k];
-  const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})">+ ${fmt(cost)} L$</button>`;
-  // valeur après la prochaine amélioration de portée
-  const rgNext=g.kind==='coin'?0:s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
-  let body='',side='',bUp='',sUp='',bInfo='',sInfo='';
-  {
-    if(g.kind==='coin'){
-      body=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
-    }else{
-      body=`<div class="row"><span class="lab">💪 Puissance</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.dmg)}</span>${btn('pw')}</div>
-        <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)} → ${fmt(rgNext)}</span>${btn('rg')}</div>
-        <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`+
-        (arm?`<div class="row"><span class="lab">🔨 Anti-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'')+
-        `<p class="rgnote">${t?'🎯 Cercle blanc sur la map = sa portée. Pointillés jaunes = sa portée après une amélioration 🎯 de plus.':'🎯 Place-le sur la map pour voir sa portée (le cercle s\'affiche pendant que tu le fais glisser).'}</p>`;
-      if(arm&&g.kind!=='wind')body+=`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`;
-    }
+  const ft=fromTeam?1:0,ev=evoOf(gid),fr=n=>String(n).replace('.',',');
+  // en-tête : image, nom, forme, niveau, rôle ; puis progression vers l'évolution suivante
+  const av=ART[gid]?`<img class="sh-av hasbig" src="img/g/${gid}-${s.form}.webp" alt="">`:gIcon(gid,48);
+  const evo=s.form<3?(()=>{const a=s.form===1?0:ev[0],b=ev[s.form-1];return `<div class="evobar"><div class="evotrack"><i style="width:${Math.min(100,(s.lv-a)/(b-a)*100)}%"></i></div><span>Évolution au <b>niv. ${b}</b></span></div>`;})()
+    :`<div class="evobar"><div class="evotrack"><i style="width:100%"></i></div><span><b>Forme finale</b> 🌟</span></div>`;
+  const bi=biomeOf(gid),biome=bi?(()=>{const pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %',p=[];if(bi.pw)p.push(pc(bi.pw)+' puissance');if(bi.rg)p.push(pc(bi.rg)+' portée');
+    return `<div><span class="chip ${(bi.pw||1)*(bi.rg||1)>=1?'up':'down'}">${WORLDS[G.world-1].em} <b>${p.join(', ')}</b>&nbsp;: ${bi.txt}</span></div>`;})():'';
+  // onglet Améliorer : 4 cartes (toute la carte est le bouton), valeur actuelle → après l'amélioration
+  const card=(k,ic,nm,cur,nxt)=>{const max=u[k]>=CFG.MAX[k],ok=!max&&P.money>=cost;
+    return `<button class="upc${max?' max':''}" ${ok?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})"><span class="ic">${ic}</span><span class="nm">${nm}</span><span class="v">${max?'<b>'+cur+'</b> · max':'<b>'+cur+'</b> → '+nxt}</span><span class="pl">${max?'✓':'+'}</span><span class="lv"><i style="width:${u[k]/CFG.MAX[k]*100}%"></i></span></button>`;};
+  let upPane,infoPane='';
+  if(g.kind==='coin'){
+    const gold=s.gold*rewMul(G.world,G.wave),n=(1+0.35*(s.lv+1))/(1+0.35*s.lv);
+    upPane=`<div class="ups one">${card('pw','💰','Pièces / vague',fmt(gold),fmt(gold*n))}</div><p class="pf">${sp.astuce}</p>`;
+  }else{
+    const rgN=s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
+    upPane=`<div class="ups">${card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
+      (arm&&g.kind!=='wind'?`<div class="lab2">CIBLE</div><div class="seg">${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'on':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`:'');
+    const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1),cl=v=>v>=1.2?'g':v>=0.9?'m':'r';
+    const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
+    const am=sp.arm*(1+CFG.CA*u.ca);
+    infoPane=evs+`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div><div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
+      <div class="fxline">✨ ${effet(gid,s)}</div>`+
+      (arm?`<div class="eff"><span class="${cl(am)}">🛡️ Armure ×${fr(Math.round(am*100)/100)}</span><span class="${cl(sp.life)}">❤️ Vie ×${fr(sp.life)}</span></div>`:'')+
+      `<p class="pf">👍 <b>Fort :</b> ${sp.fort}<br>👎 <b>Faible :</b> ${sp.faible}</p>`;
   }
-  bUp=body;sUp=side;body='';side='';
-  if(g.kind!=='coin'){
-    const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
-    const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'niveau 0':'niveau '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
-    body=evs+`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
-      <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td></tr><tr><td>🎯 Portée (rayon)</td><td>${fmt(s.rg)}</td></tr>
-      <tr><td colspan="2">✨ ${effet(gid,s)}</td></tr></table>`+
-      (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'');
-    side=`<p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<span class="astuce"><br>💡 ${sp.astuce}</span></p>`;
-  }
-  bInfo=body;sInfo=side;
-  const tabs=g.kind==='coin'?'':`<div class="tabs"><button class="${tb==='up'?'b-pink':''}" onclick="sheetTab('up')">⬆️ Améliorer</button><button class="${tb==='info'?'b-pink':''}" onclick="sheetTab('info')">📋 Fiche technique</button></div>`;
-  const foot=(t?`<button onclick="unplace('${gid}')">🏰 Rentrer</button>`:'')+(fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':'')+'<button class="b-pink" onclick="closeModal()">OK</button>';
-  // deux colonnes sur petit écran (téléphone à l'horizontale) pour que tout tienne sans faire défiler
-  openSheet(`<div class="shg"><div class="shl"><h2>${g.name} <small>${FORMS[s.form]} · niv. ${s.lv}</small></h2>
-    <p><span class="role">${sp.role}</span> ${next}</p>${biomeTxt(gid)}${tabs}<div class="stk"><div class="pane" data-t="up">${sUp}</div><div class="pane" data-t="info">${sInfo}</div></div></div>
-    <div class="shr stk"><div class="pane" data-t="up">${bUp}</div><div class="pane" data-t="info">${bInfo}</div></div></div>
-    <div class="right shf"><span class="money">💰 ${fmt(P.money)} L$</span>${foot}</div>`,gid,s.form,t&&t.x>W/2?'left':'right');
-  sheetTab(tb);
+  const tabs=g.kind==='coin'?'':`<div class="seg tabs"><button data-t="up" onclick="sheetTab('up')">⬆️ Améliorer</button><button data-t="info" onclick="sheetTab('info')">📋 Infos</button></div>`;
+  const foot=`<div class="sh-foot"><span class="money">💰 ${fmt(P.money)} L$</span><span class="cost">Une amélioration : <b>${fmt(cost)} L$</b></span></div>`;
+  const tools=(t?`<button class="sh-x" onclick="unplace('${gid}')" title="Rentrer au château" aria-label="Rentrer au château">🏰</button>`:fromTeam?`<button class="sh-x" onclick="showTeam()" title="Équipe" aria-label="Retour à l'équipe">⬅️</button>`:'');
+  openSheet(`<div class="sh-head">${av}<div class="sh-t"><h2>${g.name}</h2><div class="sh-sub"><span class="role">${sp.role}</span><span>${FORMS[s.form]} · niv. ${s.lv}</span></div></div>${tools}<button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
+    ${evo}${biome}${tabs}
+    <div class="stk"><div class="pane" data-t="up">${upPane}</div><div class="pane" data-t="info">${infoPane}</div></div>${foot}`,gid,s.form,t&&t.x>W/2?'left':'right');
+  sheetTab(G.sheetTab);
 }
+function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 // Les deux onglets sont dans la page en même temps (l'un caché) : la fenêtre garde la même taille quand on change d'onglet
 function sheetTab(t){G.sheetTab=t;const b=$('sbox');
   b.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.dataset.t===t));
-  b.querySelectorAll('.tabs button').forEach((x,i)=>x.className=(i===0)===(t==='up')?'b-pink':'');}
-function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
+  b.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));}
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
@@ -686,7 +706,7 @@ function closeModal(){$('modal').style.display='none';$('sheetM').style.display=
 // Fiche d'un gardien : petite fenêtre sur le côté, la map reste visible (portée dessinée dessus)
 function openSheet(html,gid,form,side){
   $('modal').style.display='none';
-  $('sbox').innerHTML=(ART[gid]?`<img class="smallG" src="img/g/${gid}-${form}.webp" alt="">`:'')+html;$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
+  $('sbox').innerHTML=html;$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
   const m=$('sheetM');m.className=side==='left'?'left':'right';m.style.display='flex';modalOpen=true;
 }
 $('sheetM').addEventListener('pointerdown',e=>{if(e.target===$('sheetM'))closeModal();});
