@@ -910,6 +910,13 @@ function slow(e,f,t){
   if(nf<e.slowF||e.slowT<=0){e.slowF=Math.min(nf,e.slowT>0?e.slowF:1);}e.slowT=Math.max(e.slowT,t);
 }
 function addText(x,y,txt,col,size){G.texts.push({x,y,txt,col,size:size||20,t:0,life:size>=30?2.2:1.1});}
+// Onde de choc des dégâts de zone : un cercle qui s'étend jusqu'au bord de la zone touchée, avec des particules
+const WAVE_STYLE={splash:{c:[59,167,240],p:'#BFE6FF',n:10,life:0.55},ice:{c:[120,200,240],p:'#FFFFFF',n:10,life:0.6},
+  rock:{c:[154,123,91],p:'#C9A27A',n:12,life:0.6},wind:{c:[150,195,245],p:'#FFFFFF',n:0,life:0.7}};
+function waveFx(x,y,r,kind){
+  const st=WAVE_STYLE[kind]||WAVE_STYLE.splash;G.fx.push({k:'wave',x,y,r,t:0,life:st.life,st,kind});
+  for(let i=0;i<st.n;i++){const a=Math.random()*Math.PI*2,v=r*(1.2+Math.random()*1.2);G.fx.push({k:'star',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:0.35+Math.random()*0.25,col:st.p});}
+}
 function burst(x,y,col,n){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=60+Math.random()*140;G.fx.push({k:'star',x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,life:0.6+Math.random()*0.4,col});}}
 
 function update(dt){
@@ -951,7 +958,7 @@ function update(dt){
     let tg=mode==='strong'?inR.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a)
           :mode==='armor'?first(inR.some(e=>e.ap>0||e.armor)?inR.filter(e=>e.ap>0||e.armor):inR):first(inR);
     if(g.kind==='wind'){
-      G.fx.push({k:'ring',x:t.x,y:t.y,r:s.rg,t:0,life:0.45,col:'#ffffff'});
+      waveFx(t.x,t.y,s.rg,'wind');
       for(const e of inR){hurt(e,s.dmg,'wind',s.ca);
         // recul : au plus une fois toutes les 3 s par méchant (sinon un Plumo rapide bloque tout, même les boss)
         if(!e.fly&&!(e.pushT>G.anim)){e.dist=Math.max(0,e.dist-g.push*(e.boss?0.4:1)*(1+0.15*(s.form-1)));e.pushT=G.anim+(e.boss?5:3);}}
@@ -990,7 +997,7 @@ function impact(p){
     if(p.kind==='vine'||p.kind==='ice')slow(main,g.slow,g.slowT);
   }
   if(splash){
-    G.fx.push({k:'ring',x:p.tx,y:p.ty,r:splash,t:0,life:0.3,col:g.col});
+    waveFx(p.tx,p.ty,splash,p.kind);
     for(const e of G.enemies)if(e!==main&&e.hp>0&&e.seen&&Math.hypot(e.x-p.tx,e.y-p.ty)<=splash+e.r){
       hurt(e,p.dmg*(p.kind==='rock'?0.8:0.5),p.kind,p.ca);if(p.kind==='ice')slow(e,g.slow,g.slowT);
     }
@@ -1149,6 +1156,17 @@ function draw(){
   G.projs.forEach(drawProj);
   for(const f of G.fx){const a=1-f.t/f.life;ctx.globalAlpha=Math.max(0,a);
     if(f.k==='star'){ctx.fillStyle=f.col;ctx.beginPath();ctx.arc(f.x,f.y,4,0,7);ctx.fill();}
+    else if(f.k==='wave'){
+      const p=f.t/f.life,e=1-Math.pow(1-p,3),rr=f.r*(0.12+0.88*e),[R,Gc,B]=f.st.c,al=1-p;ctx.globalAlpha=1;
+      // disque coloré qui s'estompe + bord épais et lumineux + second anneau plus petit
+      ctx.fillStyle=`rgba(${R},${Gc},${B},${0.38*al})`;ctx.beginPath();ctx.arc(f.x,f.y,rr,0,7);ctx.fill();
+      ctx.lineWidth=4+8*al;ctx.strokeStyle=`rgba(${R},${Gc},${B},${al})`;ctx.shadowColor=`rgba(${R},${Gc},${B},.9)`;ctx.shadowBlur=14;ctx.beginPath();ctx.arc(f.x,f.y,rr,0,7);ctx.stroke();ctx.shadowBlur=0;
+      ctx.lineWidth=2.5;ctx.strokeStyle=`rgba(255,255,255,${0.8*al})`;ctx.beginPath();ctx.arc(f.x,f.y,rr*0.72,0,7);ctx.stroke();
+      if(f.kind==='wind'){ // rafale : traits de vent qui tournent vers l'extérieur
+        ctx.lineCap='round';ctx.lineWidth=4*al+1;ctx.strokeStyle=`rgba(255,255,255,${0.9*al})`;
+        for(let i=0;i<8;i++){const a0=i*Math.PI/4+p*1.2;ctx.beginPath();ctx.arc(f.x,f.y,rr*0.88,a0,a0+0.45);ctx.stroke();}
+        ctx.lineCap='butt';}
+    }
     else if(f.k==='ring'){ctx.strokeStyle=f.col;ctx.lineWidth=5;ctx.beginPath();ctx.arc(f.x,f.y,f.r*(0.4+0.6*(1-a)),0,7);ctx.stroke();}
     else if(f.k==='bolt'){ctx.strokeStyle='#FFF27A';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(f.x1,f.y1);const n=5;for(let i=1;i<n;i++){ctx.lineTo(f.x1+(f.x2-f.x1)*i/n+(Math.random()-0.5)*18,f.y1+(f.y2-f.y1)*i/n+(Math.random()-0.5)*18);}ctx.lineTo(f.x2,f.y2);ctx.stroke();}
     ctx.globalAlpha=1;}
