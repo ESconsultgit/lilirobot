@@ -42,6 +42,7 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #bench{flex:none;display:flex;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,255,255,.75);border-radius:14px;padding:4px 6px;overflow-x:auto;align-self:center;max-width:100%}
 .bi{flex:none;width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Baloo 2';font-weight:800;font-size:12px;line-height:1.1;touch-action:none;cursor:grab;border-radius:10px;padding:2px 0}
 .bi .gico{pointer-events:none}
+.bi{position:relative}.bb{position:absolute;top:-2px;right:2px;font-style:normal;font-size:13px;font-weight:900;pointer-events:none;text-shadow:0 0 3px #fff}.bb.up{color:#2E9B3A}.bb.down{color:#D9342B}
 .bcount{flex:none;align-self:center;font-family:'Baloo 2';font-weight:800;font-size:14px;line-height:1.1;text-align:center;padding:2px 8px;border-radius:10px;background:#EEE6F6}
 .bcount.full{background:#FFD3E4;color:var(--pink)}
 .bi.placed{opacity:.4}
@@ -110,6 +111,35 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 #intro .ib{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));font-size:18px;padding:10px 18px;opacity:.92}
 #introSkip{right:max(14px,env(safe-area-inset-right))}
 #introSound{left:max(14px,env(safe-area-inset-left))}
+
+/* ---------- Fiche d'un gardien ---------- */
+#sheetM{position:fixed;inset:0;z-index:20;display:none;align-items:center;background:rgba(42,31,61,.12);padding:8px}
+#sheetM.right{justify-content:flex-end}#sheetM.left{justify-content:flex-start}
+.sheetWrap{display:flex;align-items:center;gap:0;max-height:100%}
+#sheetM.left .sheetWrap{flex-direction:row-reverse}
+.bigG{width:clamp(110px,22vw,210px);height:auto;flex:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite;pointer-events:none;margin:0 -14px;position:relative;z-index:2}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.bigG{animation:none}}
+.box.sheet{background:#FFFDF8;border-radius:20px;width:min(410px,calc(100vw - 150px));max-height:calc(100dvh - 16px);overflow:auto;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.sheet h2{font-family:'Baloo 2';margin:0;color:var(--violet);font-size:21px;line-height:1.1}
+.sheet p{margin:4px 0;font-size:14px;line-height:1.3}
+.sheet .row{padding:3px 0}.sheet .row .lab{width:112px;font-size:14px}.sheet .row .val{width:84px;font-size:14px}
+.sheet .row button{font-size:13px;padding:5px 8px}
+.tabs{display:flex;gap:6px;margin:6px 0}.tabs button{flex:1;font-size:14px;padding:6px}
+.biome{border-radius:10px;padding:5px 8px}.biome.up{background:#E4F6E1}.biome.down{background:#FDE5E5}
+.rgnote{font-size:13px;opacity:.8}
+/* petit écran (téléphone) : fenêtre plus étroite, le gardien passe dans l'en-tête */
+.smallG{display:none;float:right;width:64px;height:64px;object-fit:contain;margin:-4px 0 0 6px;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+@media (max-height:520px){
+  .bigG{display:none}.smallG{display:block}
+  .box.sheet{width:min(330px,calc(100vw - 20px));padding:8px 10px;border-radius:16px}
+  .sheet h2{font-size:17px}.sheet p{font-size:12px;margin:2px 0}.role{padding:1px 6px}
+  .sheet .row{padding:1px 0;gap:6px}.sheet .row .lab{width:92px;font-size:12px}.sheet .row .val{width:64px;font-size:12px}
+  .sheet .row button{font-size:12px;padding:4px 6px}.sheet .bar{height:8px}
+  .tabs{margin:4px 0}.tabs button,.tgt button{font-size:12px;padding:4px 6px}.rgnote{font-size:11px}
+  .tech{font-size:12px}.tech td{padding:2px 4px}#modal .sheet p.fx,.sheet .fx{font-size:12px;padding:5px 8px}
+  .sheet .right button{font-size:13px;padding:6px 10px}
+}
 #rotate{position:fixed;inset:0;background:linear-gradient(135deg,#F3ECFF,#FBE1EE);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:50;text-align:center;padding:20px;font-family:'Baloo 2';font-size:22px;font-weight:700}
 #rotate img{width:150px}
 @media (orientation:portrait) and (max-width:900px){#rotate{display:flex}}
@@ -146,6 +176,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
   </div>
 </div>
 <div id="modal"><div class="box" id="mbox"></div></div>
+<div id="sheetM"><div class="sheetWrap" id="sheetW"><img class="bigG" id="bigG" alt=""><div class="box sheet" id="sbox"></div></div></div>
 <div id="intro"><video id="introV" playsinline muted preload="auto"></video>
   <button class="ib" id="introSound">🔇 Activer le son</button><button class="ib b-pink" id="introSkip">Passer ⏭</button></div>
 <div id="rotate"><img src="img/livia-pensive.webp" alt=""><div>Tourne ton téléphone<br>pour défendre le château !</div></div>
@@ -215,6 +246,24 @@ const SPEC={
   lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds, les Fantômes (elle les voit)',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
   sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
 };
+// Bonus et malus selon la map (le décor aide ou gêne certains gardiens) : pw = puissance, rg = portée
+const BIOME={
+  prairie:{feuillou:{pw:1.25,rg:1.1,txt:'les plantes poussent bien dans la prairie'},
+           plumo:{rg:1.15,txt:'le vent souffle loin dans les grands champs'},
+           zapic:{pw:1.1,txt:'l\'orage gronde sur la prairie'}},
+  neige:  {gouttine:{rg:1.25,txt:'l\'eau glisse loin sur la neige'},
+           givrou:{pw:1.3,txt:'il fait très froid : la glace est plus forte'},
+           lunette:{rg:1.1,txt:'les nuits claires de l\'hiver'},
+           braisou:{pw:0.85,txt:'la neige éteint un peu son feu'}},
+  volcan: {braisou:{pw:1.3,txt:'le feu est chez lui dans le volcan'},
+           rocaillou:{pw:1.2,rg:1.1,txt:'il y a des rochers partout'},
+           givrou:{pw:0.75,txt:'la glace fond près de la lave'},
+           gouttine:{rg:0.85,txt:'l\'eau s\'évapore avec la chaleur'}}
+};
+function biomeOf(gid,world){const w=WORLDS[(world||G.world)-1];return (BIOME[w.theme]||{})[gid]||null;}
+function biomeTxt(gid,world){const b=biomeOf(gid,world);if(!b)return '';const w=WORLDS[(world||G.world)-1],pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %';
+  const parts=[];if(b.pw)parts.push(`${pc(b.pw)} de puissance`);if(b.rg)parts.push(`${pc(b.rg)} de portée`);
+  const good=(b.pw||1)*(b.rg||1)>=1;return `<p class="biome ${good?'up':'down'}">${w.em} <b>${w.name} :</b> ${parts.join(' et ')} — ${b.txt}.</p>`;}
 const KIND_G={fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
 const TARGETS={first:'🏃 Le premier',strong:'💪 Le plus costaud',armor:'🛡️ Les armures'};
 function armorOn(){return P&&P.diff>=2;}   // niveau ⭐ : pas de barre d'armure (règle simple d'origine)
@@ -322,9 +371,10 @@ function formOf(lv){return lv>=CFG.EVO[1]?3:lv>=CFG.EVO[0]?2:1;}
 function stats(gid){
   const g=GUARD[gid],u=up(gid),lv=u.pw+u.rg+u.sp+u.ca,form=formOf(lv),ev=form-1;
   if(g.kind==='coin')return{lv,form,gold:g.gold*(1+0.35*lv)*(1+0.5*ev)};
+  const bi=biomeOf(gid)||{};
   return{lv,form,
-    dmg:g.dmg*Math.pow(CFG.PW,u.pw)*Math.pow(CFG.EVO_DMG,ev),
-    rg:g.rg*(1+CFG.RG*u.rg)*Math.pow(CFG.EVO_RG,ev),
+    dmg:g.dmg*Math.pow(CFG.PW,u.pw)*Math.pow(CFG.EVO_DMG,ev)*(bi.pw||1),
+    rg:g.rg*(1+CFG.RG*u.rg)*Math.pow(CFG.EVO_RG,ev)*(bi.rg||1),
     rate:g.rate*Math.pow(CFG.SP,u.sp)*Math.pow(CFG.EVO_SP,ev),ca:u.ca};
 }
 function upCost(gid){return Math.round(CFG.COST_BASE*Math.pow(CFG.COST_GROWTH,level(gid)));}
@@ -475,7 +525,8 @@ function renderBench(){
     if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid)))+' '+level(gid);}
     else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
     else{const gf=giftOf(gid);cls+=' lock';tag='🔒 '+gf.world+'-'+gf.wave;}
-    return `<div class="${cls}" data-g="${gid}">${gIcon(gid,40,own?undefined:1)}<span>${tag}</span></div>`;
+    const bi=biomeOf(gid),bb=bi?((bi.pw||1)*(bi.rg||1)>=1?'<i class="bb up" title="Bonus de la map">▲</i>':'<i class="bb down" title="Malus de la map">▼</i>'):'';
+    return `<div class="${cls}" data-g="${gid}">${bb}${gIcon(gid,40,own?undefined:1)}<span>${tag}</span></div>`;
   }).join('');
   if(!P.tips.shop&&P.tips.wave&&Object.keys(SHOP).some(g=>!P.owned.includes(g)&&P.money>=SHOP[g]))
     tipOnce('shop','livia-idee','Tu as assez de LiliDollars pour acheter un nouveau gardien ! Touche-le dans la barre du bas.');
@@ -527,39 +578,43 @@ function effet(gid,s){
 }
 function effBar(v,lab){const w=Math.min(100,v/2.5*100),c=v>=1.2?'#3FA34D':v>=0.9?'#E0A21B':'#D9534F';
   return `<div class="row"><span class="lab">${lab}</span><div class="bar"><i style="width:${w}%;background:${c}"></i></div><span class="val">×${String(Math.round(v*100)/100).replace('.',',')}</span></div>`;}
-function showGuard(gid,fromTeam){
+function showGuard(gid,fromTeam,tab){
   const g=GUARD[gid],s=stats(gid),u=up(gid),cost=upCost(gid),t=G.towers.find(t=>t.gid===gid),sp=SPEC[gid],arm=armorOn();
-  G.sel=t||null;
-  const next=s.form<3?`Évolue au niveau <b>${CFG.EVO[s.form-1]}</b> ✨ (encore ${CFG.EVO[s.form-1]-s.lv} amélioration${CFG.EVO[s.form-1]-s.lv>1?'s':''})`:'Forme finale atteinte 🌟';
+  G.sel=t||null;G.sheetTab=tab||G.sheetTab||'up';if(g.kind==='coin')G.sheetTab='up';
+  const ft=fromTeam?1:0,tb=G.sheetTab;
+  const next=s.form<3?`Évolue au niveau <b>${CFG.EVO[s.form-1]}</b> ✨ (encore ${CFG.EVO[s.form-1]-s.lv})`:'Forme finale 🌟';
   const can=k=>P.money>=cost&&u[k]<CFG.MAX[k];
-  const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${fromTeam?1:0})">+ ${fmt(cost)} L$</button>`;
-  let rows,tech='';
-  if(g.kind==='coin'){
-    rows=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
+  const btn=k=>`<button class="b-violet" ${can(k)?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})">+ ${fmt(cost)} L$</button>`;
+  // valeur après la prochaine amélioration de portée
+  const rgNext=g.kind==='coin'?0:s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
+  let body='';
+  if(tb==='up'){
+    if(g.kind==='coin'){
+      body=`<div class="row"><span class="lab">💰 Pièces</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.gold*rewMul(G.world,G.wave))}/vague</span>${btn('pw')}</div>`;
+    }else{
+      body=`<div class="row"><span class="lab">💪 Puissance</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.dmg)}</span>${btn('pw')}</div>
+        <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)} → ${fmt(rgNext)}</span>${btn('rg')}</div>
+        <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`+
+        (arm?`<div class="row"><span class="lab">🔨 Casse-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'')+
+        `<p class="rgnote">${t?'🎯 Cercle blanc sur la map = sa portée. Pointillés jaunes = sa portée après une amélioration 🎯 de plus.':'🎯 Place-le sur la map pour voir sa portée (le cercle s\'affiche pendant que tu le fais glisser).'}</p>`;
+      if(arm&&g.kind!=='wind')body+=`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`;
+    }
+    body+=`<p style="text-align:right;font-weight:800">💰 ${fmt(P.money)} L$</p>`;
   }else{
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1);
-    tech=`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
-      <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td><td>🎯 Portée</td><td>${fmt(s.rg)}</td></tr>
-      <tr><td colspan="4">✨ ${effet(gid,s)}</td></tr></table>`;
-    if(arm)tech+=effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Contre l\'armure')+effBar(sp.life,'❤️ Contre la vie');
-    rows=`<div class="row"><span class="lab">💪 Puissance</span>${bar(u.pw,CFG.MAX.pw)}<span class="val">${fmt(s.dmg)}</span>${btn('pw')}</div>
-      <div class="row"><span class="lab">🎯 Portée</span>${bar(u.rg,CFG.MAX.rg)}<span class="val">${fmt(s.rg)}</span>${btn('rg')}</div>
-      <div class="row"><span class="lab">⏱️ Vitesse</span>${bar(u.sp,CFG.MAX.sp)}<span class="val">${s.rate.toFixed(1)}/s</span>${btn('sp')}</div>`+
-      (arm?`<div class="row"><span class="lab">🔨 Casse-armure</span>${bar(u.ca,CFG.MAX.ca)}<span class="val">+${Math.round(CFG.CA*u.ca*100)} %</span>${btn('ca')}</div>`:'');
+    body=`<table class="tech"><tr><td>💥 Dégâts par tir</td><td>${fmt(s.dmg)}</td></tr><tr><td>⏱️ Tirs par seconde</td><td>${String(s.rate.toFixed(2)).replace('.',',')}</td></tr>
+      <tr><td>🔥 Dégâts par seconde</td><td>${fmt(dps)}</td></tr><tr><td>🎯 Portée (rayon)</td><td>${fmt(s.rg)}</td></tr>
+      <tr><td colspan="2">✨ ${effet(gid,s)}</td></tr></table>`+
+      (arm?effBar(sp.arm*(1+CFG.CA*u.ca),'🛡️ Armure')+effBar(sp.life,'❤️ Vie'):'')+
+      `<p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<br>💡 ${sp.astuce}</p>`;
   }
-  const cible=arm&&g.kind!=='coin'&&g.kind!=='wind'?`<div class="tgt"><b>Cible :</b> ${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'b-pink':''}" onclick="setTarget('${gid}','${m}',${fromTeam?1:0})">${TARGETS[m]}</button>`).join('')}</div>`:'';
-  const foot=t?`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser pour le déplacer.</span><button onclick="unplace('${gid}')">🏰 Rentrer au château</button>`
-              :`<span style="align-self:center;font-weight:700;opacity:.75">Fais-le glisser depuis la barre du bas sur un cercle ➕ libre.</span>`;
-  openModal(`<div class="hasimg" style="align-items:center">${gIcon(gid,84)}<div><h2>${g.name} <small style="font-size:16px;color:#777">${FORMS[s.form]} · niveau ${s.lv}</small></h2>
-      <p><span class="role">${sp.role}</span> ${g.elem}</p><p>${next}</p></div></div>
-    ${tech}
-    <p class="fx">👍 <b>Fort contre :</b> ${sp.fort}<br>👎 <b>Faible contre :</b> ${sp.faible}<br>💡 ${sp.astuce}</p>
-    ${cible}
-    <div style="margin-top:6px">${rows}</div>
-    <p style="text-align:right;font-weight:800">💰 Tu as ${fmt(P.money)} L$</p>
-    <div class="right">${foot}${fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':''}<button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
+  const tabs=g.kind==='coin'?'':`<div class="tabs"><button class="${tb==='up'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'up')">⬆️ Améliorer</button><button class="${tb==='info'?'b-pink':''}" onclick="showGuard('${gid}',${ft},'info')">📋 Fiche technique</button></div>`;
+  const foot=(t?`<button onclick="unplace('${gid}')">🏰 Rentrer</button>`:'')+(fromTeam?'<button onclick="showTeam()">⬅️ Équipe</button>':'')+'<button class="b-pink" onclick="closeModal()">OK</button>';
+  openSheet(`<h2>${g.name} <small style="font-size:14px;color:#777">${FORMS[s.form]} · niv. ${s.lv}</small></h2>
+    <p><span class="role">${sp.role}</span></p><p>${next}</p>${biomeTxt(gid)}${tabs}${body}
+    <div class="right">${foot}</div>`,gid,s.form,t&&t.x>W/2?'left':'right');
 }
-function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam);}
+function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
@@ -592,9 +647,16 @@ let modalOpen=false;
 function openModal(html,image,noClose,wide){
   $('mbox').className='box'+(wide?' wide':'');
   $('mbox').innerHTML=image?`<div class="hasimg"><img src="img/${image}.webp" alt=""><div>${html}</div></div>`:html;
-  $('modal').style.display='flex';modalOpen=true;$('modal').dataset.noclose=noClose?1:'';
+  $('sheetM').style.display='none';$('modal').style.display='flex';modalOpen=true;$('modal').dataset.noclose=noClose?1:'';
 }
-function closeModal(){$('modal').style.display='none';modalOpen=false;G.sel=null;refreshHUD();}
+function closeModal(){$('modal').style.display='none';$('sheetM').style.display='none';modalOpen=false;G.sel=null;refreshHUD();}
+// Fiche d'un gardien : petite fenêtre sur le côté, la map reste visible (portée dessinée dessus)
+function openSheet(html,gid,form,side){
+  $('modal').style.display='none';
+  $('sbox').innerHTML=(ART[gid]?`<img class="smallG" src="img/g/${gid}-${form}.webp" alt="">`:'')+html;$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
+  const m=$('sheetM');m.className=side==='left'?'left':'right';m.style.display='flex';modalOpen=true;
+}
+$('sheetM').addEventListener('pointerdown',e=>{if(e.target===$('sheetM'))closeModal();});
 $('modal').addEventListener('pointerdown',e=>{if(e.target===$('modal')&&!$('modal').dataset.noclose)closeModal();});
 
 // ---------- Bulles d'Ellie et Livia ----------
@@ -881,7 +943,6 @@ function drawCastleLife(wd){
 function drawGuard(t,sel){
   if(DR&&DR.active&&DR.gid===t.gid)ctx.globalAlpha=0.35;
   const g=GUARD[t.gid],s=stats(t.gid),r=22+6*s.form,b=Math.sin(t.anim*3)*2,k=t.kick*0.12;
-  if(sel&&g.kind!=='coin'){ctx.fillStyle='rgba(255,255,255,.18)';ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(t.x,t.y,s.rg,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);}
   ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(t.x,t.y+r*0.8,r*0.9,r*0.3,0,0,7);ctx.fill();
   const im=gImg(t.gid,s.form);
   if(im&&im.complete&&im.naturalWidth){
@@ -954,6 +1015,12 @@ function draw(){
   if(DR&&DR.active&&DR.spot>=0&&GUARD[DR.gid].kind!=='coin'){const s=wd.spots[DR.spot],rg=stats(DR.gid).rg;
     ctx.fillStyle='rgba(255,255,255,.22)';ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(s.x,s.y,rg,0,7);ctx.fill();ctx.stroke();ctx.setLineDash([]);
     ctx.strokeStyle='#FFD93D';ctx.lineWidth=6;ctx.beginPath();ctx.arc(s.x,s.y,36,0,7);ctx.stroke();}
+  if(G.sel&&GUARD[G.sel.gid].kind!=='coin'){
+    // portée du gardien sélectionné (cercle plein) et portée après une amélioration de plus (pointillés)
+    const t=G.sel,st=stats(t.gid),u=up(t.gid),nx=st.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg),pul=1+0.02*Math.sin(G.anim*3);
+    ctx.fillStyle='rgba(255,255,255,.22)';ctx.strokeStyle='#fff';ctx.lineWidth=4;ctx.beginPath();ctx.arc(t.x,t.y,st.rg,0,7);ctx.fill();ctx.stroke();
+    if(u.rg<CFG.MAX.rg){ctx.strokeStyle='rgba(255,230,120,.95)';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(t.x,t.y,nx*pul,0,7);ctx.stroke();ctx.setLineDash([]);}
+  }
   drawCastleLife(wd);
   const objs=[...G.towers.map(t=>({y:t.y,f:()=>drawGuard(t,G.sel===t)})),...G.enemies.map(e=>({y:e.y,f:()=>drawFoe(e)}))].sort((a,b)=>a.y-b.y);
   objs.forEach(o=>o.f());

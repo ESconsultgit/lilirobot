@@ -87,7 +87,7 @@ Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
 
 ### Fiches techniques des gardiens
 
-Toucher un gardien (sur la map ou dans la barre du bas) ouvre sa **fiche technique** : son rôle, ses dégâts par tir, ses tirs par seconde, ses **dégâts par seconde**, sa portée, son effet spécial, ce contre quoi il est fort ou faible, une astuce, son évolution suivante et ses améliorations. Aux niveaux ⭐⭐ et ⭐⭐⭐, elle montre aussi son efficacité **contre l'armure** et **contre la vie**, la jauge **🔨 Casse-armure** et le choix de sa **cible**.
+Toucher un gardien (sur la map ou dans la barre du bas) ouvre sa **fiche**, une petite fenêtre sur le côté : la map reste visible, avec le gardien en grand à côté (dans l'en-tête sur téléphone). Sa **portée** est dessinée sur la map : cercle blanc = portée actuelle, pointillés jaunes = portée après une amélioration 🎯 de plus (la fiche affiche aussi « 227 → 235 »). Deux onglets : **⬆️ Améliorer** (jauges, cible) et **📋 Fiche technique** : son rôle, ses dégâts par tir, ses tirs par seconde, ses **dégâts par seconde**, sa portée, son effet spécial, ce contre quoi il est fort ou faible, une astuce, son évolution suivante et ses améliorations. Aux niveaux ⭐⭐ et ⭐⭐⭐, elle montre aussi son efficacité **contre l'armure** et **contre la vie**, la jauge **🔨 Casse-armure** et le choix de sa **cible**.
 
 | Gardien | Rôle | Contre l'armure | Contre la vie | Fort contre | Faible contre |
 |---|---|--:|--:|---|---|
@@ -103,6 +103,16 @@ Toucher un gardien (sur la map ou dans la barre du bas) ouvre sa **fiche techniq
 | 🪙 **Sousou** | tirelire | — | — | rapporte des L$ à chaque vague | n'attaque pas, prend une place |
 
 **Cible** (⭐⭐ et ⭐⭐⭐, sauf Plumo et Sousou) : 🏃 **le premier** (le plus avancé sur le chemin, par défaut), 💪 **le plus costaud** (le plus de vie + armure ; par défaut pour Lunette) ou 🛡️ **les armures** (les méchants qui ont encore une armure d'abord). Le choix est gardé pour chaque gardien.
+
+### Bonus et malus des maps
+
+Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du bas, un ▲ vert ou un ▼ rouge signale le bonus ou le malus de la map en cours ; la fiche l'explique.
+
+| Map | Bonus | Malus |
+|---|---|---|
+| 🌸 Prairie fleurie | Feuillou +25 % de puissance et +10 % de portée (les plantes poussent bien) ; Plumo +15 % de portée (le vent souffle loin) ; Zapic +10 % de puissance (l'orage) | — |
+| ❄️ Forêt enneigée | Gouttine +25 % de portée (l'eau glisse sur la neige) ; Givrou +30 % de puissance (le froid) ; Lunette +10 % de portée (nuits claires) | Braisou −15 % de puissance (la neige éteint son feu) |
+| 🌋 Volcan | Braisou +30 % de puissance (le feu est chez lui) ; Rocaillou +20 % de puissance et +10 % de portée (des rochers partout) | Givrou −25 % de puissance (la glace fond) ; Gouttine −15 % de portée (l'eau s'évapore) |
 
 ### Armure (⭐⭐ et ⭐⭐⭐)
 
@@ -160,7 +170,7 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 
 Constantes en haut du script de `index.html` :
 
-- `SPEC` : fiche technique de chaque gardien (efficacité contre l'armure `arm` et contre la vie `life`, rôle, forces, faiblesses, astuce) ; `KIND_G` relie le type de tir au gardien ; `TARGETS` : les choix de cible. Armure des méchants : `armorK` dans `FOES` et dans les boss de `WORLDS` (× leurs PV).
+- `SPEC` : fiche technique de chaque gardien (efficacité contre l'armure `arm` et contre la vie `life`, rôle, forces, faiblesses, astuce) ; `KIND_G` relie le type de tir au gardien ; `TARGETS` : les choix de cible. `BIOME` : bonus et malus de chaque map (`pw` puissance, `rg` portée, avec la phrase d'explication). Armure des méchants : `armorK` dans `FOES` et dans les boss de `WORLDS` (× leurs PV).
 - `CFG` : argent de départ, nombre de vagues, croissance des PV et des récompenses, prix et effets des améliorations, maximums des jauges, niveaux d'évolution.
 - `DIFF` (niveaux de jeu), `GUARD` (gardiens), `SHOP` (prix des gardiens à acheter), `BOSS_GIFT` (gardiens libérés par les boss), `BENCH_ORDER` (ordre de la barre du bas), `FOES` et `INTRO` (méchants et vague d'apparition), `WORLDS` (chemin `path` de chaque monde, boss), `MINIBOSS`.
 - **Emplacements** : calculés automatiquement le long du chemin (`genSpots`). Quand les fonds de map de Gemini arriveront, on les fixera à la main si besoin.
@@ -214,4 +224,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v9** — la vidéo de lancement passe au démarrage du jeu, avec les boutons « Activer le son » et « Passer ».
 - **v10** — équilibrage : vagues plus longues (10 + vague × 0,9 méchants), PV de base × 2, boss plus costauds (40 et 120 Chipeurs), croissance des PV et des prix revue ; nombre de gardiens sur la map limité selon le niveau (8 / 6 / 5) ; Plumo ne peut plus bloquer un méchant en continu ; emplacements sombres sur la map neige.
 - **v11** — armure (barre bleue qui diminue en premier) pour les Casqués, la Grosse Taupe et le Dragon en ⭐⭐ et ⭐⭐⭐ ; efficacité de chaque gardien contre l'armure et contre la vie ; jauge Casse-armure ; choix de la cible ; fiche technique complète de chaque gardien. Le niveau ⭐ ne change pas.
+- **v12** — fiche plus petite sur le côté avec le gardien en grand, portée dessinée sur la map (actuelle et après une amélioration), onglets Améliorer / Fiche technique ; bonus et malus des maps selon le gardien.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
