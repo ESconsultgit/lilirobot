@@ -216,3 +216,47 @@ Prolonger encore la scène :
 Continue the scene. The ground shakes: the giant grumpy mole boss from Image 4, with his miner's helmet and huge loot sack, stomps along the path towards the castle. All the guardians line up together and attack at the same time in a colourful burst of fire, water, lightning, snow and stars. The mole boss gets dizzy, drops his sack and runs away, crying comically. Princess Lili jumps with joy on her balcony with Ellie and Livia, the guardians cheer around the castle. The camera slowly pulls back up into the sky above the castle at sunset, leaving the top of the sky empty for a title.
 Sound: big triumphant finale of the music, cheering, fireworks. No dialogue. No text on screen.
 ```
+
+## Monde 4 — Le Marais enchanté (deux chemins)
+
+### Fond de map
+
+Joindre : la planche de style (image 1) et `guide-map-4.png` (image 2). Le chemin se sépare en deux au milieu puis se rejoint avant le château : les deux branches doivent rester exactement à leur place.
+
+```
+Image 1 is the style reference: keep the same art style. Image 2 is a layout guide: the light band is the enemies' path, which splits into TWO separate paths in the middle and joins again before the castle; the magenta rectangle is where the castle will be placed later.
+
+Redraw image 2 as a beautiful top-down game map for a cute children's tower defense game: a magical enchanted swamp with dark green-blue water pools, giant lily pads, reeds and cattails, glowing mushrooms, fireflies, small wooden boardwalks and twisted friendly trees, a bit misty but cheerful.
+Keep BOTH paths EXACTLY the same shape, width and position as in image 2, as a light muddy path with small stones, clear of any object; keep the split and the junction exactly where they are. Leave the magenta rectangle area as plain empty ground (no castle, no objects, no magenta). Decorations only beside the paths, with plenty of open ground next to the paths where guardians will be placed, including inside the two loops. No characters, no creatures, no buildings, no text.
+STYLE: cute 2D cartoon illustration, top-down view, clean outlines, soft cel shading, bright cheerful colours. Same 16:9 format as image 2.
+```
+
+### Grand boss du monde 4
+
+Joindre : la planche de style.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw La Reine Grenouille Grognon, the final boss of a cute children's tower defense game, walking towards the RIGHT, seen from the side, full body, big and impressive but funny rather than scary: a huge grumpy chubby green frog queen with a small wonky golden crown, a black bandit eye mask like the Chipeurs, a lily-pad cape and a big loot sack.
+
+Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard.
+STYLE: cute 2D cartoon illustration for a children's mobile game, clean dark outlines, simple cel shading, bright colours. No text. Square 1:1 image.
+```
+
+## Nouveau gardien — Gloupi (poison)
+
+Joindre : la planche de style.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw Gloupi, a guardian creature, in its 3 evolution stages, side by side from left to right, all facing the viewer in a 3/4 front view, full body, evenly spaced with a clear gap between them. Each stage is bigger and more impressive than the previous one, but clearly the same creature (same colours, same face, same key features):
+1. Baby: a tiny round wobbly blob of translucent lime-green jelly with big shiny eyes, a happy smile and little purple poison bubbles floating inside it
+2. Grand (teen): a bigger jelly creature with a wobbly drip on its head like a little crest, small jelly arms, more glowing purple bubbles inside and a few drips at its feet
+3. Super (final): a majestic jelly creature with a crown-shaped drip on its head, a jelly cape, glowing green aura and purple bubbles swirling around it
+Sizes: the baby is about half the height of the super form. Cute and friendly, never gross or scary.
+
+Background: perfectly flat solid pure blue #0000FF (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard.
+STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. Simple, readable silhouette that is still recognisable when very small. No text. Wide 16:9 image.
+```

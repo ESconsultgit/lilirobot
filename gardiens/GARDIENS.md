@@ -37,6 +37,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 | 🌸 1. La Prairie fleurie | prairie, fleurs, arbres | Chipeur (vague 1), Fusée (3), Costaud (6) | La Grosse Taupe Grognon |
 | ❄️ 2. La Forêt enneigée | sapins, neige | + Casqué (2), Volant (5) | Le Yéti Ronchon |
 | 🌋 3. Le Volcan | roches, lave, cristaux | + Fantôme (3) | Le Dragon de Grognon |
+| 🐸 4. Le Marais enchanté | marais, nénuphars, roseaux ; **deux chemins** au milieu (un Chipeur sur deux prend l'autre) | tous | La Reine Grenouille Grognon (armure 0,5 × PV) |
 
 - Chaque monde compte **50 vagues**. Il faut les réussir toutes pour débloquer le monde suivant. Un monde réussi peut être rejoué depuis la vague 1 (pour gagner des L$).
 - **Chef des Chipeurs** (mini-boss) aux vagues 10, 20, 30 et 40 ; **grand boss** du monde à la vague 50.
@@ -81,6 +82,7 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 | 🪨 | **Rocaillou** | roche | rocher en zone (rayon 70), casse les casques | 22 | 120 | 0,5 |
 | ⭐ | **Étoilette** | étoile | voisins proches +25 % de vitesse (+10 % par évolution) ; seule à voir les Fantômes, elle les démasque pour tous | 4 | 150 | 1,2 |
 | 🌙 | **Lunette** | lune | tir de très loin sur le méchant qui a le plus de PV | 28 | 270 | 0,45 |
+| 🧪 | **Gloupi** | poison | boule de gelée qui empoisonne la cible (et un peu autour) : 35 % des dégâts par seconde pendant 4 s, s'ajoute jusqu'à 3 fois, **passe sous l'armure** ; libéré par le Chef des Chipeurs (monde 3, vague 20) ; évolue aux niveaux 22 et 65 | 6 | 140 | 1,0 |
 | 🪙 | **Sousou** | pièce | n'attaque pas : fait gagner des LiliDollars à chaque vague | — | — | — |
 
 Valeurs de départ (niveau 0). La map fait 1 600 × 900 unités.
@@ -259,4 +261,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v22** — places plus chères selon le niveau (⭐⭐⭐ : 200 000 puis 500 000 L$).
 - **v23** — la map prend tout l'écran ; tout flotte par-dessus : infos (monde, cœurs, L$, vague) en haut à gauche, prochaine vague toujours affichée en haut au milieu (le bouton 👀 Vague est supprimé), menu déroulant ☰ en haut à droite (Auto, vitesse, pause, équipe, menu), ▶ Vague en bas à droite, et la liste des gardiens qui s'ouvre avec le bouton 🛡️ Gardiens en bas à gauche.
 - **v24** — barre du haut sans chevauchement : la bulle d'infos et le bandeau de la vague sont côte à côte (le bandeau se réduit si la place manque), le menu ☰ garde sa place à droite.
+- **v25** — monde 4 « Le Marais enchanté » avec deux chemins (débloqué après le Volcan) ; nouveau gardien Gloupi (poison qui passe sous l'armure), libéré au monde 3 vague 20 ; bonus du marais (Gloupi, Feuillou, Zapic ; malus Braisou). Images Gemini à venir (map 4, boss, Gloupi) : en attendant, décor dessiné par le code et ronds de couleur.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
