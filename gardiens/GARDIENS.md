@@ -68,7 +68,7 @@ On commence avec **1 gardien parmi 3** (Braisou, Gouttine ou Feuillou). Les autr
 
 **Glisser-déposer** : on fait glisser un gardien de la barre du bas vers un **emplacement** (cercle ➕ près du chemin, 14 par map ; cercles sombres sur la neige pour bien les voir) ; pendant le glisser, sa portée s'affiche sur l'emplacement visé. Sur la map, on fait glisser un gardien vers un autre emplacement pour le déplacer (si l'emplacement est pris, les deux gardiens échangent leur place), ou vers la barre du bas pour le rentrer au château. Un simple toucher sur un gardien ouvre sa fiche ; toucher un cercle libre propose les gardiens disponibles. Chaque gardien est unique et ne se place qu'une fois par map.
 
-**Nombre de gardiens sur la map** selon le niveau : **8** (⭐), **6** (⭐⭐), **5** (⭐⭐⭐). Le compteur 🛡️ au début de la barre du bas l'affiche (en rose quand c'est plein). Quand c'est plein, il faut rentrer un gardien au château pour en placer un autre : on choisit son équipe selon les méchants du monde. Les gardiens au château peuvent quand même être améliorés.
+**Nombre de gardiens sur la map** selon le niveau : **8** (⭐), **6** (⭐⭐), **5** (⭐⭐⭐) au départ. On peut **acheter des places** en touchant le compteur 🛡️ (le **+** devient rose quand on a assez de L$) : 2 000, puis 10 000, puis 50 000, 250 000 et 1 000 000 L$. Les places achetées sont gardées pour toujours, dans tous les mondes, avec un **plafond** par niveau : **10** (⭐, tous les gardiens), **8** (⭐⭐), **7** (⭐⭐⭐). Réglages : `SLOT_MAX`, `SLOT_PRICE`. Le compteur 🛡️ au début de la barre du bas l'affiche (en rose quand c'est plein). Quand c'est plein, il faut rentrer un gardien au château pour en placer un autre : on choisit son équipe selon les méchants du monde. Les gardiens au château peuvent quand même être améliorés.
 
 | | Gardien | Élément | Pouvoir | Dégâts | Portée | Tirs/s |
 |---|---|---|---|--:|--:|--:|
@@ -157,7 +157,7 @@ Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du b
 | 🐻 | **Costaud** | 75 | 34 | 7 | lent, beaucoup de PV |
 | ⛑️ | **Casqué** | 35 | 50 | 5 | casque : en ⭐, dégâts ÷2 sauf Rocaillou qui casse le casque ; en ⭐⭐ et ⭐⭐⭐, **armure** = 1,2 × ses PV |
 | 🦇 | **Volant** | 24 | 72 | 4 | vole : ni ralenti ni repoussé |
-| 👻 | **Fantôme** | 30 | 58 | 5 | invisible : seule **Étoilette** le voit ; dès qu'elle le touche une fois (« Démasqué ! »), il est visible pour tous les gardiens |
+| 👻 | **Fantôme** | 30 | 58 | 5 | invisible : seule **Étoilette** le voit ; dès qu'elle le touche, il se **transforme en vrai méchant** visible par tous (« Démasqué : … ! ») : un simple Chipeur en ⭐, une surprise en ⭐⭐ et ⭐⭐⭐ (Chipeur, Fusée, Costaud, Casqué ou Volant, avec sa vie et son armure). Réglage : `GHOST_INTO` |
 | 😤 | **Chef des Chipeurs** | 40 × Chipeur | 28 | 40 | mini-boss, enlève 5 cœurs |
 | 👑 | **Grand boss** | 120 × Chipeur | 28 | 120 | un par monde, enlève 5 cœurs |
 
@@ -255,4 +255,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v18** — fiche redessinée : en-tête (image, nom, rôle, forme et niveau, boutons 🏰 Rentrer et ✕ Fermer), barre de progression vers l'évolution, bonus de la map en pastille, onglets « Améliorer / Infos » en contrôle segmenté ; 4 cartes d'amélioration (toute la carte est le bouton, valeur actuelle → après), cible en contrôle segmenté ; infos : 3 évolutions, 4 chiffres en tuiles, effet, armure/vie, fort/faible ; pied fixe avec tes L$ et le prix d'une amélioration. Tient sans défilement sur téléphone.
 - **v19** — aperçu de la prochaine vague : bandeau en haut de la map et fenêtre détaillée (méchants, nombre, vie, armure, vitesse, gardiens conseillés).
 - **v20** — dégâts de zone bien visibles : onde de choc qui s'étend jusqu'au bord de la zone touchée (disque coloré, bord lumineux, second anneau, éclaboussures) pour Gouttine (bleu), Givrou (bleu glacé), Rocaillou (brun) ; rafale de Plumo avec des traits de vent qui tournent. Réglage : `WAVE_STYLE`.
+- **v21** — places sur la map à acheter (plafond 10 / 8 / 7) ; les Fantômes démasqués se transforment en vrai méchant (Chipeur en ⭐, surprise en ⭐⭐ et ⭐⭐⭐).
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

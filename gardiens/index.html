@@ -44,6 +44,7 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .bi .gico{pointer-events:none}
 .bi{position:relative}.bb{position:absolute;top:-2px;right:2px;font-style:normal;font-size:13px;font-weight:900;pointer-events:none;text-shadow:0 0 3px #fff}.bb.up{color:#2E9B3A}.bb.down{color:#D9342B}
 .bcount{flex:none;align-self:center;font-family:'Baloo 2';font-weight:800;font-size:14px;line-height:1.1;text-align:center;padding:2px 8px;border-radius:10px;background:#EEE6F6}
+.bcount{position:relative;cursor:pointer}.slotplus{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#B9A9D6;color:#fff;font:800 15px/20px 'Baloo 2'}.slotplus.afford{background:var(--pink);box-shadow:0 0 0 3px #FFD3E4}
 .bcount.full{background:#FFD3E4;color:var(--pink)}
 .bi.placed{opacity:.4}
 .bi.shop{cursor:pointer}.bi.shop .gico{filter:grayscale(.7) opacity(.8)}
@@ -462,7 +463,19 @@ function enterWorld(n){
   else if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
 function resetField(){G.state='idle';G.queue=[];G.enemies=[];G.projs=[];G.fx=[];G.texts=[];G.t=0;G.sel=null;G.autoT=0;}
-function teamMax(){return DIFF[P.diff].team;}
+// Places sur la map : base selon le niveau + places achetées (gardées pour toujours), avec un plafond par niveau
+const SLOT_MAX={1:10,2:8,3:7},SLOT_PRICE=[2000,10000,50000,250000,1000000];
+function teamMax(){return Math.min(SLOT_MAX[P.diff],DIFF[P.diff].team+(P.slots||0));}
+function slotPrice(){return SLOT_PRICE[Math.min(P.slots||0,SLOT_PRICE.length-1)];}
+function showSlotShop(){
+  const max=SLOT_MAX[P.diff],cur=teamMax(),full=cur>=max,pr=slotPrice(),ok=P.money>=pr;
+  openModal(`<h2>🛡️ Une place de plus sur la map</h2>
+    <p>Tu peux placer <b>${cur} gardiens</b> en même temps (maximum au niveau ${DIFF[P.diff].name} : <b>${max}</b>).</p>
+    ${full?'<p>Tu as déjà toutes les places de ce niveau ! 🎉</p>':`<p>Une place de plus coûte <b>${fmt(pr)} L$</b> (tu as ${fmt(P.money)} L$). Elle est gardée pour toujours, dans tous les mondes.</p>${ok?'':`<p>Il te manque <b>${fmt(pr-P.money)} L$</b> : continue à défendre le château et épargne !</p>`}`}
+    <div class="right"><button onclick="closeModal()">${full?'OK':'Plus tard'}</button>${full?'':`<button class="b-pink" ${ok?'':'disabled'} onclick="buySlot()">Acheter (${fmt(pr)} L$)</button>`}</div>`,'livia-idee');
+}
+function buySlot(){const pr=slotPrice();if(P.money<pr||teamMax()>=SLOT_MAX[P.diff])return;P.money-=pr;P.slots=(P.slots||0)+1;save();closeModal();refreshHUD();
+  tip('lili-contente',`Bravo ! Tu peux maintenant placer <b>${teamMax()} gardiens</b> sur la map.`,5000);}
 function buildTowers(){
   const pl=P.place[G.world];G.towers=[];
   for(const k in pl){const s=WORLDS[G.world-1].spots[k];if(!s||!P.owned.includes(pl[k]))continue;
@@ -471,7 +484,7 @@ function buildTowers(){
     G.towers.push({gid:pl[k],spot:+k,x:s.x,y:s.y,cd:0.3,anim:Math.random()*6,kick:0});}
 }
 function teamFull(){
-  tip('lili-explique',`Pas plus de <b>${teamMax()} gardiens</b> sur la map au niveau ${DIFF[P.diff].name} ! Fais glisser un gardien vers la barre du bas pour le rentrer au château, puis place celui que tu veux.`,6500);
+  tip('lili-explique',`Pas plus de <b>${teamMax()} gardiens</b> sur la map au niveau ${DIFF[P.diff].name} ! Fais glisser un gardien vers la barre du bas pour le rentrer au château, ou achète une place de plus avec le <b>+</b> du compteur 🛡️.`,6500);
 }
 function saveRun(){P.runs[G.world]={wave:G.wave,hearts:G.hearts};save();}
 
@@ -503,7 +516,7 @@ const FOE_INFO={
   costaud:{txt:'Lent mais beaucoup de vie.',best:['braisou','lunette','rocaillou']},
   casque:{txt:'Porte une armure : il faut la casser d\'abord.',best:['rocaillou','zapic','gouttine']},
   volant:{txt:'Vole au-dessus du chemin : pas ralenti, pas repoussé.',best:['zapic','lunette','braisou']},
-  fantome:{txt:'Invisible : seule Étoilette le voit et le démasque.',best:['etoilette']},
+  fantome:{txt:'Invisible : seule Étoilette le voit. Démasqué, il devient un vrai méchant (en ⭐⭐ et ⭐⭐⭐, surprise : peut-être un Costaud ou un Casqué !).',best:['etoilette']},
   boss:{txt:'Énorme, enlève 5 cœurs s\'il arrive au château.',best:['lunette','braisou','givrou']}
 };
 function waveSummary(world,w){
@@ -559,7 +572,7 @@ function spawn(s){
   if(f.armor&&!armorOn())tipOnce('armor','lili-idee','Les Casqués ont un casque : tes gardiens leur font moitié moins mal. Rocaillou peut casser leur casque !');
   if(f.armor&&armorOn())tipOnce('armor2','lili-idee','Les Casqués ont une <b>armure</b> (la barre bleue) : il faut la casser avant qu\'ils perdent de la vie. Rocaillou, Zapic et Gouttine cassent bien les armures ; Braisou et Lunette enlèvent bien la vie. Regarde la fiche de chaque gardien !',9000);
   if(f.fly)tipOnce('fly','livia-idee','Les Volants passent au-dessus des lianes, de la glace et du vent : ils ne sont ni ralentis ni repoussés.');
-  if(f.ghost)tipOnce('ghost','lili-explique','Les Fantômes sont invisibles ! Seule <b>Étoilette</b> peut les voir : dès qu\'elle touche un Fantôme, tous tes gardiens peuvent l\'attaquer.',8000);
+  if(f.ghost)tipOnce('ghost','lili-explique','Les Fantômes sont invisibles ! Seule <b>Étoilette</b> peut les voir : dès qu\'elle en touche un, il se transforme en vrai méchant et tous tes gardiens peuvent l\'attaquer.',8000);
 }
 function waveClear(){
   const w=G.wave,rw=rewMul(G.world,w);
@@ -632,7 +645,8 @@ function renderBench(){
   if(!P)return;
   const placed=G.towers.map(t=>t.gid);
   const full=placed.length>=teamMax();
-  $('bench').innerHTML=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}</div>`+BENCH_ORDER.map(gid=>{
+  const canBuy=teamMax()<SLOT_MAX[P.diff];
+  $('bench').innerHTML=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}${canBuy?`<span class="slotplus${P.money>=slotPrice()?' afford':''}">+</span>`:''}</div>`+BENCH_ORDER.map(gid=>{
     const own=P.owned.includes(gid);let cls='bi',tag;
     if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid),gid))+' '+level(gid);}
     else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
@@ -883,9 +897,18 @@ function refreshHUD(){
 // Fantômes : invisibles pour tous, sauf pour Étoilette ; dès qu'elle en touche un, il devient visible pour tous
 function seenBy(e){return !e.ghost||!!e.revealed;}
 function starSees(e){if(!e.ghost||e.revealed)return false;return G.towers.some(t=>GUARD[t.gid].sees&&Math.hypot(t.x-e.x,t.y-e.y)<=stats(t.gid).rg+e.r);}
+// Fantôme démasqué par Étoilette : il se transforme en vrai méchant.
+// Niveau ⭐ : toujours un simple Chipeur. Niveaux ⭐⭐ et ⭐⭐⭐ : surprise (Chipeur, Fusée, Costaud, Casqué ou Volant).
+const GHOST_INTO=['chipeur','fusee','costaud','casque','volant'];
+function unmask(e){
+  const into=P.diff===1?'chipeur':GHOST_INTO[Math.floor(Math.random()*GHOST_INTO.length)],f=FOES[into],k=e.max/FOES.fantome.hp,frac=e.hp/e.max;
+  burst(e.x,e.y,'#E9E4FF',16);addText(e.x,e.y-34,`Démasqué : ${f.name} !`,'#C2367A',18);
+  Object.assign(e,{type:into,art:into,name:f.name,em:f.em,col:f.col,max:f.hp*k,hp:f.hp*k*frac,spd:f.spd*(0.95+Math.random()*0.1),r:f.r,rew:Math.max(e.rew,Math.round(e.rew*f.rew/FOES.fantome.rew)),
+    ghost:false,revealed:true,seen:true,fly:!!f.fly,armor:!armorOn()&&!!f.armor,ap:armorOn()?f.hp*k*(f.armorK||0):0,apMax:armorOn()?f.hp*k*(f.armorK||0):0});
+}
 function hurt(e,amount,src,ca){
   if(e.hp<=0)return;
-  if(e.ghost&&!e.revealed&&src==='star'){e.revealed=true;e.seen=true;addText(e.x,e.y-30,'Démasqué !','#C2367A',18);}
+  if(e.ghost&&!e.revealed&&src==='star')unmask(e);
   if(!armorOn()){
     // niveau ⭐ : règle simple, le casque divise les dégâts par 2, Rocaillou le casse
     if(e.armor){if(src==='rock'){e.armor=false;addText(e.x,e.y-30,'Casque cassé !','#5E6B7A',18);}else amount*=0.5;}
@@ -1190,6 +1213,7 @@ cv.addEventListener('pointerdown',e=>{
 });
 $('bench').addEventListener('pointerdown',e=>{
   if(!P||modalOpen)return;
+  if(e.target.closest('.bcount')){showSlotShop();return;}
   const b=e.target.closest('.bi');if(!b)return;const gid=b.dataset.g;
   if(P.owned.includes(gid)){e.preventDefault();dragStart(e,gid);}
   else benchTap(gid);
