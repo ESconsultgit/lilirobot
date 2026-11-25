@@ -227,6 +227,7 @@ const CFG={
   CA:0.06,                           // casse-armure : +6 % de dégâts sur l'armure par amélioration
   EVO:[10,25],                       // niveaux d'évolution (forme 2, forme 3)
   EVO_DMG:1.35, EVO_RG:1.08, EVO_SP:1.1,
+  CHECKPOINT:25,                     // perdu après cette vague : on reprend à cette vague (avant : vague 1)
   AUTO_DELAY:2.5,                    // secondes entre deux vagues en mode Auto
   BOSS_HEARTS:5
 };
@@ -479,7 +480,6 @@ function waveClear(){
   addText(W/2,90,`Vague ${w} réussie ! +${fmt(bonus+gold)} L$`,'#7A4FC8',34);
   G.state='idle';G.projs=[];
   const wd=P.worlds[G.world];
-  if(w%10===0&&w<CFG.WAVES)wd.cp=w+1;
   if(w>=CFG.WAVES){worldWon();return;}
   G.wave=w+1;saveRun();refreshHUD();
   const gift=BOSS_GIFT[G.world+'-'+w];
@@ -498,11 +498,13 @@ function worldWon(){
     <div class="right">${next?`<button class="b-pink" onclick="closeModal();enterWorld(${n+1})">${next.em} En route !</button>`:''}<button onclick="showWorlds()">🗺️ Les mondes</button></div>`,'princesse-victoire');
 }
 function defeat(){
-  G.state='over';const cp=P.worlds[G.world].cp;
+  // Point de reprise : perdu jusqu'à la vague 25 → vague 1 ; après la vague 25 → vague 25 ;
+  // à la dernière vague (le grand boss), on la recommence autant de fois qu'il faut
+  G.state='over';const w=G.wave,cp=w>=CFG.WAVES?CFG.WAVES:w>CFG.CHECKPOINT?CFG.CHECKPOINT:1;
   G.wave=cp;G.hearts=maxHearts();saveRun();
   openModal(`<h2>Oh non ! Les Chipeurs sont entrés…</h2>
     <p>Ils ont chipé le goûter de la princesse Lili ! Mais pas de panique : <b>tes gardiens gardent toutes leurs améliorations</b> et tes LiliDollars.</p>
-    <p>Améliore-les un peu, puis on recommence à la <b>vague ${cp}</b>.</p>
+    <p>Améliore-les un peu, puis on recommence ${cp===CFG.WAVES?'<b>le combat contre le grand boss</b> (vague '+cp+')':cp===1?'à la <b>vague 1</b>':'à la <b>vague '+cp+'</b> (tu avais dépassé la moitié du monde !)'}.</p>
     <div class="right"><button onclick="showTeam()">🛡️ Équipe</button><button class="b-pink" onclick="closeModal();resetField();refreshHUD()">🔄 On recommence !</button></div>`,'princesse-inquiete');
 }
 

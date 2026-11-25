@@ -43,7 +43,7 @@ Pas de violence : un Chipeur touché assez de fois **éclate en petites étoiles
 - Toutes les 5 vagues (hors boss) : une **ruée de Fusées**.
 - Le **château** a des **cœurs** (selon le niveau). Chaque Chipeur qui arrive enlève 1 cœur, un boss 5. À 0, la partie est perdue.
 - **Lancer les vagues** : bouton ▶ **Vague N**, ou 🔁 **Auto** qui enchaîne les vagues toutes seules (2,5 s entre deux vagues). Vitesse ×1, ×2, ×3 et ⏸ Pause.
-- **Points de reprise** : si on perd, on reprend à la dernière vague de boss réussie (11, 21, 31, 41), avec tous les cœurs.
+- **Points de reprise** (tous les cœurs reviennent) : perdu jusqu'à la vague 25 → on reprend à la **vague 1** ; perdu entre les vagues 26 et 49 → on reprend à la **vague 25** ; perdu à la **vague 50** (le grand boss) → on recommence la vague 50 autant de fois qu'il faut. Réglage : `CFG.CHECKPOINT`.
 
 ## L'argent et la progression
 
@@ -245,4 +245,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v14** — Fantômes : seule Étoilette les voit (elle vise d'abord ceux qui sont cachés) ; dès qu'elle en touche un, il est visible pour tous. Lunette ne les voit plus.
 - **v15** — fiche sans défilement sur téléphone : deux colonnes (à gauche le gardien, son rôle, le bonus de la map, les onglets ; à droite les jauges et la cible, ou les évolutions et les chiffres), l'astuce n'apparaît que sur grand écran ; « Casse-armure » s'appelle « Anti-armure » dans la fiche.
 - **v16** — la fiche garde la même taille entre les onglets Améliorer et Fiche technique (les deux sont dans la page, l'un caché).
+- **v17** — nouveaux points de reprise : vague 1 jusqu'à la vague 25, puis vague 25, et le grand boss de la vague 50 se rejoue sans reculer.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
