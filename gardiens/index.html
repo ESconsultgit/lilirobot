@@ -129,6 +129,18 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .tgt{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}.tgt button{font-size:14px;padding:6px 10px}
 .bar{flex:1;height:12px;background:#EEE6F6;border-radius:8px;overflow:hidden}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--violet),var(--pink))}
+.rk-tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0}
+.rk-tabs .seg{display:flex;background:#EFE7FA;border-radius:12px;padding:3px;gap:2px}
+.rk-tabs .seg button{background:none;box-shadow:none;border:0;padding:5px 10px;font-size:14px;border-radius:9px;color:#5B4A7A}
+.rk-tabs .seg button.sel{background:#fff;color:#2A1F3D;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.rk-sub{text-align:center;margin:2px 0 6px;font-weight:800;color:#7A4FC8}
+.rk{max-height:46vh;overflow:auto;display:flex;flex-direction:column;gap:4px;padding:2px}
+.rkr{display:flex;align-items:center;gap:10px;background:#FAF6FF;border-radius:12px;padding:6px 10px;font-weight:700}
+.rkr.me{background:#FFE9F4;outline:2px solid #E0559A}
+.rkn{width:30px;text-align:center;font:800 18px 'Baloo 2',sans-serif;color:#7A4FC8}
+.rkp{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rkv{white-space:nowrap;font-size:14px;color:#2A1F3D}
+.rk-msg{text-align:center;opacity:.75}
 .who{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .who .pl{display:flex;align-items:center;gap:10px}
 .who .pl button.go{flex:1;text-align:left;font-size:20px}
@@ -262,11 +274,12 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 37</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 38</div>
           <button id="bAuto">🔁 Auto</button>
           <button id="bSpeed">⏩ ×1</button>
           <button id="bPause">⏸ Pause</button>
           <button id="bTeam">🛡️ Équipe</button>
+          <button id="bRank" onclick="showRank()">🏆 Classement</button>
           <button id="bMenu">⚙️ Menu</button>
           <div id="dev">
             <button onclick="devMoney()">+ argent</button>
@@ -638,17 +651,19 @@ function waveClear(){
   addText(W/2,90,`Vague ${w} réussie ! +${fmt(bonus+gold)} L$`,'#7A4FC8',34);
   G.state='idle';G.projs=[];
   const wd=P.worlds[G.world];
+  const bd=statD().best;bd[G.world]=Math.max(bd[G.world]||0,w);
   if(w>=CFG.WAVES){worldWon();return;}
   G.wave=w+1;saveRun();refreshHUD();
   const gift=BOSS_GIFT[G.world+'-'+w];
   if(gift&&!P.owned.includes(gift)){bossGift(gift);return;}
+  pushScore();
   if(w===3)tipOnce('auto','livia-idee','Astuce : appuie sur 🔁 Auto et les vagues se lanceront toutes seules !');
   if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
 function worldWon(){
   const n=G.world;P.worlds[n].done=true;P.worlds[n].cp=1;delete P.runs[n];
   if(n<WORLDS.length)P.unlocked=Math.max(P.unlocked,n+1);
-  save();refreshHUD();
+  save();refreshHUD();pushScore(true);
   const next=WORLDS[n];
   openModal(`<h2>🎉 Bravo ! Le château est sauvé !</h2>
     <p>Tu as réussi les ${CFG.WAVES} vagues de <b>${WORLDS[n-1].name}</b> et chassé ${esc(WORLDS[n-1].boss.name)} !</p>
@@ -888,12 +903,57 @@ function hideTipSoon(){clearTimeout(tipTimer);tipTimer=setTimeout(()=>$('tip').s
 $('tip').addEventListener('pointerdown',()=>{$('tip').style.display='none';});
 
 // ---------- Écrans : Qui joue ? / départ / mondes / menu ----------
+// ---------- Classement (partagé entre tous les téléphones, via api/score.php) ----------
+// On classe par niveau (⭐, ⭐⭐, ⭐⭐⭐) : 1) le plus loin dans les mondes, 2) les Chipeurs chassés.
+const RANK_API='api/score.php';
+function statD(d){d=d||P.diff;P.st=P.st||{};return P.st[d]||(P.st[d]={best:{},kills:0,bosses:0});}
+function initStats(){
+  if(!P.uid)P.uid=(Date.now().toString(36)+Math.random().toString(36).slice(2,10)).replace(/[^a-z0-9]/g,'').slice(0,20);
+  if(!P.st){ // parties d'avant le classement : on reprend leur progression dans le niveau actuel
+    const b=statD().best;
+    WORLDS.forEach(w=>{const n=w.id,r=P.runs[n],st=P.worlds[n];let v=st&&st.done?CFG.WAVES:0;
+      if(r)v=Math.max(v,r.wave-1);if(st&&st.cp>1)v=Math.max(v,st.cp-1);if(v>0)b[n]=v;});
+  }
+  save();
+}
+function progOf(sd){let p=0;for(const n in sd.best){const v=sd.best[n];if(v>0)p=Math.max(p,n*100+v);}return p;}
+function progTxt(p){if(!p)return 'Monde 1 · vague 0';const n=Math.floor(p/100),v=p%100,w=WORLDS[n-1];
+  return v>=CFG.WAVES?`${w?w.em:''} Monde ${n} réussi !`:`${w?w.em:''} Monde ${n} · vague ${v}`;}
+let pushT=0;
+function pushScore(now){
+  if(!P||!P.uid||location.hash.includes('dev')||location.protocol==='file:')return;
+  clearTimeout(pushT);pushT=setTimeout(()=>{
+    const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses}:null;}).filter(Boolean);
+    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:P.av,rows})}).catch(()=>{});
+  },now?300:1500);
+}
+let RK={diff:2,by:'prog'};
+function showRank(d,by){
+  RK.diff=d||RK.diff||(P?P.diff:2);RK.by=by||RK.by;
+  const tabs=[1,2,3].map(x=>`<button class="${x===RK.diff?'sel':''}" onclick="showRank(${x})">${DIFF[x].stars}</button>`).join('');
+  const kinds=[['prog','🗺️ Le plus loin'],['kills','😠 Chipeurs chassés']].map(([k,l])=>`<button class="${k===RK.by?'sel':''}" onclick="showRank(0,'${k}')">${l}</button>`).join('');
+  openModal(`<h2>🏆 Classement</h2>
+    <div class="rk-tabs"><div class="seg">${tabs}</div><div class="seg">${kinds}</div></div>
+    <p class="rk-sub">${DIFF[RK.diff].stars} ${DIFF[RK.diff].name}</p>
+    <div class="rk" id="rkList"><p class="rk-msg">Chargement…</p></div>
+    <div class="right">${P?'':`<button onclick="showWho()">⬅️ Retour</button>`}<button class="b-pink" onclick="${P?'closeModal()':'showWho()'}">OK</button></div>`,null,!P,true);
+  const d0=RK.diff,b0=RK.by;
+  fetch(`${RANK_API}?diff=${d0}&by=${b0}&me=${P&&P.uid?P.uid:''}`,{cache:'no-store'}).then(r=>r.json()).then(j=>{
+    if(RK.diff!==d0||RK.by!==b0||!$('rkList'))return;
+    const rows=j.rows||[];
+    if(!rows.length){$('rkList').innerHTML='<p class="rk-msg">Personne encore à ce niveau. Sois le premier !</p>';return;}
+    const med=['🥇','🥈','🥉'];
+    $('rkList').innerHTML=rows.map((r,i)=>`<div class="rkr${r.me?' me':''}"><span class="rkn">${med[i]||i+1}</span><span class="rkp">${esc(r.av)} ${esc(r.name)}</span>
+      <span class="rkv">${b0==='kills'?`${fmt(r.kills)} 😠`:progTxt(r.prog)}</span></div>`).join('');
+    const me=$('rkList').querySelector('.me');if(me)me.scrollIntoView({block:'center'});
+  }).catch(()=>{if($('rkList'))$('rkList').innerHTML='<p class="rk-msg">Pas de connexion : le classement a besoin d\'internet.</p>';});
+}
 const AVATARS=['👧','👸','🧚','🦄','🐱','🐶','🦊','🐼','🐰','🐸','🌸','⭐'];
 function showWho(){
   PROFILES=LS.get(PKEY)||[];
   const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
   openModal(`<h2>🏰 Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
-    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button></div>`,'princesse-contente',true);
+    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="showRank()">🏆 Classement</button></div>`,'princesse-contente',true);
 }
 let NP={av:AVATARS[0],diff:2};
 function newProfile(){
@@ -923,6 +983,7 @@ function selectProfile(id){
   PID=id;P=s;LS.set('gardiens-last',id);
   WORLDS.forEach(w=>{P.worlds[w.id]=P.worlds[w.id]||{cp:1,done:false};P.place[w.id]=P.place[w.id]||{};});
   if(P.worlds[3].done)P.unlocked=Math.max(P.unlocked,4);
+  initStats();pushScore(true);
   if(!P.starter){chooseStarter();return;}
   showWorlds();
 }
@@ -948,6 +1009,7 @@ function showMenu(){
     <p><b>Niveau</b></p><div class="diffs">${diffs}</div>
     <div class="right" style="justify-content:flex-start">
       <button onclick="showWorlds()">🗺️ Les mondes</button>
+      <button onclick="showRank()">🏆 Classement</button>
       <button onclick="showWho()">👥 Changer de joueur</button>
       <button onclick="fullscreen()">⛶ Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
@@ -1020,6 +1082,7 @@ function hurt(e,amount,src,ca){
   }
   e.hp-=amount;
   if(e.hp<=0){
+    if(!e.kc){e.kc=1;const sd=statD();sd.kills++;if(e.boss)sd.bosses++;}
     P.money+=e.rew;addText(e.x,e.y-20,'+'+fmt(e.rew),'#B07A00');burst(e.x,e.y,'#FFD93D',e.boss?30:8);
     if(e.boss)addText(e.x,e.y-60,e.name+' s\'enfuit !','#C2367A',26);
   }

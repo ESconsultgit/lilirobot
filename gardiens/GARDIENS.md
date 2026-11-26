@@ -189,6 +189,14 @@ Bulle en bas à gauche de la map (on la ferme en la touchant). Chaque conseil n'
 - Dessin net à toutes les tailles (jusqu'à ×3 de densité de pixels). L'écran reste allumé pendant le jeu ; quand on quitte l'app pendant une vague, le jeu se met en pause.
 - **Mode test** : ajouter `#dev` à l'adresse affiche trois boutons (+ argent, vague +5, gagner la vague).
 
+## Classement
+
+- Bouton **🏆 Classement** dans le menu ☰, dans ⚙️ Menu et sur l'écran « Qui joue ? ». Il faut internet pour le voir ; le jeu continue de marcher sans.
+- Un classement **par niveau** (⭐, ⭐⭐, ⭐⭐⭐), pour que ce soit juste. Deux tris : **🗺️ Le plus loin** (le meilleur monde et la meilleure vague réussie, « Monde 3 · vague 32 » ou « Monde 2 réussi ! ») et **😠 Chipeurs chassés** (total des méchants battus à ce niveau). Ta ligne est surlignée en rose.
+- Le score est envoyé à l'ouverture d'une partie, à la fin de chaque vague et quand on réussit un monde. Seuls le **prénom** et l'**avatar** partent sur le serveur, avec un identifiant au hasard propre à chaque partie (`P.uid`). Rien n'est envoyé en mode test (`#dev`).
+- Les parties créées avant le classement reprennent leur progression (vague atteinte, mondes réussis) dans leur niveau actuel ; les Chipeurs chassés comptent à partir de la version 38.
+- Serveur : `api/score.php` (PHP 8.4 + SQLite sur l'hébergement OVH), base dans `api/data/scores.sqlite` (dossier interdit d'accès par `.htaccess`, pas dans git). `GET api/score.php?diff=2&by=prog|kills` donne les 100 premiers. Le serveur garde le meilleur de chaque joueur et vérifie les valeurs (prénom de 14 caractères max, avatars de la liste). Stats dans la sauvegarde : `P.st[niveau] = {best:{monde:vague}, kills, bosses}`.
+
 ## Réglages techniques
 
 Constantes en haut du script de `index.html` :
@@ -269,4 +277,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v30** — fiche ouverte : toucher un autre gardien (colonne, liste ou map) ou un autre méchant affiche directement sa fiche à la place ; toucher ailleurs la ferme. Avec les colonnes sur les côtés, la fiche reste entre les deux colonnes.
 - **v31** — l'application installée charge toujours la dernière version de la page (plus de vieille version gardée en cache par le téléphone) ; numéro de version affiché dans le menu ☰ ; la fiche ne se ferme plus qu'avec ✕ ou un toucher sur un endroit vide de la map.
 - **v32** (version 37) — halo autour des gardiens sur la map (contour blanc lumineux + lueur à la couleur du gardien) pour bien les voir sur les maps foncées (Volcan, Marais).
+- **v33** (version 38) — 🏆 **Classement** partagé entre tous les téléphones (menu ☰, ⚙️ Menu et « Qui joue ? ») : un classement par niveau (⭐, ⭐⭐, ⭐⭐⭐), trié par « 🗺️ Le plus loin » (meilleur monde et vague atteints) ou « 😠 Chipeurs chassés ». Seuls le prénom et l'avatar sont envoyés. Les parties d'avant reprennent leur progression dans le niveau actuel.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).
