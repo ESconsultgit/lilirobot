@@ -314,7 +314,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 47</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 48</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -481,7 +481,7 @@ const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','pl
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
-const ART={hypnou:0,gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1,prismi:1};
+const ART={hypnou:1,gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1,prismi:1};
 // chemin de l'image d'un gardien (Prismi : une image par forme de métamorphose)
 function gFile(gid,form){return gid==='prismi'?'g/prismi-'+curMorph():'g/'+gid+'-'+form;}
 function gImg(gid,form){return ART[gid]?img(gFile(gid,form)):null;}
@@ -908,7 +908,7 @@ function showGuard(gid,fromTeam,tab){
   }else{
     const rgN=s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
     const psy=g.kind==='psy',st0=psy?psyStun(gid):0,st1=psy?st0*(1+0.03*(u.pw+1))/(1+0.03*u.pw):0;
-    upPane=`<div class="ups">${psy?card('pw','💤','Sommeil',fr(st0.toFixed(1))+' s',fr(st1.toFixed(1))+' s'):card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm&&!psy?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
+    upPane=`<div class="ups">${psy?card('pw','💤','Sommeil',fr(st0.toFixed(1))+' s',fr(st1.toFixed(1))+' s'):card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${psy?card('sp','⏱️','Un sort toutes les',fr((1/s.rate).toFixed(2))+' s',fr((1/(s.rate*CFG.SP)).toFixed(2))+' s'):card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm&&!psy?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
       (arm&&g.kind!=='wind'?`<div class="lab2">CIBLE</div><div class="seg">${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'on':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`:'');
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1),cl=v=>v>=1.2?'g':v>=0.9?'m':'r';
     const evs=gid==='prismi'?'':ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
