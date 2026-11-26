@@ -262,6 +262,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 36</div>
           <button id="bAuto">🔁 Auto</button>
           <button id="bSpeed">⏩ ×1</button>
           <button id="bPause">⏸ Pause</button>
@@ -1314,11 +1315,7 @@ function toMap(cx,cy){const r=cv.getBoundingClientRect();if(cx<r.left||cx>r.righ
 function spotAt(x,y){return WORLDS[G.world-1].spots.findIndex(s=>Math.hypot(s.x-x,s.y-y)<52);}
 function dragStart(e,gid){DR={gid,pid:e.pointerId,sx:e.clientX,sy:e.clientY,active:false,spot:-1};}
 function sheetOpen(){return $('sheetM').style.display==='flex';}
-// Toucher en dehors de la fiche (et pas sur un gardien, un méchant ou la liste) : la fiche se ferme
-document.addEventListener('pointerdown',e=>{
-  if(!sheetOpen()||e.target.closest('.sheetWrap,.sideb,#bench,#cv,#modal'))return;
-  closeModal();
-},true);
+// La fiche se ferme avec ✕ ou en touchant un endroit vide de la map (jamais en touchant un gardien ou un méchant)
 cv.addEventListener('pointerdown',e=>{
   if(!P||(modalOpen&&!sheetOpen()))return;
   const p=toMap(e.clientX,e.clientY);if(!p)return;
