@@ -118,7 +118,9 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .morph small{font-size:10.5px;font-weight:700;white-space:nowrap}
 .morph.on{border-color:var(--pink);background:#FFE9F4}
 .morph.locked{opacity:.45;filter:grayscale(1);cursor:default}
-.stonewin{background:#F3ECFF;border-radius:12px;padding:8px 10px}
+.stonewin{background:#F3ECFF;border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:10px}
+.stonewin .stbig{width:46px;height:auto;flex:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.morph small img.ic{width:13px;height:13px;margin-right:2px}
 .wcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:8px}
 .wcard{position:relative;background:#fff;border:4px solid var(--c);border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 70%,#000),0 6px 14px rgba(42,31,61,.18);transition:transform .12s;display:flex;flex-direction:column}
 .wcard:active{transform:translateY(2px) scale(.98)}
@@ -309,7 +311,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 44</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 45</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -411,7 +413,8 @@ const MORPH={
           spec:{arm:0.3,life:1.0,role:'🧪 Poison sous l\'armure',fort:'les Costauds, les Casqués et les boss',faible:'les Fusées',astuce:'Forme idéale dans le Marais (bonus de Gloupi).'}}
 };
 const MORPH_ORDER=['base','plante','glace','feu','poison'];
-const STONE={1:{name:'Pierre végétale',em:'💚'},2:{name:'Pierre de glace',em:'🩵'},3:{name:'Pierre de feu',em:'❤️‍🔥'},4:{name:'Pierre poison',em:'💜'}};
+const STONE={1:{name:'Pierre végétale',m:'plante'},2:{name:'Pierre de glace',m:'glace'},3:{name:'Pierre de feu',m:'feu'},4:{name:'Pierre poison',m:'poison'}};
+function stoneImg(n,cls){return `<img class="${cls||'ic'}" src="img/ui/pierre-${STONE[n].m}.webp" alt="${STONE[n].name}">`;}
 function morphOk(m){const w=MORPH[m].stone;return !w||!!(P&&P.worlds[w]&&P.worlds[w].done);}
 function curMorph(){const m=P&&P.morph;return m&&MORPH[m]&&morphOk(m)?m:'base';}
 function applyMorph(){const m=MORPH[curMorph()];GUARD.prismi=Object.assign({name:m.name,em:m.em,col:m.col,elem:m.elem,pow:m.pow,kind:m.kind,dmg:m.dmg,rg:m.rg,rate:m.rate},
@@ -473,7 +476,7 @@ const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','pl
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
-const ART={gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1};
+const ART={gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1,prismi:1};
 // chemin de l'image d'un gardien (Prismi : une image par forme de métamorphose)
 function gFile(gid,form){return gid==='prismi'?'g/prismi-'+curMorph():'g/'+gid+'-'+form;}
 function gImg(gid,form){return ART[gid]?img(gFile(gid,form)):null;}
@@ -740,7 +743,7 @@ function worldWon(){
   const next=WORLDS[n];
   openModal(`<h2>🎉 Bravo ! Le château est sauvé !</h2>
     <p>Tu as réussi les ${CFG.WAVES} vagues de <b>${WORLDS[n-1].name}</b> et chassé ${esc(WORLDS[n-1].boss.name)} !</p>
-    ${first&&STONE[n]?`<p class="stonewin">${STONE[n].em} Tu as gagné la <b>${STONE[n].name}</b> ! ${P.owned.includes('prismi')?'Prismi peut maintenant se métamorphoser en <b>'+MORPH[MORPH_ORDER[n]].name+'</b> : ouvre sa fiche.':'Elle servira à <b>Prismi</b>, le gardien qui se métamorphose (à acheter avec tes L$).'}</p>`:''}
+    ${first&&STONE[n]?`<p class="stonewin">${stoneImg(n,'stbig')}<span>Tu as gagné la <b>${STONE[n].name}</b> ! ${P.owned.includes('prismi')?'Prismi peut maintenant se métamorphoser en <b>'+MORPH[MORPH_ORDER[n]].name+'</b> : ouvre sa fiche.':'Elle servira à <b>Prismi</b>, le gardien qui se métamorphose (à acheter avec tes L$).'}</span></p>`:''}
     ${next?`<p>Un nouveau monde t'attend : <b>${next.em} ${next.name}</b>. Tes gardiens gardent toutes leurs améliorations.</p>`:`<p>Tu as fini les trois mondes : tu fais partie des <b>Grands Gardiens</b> du château ! La princesse Lili te dit merci !</p>`}
     <div class="right">${next?`<button class="b-pink" onclick="closeModal();enterWorld(${n+1})">${next.em} En route !</button>`:''}<button onclick="showWorlds()">🗺️ Les mondes</button></div>`,'princesse-victoire');
 }
@@ -921,7 +924,7 @@ function morphRow(){
   const cur=curMorph();
   return `<div class="morphs">${MORPH_ORDER.map(m=>{const M=MORPH[m],ok=morphOk(m),st=M.stone?STONE[M.stone]:null;
     const pic=ART.prismi?`<img src="img/g/prismi-${m}.webp" alt="">`:`<span class="mem">${M.em}</span>`;
-    return `<button class="morph${m===cur?' on':''}${ok?'':' locked'}" ${ok&&m!==cur?`onclick="setMorph('${m}')"`:''} title="${M.name}">${pic}<small>${st?(ok?st.em+' '+M.elem:'🔒 monde '+M.stone):'normal'}</small></button>`;}).join('')}</div>`;
+    return `<button class="morph${m===cur?' on':''}${ok?'':' locked'}" ${ok&&m!==cur?`onclick="setMorph('${m}')"`:''} title="${M.name}">${pic}<small>${st?(ok?stoneImg(M.stone)+M.elem:'🔒 monde '+M.stone):'normal'}</small></button>`;}).join('')}</div>`;
 }
 function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 // Les deux onglets sont dans la page en même temps (l'un caché) : la fenêtre garde la même taille quand on change d'onglet
