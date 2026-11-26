@@ -53,9 +53,17 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #bench{position:absolute;left:50%;transform:translateX(-50%);bottom:58px;display:none;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,253,248,.95);border-radius:16px;padding:6px 8px;overflow-x:auto;max-width:calc(100% - 16px);box-shadow:0 6px 18px rgba(42,31,61,.3)}
 #bench.open{display:flex}
 /* Écran plus large que la map (téléphone) : les gardiens vont dans les bandes noires à gauche et à droite */
-.sideb{position:absolute;top:0;bottom:0;display:none;flex-direction:column;justify-content:center;align-items:center;gap:2px;padding:10px 0 4px;z-index:3}
+.sideb{position:absolute;top:0;bottom:0;display:none;flex-direction:column;align-items:stretch;padding:10px 0 0;z-index:3;touch-action:none}
+.sbtop{flex:none;display:flex;justify-content:center;padding-bottom:4px}
+.sbs{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:4px;-webkit-mask-image:linear-gradient(transparent,#000 14px,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(transparent,#000 14px,#000 calc(100% - 14px),transparent)}
+.sbs .bi,.sbs .fi{flex:none}
+.fi{width:100%;display:flex;flex-direction:column;align-items:center;cursor:pointer;color:#fff;font:800 11px/1.1 'Baloo 2'}
+.fi img{height:38px;width:auto;max-width:90%;object-fit:contain;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.fi b{background:var(--violet);border-radius:9px;padding:0 6px;margin-top:-4px;font-size:12px}
+.fi.boss img{height:46px}.fi.boss b{background:var(--yellow);color:var(--ink)}
+.sbtitle{color:#fff;font:800 12px/1.1 'Baloo 2';text-align:center;opacity:.85}
 .app.side .sideb{display:flex}
-.app.side #bench,.app.side #bBench{display:none!important}
+.app.side #bench,.app.side #bBench,.app.side #nextW{display:none!important}
 .app.side #ov.bopen #tip,.app.side #tip{bottom:56px}
 .sideb .bi{width:100%;color:#fff;font-size:10px}.sideb .bi.placed{opacity:.35}
 .sideb .bi.shop.afford{background:rgba(255,243,196,.25)}
@@ -244,7 +252,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 <div class="app">
   <div id="cvWrap">
     <canvas id="cv"></canvas>
-    <div id="benchL" class="sideb"></div><div id="benchR" class="sideb"></div>
+    <div id="benchL" class="sideb"><div class="sbtop" id="benchLtop"></div><div class="sbs" id="benchLs"></div></div><div id="benchR" class="sideb"><div class="sbtop" id="benchRtop"></div><div class="sbs" id="benchRs"></div></div>
     <!-- Couche posée exactement sur la map : infos, vague, boutons -->
     <div id="ov">
       <div id="topbar"><div id="hud"><span id="sWorld"></span><span id="sHearts"></span><span id="sMoney"></span><span id="sWave"></span></div>
@@ -576,6 +584,7 @@ function waveSummary(world,w){
 }
 function speedTxt(type){if(type==='boss')return 'très lent';const v=FOES[type].spd;return v>=90?'très rapide':v>=65?'rapide':v<=40?'lent':'normal';}
 function renderNextStrip(){
+  renderSideFoes();
   const el=$('nextW');if(!P){el.style.display='none';return;}
   const gs=waveSummary(G.world,G.wave);
   el.innerHTML=(G.state==='wave'?'<span class="lbl">⚔️</span>':'')+gs.map(g=>`<span class="fq"><img src="img/f/${g.art}.webp" alt=""><b>${g.n}</b></span>`).join('');
@@ -701,10 +710,34 @@ function renderBench(){
     const bi=biomeOf(gid),bb=bi?((bi.pw||1)*(bi.rg||1)>=1?'<i class="bb up" title="Bonus de la map">▲</i>':'<i class="bb down" title="Malus de la map">▼</i>'):'';
     return `<div class="${cls}" data-g="${gid}">${bb}${gIcon(gid,isz,own?undefined:1)}<span>${tag}</span></div>`;
   });
-  if(side){const h=Math.ceil(items.length/2);$('benchL').innerHTML=cnt+items.slice(0,h).join('');$('benchR').innerHTML=items.slice(h).join('');$('bench').innerHTML='';}
-  else{$('bench').innerHTML=cnt+items.join('');$('benchL').innerHTML=$('benchR').innerHTML='';}
+  if(side){$('benchLtop').innerHTML=cnt;loopFill($('benchLs'),items.join(''));$('bench').innerHTML='';}
+  else{$('bench').innerHTML=cnt+items.join('');$('benchLs').innerHTML='';}
   if(!P.tips.shop&&P.tips.wave&&Object.keys(SHOP).some(g=>!P.owned.includes(g)&&P.money>=SHOP[g]))
     tipOnce('shop','livia-idee','Tu as assez de LiliDollars pour acheter un nouveau gardien ! Touche-le dans la barre du bas.');
+}
+// Colonne qui défile en boucle : le contenu est répété 3 fois et on revient au milieu quand on dépasse
+function loopFill(el,html){
+  if(SC&&SC.el===el&&SC.moved)return;            // pas pendant que l'on fait défiler
+  const prev=el._set?el.scrollTop-el._set:0;
+  el.innerHTML=html;el._set=0;
+  if(el.scrollHeight>el.clientHeight+4){const one=el.scrollHeight+4;el.innerHTML=html+html+html;el._set=one;el.scrollTop=one+Math.max(0,Math.min(one-1,prev));}
+}
+function loopFix(el){if(!el._set)return;if(el.scrollTop<el._set*0.5)el.scrollTop+=el._set;else if(el.scrollTop>el._set*1.5)el.scrollTop-=el._set;}
+// Colonne de droite : les méchants de la vague
+function renderSideFoes(){
+  if(!P||!G.side)return;
+  const gs=waveSummary(G.world,G.wave);G.sideFoes=gs;
+  $('benchRtop').innerHTML=`<div class="sbtitle">${G.state==='wave'?'⚔️':'👀'} Vague<br>${G.wave}</div>`;
+  loopFill($('benchRs'),gs.map((g,i)=>`<div class="fi${g.type==='boss'?' boss':''}" data-f="${i}"><img src="img/f/${g.art}.webp" alt=""><b>${g.n}</b></div>`).join(''));
+}
+function showFoe(i){
+  const g=(G.sideFoes||[])[i];if(!g)return;const fi=FOE_INFO[g.type]||FOE_INFO.chipeur,boss=g.type==='boss';
+  const best=fi.best.map(b=>`<span class="chip up">${ART[b]?`<img src="img/g/${b}-1.webp" alt="" style="width:22px;height:22px;object-fit:contain">`:GUARD[b].em} ${GUARD[b].name}</span>`).join(' ');
+  openSheet(`<div class="sh-head"><img class="sh-av" src="img/f/${g.art}.webp" alt="" style="display:block"><div class="sh-t"><h2>${g.name}</h2><div class="sh-sub"><span class="role">${boss?(g.final?'👑 grand boss':'😤 mini-boss'):'Chipeur'}</span><span>×${g.n} dans la vague ${G.wave}</span></div></div><button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
+    <div class="tiles"><div class="tile"><b>${fmt(g.hp)}</b><small>vie</small></div><div class="tile"><b>${g.ap>0?fmt(g.ap):'—'}</b><small>armure</small></div><div class="tile"><b>${speedTxt(g.type)}</b><small>vitesse</small></div><div class="tile"><b>${boss?5:1}</b><small>cœur${boss?'s':''} perdu${boss?'s':''}</small></div></div>
+    <div class="fxline">✨ ${fi.txt}</div>
+    <div class="lab2">BONS CONTRE LUI</div><div>${best}</div>
+    <div class="sh-foot"><span class="money" style="font-size:13px">${G.state==='idle'?'Place tes gardiens, puis lance la vague':'Vague en cours'}</span><button class="b-pink" style="box-shadow:none" onclick="showNextWave()">👀 Toute la vague</button></div>`,null,1,'left');
 }
 function gIcon(gid,size,form){
   const g=GUARD[gid];form=form||formOf(level(gid),gid);const s=size*(0.8+0.12*form);
@@ -1099,10 +1132,10 @@ function resize(){
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
   K=cv.width/W;buildBg();
   const band=(sw-cw)/2,rows=Math.ceil(BENCH_ORDER.length/2)+1,cell=(ch-8)/rows;
-  G.side=band>=58&&cell>=40;G.sideIcon=Math.max(26,Math.min(44,Math.min(band-14,cell-14)));
+  G.side=band>=58;G.sideIcon=Math.max(26,Math.min(44,band-16));
   document.querySelector('.app').classList.toggle('side',G.side);
   if(G.side){const L=$('benchL'),R=$('benchR');L.style.left=cv.offsetLeft-band+'px';L.style.width=band+'px';R.style.left=cv.offsetLeft+cw+'px';R.style.width=band+'px';L.style.top=R.style.top=cv.offsetTop+'px';L.style.bottom=R.style.bottom='auto';L.style.height=R.style.height=ch+'px';}
-  if(P)renderBench();
+  if(P){renderBench();renderSideFoes();}
   const o=$('ov');o.style.left=cv.offsetLeft+'px';o.style.top=cv.offsetTop+'px';o.style.width=cw+'px';o.style.height=ch+'px';
 }
 const THEMES={
@@ -1286,7 +1319,32 @@ cv.addEventListener('pointerdown',e=>{
   if(i>=0){chooseForSpot(i);return;}
   G.sel=null;
 });
-['bench','benchL','benchR'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
+let SC=null; // geste en cours dans une colonne de côté
+['benchLs','benchRs'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
+  if(!P||modalOpen)return;e.preventDefault();
+  SC={el:$(id),pid:e.pointerId,x0:e.clientX,y0:e.clientY,last:e.clientY,moved:false,t:e.target,ev:e};
+}));
+$('benchLtop').addEventListener('pointerdown',e=>{if(P&&!modalOpen&&e.target.closest('.bcount'))showSlotShop();});
+document.addEventListener('pointermove',e=>{
+  if(!SC||e.pointerId!==SC.pid)return;
+  const dx=e.clientX-SC.x0,dy=e.clientY-SC.y0;
+  if(!SC.moved&&Math.hypot(dx,dy)>8){
+    const b=SC.t.closest('.bi'),gid=b&&b.dataset.g;
+    if(Math.abs(dy)>=Math.abs(dx)||!gid||!P.owned.includes(gid))SC.moved='scroll';
+    else{SC.moved='drag';dragStart(SC.ev,gid);}
+  }
+  if(SC.moved==='scroll'){SC.el.scrollTop-=e.clientY-SC.last;loopFix(SC.el);}
+  SC.last=e.clientY;
+});
+document.addEventListener('pointerup',e=>{
+  if(!SC||e.pointerId!==SC.pid)return;const sc=SC;SC=null;
+  if(sc.moved)return;
+  const b=sc.t.closest('.bi'),f=sc.t.closest('.fi');
+  if(b){const gid=b.dataset.g;if(P.owned.includes(gid))showGuard(gid);else benchTap(gid);}
+  else if(f)showFoe(+f.dataset.f);
+});
+document.addEventListener('pointercancel',()=>{SC=null;});
+['bench'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
   if(!P||modalOpen)return;
   if(e.target.closest('.bcount')){showSlotShop();return;}
   const b=e.target.closest('.bi');if(!b)return;const gid=b.dataset.g;
