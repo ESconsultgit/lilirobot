@@ -295,3 +295,39 @@ Row 4: a shiny golden coin with a heart engraved on it (LiliDollars money); a bi
 Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no shadow, not transparent, no checkerboard. Do not use magenta in the icons (use red or soft pink instead).
 STYLE: cute 2D cartoon game icons, like a modern mobile game for kids. Soft rounded shapes, clean dark outlines, simple cel shading with a small white highlight, bright saturated colours. No text, no letters, no numbers. Square 1:1 image.
 ```
+
+## Nouveau gardien — Prismi (se métamorphose)
+
+Joindre : la planche de style. Une seule image avec les 5 formes. Fond magenta (pas de vert : une forme est verte).
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw Prismi, a guardian creature that can transform with magic stones, in 5 different forms side by side from left to right, all facing the viewer in a 3/4 front view, full body, all the SAME size, evenly spaced with a clear gap between them. All 5 forms are clearly the same creature: same body shape (a small round fluffy creature, a mix of a kitten and a bunny, with long soft ears, a fluffy tail, big shiny eyes and a big faceted gem on its forehead), same face, same pose; only the colours, the gem and the elemental details change:
+1. Normal form: soft cream and pale lilac fur, a clear rainbow-shimmering crystal gem on its forehead, tiny sparkles around it
+2. Plant form: leaf-green fur, ears shaped like big leaves, a little flower crown, a vine curling around its tail, a green emerald gem
+3. Ice form: icy light-blue and white fur, frosty crystal tips on its ears and tail, a snowflake-shaped ice gem, a few snowflakes around it
+4. Fire form: warm orange-red fur, a flaming mane and a flame at the tip of its tail, a glowing ruby gem, little embers around it
+5. Poison form: deep violet fur with lime-green spots, a wobbly drip of green jelly on its head, an amethyst gem, small green poison bubbles around it (use violet and lime green, no pink, no magenta)
+Cute and friendly, never scary. Simple, readable silhouettes that stay recognisable when very small.
+
+Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard. Do not use magenta or pink on the creature.
+STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. No text. Wide 16:9 image.
+```
+
+### Les 4 pierres magiques
+
+Joindre : la planche de style.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw 4 magic stones for a children's game, side by side from left to right, the same size, evenly spaced with a wide gap between them. Each is a chunky, glossy, faceted gem stone with a soft inner glow and a small white highlight, with a little symbol shining inside it:
+1. Plant stone: emerald green with a small glowing leaf inside
+2. Ice stone: icy light blue with a small glowing snowflake inside
+3. Fire stone: ruby red-orange with a small glowing flame inside
+4. Poison stone: deep violet with a small glowing lime-green bubble inside (no pink, no magenta)
+
+Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no shadow, not transparent, no checkerboard.
+STYLE: cute 2D cartoon game items, clean dark outlines, simple cel shading, bright saturated colours. No text. Wide 16:9 image.
+```

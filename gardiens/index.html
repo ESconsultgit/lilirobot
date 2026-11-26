@@ -112,6 +112,13 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #modal p{margin:6px 0;font-size:16px;line-height:1.35}
 #modal .right{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;flex-wrap:wrap}
 @media (max-height:520px){#modal .hasimg>img{width:80px}#modal h2{font-size:20px}#modal p{font-size:14px}}
+.morphs{display:flex;gap:5px;justify-content:center;margin:4px 0 2px}
+.morph{flex:1;max-width:76px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 2px;border-radius:12px;background:#F6F1FC;box-shadow:none;border:2px solid transparent;font-size:11px;line-height:1.1}
+.morph img{width:38px;height:38px;object-fit:contain}.morph .mem{font-size:26px;line-height:38px}
+.morph small{font-size:10.5px;font-weight:700;white-space:nowrap}
+.morph.on{border-color:var(--pink);background:#FFE9F4}
+.morph.locked{opacity:.45;filter:grayscale(1);cursor:default}
+.stonewin{background:#F3ECFF;border-radius:12px;padding:8px 10px}
 .wcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:8px}
 .wcard{position:relative;background:#fff;border:4px solid var(--c);border-radius:20px;overflow:hidden;cursor:pointer;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 70%,#000),0 6px 14px rgba(42,31,61,.18);transition:transform .12s;display:flex;flex-direction:column}
 .wcard:active{transform:translateY(2px) scale(.98)}
@@ -302,7 +309,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 43</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 44</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -379,9 +386,43 @@ const GUARD={
   etoilette:{name:'Étoilette',em:'⭐',col:'#F7A8D8',elem:'Étoile',     pow:'Rend ses voisins plus rapides. Seule à voir les Fantômes : dès qu\'elle en touche un, tout le monde le voit.',kind:'star',dmg:4,rg:150,rate:1.2,aura:0.25,auraRg:190,sees:true},
   lunette:  {name:'Lunette',  em:'🌙',col:'#6C4AB6',elem:'Lune',       pow:'Tire de très loin sur le plus costaud.',kind:'snipe',dmg:28,rg:270,rate:0.45},
   gloupi:   {name:'Gloupi',   em:'🧪',col:'#8BD94A',elem:'Poison',     pow:'Une boule de gelée qui empoisonne : le poison passe sous l\'armure.',kind:'poison',dmg:6,rg:140,rate:1.0,splash:40,poison:0.35},
+  prismi:   {name:'Prismi',   em:'💎',col:'#C9B6E8',elem:'Prisme',kind:'prism',dmg:10,rg:150,rate:1.0},
   sousou:   {name:'Sousou',   em:'🪙',col:'#F2C230',elem:'Pièce',      pow:'N\'attaque pas : fait gagner des LiliDollars à chaque vague.',kind:'coin',gold:12}
 };
 const STARTERS=['braisou','gouttine','feuillou'];
+// Prismi : gardien qui se métamorphose. Il n'évolue pas avec les niveaux ; chaque monde réussi donne une pierre
+// qui lui ouvre une forme (on change de forme dans sa fiche, entre deux vagues). Ses formes reprennent le type
+// de tir du gardien du même élément (et donc son efficacité contre l'armure et la vie).
+const MORPH={
+  base:  {name:'Prismi',          em:'💎',col:'#C9B6E8',elem:'Prisme', kind:'prism', dmg:10,rg:150,rate:1.0,stone:null,like:null,
+          pow:'Un rayon de lumière sur un seul méchant. Donne-lui une pierre magique pour qu\'il se métamorphose !',
+          spec:{arm:1,life:1,role:'💎 Se métamorphose',fort:'un peu tout : il ne craint rien de spécial',faible:'pas de pouvoir spécial tant qu\'il n\'a pas de pierre',astuce:'Réussis un monde pour gagner sa première pierre magique, puis change sa forme dans cette fiche.'}},
+  plante:{name:'Prismi Végétal',  em:'🌿',col:'#4CB84A',elem:'Plante', kind:'vine',  dmg:13,rg:160,rate:1.15,slow:0.38,slowT:1.4,stone:1,like:'feuillou',
+          pow:'Des lianes qui ralentissent les méchants.',
+          spec:{arm:0.4,life:1.1,role:'🌿 Ralentit',fort:'les Fusées et les Costauds',faible:'les armures, les Volants',astuce:'Forme idéale dans la Prairie et le Marais (bonus de Feuillou).'}},
+  glace: {name:'Prismi Glacé',    em:'❄️',col:'#7FCDF0',elem:'Glace',  kind:'ice',   dmg:5, rg:155,rate:1.15,slow:0.55,slowT:1.7,splash:50,stone:2,like:'givrou',
+          pow:'Des flocons qui ralentissent beaucoup, en zone.',
+          spec:{arm:0.7,life:1.0,role:'❄️ Ralentit beaucoup, en zone',fort:'les Fusées, les groupes, les boss',faible:'les Volants, petits dégâts',astuce:'Forme idéale dans la Forêt enneigée (bonus de Givrou).'}},
+  feu:   {name:'Prismi Flamme',   em:'🔥',col:'#F2643A',elem:'Feu',    kind:'fire',  dmg:20,rg:150,rate:0.95,stone:3,like:'braisou',
+          pow:'Des boules de feu qui font brûler.',
+          spec:{arm:0.5,life:1.4,role:'🔥 Dégâts sur la vie',fort:'les Costauds, les boss une fois l\'armure cassée',faible:'les armures',astuce:'Forme idéale dans le Volcan (bonus de Braisou).'}},
+  poison:{name:'Prismi Toxique',  em:'🧪',col:'#9B5BD6',elem:'Poison', kind:'poison',dmg:9, rg:145,rate:1.05,splash:42,poison:0.38,stone:4,like:'gloupi',
+          pow:'Une bulle empoisonnée qui passe sous l\'armure.',
+          spec:{arm:0.3,life:1.0,role:'🧪 Poison sous l\'armure',fort:'les Costauds, les Casqués et les boss',faible:'les Fusées',astuce:'Forme idéale dans le Marais (bonus de Gloupi).'}}
+};
+const MORPH_ORDER=['base','plante','glace','feu','poison'];
+const STONE={1:{name:'Pierre végétale',em:'💚'},2:{name:'Pierre de glace',em:'🩵'},3:{name:'Pierre de feu',em:'❤️‍🔥'},4:{name:'Pierre poison',em:'💜'}};
+function morphOk(m){const w=MORPH[m].stone;return !w||!!(P&&P.worlds[w]&&P.worlds[w].done);}
+function curMorph(){const m=P&&P.morph;return m&&MORPH[m]&&morphOk(m)?m:'base';}
+function applyMorph(){const m=MORPH[curMorph()];GUARD.prismi=Object.assign({name:m.name,em:m.em,col:m.col,elem:m.elem,pow:m.pow,kind:m.kind,dmg:m.dmg,rg:m.rg,rate:m.rate},
+  m.slow?{slow:m.slow,slowT:m.slowT}:{},m.splash?{splash:m.splash}:{},m.poison?{poison:m.poison}:{});SPEC.prismi=m.spec;}
+function setMorph(m){
+  if(!morphOk(m))return;
+  if(G.state==='wave'){tip('livia-idee','Prismi ne peut se métamorphoser qu\'entre deux vagues !',4000);return;}
+  P.morph=m;save();applyMorph();
+  const t=G.towers.find(t=>t.gid==='prismi');if(t){burst(t.x,t.y,MORPH[m].col,26);addText(t.x,t.y-60,'Métamorphose !',MORPH[m].col,24);}
+  refreshHUD();showGuard('prismi',0,'up');
+}
 // Fiche technique : efficacité contre l'armure (arm) et contre la vie (life) — utilisée aux niveaux ⭐⭐ et ⭐⭐⭐ —,
 // rôle, forces, faiblesses et astuce affichés dans la fiche du gardien.
 const SPEC={
@@ -395,6 +436,7 @@ const SPEC={
   etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien, seule à voir les Fantômes',fort:'les Fantômes : elle est la seule à les voir, et dès qu\'elle en touche un, tous tes gardiens peuvent l\'attaquer ; ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Dans le Volcan, ne l\'oublie pas ! Mets-la au début du chemin pour démasquer les Fantômes tôt, au milieu de tes gardiens les plus forts.'},
   lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
   gloupi:   {arm:0.3,life:1.0, role:'🧪 Poison qui passe sous l\'armure',fort:'les Costauds, les Casqués et les boss : le poison ronge leur vie même avec une armure, et il s\'accumule',faible:'les Fusées (elles passent avant que le poison agisse), petits dégâts directs',astuce:'Place-le au début du chemin : plus un méchant reste empoisonné longtemps, plus il perd de vie. Le poison s\'ajoute à chaque tir (jusqu\'à 3 fois).'},
+  prismi:   {arm:1,life:1,role:'💎 Se métamorphose',fort:'',faible:'',astuce:''},
   sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
 };
 // Bonus et malus selon la map (le décor aide ou gêne certains gardiens) : pw = puissance, rg = portée
@@ -415,24 +457,26 @@ const BIOME={
            givrou:{pw:0.75,txt:'la glace fond près de la lave'},
            gouttine:{rg:0.85,txt:'l\'eau s\'évapore avec la chaleur'}}
 };
-function biomeOf(gid,world){const w=WORLDS[(world||G.world)-1];return (BIOME[w.theme]||{})[gid]||null;}
+function biomeOf(gid,world){if(gid==='prismi'){const l=MORPH[curMorph()].like;if(!l)return null;gid=l;}const w=WORLDS[(world||G.world)-1];return (BIOME[w.theme]||{})[gid]||null;}
 function biomeTxt(gid,world){const b=biomeOf(gid,world);if(!b)return '';const w=WORLDS[(world||G.world)-1],pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %';
   const parts=[];if(b.pw)parts.push(`${pc(b.pw)} de puissance`);if(b.rg)parts.push(`${pc(b.rg)} de portée`);
   const good=(b.pw||1)*(b.rg||1)>=1;return `<p class="biome ${good?'up':'down'}">${w.em} <b>${parts.join(' et ')}</b> : ${b.txt}.</p>`;}
-const KIND_G={poison:'gloupi',poisonDot:'gloupi',fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
+const KIND_G={prism:'prismi',poison:'gloupi',poisonDot:'gloupi',fire:'braisou',burn:'braisou',splash:'gouttine',vine:'feuillou',chain:'zapic',ice:'givrou',wind:'plumo',rock:'rocaillou',star:'etoilette',snipe:'lunette'};
 const TARGETS={first:'🏃 Premier',strong:'💪 Costaud',armor:'🛡️ Armures'};
 function armorOn(){return P&&P.diff>=2;}   // niveau ⭐ : pas de barre d'armure (règle simple d'origine)
 function targetOf(gid){return (armorOn()&&P.tgt&&P.tgt[gid])||(GUARD[gid].kind==='snipe'?'strong':'first');}
 // Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
-const SHOP={braisou:150,gouttine:150,feuillou:150,sousou:400,zapic:700,givrou:1200};
+const SHOP={braisou:150,gouttine:150,feuillou:150,sousou:400,zapic:700,givrou:1200,prismi:2500};
 // Gardiens libérés par les boss : clé « monde-vague »
 const BOSS_GIFT={'1-20':'plumo','1-40':'rocaillou','2-20':'etoilette','2-40':'lunette','3-20':'gloupi'};
-const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette','gloupi'];
+const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette','gloupi','prismi'];
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
 const ART={gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1};
-function gImg(gid,form){return ART[gid]?img('g/'+gid+'-'+form):null;}
+// chemin de l'image d'un gardien (Prismi : une image par forme de métamorphose)
+function gFile(gid,form){return gid==='prismi'?'g/prismi-'+curMorph():'g/'+gid+'-'+form;}
+function gImg(gid,form){return ART[gid]?img(gFile(gid,form)):null;}
 
 // ---------- Les méchants ----------
 const FOES={
@@ -518,6 +562,7 @@ function distPaths(Ps,x,y){let m=1e9;for(const p of Ps)m=Math.min(m,distPath(p,x
 const PKEY='gardiens-profiles';
 let PROFILES=LS.get(PKEY)||[];
 let PID=null,P=null;
+applyMorph();
 function newSave(name,av,diff){
   return{v:1,name,av,diff,money:CFG.START_MONEY,starter:null,owned:[],up:{},unlocked:1,
     worlds:{1:{cp:1,done:false},2:{cp:1,done:false},3:{cp:1,done:false},4:{cp:1,done:false}},
@@ -529,7 +574,7 @@ function up(gid){const u=P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0,ca:0});if(u.ca===
 // ---------- Statistiques d'un gardien ----------
 function level(gid){const u=up(gid);return u.pw+u.rg+u.sp+u.ca;}
 // Niveaux d'évolution de chaque gardien (forme 2 « grand », forme 3 « super ») : chacun évolue à son rythme
-const EVO={gloupi:[22,65],braisou:[20,60],gouttine:[20,55],feuillou:[25,70],zapic:[22,65],givrou:[25,70],plumo:[18,50],rocaillou:[30,80],etoilette:[20,60],lunette:[30,80],sousou:[15,45]};
+const EVO={prismi:[9999,9999],gloupi:[22,65],braisou:[20,60],gouttine:[20,55],feuillou:[25,70],zapic:[22,65],givrou:[25,70],plumo:[18,50],rocaillou:[30,80],etoilette:[20,60],lunette:[30,80],sousou:[15,45]};
 function evoOf(gid){return EVO[gid]||CFG.EVO;}
 function formOf(lv,gid){const e=evoOf(gid);return lv>=e[1]?3:lv>=e[0]?2:1;}
 function stats(gid){
@@ -689,12 +734,13 @@ function waveClear(){
   if(P.auto)G.autoT=CFG.AUTO_DELAY;
 }
 function worldWon(){
-  const n=G.world;P.worlds[n].done=true;P.worlds[n].cp=1;delete P.runs[n];
+  const n=G.world,first=!P.worlds[n].done;P.worlds[n].done=true;P.worlds[n].cp=1;delete P.runs[n];
   if(n<WORLDS.length)P.unlocked=Math.max(P.unlocked,n+1);
   save();refreshHUD();pushScore(true);
   const next=WORLDS[n];
   openModal(`<h2>🎉 Bravo ! Le château est sauvé !</h2>
     <p>Tu as réussi les ${CFG.WAVES} vagues de <b>${WORLDS[n-1].name}</b> et chassé ${esc(WORLDS[n-1].boss.name)} !</p>
+    ${first&&STONE[n]?`<p class="stonewin">${STONE[n].em} Tu as gagné la <b>${STONE[n].name}</b> ! ${P.owned.includes('prismi')?'Prismi peut maintenant se métamorphoser en <b>'+MORPH[MORPH_ORDER[n]].name+'</b> : ouvre sa fiche.':'Elle servira à <b>Prismi</b>, le gardien qui se métamorphose (à acheter avec tes L$).'}</p>`:''}
     ${next?`<p>Un nouveau monde t'attend : <b>${next.em} ${next.name}</b>. Tes gardiens gardent toutes leurs améliorations.</p>`:`<p>Tu as fini les trois mondes : tu fais partie des <b>Grands Gardiens</b> du château ! La princesse Lili te dit merci !</p>`}
     <div class="right">${next?`<button class="b-pink" onclick="closeModal();enterWorld(${n+1})">${next.em} En route !</button>`:''}<button onclick="showWorlds()">🗺️ Les mondes</button></div>`,'princesse-victoire');
 }
@@ -786,7 +832,7 @@ function showFoe(i){
 }
 function gIcon(gid,size,form){
   const g=GUARD[gid];form=form||formOf(level(gid),gid);const s=size*(0.8+0.12*form);
-  if(ART[gid])return `<span class="gico" style="width:${s}px;height:${s}px;background:radial-gradient(circle,#fff 55%,${g.col}55);border-color:${g.col}"><img src="img/g/${gid}-${form}.webp" alt="" style="width:88%;height:88%;object-fit:contain"></span>`;
+  if(ART[gid])return `<span class="gico" style="width:${s}px;height:${s}px;background:radial-gradient(circle,#fff 55%,${g.col}55);border-color:${g.col}"><img src="img/${gFile(gid,form)}.webp" alt="" style="width:88%;height:88%;object-fit:contain"></span>`;
   return `<span class="gico" style="width:${s}px;height:${s}px;background:${g.col};font-size:${s*0.5}px">${g.em}</span>`;
 }
 function gCard(gid,onclick){
@@ -826,6 +872,7 @@ function effet(gid,s){
     case 'rock':return`écrase une zone (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))})`;
     case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; seule à voir les Fantômes, et un Fantôme qu'elle touche devient visible pour tous`;
     case 'poison':return`empoisonne : ${fmt(s.dmg*g.poison)} dégâts par seconde pendant 4 s, s'ajoute jusqu'à 3 fois, et passe sous l'armure`;
+    case 'prism':return`se métamorphose avec les pierres magiques gagnées en réussissant les mondes`;
     case 'snipe':return`vise d'abord le méchant le plus costaud (réglable)`;
   }
   return '';
@@ -837,8 +884,8 @@ function showGuard(gid,fromTeam,tab){
   G.sel=t||null;G.sheetTab=tab||G.sheetTab||'up';if(g.kind==='coin')G.sheetTab='up';
   const ft=fromTeam?1:0,ev=evoOf(gid),fr=n=>String(n).replace('.',',');
   // en-tête : image, nom, forme, niveau, rôle ; puis progression vers l'évolution suivante
-  const av=ART[gid]?`<img class="sh-av hasbig" src="img/g/${gid}-${s.form}.webp" alt="">`:gIcon(gid,48);
-  const evo=s.form<3?(()=>{const a=s.form===1?0:ev[0],b=ev[s.form-1];return `<div class="evobar"><div class="evotrack"><i style="width:${Math.min(100,(s.lv-a)/(b-a)*100)}%"></i></div><span>Évolution au <b>niv. ${b}</b></span></div>`;})()
+  const av=ART[gid]?`<img class="sh-av hasbig" src="img/${gFile(gid,s.form)}.webp" alt="">`:gIcon(gid,48);
+  const evo=gid==='prismi'?morphRow():s.form<3?(()=>{const a=s.form===1?0:ev[0],b=ev[s.form-1];return `<div class="evobar"><div class="evotrack"><i style="width:${Math.min(100,(s.lv-a)/(b-a)*100)}%"></i></div><span>Évolution au <b>niv. ${b}</b></span></div>`;})()
     :`<div class="evobar"><div class="evotrack"><i style="width:100%"></i></div><span><b>Forme finale</b> 🌟</span></div>`;
   const bi=biomeOf(gid),biome=bi?(()=>{const pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %',p=[];if(bi.pw)p.push(pc(bi.pw)+' puissance');if(bi.rg)p.push(pc(bi.rg)+' portée');
     return `<div><span class="chip ${(bi.pw||1)*(bi.rg||1)>=1?'up':'down'}">${WORLDS[G.world-1].em} <b>${p.join(', ')}</b>&nbsp;: ${bi.txt}</span></div>`;})():'';
@@ -854,7 +901,7 @@ function showGuard(gid,fromTeam,tab){
     upPane=`<div class="ups">${card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
       (arm&&g.kind!=='wind'?`<div class="lab2">CIBLE</div><div class="seg">${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'on':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`:'');
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1),cl=v=>v>=1.2?'g':v>=0.9?'m':'r';
-    const evs=ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
+    const evs=gid==='prismi'?'':ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
     const am=sp.arm*(1+CFG.CA*u.ca);
     infoPane=evs+`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div><div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
       <div class="fxline">✨ ${effet(gid,s)}</div>`+
@@ -864,10 +911,17 @@ function showGuard(gid,fromTeam,tab){
   const tabs=g.kind==='coin'?'':`<div class="seg tabs"><button data-t="up" onclick="sheetTab('up')">⬆️ Améliorer</button><button data-t="info" onclick="sheetTab('info')">📋 Infos</button></div>`;
   const foot=`<div class="sh-foot"><span class="money">${ic('argent')} ${fmt(P.money)} L$</span><span class="cost">Une amélioration : <b>${fmt(cost)} L$</b></span></div>`;
   const tools=(t?`<button class="sh-x" onclick="unplace('${gid}')" title="Rentrer au château" aria-label="Rentrer au château">🏰</button>`:fromTeam?`<button class="sh-x" onclick="showTeam()" title="Équipe" aria-label="Retour à l'équipe">⬅️</button>`:'');
-  openSheet(`<div class="sh-head">${av}<div class="sh-t"><h2>${g.name}</h2><div class="sh-sub"><span class="role">${sp.role}</span><span>${FORMS[s.form]} · niv. ${s.lv}</span></div></div>${tools}<button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
+  openSheet(`<div class="sh-head">${av}<div class="sh-t"><h2>${g.name}</h2><div class="sh-sub"><span class="role">${sp.role}</span><span>${gid==='prismi'?MORPH[curMorph()].elem:FORMS[s.form]} · niv. ${s.lv}</span></div></div>${tools}<button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
     ${evo}${biome}${tabs}
     <div class="stk"><div class="pane" data-t="up">${upPane}</div><div class="pane" data-t="info">${infoPane}</div></div>${foot}`,gid,s.form,t&&t.x>W/2?'left':'right');
   sheetTab(G.sheetTab);
+}
+// Prismi : les 5 formes, celles dont on a la pierre se choisissent d'un toucher
+function morphRow(){
+  const cur=curMorph();
+  return `<div class="morphs">${MORPH_ORDER.map(m=>{const M=MORPH[m],ok=morphOk(m),st=M.stone?STONE[M.stone]:null;
+    const pic=ART.prismi?`<img src="img/g/prismi-${m}.webp" alt="">`:`<span class="mem">${M.em}</span>`;
+    return `<button class="morph${m===cur?' on':''}${ok?'':' locked'}" ${ok&&m!==cur?`onclick="setMorph('${m}')"`:''} title="${M.name}">${pic}<small>${st?(ok?st.em+' '+M.elem:'🔒 monde '+M.stone):'normal'}</small></button>`;}).join('')}</div>`;
 }
 function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 // Les deux onglets sont dans la page en même temps (l'un caché) : la fenêtre garde la même taille quand on change d'onglet
@@ -892,7 +946,7 @@ function buyUp(gid,k,fromTeam){
 function unplace(gid){const pl=P.place[G.world];for(const k in pl)if(pl[k]===gid)delete pl[k];save();buildTowers();G.sel=null;closeModal();}
 function showTeam(){
   const list=P.owned.map(g=>{const s=stats(g),placed=G.towers.some(t=>t.gid===g);
-    return `<div class="card" onclick="showGuard('${g}',1)">${gIcon(g,52)}<b>${GUARD[g].name}</b><small>${FORMS[s.form]} · niveau ${s.lv}</small><small>${placed?'✅ sur la map':'🏰 au château'}</small></div>`;}).join('');
+    return `<div class="card" onclick="showGuard('${g}',1)">${gIcon(g,52)}<b>${GUARD[g].name}</b><small>${g==='prismi'?MORPH[curMorph()].elem:FORMS[s.form]} · niveau ${s.lv}</small><small>${placed?'✅ sur la map':'🏰 au château'}</small></div>`;}).join('');
   const nb=Object.keys(GUARD).length;
   openModal(`<h2>${ic('equipe')} Ton équipe (${P.owned.length}/${nb})</h2>
     <p>Touche un gardien pour l'améliorer. Les améliorations restent pour toujours, même si tu perds.</p>
@@ -1037,7 +1091,7 @@ function selectProfile(id){
   PID=id;P=s;LS.set('gardiens-last',id);
   WORLDS.forEach(w=>{P.worlds[w.id]=P.worlds[w.id]||{cp:1,done:false};P.place[w.id]=P.place[w.id]||{};});
   if(P.worlds[3].done)P.unlocked=Math.max(P.unlocked,4);
-  initStats();pushScore(true);
+  initStats();applyMorph();pushScore(true);
   if(!P.starter){chooseStarter();return;}
   showWorlds();
 }
