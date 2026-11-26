@@ -145,7 +145,13 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .who .pl{display:flex;align-items:center;gap:10px}
 .who .pl button.go{flex:1;text-align:left;font-size:20px}
 .avs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
-.avs button{font-size:26px;padding:4px 8px}
+.avs button{padding:3px;border-radius:50%;line-height:0}
+.avs button img{width:54px;height:54px;display:block}
+.avs button.sel{outline-offset:1px}
+img.ic{width:1.3em;height:1.3em;vertical-align:-0.28em;object-fit:contain;margin-right:3px;pointer-events:none}
+#hud img.ic{width:1.25em;height:1.25em;margin-right:2px}
+h2 img.ic{width:1.15em;height:1.15em}
+img.avi{width:1.35em;height:1.35em;vertical-align:-0.3em;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .avs button.sel,.diffs button.sel{outline:3px solid var(--pink)}
 .diffs{display:flex;flex-direction:column;gap:6px;margin:6px 0}
 .diffs button{text-align:left}
@@ -274,13 +280,13 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 39</div>
-          <button id="bAuto">🔁 Auto</button>
-          <button id="bSpeed">⏩ ×1</button>
-          <button id="bPause">⏸ Pause</button>
-          <button id="bTeam">🛡️ Équipe</button>
-          <button id="bRank" onclick="showRank()">🏆 Classement</button>
-          <button id="bMenu">⚙️ Menu</button>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 41</div>
+          <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
+          <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
+          <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
+          <button id="bTeam"><img class="ic" src="img/ui/equipe.webp" alt=""> Équipe</button>
+          <button id="bRank" onclick="showRank()"><img class="ic" src="img/ui/classement.webp" alt=""> Classement</button>
+          <button id="bMenu"><img class="ic" src="img/ui/menu.webp" alt=""> Menu</button>
           <div id="dev">
             <button onclick="devMoney()">+ argent</button>
             <button onclick="devSkip(5)">Vague +5</button>
@@ -615,10 +621,10 @@ function showNextWave(){
     return `<div class="wf${boss?' boss':''}"><img src="img/f/${g.art}.webp" alt=""><div><div class="nm">${g.name}${boss?` <small>${g.final?'grand boss':'mini-boss'}</small>`:''}</div>
       <div class="st">${stats}<span class="ftxt"><br>${fi.txt}</span></div><div class="best">Bons contre lui : ${best}</div></div><div class="ct">×${g.n}</div></div>`;}).join('');
   const tags=[`${tot} méchants`,w%10===0?(w===CFG.WAVES?'👑 grand boss':'😤 Chef des Chipeurs'):'',w%5===0&&w%10!==0?'💨 ruée de Fusées':'',fly?'🦇 volants':'',gh?'👻 fantômes : il faut Étoilette':'',ar?'🛡️ armures':''].filter(Boolean);
-  openSheet(`<div class="sh-head"><div class="sh-t"><h2>👀 Vague ${w} sur ${CFG.WAVES}</h2><div class="sh-sub">${WORLDS[G.world-1].em} ${WORLDS[G.world-1].name}</div></div><button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
+  openSheet(`<div class="sh-head"><div class="sh-t"><h2>${ic('longue-vue')} Vague ${w} sur ${CFG.WAVES}</h2><div class="sh-sub">${WORLDS[G.world-1].em} ${WORLDS[G.world-1].name}</div></div><button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
     <div class="wsum">${tags.map(t=>`<span>${t}</span>`).join('')}</div>
     <div class="wl">${rows}</div>
-    <div class="sh-foot"><span class="money" style="font-size:13px">Place tes gardiens, puis lance la vague</span>${G.state==='idle'?`<button class="b-pink" style="box-shadow:none" onclick="closeModal();startWave()">▶ Lancer</button>`:''}</div>`,null,1,'right');
+    <div class="sh-foot"><span class="money" style="font-size:13px">Place tes gardiens, puis lance la vague</span>${G.state==='idle'?`<button class="b-pink" style="box-shadow:none" onclick="closeModal();startWave()">${ic('play')} Lancer</button>`:''}</div>`,null,1,'right');
   $('sbox').classList.add('wide2');
 }
 function startWave(){
@@ -718,7 +724,7 @@ function renderBench(){
   const full=placed.length>=teamMax();
   const canBuy=teamMax()<SLOT_MAX[P.diff];
   const side=G.side,isz=side?G.sideIcon:40;
-  const cnt=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}${canBuy?`<span class="slotplus${P.money>=slotPrice()?' afford':''}">+</span>`:''}</div>`;
+  const cnt=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">${ic('equipe')}<br>${placed.length}/${teamMax()}${canBuy?`<span class="slotplus${P.money>=slotPrice()?' afford':''}">+</span>`:''}</div>`;
   const items=BENCH_ORDER.map(gid=>{
     const own=P.owned.includes(gid);let cls='bi',tag;
     if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid),gid))+' '+level(gid);}
@@ -744,7 +750,7 @@ function loopFix(el){if(!el._set)return;if(el.scrollTop<el._set*0.5)el.scrollTop
 function renderSideFoes(){
   if(!P||!G.side)return;
   const gs=waveSummary(G.world,G.wave);G.sideFoes=gs;
-  $('benchRtop').innerHTML=`<div class="sbtitle">${G.state==='wave'?'⚔️':'👀'} Vague<br>${G.wave}</div>`;
+  $('benchRtop').innerHTML=`<div class="sbtitle">${G.state==='wave'?'⚔️':ic('longue-vue')} Vague<br>${G.wave}</div>`;
   loopFill($('benchRs'),gs.map((g,i)=>`<div class="fi${g.type==='boss'?' boss':''}" data-f="${i}"><img src="img/f/${g.art}.webp" alt=""><b>${g.n}</b></div>`).join(''));
 }
 function showFoe(i){
@@ -834,7 +840,7 @@ function showGuard(gid,fromTeam,tab){
       `<p class="pf">👍 <b>Fort :</b> ${sp.fort}<br>👎 <b>Faible :</b> ${sp.faible}</p>`;
   }
   const tabs=g.kind==='coin'?'':`<div class="seg tabs"><button data-t="up" onclick="sheetTab('up')">⬆️ Améliorer</button><button data-t="info" onclick="sheetTab('info')">📋 Infos</button></div>`;
-  const foot=`<div class="sh-foot"><span class="money">💰 ${fmt(P.money)} L$</span><span class="cost">Une amélioration : <b>${fmt(cost)} L$</b></span></div>`;
+  const foot=`<div class="sh-foot"><span class="money">${ic('argent')} ${fmt(P.money)} L$</span><span class="cost">Une amélioration : <b>${fmt(cost)} L$</b></span></div>`;
   const tools=(t?`<button class="sh-x" onclick="unplace('${gid}')" title="Rentrer au château" aria-label="Rentrer au château">🏰</button>`:fromTeam?`<button class="sh-x" onclick="showTeam()" title="Équipe" aria-label="Retour à l'équipe">⬅️</button>`:'');
   openSheet(`<div class="sh-head">${av}<div class="sh-t"><h2>${g.name}</h2><div class="sh-sub"><span class="role">${sp.role}</span><span>${FORMS[s.form]} · niv. ${s.lv}</span></div></div>${tools}<button class="sh-x" onclick="closeModal()" aria-label="Fermer">✕</button></div>
     ${evo}${biome}${tabs}
@@ -866,7 +872,7 @@ function showTeam(){
   const list=P.owned.map(g=>{const s=stats(g),placed=G.towers.some(t=>t.gid===g);
     return `<div class="card" onclick="showGuard('${g}',1)">${gIcon(g,52)}<b>${GUARD[g].name}</b><small>${FORMS[s.form]} · niveau ${s.lv}</small><small>${placed?'✅ sur la map':'🏰 au château'}</small></div>`;}).join('');
   const nb=Object.keys(GUARD).length;
-  openModal(`<h2>🛡️ Ton équipe (${P.owned.length}/${nb})</h2>
+  openModal(`<h2>${ic('equipe')} Ton équipe (${P.owned.length}/${nb})</h2>
     <p>Touche un gardien pour l'améliorer. Les améliorations restent pour toujours, même si tu perds.</p>
     <div class="team">${list}</div>
     <p style="opacity:.75">${P.owned.length<nb?'Les autres gardiens s\'achètent avec des LiliDollars ou sont libérés en battant le Chef des Chipeurs (bouton 🛡️ Gardiens).':'Tu as tous les gardiens !'}</p>
@@ -924,15 +930,15 @@ function pushScore(now){
   if(!P||!P.uid||location.hash.includes('dev')||location.protocol==='file:')return;
   clearTimeout(pushT);pushT=setTimeout(()=>{
     const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses}:null;}).filter(Boolean);
-    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:P.av,rows})}).catch(()=>{});
+    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:avId(P.av),rows})}).catch(()=>{});
   },now?300:1500);
 }
 let RK={diff:2,by:'prog'};
 function showRank(d,by){
   RK.diff=d||RK.diff||(P?P.diff:2);RK.by=by||RK.by;
   const tabs=[1,2,3].map(x=>`<button class="${x===RK.diff?'sel':''}" onclick="showRank(${x})">${DIFF[x].stars}</button>`).join('');
-  const kinds=[['prog','🗺️ Le plus loin'],['kills','😠 Chipeurs chassés']].map(([k,l])=>`<button class="${k===RK.by?'sel':''}" onclick="showRank(0,'${k}')">${l}</button>`).join('');
-  openModal(`<h2>🏆 Classement</h2>
+  const kinds=[['prog',ic('mondes')+' Le plus loin'],['kills','😠 Chipeurs chassés']].map(([k,l])=>`<button class="${k===RK.by?'sel':''}" onclick="showRank(0,'${k}')">${l}</button>`).join('');
+  openModal(`<h2>${ic('classement')} Classement</h2>
     <div class="rk-tabs"><div class="seg">${tabs}</div><div class="seg">${kinds}</div></div>
     <p class="rk-sub">${DIFF[RK.diff].stars} ${DIFF[RK.diff].name}</p>
     <div class="rk" id="rkList"><p class="rk-msg">Chargement…</p></div>
@@ -943,22 +949,27 @@ function showRank(d,by){
     const rows=j.rows||[];
     if(!rows.length){$('rkList').innerHTML='<p class="rk-msg">Personne encore à ce niveau. Sois le premier !</p>';return;}
     const med=['🥇','🥈','🥉'];
-    $('rkList').innerHTML=rows.map((r,i)=>`<div class="rkr${r.me?' me':''}"><span class="rkn">${med[i]||i+1}</span><span class="rkp">${esc(r.av)} ${esc(r.name)}</span>
+    $('rkList').innerHTML=rows.map((r,i)=>`<div class="rkr${r.me?' me':''}"><span class="rkn">${med[i]||i+1}</span><span class="rkp">${avHtml(r.av)} ${esc(r.name)}</span>
       <span class="rkv">${b0==='kills'?`${fmt(r.kills)} 😠`:progTxt(r.prog)}</span></div>`).join('');
     const me=$('rkList').querySelector('.me');if(me)me.scrollIntoView({block:'center'});
   }).catch(()=>{if($('rkList'))$('rkList').innerHTML='<p class="rk-msg">Pas de connexion : le classement a besoin d\'internet.</p>';});
 }
-const AVATARS=['👧','👸','🧚','🦄','🐱','🐶','🦊','🐼','🐰','🐸','🌸','⭐'];
+// Avatars dessinés par Gemini (img/av/<id>.webp) ; les anciens avatars emoji sont convertis
+const AVATARS=['princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja','licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon'];
+const AV_OLD={'👧':'princesse','👸':'princesse','🧚':'fee','🦄':'licorne','🐱':'chaton','🐶':'chiot','🦊':'renard','🐼':'panda','🐰':'lapin','🐸':'grenouille','🌸':'fee','⭐':'sorcier'};
+function avId(a){return AVATARS.includes(a)?a:(AV_OLD[a]||'princesse');}
+function avHtml(a){return `<img class="avi" src="img/av/${avId(a)}.webp" alt="">`;}
+function migrateAvatars(){let ch=false;PROFILES.forEach(p=>{const n=avId(p.av);if(n!==p.av){p.av=n;ch=true;const sv=LS.get('gardiens-'+p.id);if(sv){sv.av=n;LS.set('gardiens-'+p.id,sv);}}});if(ch)LS.set(PKEY,PROFILES);}
 function showWho(){
-  PROFILES=LS.get(PKEY)||[];
-  const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="editProfile('${p.id}')" title="Changer le prénom ou l'avatar">✏️</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
-  openModal(`<h2>🏰 Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
-    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="showRank()">🏆 Classement</button></div>`,'princesse-contente',true);
+  PROFILES=LS.get(PKEY)||[];migrateAvatars();
+  const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${avHtml(p.av)} ${esc(p.name)}</button><button onclick="editProfile('${p.id}')" title="Changer le prénom ou l'avatar">${ic('modifier')}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
+  openModal(`<h2>${ic('chateau')} Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
+    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="showRank()">${ic('classement')} Classement</button></div>`,'princesse-contente',true);
 }
 let NP={av:AVATARS[0],diff:2};
 function newProfile(){
   NP={av:AVATARS[0],diff:2};
-  const avs=AVATARS.map(a=>`<button class="${a===NP.av?'sel':''}" onclick="NP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${a}</button>`).join('');
+  const avs=AVATARS.map(a=>`<button class="${a===NP.av?'sel':''}" onclick="NP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')"><img src="img/av/${a}.webp" alt="${a}"></button>`).join('');
   const diffs=[1,2,3].map(d=>`<button class="${d===NP.diff?'sel':''}" onclick="NP.diff=${d};[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${DIFF[d].stars} <b>${DIFF[d].name}</b> <small>(${DIFF[d].age}) — ${DIFF[d].txt}</small></button>`).join('');
   openModal(`<h2>Nouveau joueur</h2>
     <p>Ton prénom :</p><input class="txt" id="npName" maxlength="14" autocomplete="off">
@@ -977,8 +988,8 @@ let EP=null;
 function editProfile(id,back){
   const p=PROFILES.find(p=>p.id===id);if(!p)return;
   EP={id,av:p.av,back:back||'who'};
-  const avs=AVATARS.map(a=>`<button class="${a===EP.av?'sel':''}" onclick="EP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${a}</button>`).join('');
-  openModal(`<h2>✏️ Modifier ${p.av} ${esc(p.name)}</h2>
+  const avs=AVATARS.map(a=>`<button class="${a===EP.av?'sel':''}" onclick="EP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')"><img src="img/av/${a}.webp" alt="${a}"></button>`).join('');
+  openModal(`<h2>${ic('modifier')} Modifier ${avHtml(p.av)} ${esc(p.name)}</h2>
     <p>Ton prénom :</p><input class="txt" id="epName" maxlength="14" autocomplete="off" value="${esc(p.name)}">
     <p>Ton avatar :</p><div class="avs">${avs}</div>
     <p style="font-size:13px;opacity:.75">Ta partie, tes gardiens et ta place dans le classement sont gardés.</p>
@@ -995,7 +1006,7 @@ function saveEdit(){
 }
 function delProfile(id){
   const p=PROFILES.find(p=>p.id===id);if(!p)return;
-  openModal(`<h2>Supprimer ${p.av} ${esc(p.name)} ?</h2><p>Sa partie sera perdue pour toujours.</p>
+  openModal(`<h2>Supprimer ${avHtml(p.av)} ${esc(p.name)} ?</h2><p>Sa partie sera perdue pour toujours.</p>
     <div class="right"><button onclick="showWho()">Non</button><button class="b-red" onclick="reallyDel('${id}')">🗑️ Oui, supprimer</button></div>`,null,true);
 }
 function reallyDel(id){PROFILES=PROFILES.filter(p=>p.id!==id);LS.set(PKEY,PROFILES);LS.del('gardiens-'+id);showWho();}
@@ -1009,7 +1020,7 @@ function selectProfile(id){
   showWorlds();
 }
 function chooseStarter(){
-  openModal(`<h2>Bienvenue, ${P.av} ${esc(P.name)} !</h2>
+  openModal(`<h2>Bienvenue, ${avHtml(P.av)} ${esc(P.name)} !</h2>
     <p>Le méchant <b>Grognon</b> et ses <b>Chipeurs</b> veulent entrer dans le château de la <b>princesse Lili</b> ! Nous, Ellie et Livia, on a préparé la défense avec des <b>gardiens</b>.</p>
     <p><b>Choisis ton premier gardien :</b></p>
     <div class="cards">${STARTERS.map(g=>gCard(g,`pickStarter('${g}')`)).join('')}</div>`,'duo-equipe',true,true);
@@ -1021,19 +1032,19 @@ function showWorlds(){
     const info=lock?'🔒 Réussis le monde d\'avant':st.done&&!run?'✅ Réussi ! Rejouer pour gagner des L$':`Vague ${run?run.wave:st.cp} sur ${CFG.WAVES}`;
     return `<div class="card ${lock?'locked':''}" ${lock?'':`onclick="closeModal();enterWorld(${n})"`}><span style="font-size:44px">${w.em}</span><b>${n}. ${w.name}</b><small>${info}</small></div>`;
   }).join('');
-  openModal(`<h2>🗺️ Choisis ton monde</h2><div class="cards">${cards}</div>
-    <div class="right"><button onclick="showWho()">👥 Changer de joueur</button></div>`,null,!G.towers.length&&!P.runs[G.world],true);
+  openModal(`<h2>${ic('mondes')} Choisis ton monde</h2><div class="cards">${cards}</div>
+    <div class="right"><button onclick="showWho()">${ic('joueurs')} Changer de joueur</button></div>`,null,!G.towers.length&&!P.runs[G.world],true);
 }
 function showMenu(){
   const diffs=[1,2,3].map(d=>`<button class="${d===P.diff?'sel':''}" onclick="setDiff(${d})">${DIFF[d].stars} <b>${DIFF[d].name}</b> <small>(${DIFF[d].age}) — ${DIFF[d].txt}</small></button>`).join('');
-  openModal(`<h2>⚙️ Menu</h2>
+  openModal(`<h2>${ic('menu')} Menu</h2>
     <p><b>Niveau</b></p><div class="diffs">${diffs}</div>
     <div class="right" style="justify-content:flex-start">
-      <button onclick="showWorlds()">🗺️ Les mondes</button>
-      <button onclick="showRank()">🏆 Classement</button>
-      <button onclick="editProfile(PID,'menu')">✏️ Prénom et avatar</button>
-      <button onclick="showWho()">👥 Changer de joueur</button>
-      <button onclick="fullscreen()">⛶ Plein écran</button>
+      <button onclick="showWorlds()">${ic('mondes')} Les mondes</button>
+      <button onclick="showRank()">${ic('classement')} Classement</button>
+      <button onclick="editProfile(PID,'menu')">${ic('modifier')} Prénom et avatar</button>
+      <button onclick="showWho()">${ic('joueurs')} Changer de joueur</button>
+      <button onclick="fullscreen()">${ic('plein-ecran')} Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
 function setDiff(d){P.diff=d;buildTowers();if(G.state!=='wave')G.hearts=Math.min(G.hearts,maxHearts());save();showMenu();refreshHUD();}
@@ -1051,21 +1062,23 @@ function benchOpen(o){$('bench').classList.toggle('open',o);$('bBench').classLis
 $('bBench').onclick=()=>benchOpen(!$('bench').classList.contains('open'));
 $('nextW').onclick=()=>showNextWave();
 $('bMenu').onclick=()=>showMenu();
+// Icônes dessinées par Gemini (img/ui/<nom>.webp)
+function ic(n){return `<img class="ic" src="img/ui/${n}.webp" alt="">`;}
 function refreshHUD(){
   if(!P)return;
   renderNextStrip();
   const wd=WORLDS[G.world-1];
-  $('sHearts').textContent=`❤️ ${G.hearts}`;
-  $('sMoney').textContent=`💰 ${short(P.money)}`;
-  $('sWave').textContent=`🌊 ${G.wave}/${CFG.WAVES}`;
+  $('sHearts').innerHTML=`${ic('coeur')}${G.hearts}`;
+  $('sMoney').innerHTML=`${ic('argent')}${short(P.money)}`;
+  $('sWave').innerHTML=`${ic('vague')}${G.wave}/${CFG.WAVES}`;
   $('sWorld').textContent=wd.em;$('sWorld').title=wd.name;
-  $('sPlayer').innerHTML=`${P.av} ${esc(P.name)} · ${wd.name}`;
-  $('bWave').innerHTML=G.state==='wave'?'⚔️ En cours':`▶ Vague ${G.wave}`;
-  $('bBench').innerHTML=`🛡️ Gardiens ${G.towers.length}/${teamMax()}`;
+  $('sPlayer').innerHTML=`${avHtml(P.av)} ${esc(P.name)} · ${wd.name}`;
+  $('bWave').innerHTML=G.state==='wave'?'⚔️ En cours':`${ic('play')} Vague ${G.wave}`;
+  $('bBench').innerHTML=`${ic('equipe')} Gardiens ${G.towers.length}/${teamMax()}`;
   $('bWave').disabled=G.state!=='idle';
   $('bAuto').className=P.auto?'b-on':'';
-  $('bSpeed').textContent=`⏩ ×${G.speed}`;
-  $('bPause').textContent=G.paused?'▶ Reprendre':'⏸ Pause';
+  $('bSpeed').innerHTML=`${ic('vitesse')} ×${G.speed}`;
+  $('bPause').innerHTML=G.paused?`${ic('play')} Reprendre`:`${ic('pause')} Pause`;
   $('bPause').className=G.paused?'b-yellow':'';
   renderBench();
 }

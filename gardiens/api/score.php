@@ -4,7 +4,7 @@
 // GET ?diff=1|2|3 : les 100 meilleurs du niveau.
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
-$AV=['👧','👸','🧚','🦄','🐱','🐶','🦊','🐼','🐰','🐸','🌸','⭐'];
+$AV=['princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja','licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon'];
 function out($x,$code=200){http_response_code($code);echo json_encode($x,JSON_UNESCAPED_UNICODE);exit;}
 try{
   $dir=__DIR__.'/data';if(!is_dir($dir))mkdir($dir,0755);
@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   $uid=$in['uid']??'';if(!preg_match('/^[a-z0-9]{8,24}$/',$uid))out(['error'=>'uid'],400);
   $name=trim(preg_replace('/[\x00-\x1F<>]/u','',(string)($in['name']??'')));
   $name=mb_substr($name,0,14);if($name==='')$name='Joueur';
-  $av=in_array($in['av']??'',$AV,true)?$in['av']:'⭐';
+  $av=in_array($in['av']??'',$AV,true)?$in['av']:'princesse';
   $st=$db->prepare('INSERT INTO scores(uid,diff,name,av,prog,kills,bosses,updated) VALUES(?,?,?,?,?,?,?,?)
     ON CONFLICT(uid,diff) DO UPDATE SET name=excluded.name,av=excluded.av,prog=MAX(prog,excluded.prog),
     kills=MAX(kills,excluded.kills),bosses=MAX(bosses,excluded.bosses),updated=excluded.updated');
