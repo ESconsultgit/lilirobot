@@ -274,7 +274,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 38</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 39</div>
           <button id="bAuto">🔁 Auto</button>
           <button id="bSpeed">⏩ ×1</button>
           <button id="bPause">⏸ Pause</button>
@@ -951,7 +951,7 @@ function showRank(d,by){
 const AVATARS=['👧','👸','🧚','🦄','🐱','🐶','🦊','🐼','🐰','🐸','🌸','⭐'];
 function showWho(){
   PROFILES=LS.get(PKEY)||[];
-  const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
+  const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${p.av} ${esc(p.name)}</button><button onclick="editProfile('${p.id}')" title="Changer le prénom ou l'avatar">✏️</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
   openModal(`<h2>🏰 Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
     <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="showRank()">🏆 Classement</button></div>`,'princesse-contente',true);
 }
@@ -971,6 +971,27 @@ function createProfile(){
   const id=Date.now().toString(36);
   PROFILES.push({id,name,av:NP.av});LS.set(PKEY,PROFILES);
   LS.set('gardiens-'+id,newSave(name,NP.av,NP.diff));selectProfile(id);
+}
+// Changer le prénom et l'avatar d'un joueur (depuis « Qui joue ? » ou ⚙️ Menu)
+let EP=null;
+function editProfile(id,back){
+  const p=PROFILES.find(p=>p.id===id);if(!p)return;
+  EP={id,av:p.av,back:back||'who'};
+  const avs=AVATARS.map(a=>`<button class="${a===EP.av?'sel':''}" onclick="EP.av='${a}';[...this.parentNode.children].forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${a}</button>`).join('');
+  openModal(`<h2>✏️ Modifier ${p.av} ${esc(p.name)}</h2>
+    <p>Ton prénom :</p><input class="txt" id="epName" maxlength="14" autocomplete="off" value="${esc(p.name)}">
+    <p>Ton avatar :</p><div class="avs">${avs}</div>
+    <p style="font-size:13px;opacity:.75">Ta partie, tes gardiens et ta place dans le classement sont gardés.</p>
+    <div class="right"><button onclick="${EP.back==='menu'?'showMenu()':'showWho()'}">Annuler</button><button class="b-pink" onclick="saveEdit()">✅ Enregistrer</button></div>`,null,true);
+}
+function saveEdit(){
+  const p=PROFILES.find(p=>p.id===EP.id);if(!p)return;
+  const name=($('epName').value||'').trim()||p.name;
+  p.name=name;p.av=EP.av;LS.set(PKEY,PROFILES);
+  const sv=EP.id===PID&&P?P:LS.get('gardiens-'+EP.id);
+  if(sv){sv.name=name;sv.av=EP.av;LS.set('gardiens-'+EP.id,sv);}
+  if(EP.id===PID&&P){pushScore(true);refreshHUD();}
+  if(EP.back==='menu')showMenu();else showWho();
 }
 function delProfile(id){
   const p=PROFILES.find(p=>p.id===id);if(!p)return;
@@ -1010,6 +1031,7 @@ function showMenu(){
     <div class="right" style="justify-content:flex-start">
       <button onclick="showWorlds()">🗺️ Les mondes</button>
       <button onclick="showRank()">🏆 Classement</button>
+      <button onclick="editProfile(PID,'menu')">✏️ Prénom et avatar</button>
       <button onclick="showWho()">👥 Changer de joueur</button>
       <button onclick="fullscreen()">⛶ Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);

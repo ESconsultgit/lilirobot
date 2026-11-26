@@ -261,3 +261,37 @@ Sizes: the baby is about half the height of the super form. Cute and friendly, n
 Background: perfectly flat solid pure blue #0000FF (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard.
 STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. Simple, readable silhouette that is still recognisable when very small. No text. Wide 16:9 image.
 ```
+
+## Avatars des joueurs (16, une seule image)
+
+Joindre : la planche de style. Fond vert à retirer, puis je découpe les 16 avatars.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw a sheet of 16 player avatars for a children's game, arranged in a neat grid of 4 rows and 4 columns, evenly spaced with a wide clear gap between them. Each avatar is a round badge: a head-and-shoulders portrait, facing the viewer, smiling, inside a soft pastel circle with a thick white border. All badges are exactly the same size. Each character must be instantly recognisable even when very small (48 pixels).
+Row 1 (kids): a little princess with a tiara and long hair (pink circle); a little knight boy with a shiny helmet visor up (light blue circle); a little fairy girl with sparkly wings (lilac circle); a young wizard boy with a starry hat (dark blue circle)
+Row 2 (kids): an astronaut kid in a round helmet (navy circle with tiny stars); a pirate kid with a bandana and eyepatch (sand yellow circle); a superhero kid with a mask and cape (red circle); a ninja kid with a headband (grey circle)
+Row 3 (animals): a white unicorn with a rainbow mane (pink circle); a ginger kitten (peach circle); a happy puppy with floppy ears (light brown circle); a little fox (orange circle)
+Row 4 (animals): a panda (mint circle); a bunny with long ears (lavender circle); a smiling frog (light green circle); a baby dragon, cute, not scary (turquoise circle)
+
+Background around the badges: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no shadow, not transparent, no checkerboard. Do not use that exact green inside the badges.
+STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. No text, no letters. Square 1:1 image.
+```
+
+## Icônes des menus (16, une seule image)
+
+Joindre : la planche de style. Fond magenta à retirer.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw a sheet of 16 game interface icons for a children's tower defense game, arranged in a neat grid of 4 rows and 4 columns, evenly spaced with a wide clear gap between them. Each icon is a single chunky object, front view, glossy and cute, with a thick dark outline, all the same size, easy to understand at 32 pixels. No faces on the objects, no buttons or frames around them.
+Row 1: a big green "play" triangle (start the wave); two curved arrows forming a circle (automatic mode); a fast-forward double triangle with little speed lines (speed); a pause sign made of two rounded bars
+Row 2: a blue and gold shield (the team of guardians); a purple gear (settings menu); a golden trophy cup with a star (ranking); a rolled-out treasure map with a dotted path and a little castle (the worlds)
+Row 3: two little smiling silhouettes, one pink and one purple (change player); four corner arrows pointing outwards (full screen); a pink spyglass / telescope (look at the next wave); a pencil (edit name)
+Row 4: a shiny golden coin with a heart engraved on it (LiliDollars money); a big glossy red heart (castle lives); a pink castle tower with a flag (the castle); a blue ocean wave (the wave counter)
+
+Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no shadow, not transparent, no checkerboard. Do not use magenta in the icons (use red or soft pink instead).
+STYLE: cute 2D cartoon game icons, like a modern mobile game for kids. Soft rounded shapes, clean dark outlines, simple cel shading with a small white highlight, bright saturated colours. No text, no letters, no numbers. Square 1:1 image.
+```
