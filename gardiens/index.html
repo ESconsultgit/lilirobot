@@ -132,6 +132,9 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .wboss.flip{transform:scaleX(-1)}
 .wcard.locked .wboss{filter:brightness(0) opacity(.55)}
 .winfo{position:relative}
+.wmedal{position:absolute;top:-2px;right:6px;width:34px;z-index:3;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));animation:medal 2.4s ease-in-out infinite;transform-origin:50% 0}
+@keyframes medal{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.wlock img{width:54px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5))}
 .wlock{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px;z-index:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
 .winfo{padding:7px 10px 9px;padding-right:30%;text-align:left;display:flex;flex-direction:column;gap:4px;text-align:center}
 .winfo b{font-family:'Baloo 2';font-size:17px;line-height:1.15;color:#2A1F3D}
@@ -140,7 +143,7 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .wbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 60%,#fff))}
 .wcard.done .wbar i{background:linear-gradient(90deg,#F5C33B,#FFE38A)}
 .wcard.locked{cursor:default;border-color:#bbb;box-shadow:0 4px 0 #999}
-.wcard.locked .wimg{filter:grayscale(1) brightness(.75);border-color:#bbb}
+.wcard.locked .wimg{background-color:#6d6d6d;background-blend-mode:luminosity;border-color:#bbb}
 .wcard.locked .winfo{opacity:.7}
 @media (max-height:500px){.wcards{gap:9px}.winfo{padding:5px 8px 7px;padding-right:30%}.winfo b{font-size:15px}.winfo small{font-size:11.5px}}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:8px}
@@ -311,7 +314,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 45</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 46</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -924,7 +927,7 @@ function morphRow(){
   const cur=curMorph();
   return `<div class="morphs">${MORPH_ORDER.map(m=>{const M=MORPH[m],ok=morphOk(m),st=M.stone?STONE[M.stone]:null;
     const pic=ART.prismi?`<img src="img/g/prismi-${m}.webp" alt="">`:`<span class="mem">${M.em}</span>`;
-    return `<button class="morph${m===cur?' on':''}${ok?'':' locked'}" ${ok&&m!==cur?`onclick="setMorph('${m}')"`:''} title="${M.name}">${pic}<small>${st?(ok?stoneImg(M.stone)+M.elem:'🔒 monde '+M.stone):'normal'}</small></button>`;}).join('')}</div>`;
+    return `<button class="morph${m===cur?' on':''}${ok?'':' locked'}" ${ok&&m!==cur?`onclick="setMorph('${m}')"`:''} title="${M.name}">${pic}<small>${st?(ok?stoneImg(M.stone)+M.elem:'<img class="ic" src="img/ui/cadenas.webp" alt="">monde '+M.stone):'normal'}</small></button>`;}).join('')}</div>`;
 }
 function setTarget(gid,m,fromTeam){P.tgt=P.tgt||{};P.tgt[gid]=m;save();showGuard(gid,fromTeam,'up');}
 // Les deux onglets sont dans la page en même temps (l'un caché) : la fenêtre garde la même taille quand on change d'onglet
@@ -1110,10 +1113,10 @@ function showWorlds(){
   const cards=WORLDS.map(w=>{
     const n=w.id,st=P.worlds[n],lock=n>P.unlocked,run=P.runs[n],cur=run?run.wave:st.cp,done=st.done&&!run;
     const pct=done?100:Math.round((cur-1)/CFG.WAVES*100);
-    const badge=lock?'':st.done?'<span class="wbadge ok">✅</span>':'';
+    const badge=lock?'':st.done?'<img class="wmedal" src="img/ui/medaille.webp" alt="Réussi">':'';
     const info=lock?'Réussis le monde d\'avant pour l\'ouvrir':done?'Réussi ! Rejoue pour gagner des L$':`Vague <b>${cur}</b> sur ${CFG.WAVES}`;
     return `<div class="wcard${lock?' locked':''}${done?' done':''}" style="--c:${WORLD_COL[n]||'#7A4FC8'}" ${lock?'':`onclick="closeModal();enterWorld(${n})"`}>
-      <div class="wimg" style="background-image:url(img/map-${n}-mini.webp)"><span class="wnum">${n}</span>${badge}${lock?'<span class="wlock">🔒</span>':''}<img class="wboss${(FOE_FACE[w.boss.art]||1)>0?' flip':''}" src="img/f/${w.boss.art}.webp" alt="${w.boss.name}" title="${w.boss.name}"></div>
+      <div class="wimg" style="background-image:url(img/map-${n}-mini.webp)"><span class="wnum">${n}</span>${badge}${lock?'<span class="wlock"><img src="img/ui/cadenas.webp" alt="Verrouillé"></span>':''}<img class="wboss${(FOE_FACE[w.boss.art]||1)>0?' flip':''}" src="img/f/${w.boss.art}.webp" alt="${w.boss.name}" title="${w.boss.name}"></div>
       <div class="winfo"><b>${w.em} ${w.name}</b>${lock?'':`<div class="wbar"><i style="width:${pct}%"></i></div>`}<small>${info}</small></div></div>`;
   }).join('');
   openModal(`<h2>${ic('mondes')} Choisis ton monde</h2><div class="wcards">${cards}</div>
