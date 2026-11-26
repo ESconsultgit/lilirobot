@@ -365,3 +365,30 @@ Sizes: the baby is about half the height of the super form. Cute, calm and frien
 Background: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard. Do not use green on the creature.
 STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. Simple, readable silhouette that is still recognisable when very small. No text. Wide 16:9 image.
 ```
+
+## Monde 5 — La Cité du Futur (chemin en spirale)
+
+### Fond de map
+
+Joindre : la planche de style (image 1) et `guide-map-5.png` (image 2). Le chemin tourne en spirale jusqu'au château, au centre.
+
+```
+Image 1 is the style reference: keep the same art style. Image 2 is a layout guide: the light band is the enemies' path, a square spiral that goes from the top-left edge all the way to the centre; the magenta rectangle is where the castle will be placed later.
+
+Redraw image 2 as a beautiful top-down game map for a cute children's tower defense game: a friendly futuristic city seen from above at night, cheerful and colourful, like a cartoon space-age town: dark navy-blue metal floor tiles with glowing cyan lines, small round rooftops with antennas, neon pink and cyan lights, tiny hover-car parking pads, holographic plants in glass domes, little satellite dishes, blinking lamps and a few stars in the sky reflections.
+Keep the path EXACTLY the same shape, width and position as in image 2, as a glowing light-cyan sci-fi road with a dotted light line in the middle, clear of any object. Leave the magenta rectangle area as a plain empty round landing platform (no castle, no objects, no magenta). Decorations only beside the path, with plenty of open floor between the rings of the spiral where guardians will be placed. No characters, no creatures, no vehicles on the road, no text.
+STYLE: cute 2D cartoon illustration, top-down view, clean outlines, soft cel shading, bright cheerful colours, never dark or scary. Same 16:9 format as image 2.
+```
+
+### Grand boss du monde 5
+
+Joindre : la planche de style. Fond vert.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw Le Robot Grognon, the final boss of a cute children's tower defense game, walking towards the RIGHT, seen from the side, full body, big and impressive but funny rather than scary: a huge chubby grumpy round robot made of shiny steel-blue metal plates with rivets, short stompy legs, big clumsy claw hands, a glass dome head with a little grumpy purple Chipeur (the villain minion from image 1, with its black bandit eye mask) piloting it inside, a blinking antenna on top, a big loot sack hanging on its back and little puffs of steam from its joints.
+
+Background: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard. Do not use green on the robot.
+STYLE: cute 2D cartoon illustration for a children's mobile game, clean dark outlines, simple cel shading, bright colours. No text. Square 1:1 image.
+```

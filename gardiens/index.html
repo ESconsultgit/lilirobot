@@ -314,7 +314,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 48</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 49</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -456,6 +456,9 @@ const BIOME={
            givrou:{pw:1.3,txt:'il fait très froid : la glace est plus forte'},
            lunette:{rg:1.1,txt:'les nuits claires de l\'hiver'},
            braisou:{pw:0.85,txt:'la neige éteint un peu son feu'}},
+  futur:  {zapic:{pw:1.3,txt:'toute la cité marche à l\'électricité'},
+           etoilette:{rg:1.2,txt:'les néons de la cité brillent comme des étoiles'},
+           gouttine:{pw:0.85,txt:'l\'eau et les machines ne s\'aiment pas'}},
   marais: {gloupi:{pw:1.3,txt:'le marais est plein de gelée et de bulles'},
            feuillou:{rg:1.15,txt:'les roseaux et les lianes poussent partout'},
            zapic:{pw:1.15,txt:'l\'eau du marais conduit l\'électricité'},
@@ -509,7 +512,10 @@ const WORLDS=[
   // Monde 4 : le chemin se sépare en deux au milieu puis se rejoint avant le château ; les Chipeurs prennent l'un ou l'autre
   {id:4,name:'Le Marais enchanté',em:'🐸',theme:'marais',boss:{armorK:0.5,art:'boss-grenouille',name:'La Reine Grenouille Grognon',em:'🐸',col:'#5A9E3A'},
    paths:[[[-40,442],[262,442],[262,142],[630,142],[630,305],[905,305],[905,142],[1160,142],[1160,442],[1390,442]],
-          [[-40,442],[262,442],[262,762],[560,762],[560,590],[865,590],[865,765],[1160,765],[1160,442],[1390,442]]]}
+          [[-40,442],[262,442],[262,762],[560,762],[560,590],[865,590],[865,765],[1160,765],[1160,442],[1390,442]]]},
+  // Monde 5 : chemin en spirale jusqu'au château au centre ; tout est si proche que les portées sont divisées par 2 (rgK)
+  {id:5,name:'La Cité du Futur',em:'🛸',theme:'futur',cs:0.6,rgK:0.5,boss:{armorK:1.2,art:'boss-robot',name:'Le Robot Grognon',em:'🤖',col:'#7C8DA6'},
+   path:[[-40,110],[1520,110],[1520,820],[80,820],[80,290],[1330,290],[1330,640],[270,640],[270,465],[900,465]]}
 ];
 // Sens dans lequel regarde chaque image de méchant (1 = vers la droite, -1 = vers la gauche)
 const FOE_FACE={'boss-taupe':-1,'boss-dragon':-1};
@@ -591,7 +597,7 @@ function stats(gid){
   const bi=biomeOf(gid)||{};
   return{lv,form,
     dmg:g.dmg*Math.pow(CFG.PW,u.pw)*Math.pow(CFG.EVO_DMG,ev)*(bi.pw||1),
-    rg:g.rg*(1+CFG.RG*u.rg)*Math.pow(CFG.EVO_RG,ev)*(bi.rg||1),
+    rg:g.rg*(1+CFG.RG*u.rg)*Math.pow(CFG.EVO_RG,ev)*(bi.rg||1)*(WORLDS[G.world-1].rgK||1),
     rate:g.rate*Math.pow(CFG.SP,u.sp)*Math.pow(CFG.EVO_SP,ev),ca:u.ca};
 }
 function upCost(gid){return Math.round(CFG.COST_BASE*Math.pow(CFG.COST_GROWTH,level(gid)));}
@@ -896,8 +902,9 @@ function showGuard(gid,fromTeam,tab){
   const av=ART[gid]?`<img class="sh-av hasbig" src="img/${gFile(gid,s.form)}.webp" alt="">`:gIcon(gid,48);
   const evo=gid==='prismi'?morphRow():s.form<3?(()=>{const a=s.form===1?0:ev[0],b=ev[s.form-1];return `<div class="evobar"><div class="evotrack"><i style="width:${Math.min(100,(s.lv-a)/(b-a)*100)}%"></i></div><span>Évolution au <b>niv. ${b}</b></span></div>`;})()
     :`<div class="evobar"><div class="evotrack"><i style="width:100%"></i></div><span><b>Forme finale</b> 🌟</span></div>`;
-  const bi=biomeOf(gid),biome=bi?(()=>{const pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %',p=[];if(bi.pw)p.push(pc(bi.pw)+' puissance');if(bi.rg)p.push(pc(bi.rg)+' portée');
-    return `<div><span class="chip ${(bi.pw||1)*(bi.rg||1)>=1?'up':'down'}">${WORLDS[G.world-1].em} <b>${p.join(', ')}</b>&nbsp;: ${bi.txt}</span></div>`;})():'';
+  const rk=WORLDS[G.world-1].rgK,rkChip=rk&&g.kind!=='coin'?`<div><span class="chip down">${WORLDS[G.world-1].em} <b>portée ÷ ${Math.round(1/rk)}</b>&nbsp;: tout est très serré dans ce monde</span></div>`:'';
+  const bi=biomeOf(gid),biome=rkChip+(bi?(()=>{const pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %',p=[];if(bi.pw)p.push(pc(bi.pw)+' puissance');if(bi.rg)p.push(pc(bi.rg)+' portée');
+    return `<div><span class="chip ${(bi.pw||1)*(bi.rg||1)>=1?'up':'down'}">${WORLDS[G.world-1].em} <b>${p.join(', ')}</b>&nbsp;: ${bi.txt}</span></div>`;})():'');
   // onglet Améliorer : 4 cartes (toute la carte est le bouton), valeur actuelle → après l'amélioration
   const card=(k,ic,nm,cur,nxt)=>{const max=u[k]>=CFG.MAX[k],ok=!max&&P.money>=cost;
     return `<button class="upc${max?' max':''}" ${ok?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})"><span class="ic">${ic}</span><span class="nm">${nm}</span><span class="v">${max?'<b>'+cur+'</b> · max':'<b>'+cur+'</b> → '+nxt}</span><span class="pl">${max?'✓':'+'}</span><span class="lv"><i style="width:${u[k]/CFG.MAX[k]*100}%"></i></span></button>`;};
@@ -1100,7 +1107,7 @@ function selectProfile(id){
   const s=LS.get('gardiens-'+id);if(!s){showWho();return;}
   PID=id;P=s;LS.set('gardiens-last',id);
   WORLDS.forEach(w=>{P.worlds[w.id]=P.worlds[w.id]||{cp:1,done:false};P.place[w.id]=P.place[w.id]||{};});
-  if(P.worlds[3].done)P.unlocked=Math.max(P.unlocked,4);
+  WORLDS.forEach(w=>{if(P.worlds[w.id].done&&w.id<WORLDS.length)P.unlocked=Math.max(P.unlocked,w.id+1);});
   initStats();applyMorph();pushScore(true);
   if(!P.starter){chooseStarter();return;}
   showWorlds();
@@ -1112,7 +1119,7 @@ function chooseStarter(){
     <div class="cards">${STARTERS.map(g=>gCard(g,`pickStarter('${g}')`)).join('')}</div>`,'duo-equipe',true,true);
 }
 function pickStarter(gid){P.starter=gid;P.owned=[gid];save();closeModal();enterWorld(1);}
-const WORLD_COL={1:'#6DBE5B',2:'#6FA8DC',3:'#E2683A',4:'#3FA38A'};
+const WORLD_COL={1:'#6DBE5B',2:'#6FA8DC',3:'#E2683A',4:'#3FA38A',5:'#3C5BD6'};
 function showWorlds(){
   const cards=WORLDS.map(w=>{
     const n=w.id,st=P.worlds[n],lock=n>P.unlocked,run=P.runs[n],cur=run?run.wave:st.cp,done=st.done&&!run;
@@ -1350,7 +1357,8 @@ const THEMES={
   prairie:{bg1:'#A8DA72',bg2:'#8CC95A',road:'#E6C88E',edge:'#B8955A'},
   neige:  {bg1:'#F2F8FD',bg2:'#D9E8F4',road:'#C4D3E2',edge:'#93A6BB'},
   volcan: {bg1:'#7A5544',bg2:'#5B3D31',road:'#A88468',edge:'#4A3328'},
-  marais: {bg1:'#6FA46B',bg2:'#4E7F57',road:'#B9A57A',edge:'#6E6040'}
+  marais: {bg1:'#6FA46B',bg2:'#4E7F57',road:'#B9A57A',edge:'#6E6040'},
+  futur:  {bg1:'#2E3468',bg2:'#1B1F44',road:'#9FE8F2',edge:'#3D7FB0'}
 };
 function buildBg(){
   if(!P)return;
@@ -1374,6 +1382,9 @@ function buildBg(){
       if(k<0.1)pine(x,px,py);
       else if(k<0.2){x.fillStyle='#FFFFFF';x.beginPath();x.ellipse(px,py,22,10,0,0,7);x.fill();}
       else{x.fillStyle='rgba(160,190,220,.45)';x.beginPath();x.arc(px,py,3,0,7);x.fill();}
+    }else if(wd.theme==='futur'){
+      if(k<0.08){x.fillStyle='#3A4486';x.fillRect(px-14,py-14,28,28);x.fillStyle=['#5FF2FF','#FF7BD5','#FFE45F'][Math.floor(R()*3)];x.fillRect(px-4,py-4,8,8);}
+      else{x.fillStyle=['rgba(95,242,255,.5)','rgba(255,123,213,.5)'][Math.floor(R()*2)];x.beginPath();x.arc(px,py,2.5,0,7);x.fill();}
     }else if(wd.theme==='marais'){
       if(k<0.07){x.fillStyle='rgba(60,110,120,.75)';x.beginPath();x.ellipse(px,py,34,18,0,0,7);x.fill();x.fillStyle='#7FC46A';x.beginPath();x.arc(px+8,py-2,7,0.4,6);x.fill();}
       else if(k<0.2){x.strokeStyle='#3E6B35';x.lineWidth=3;for(let j=-1;j<2;j++){x.beginPath();x.moveTo(px+j*5,py+10);x.lineTo(px+j*7,py-16);x.stroke();}x.fillStyle='#7A5230';x.fillRect(px-2,py-22,5,10);}
