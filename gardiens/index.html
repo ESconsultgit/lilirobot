@@ -148,7 +148,8 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 #introSound{left:max(14px,env(safe-area-inset-left))}
 
 /* ---------- Fiche d'un gardien : panneau sur le côté, la map reste visible ---------- */
-#sheetM{position:fixed;inset:0;z-index:20;display:none;align-items:center;background:rgba(42,31,61,.10);padding:8px}
+#sheetM{position:fixed;inset:0;z-index:20;display:none;align-items:center;background:rgba(42,31,61,.10);padding:8px;pointer-events:none}
+#sheetM .sheetWrap{pointer-events:auto}
 #sheetM.right{justify-content:flex-end}#sheetM.left{justify-content:flex-start}
 .sheetWrap{display:flex;align-items:center;max-height:100%}
 #sheetM.left .sheetWrap{flex-direction:row-reverse}
@@ -869,6 +870,8 @@ function openSheet(html,gid,form,side){
   $('modal').style.display='none';
   $('sbox').innerHTML=html;$('sbox').classList.remove('wide2');$('tip').style.display='none';$('bigG').src=ART[gid]?`img/g/${gid}-${form}.webp`:'';$('bigG').style.display=ART[gid]?'':'none';
   const m=$('sheetM');m.className=side==='left'?'left':'right';m.style.display='flex';modalOpen=true;
+  // avec les colonnes sur les côtés, la fiche reste entre les deux pour qu'on puisse toucher un autre gardien ou méchant
+  const pad=G.side?G.band+6:8;m.style.paddingLeft=m.style.paddingRight=pad+'px';
 }
 $('sheetM').addEventListener('pointerdown',e=>{if(e.target===$('sheetM'))closeModal();});
 $('modal').addEventListener('pointerdown',e=>{if(e.target===$('modal')&&!$('modal').dataset.noclose)closeModal();});
@@ -1132,7 +1135,7 @@ function resize(){
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
   K=cv.width/W;buildBg();
   const band=(sw-cw)/2,rows=Math.ceil(BENCH_ORDER.length/2)+1,cell=(ch-8)/rows;
-  G.side=band>=58;G.sideIcon=Math.max(26,Math.min(44,band-16));
+  G.side=band>=58;G.band=band;G.sideIcon=Math.max(26,Math.min(44,band-16));
   document.querySelector('.app').classList.toggle('side',G.side);
   if(G.side){const L=$('benchL'),R=$('benchR');L.style.left=cv.offsetLeft-band+'px';L.style.width=band+'px';R.style.left=cv.offsetLeft+cw+'px';R.style.width=band+'px';L.style.top=R.style.top=cv.offsetTop+'px';L.style.bottom=R.style.bottom='auto';L.style.height=R.style.height=ch+'px';}
   if(P){renderBench();renderSideFoes();}
@@ -1310,21 +1313,28 @@ let DR=null; // gardien en cours de glisser : {gid,pid,sx,sy,active,el,spot}
 function toMap(cx,cy){const r=cv.getBoundingClientRect();if(cx<r.left||cx>r.right||cy<r.top||cy>r.bottom)return null;return{x:(cx-r.left)/r.width*W,y:(cy-r.top)/r.height*H};}
 function spotAt(x,y){return WORLDS[G.world-1].spots.findIndex(s=>Math.hypot(s.x-x,s.y-y)<52);}
 function dragStart(e,gid){DR={gid,pid:e.pointerId,sx:e.clientX,sy:e.clientY,active:false,spot:-1};}
+function sheetOpen(){return $('sheetM').style.display==='flex';}
+// Toucher en dehors de la fiche (et pas sur un gardien, un méchant ou la liste) : la fiche se ferme
+document.addEventListener('pointerdown',e=>{
+  if(!sheetOpen()||e.target.closest('.sheetWrap,.sideb,#bench,#cv,#modal'))return;
+  closeModal();
+},true);
 cv.addEventListener('pointerdown',e=>{
-  if(!P||modalOpen)return;
+  if(!P||(modalOpen&&!sheetOpen()))return;
   const p=toMap(e.clientX,e.clientY);if(!p)return;
   const t=G.towers.find(t=>Math.hypot(t.x-p.x,t.y-p.y)<46);
   if(t){e.preventDefault();dragStart(e,t.gid);return;}
   const i=spotAt(p.x,p.y);
   if(i>=0){chooseForSpot(i);return;}
+  if(sheetOpen())closeModal();
   G.sel=null;
 });
 let SC=null; // geste en cours dans une colonne de côté
 ['benchLs','benchRs'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
-  if(!P||modalOpen)return;e.preventDefault();
+  if(!P||(modalOpen&&!sheetOpen()))return;e.preventDefault();
   SC={el:$(id),pid:e.pointerId,x0:e.clientX,y0:e.clientY,last:e.clientY,moved:false,t:e.target,ev:e};
 }));
-$('benchLtop').addEventListener('pointerdown',e=>{if(P&&!modalOpen&&e.target.closest('.bcount'))showSlotShop();});
+$('benchLtop').addEventListener('pointerdown',e=>{if(P&&(!modalOpen||sheetOpen())&&e.target.closest('.bcount'))showSlotShop();});
 document.addEventListener('pointermove',e=>{
   if(!SC||e.pointerId!==SC.pid)return;
   const dx=e.clientX-SC.x0,dy=e.clientY-SC.y0;
@@ -1345,7 +1355,7 @@ document.addEventListener('pointerup',e=>{
 });
 document.addEventListener('pointercancel',()=>{SC=null;});
 ['bench'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
-  if(!P||modalOpen)return;
+  if(!P||(modalOpen&&!sheetOpen()))return;
   if(e.target.closest('.bcount')){showSlotShop();return;}
   const b=e.target.closest('.bi');if(!b)return;const gid=b.dataset.g;
   if(P.owned.includes(gid)){e.preventDefault();dragStart(e,gid);}
