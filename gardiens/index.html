@@ -52,6 +52,15 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 #bBench.on{background:var(--violet);color:#fff}
 #bench{position:absolute;left:50%;transform:translateX(-50%);bottom:58px;display:none;gap:4px;justify-content:center;align-items:flex-end;background:rgba(255,253,248,.95);border-radius:16px;padding:6px 8px;overflow-x:auto;max-width:calc(100% - 16px);box-shadow:0 6px 18px rgba(42,31,61,.3)}
 #bench.open{display:flex}
+/* Écran plus large que la map (téléphone) : les gardiens vont dans les bandes noires à gauche et à droite */
+.sideb{position:absolute;top:0;bottom:0;display:none;flex-direction:column;justify-content:center;align-items:center;gap:2px;padding:10px 0 4px;z-index:3}
+.app.side .sideb{display:flex}
+.app.side #bench,.app.side #bBench{display:none!important}
+.app.side #ov.bopen #tip,.app.side #tip{bottom:56px}
+.sideb .bi{width:100%;color:#fff;font-size:10px}.sideb .bi.placed{opacity:.35}
+.sideb .bi.shop.afford{background:rgba(255,243,196,.25)}
+.sideb .bcount{background:rgba(255,255,255,.15);color:#fff;font-size:12px;margin-bottom:2px}.sideb .bcount.full{background:#FFD3E4;color:var(--pink)}
+.sideb .bb{text-shadow:none}
 #ov.bopen #tip{bottom:142px}
 @media (max-height:520px){#ov.bopen #tip{bottom:112px}}
 .bi{flex:none;width:56px;display:flex;flex-direction:column;align-items:center;gap:1px;font-family:'Baloo 2';font-weight:800;font-size:12px;line-height:1.1;touch-action:none;cursor:grab;border-radius:10px;padding:2px 0}
@@ -235,6 +244,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
 <div class="app">
   <div id="cvWrap">
     <canvas id="cv"></canvas>
+    <div id="benchL" class="sideb"></div><div id="benchR" class="sideb"></div>
     <!-- Couche posée exactement sur la map : infos, vague, boutons -->
     <div id="ov">
       <div id="topbar"><div id="hud"><span id="sWorld"></span><span id="sHearts"></span><span id="sMoney"></span><span id="sWave"></span></div>
@@ -681,14 +691,18 @@ function renderBench(){
   const placed=G.towers.map(t=>t.gid);
   const full=placed.length>=teamMax();
   const canBuy=teamMax()<SLOT_MAX[P.diff];
-  $('bench').innerHTML=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}${canBuy?`<span class="slotplus${P.money>=slotPrice()?' afford':''}">+</span>`:''}</div>`+BENCH_ORDER.map(gid=>{
+  const side=G.side,isz=side?G.sideIcon:40;
+  const cnt=`<div class="bcount${full?' full':''}" title="Gardiens sur la map">🛡️<br>${placed.length}/${teamMax()}${canBuy?`<span class="slotplus${P.money>=slotPrice()?' afford':''}">+</span>`:''}</div>`;
+  const items=BENCH_ORDER.map(gid=>{
     const own=P.owned.includes(gid);let cls='bi',tag;
     if(own){cls+=placed.includes(gid)?' placed own':' own';tag='★'.repeat(formOf(level(gid),gid))+' '+level(gid);}
     else if(SHOP[gid]){cls+=' shop'+(P.money>=SHOP[gid]?' afford':'');tag=fmt(SHOP[gid])+' L$';}
     else{const gf=giftOf(gid);cls+=' lock';tag='🔒 '+gf.world+'-'+gf.wave;}
     const bi=biomeOf(gid),bb=bi?((bi.pw||1)*(bi.rg||1)>=1?'<i class="bb up" title="Bonus de la map">▲</i>':'<i class="bb down" title="Malus de la map">▼</i>'):'';
-    return `<div class="${cls}" data-g="${gid}">${bb}${gIcon(gid,40,own?undefined:1)}<span>${tag}</span></div>`;
-  }).join('');
+    return `<div class="${cls}" data-g="${gid}">${bb}${gIcon(gid,isz,own?undefined:1)}<span>${tag}</span></div>`;
+  });
+  if(side){const h=Math.ceil(items.length/2);$('benchL').innerHTML=cnt+items.slice(0,h).join('');$('benchR').innerHTML=items.slice(h).join('');$('bench').innerHTML='';}
+  else{$('bench').innerHTML=cnt+items.join('');$('benchL').innerHTML=$('benchR').innerHTML='';}
   if(!P.tips.shop&&P.tips.wave&&Object.keys(SHOP).some(g=>!P.owned.includes(g)&&P.money>=SHOP[g]))
     tipOnce('shop','livia-idee','Tu as assez de LiliDollars pour acheter un nouveau gardien ! Touche-le dans la barre du bas.');
 }
@@ -1084,6 +1098,11 @@ function resize(){
   const dpr=Math.min(3,window.devicePixelRatio||1);
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);
   K=cv.width/W;buildBg();
+  const band=(sw-cw)/2,rows=Math.ceil(BENCH_ORDER.length/2)+1,cell=(ch-8)/rows;
+  G.side=band>=58&&cell>=40;G.sideIcon=Math.max(26,Math.min(44,Math.min(band-14,cell-14)));
+  document.querySelector('.app').classList.toggle('side',G.side);
+  if(G.side){const L=$('benchL'),R=$('benchR');L.style.left=cv.offsetLeft-band+'px';L.style.width=band+'px';R.style.left=cv.offsetLeft+cw+'px';R.style.width=band+'px';L.style.top=R.style.top=cv.offsetTop+'px';L.style.bottom=R.style.bottom='auto';L.style.height=R.style.height=ch+'px';}
+  if(P)renderBench();
   const o=$('ov');o.style.left=cv.offsetLeft+'px';o.style.top=cv.offsetTop+'px';o.style.width=cw+'px';o.style.height=ch+'px';
 }
 const THEMES={
@@ -1267,13 +1286,13 @@ cv.addEventListener('pointerdown',e=>{
   if(i>=0){chooseForSpot(i);return;}
   G.sel=null;
 });
-$('bench').addEventListener('pointerdown',e=>{
+['bench','benchL','benchR'].forEach(id=>$(id).addEventListener('pointerdown',e=>{
   if(!P||modalOpen)return;
   if(e.target.closest('.bcount')){showSlotShop();return;}
   const b=e.target.closest('.bi');if(!b)return;const gid=b.dataset.g;
   if(P.owned.includes(gid)){e.preventDefault();dragStart(e,gid);}
   else benchTap(gid);
-});
+}));
 document.addEventListener('pointermove',e=>{
   if(!DR||e.pointerId!==DR.pid)return;
   if(!DR.active&&Math.hypot(e.clientX-DR.sx,e.clientY-DR.sy)>8){
@@ -1288,8 +1307,9 @@ function dragEnd(e,cancel){
   if(cancel)return;
   if(!d.active){showGuard(d.gid);return;}
   if(d.spot>=0){placeGuard(d.gid,d.spot);return;}
-  const br=$('bench').getBoundingClientRect();
-  if(e.clientX>=br.left&&e.clientX<=br.right&&e.clientY>=br.top-20&&e.clientY<=br.bottom&&G.towers.some(t=>t.gid===d.gid))unplace(d.gid);
+  // lâché sur la liste des gardiens (en bas ou dans une bande sur le côté) : il rentre au château
+  const inList=['bench','benchL','benchR'].some(id=>{const el=$(id);if(!el.offsetParent&&getComputedStyle(el).display==='none')return false;const br=el.getBoundingClientRect();return br.width>0&&e.clientX>=br.left&&e.clientX<=br.right&&e.clientY>=br.top-20&&e.clientY<=br.bottom;});
+  if(inList&&G.towers.some(t=>t.gid===d.gid))unplace(d.gid);
 }
 document.addEventListener('pointerup',e=>dragEnd(e,false));
 document.addEventListener('pointercancel',e=>dragEnd(e,true));
