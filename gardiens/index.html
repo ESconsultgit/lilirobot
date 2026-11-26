@@ -262,7 +262,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 36</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 37</div>
           <button id="bAuto">🔁 Auto</button>
           <button id="bSpeed">⏩ ×1</button>
           <button id="bPause">⏸ Pause</button>
@@ -1202,6 +1202,22 @@ function drawCastleLife(wd){
   ctx.font='800 24px "Baloo 2",sans-serif';ctx.textAlign='center';ctx.fillStyle='#fff';ctx.strokeStyle='#B5527F';ctx.lineWidth=6;
   const t=`❤️ ${G.hearts}`,ty=Math.min(H-14,r.y+r.h+16);ctx.strokeText(t,r.x+r.w*0.55,ty);ctx.fillText(t,r.x+r.w*0.55,ty);
 }
+const HALO_P=44,HALO_C=new Map();
+function hexA(h,a){if(!h||h[0]!=='#')return `rgba(255,255,255,${a})`;const n=parseInt(h.length===4?h.slice(1).split('').map(c=>c+c).join(''):h.slice(1,7),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
+function haloOf(im){
+  if(HALO_C.has(im))return HALO_C.get(im);
+  let c=null;
+  try{
+    const w=im.naturalWidth,h=im.naturalHeight,P=HALO_P;
+    const sil=document.createElement('canvas');sil.width=w;sil.height=h;const sx=sil.getContext('2d');
+    sx.drawImage(im,0,0);sx.globalCompositeOperation='source-in';sx.fillStyle='#fff';sx.fillRect(0,0,w,h);
+    c=document.createElement('canvas');c.width=w+2*P;c.height=h+2*P;const cx=c.getContext('2d');
+    cx.shadowColor='#fff';cx.shadowBlur=28;
+    for(let i=0;i<16;i++){const a=i/16*Math.PI*2;cx.drawImage(sil,P+Math.cos(a)*14,P+Math.sin(a)*14);}
+    cx.shadowBlur=0;for(let i=0;i<16;i++){const a=i/16*Math.PI*2;cx.drawImage(sil,P+Math.cos(a)*11,P+Math.sin(a)*11);}
+  }catch(e){c=null;}
+  HALO_C.set(im,c);return c;
+}
 function drawGuard(t,sel){
   if(DR&&DR.active&&DR.gid===t.gid)ctx.globalAlpha=0.35;
   const g=GUARD[t.gid],s=stats(t.gid),r=22+6*s.form,b=Math.sin(t.anim*3)*2,k=t.kick*0.12;
@@ -1209,7 +1225,13 @@ function drawGuard(t,sel){
   const im=gImg(t.gid,s.form);
   if(im&&im.complete&&im.naturalWidth){
     const hh=[0,74,90,106][s.form],ww=hh*im.naturalWidth/im.naturalHeight,base=t.y+r*0.8;
-    ctx.save();ctx.translate(t.x,base);ctx.scale(1+k,1-k);ctx.drawImage(im,-ww/2,-hh+b,ww,hh);ctx.restore();
+    const gr=ctx.createRadialGradient(t.x,base-hh*0.45,hh*0.1,t.x,base-hh*0.45,hh*0.62);
+    gr.addColorStop(0,'rgba(255,255,255,.7)');gr.addColorStop(0.55,hexA(g.col,.45));gr.addColorStop(1,hexA(g.col,0));
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(t.x,base-hh*0.45,hh*0.62,0,7);ctx.fill();
+    const hl=haloOf(im);
+    ctx.save();ctx.translate(t.x,base);ctx.scale(1+k,1-k);
+    if(hl){const sc=hh/im.naturalHeight;ctx.drawImage(hl,-ww/2-HALO_P*sc,-hh+b-HALO_P*sc,hl.width*sc,hl.height*sc);}
+    ctx.drawImage(im,-ww/2,-hh+b,ww,hh);ctx.restore();
   }else{
   ctx.save();ctx.translate(t.x,t.y+b);ctx.scale(1+k,1-k);
   ctx.fillStyle=g.col;ctx.strokeStyle='#fff';ctx.lineWidth=4+s.form;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();ctx.stroke();
