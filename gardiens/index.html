@@ -315,7 +315,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 50</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 51</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -444,7 +444,7 @@ const SPEC={
   etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien, seule à voir les Fantômes',fort:'les Fantômes : elle est la seule à les voir, et dès qu\'elle en touche un, tous tes gardiens peuvent l\'attaquer ; ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Dans le Volcan, ne l\'oublie pas ! Mets-la au début du chemin pour démasquer les Fantômes tôt, au milieu de tes gardiens les plus forts.'},
   lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
   gloupi:   {arm:0.3,life:1.0, role:'🧪 Poison qui passe sous l\'armure',fort:'les Costauds, les Casqués et les boss : le poison ronge leur vie même avec une armure, et il s\'accumule',faible:'les Fusées (elles passent avant que le poison agisse), petits dégâts directs',astuce:'Place-le au début du chemin : plus un méchant reste empoisonné longtemps, plus il perd de vie. Le poison s\'ajoute à chaque tir (jusqu\'à 3 fois).'},
-  hypnou:   {arm:0,life:0,     role:'🌀 Soutien : endort et double les dégâts',fort:'tous les méchants qui marchent ou volent : il les arrête net ; et il rend ses voisins deux fois plus forts',faible:'il ne fait aucun dégât lui-même ; les boss ne dorment que 40 % du temps',astuce:'Place-le au milieu de tes meilleurs gardiens : tous ceux qui sont dans son cercle font ×2 de dégâts. Un méchant réveillé ne peut pas être rendormi tout de suite.'},
+  hypnou:   {arm:0,life:0,     role:'🌀 Soutien : endort et double les dégâts',fort:'tous les méchants qui marchent ou volent : il les arrête net ; et il rend ses voisins deux fois plus forts',faible:'il ne fait aucun dégât lui-même ; les boss ne dorment que 40 % du temps',astuce:'Place-le au milieu de tes meilleurs gardiens : tous ceux qui sont dans son cercle font ×2 de dégâts (ils brillent en rouge). Il n\'endort qu\'un méchant à la fois : règle sa cible sur « Costaud » pour arrêter les gros.'},
   prismi:   {arm:1,life:1,role:'💎 Se métamorphose',fort:'',faible:'',astuce:''},
   sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
 };
@@ -887,7 +887,7 @@ function effet(gid,s){
     case 'rock':return`écrase une zone (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))})`;
     case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; seule à voir les Fantômes, et un Fantôme qu'elle touche devient visible pour tous`;
     case 'poison':return`empoisonne : ${fmt(s.dmg*g.poison)} dégâts par seconde pendant 4 s, s'ajoute jusqu'à 3 fois, et passe sous l'armure`;
-    case 'psy':return`endort un méchant ${String(psyStun(gid).toFixed(1)).replace('.',',')} s (les boss moins longtemps), et tous les gardiens dans son cercle font ×2 de dégâts`;
+    case 'psy':return`endort un seul méchant à la fois pendant ${String(psyStun(gid).toFixed(1)).replace('.',',')} s (5 s au plus, les boss moins longtemps), puis attend 1 s avant le sort suivant ; tous les gardiens dans son cercle font ×2 de dégâts (halo rouge)`;
     case 'prism':return`se métamorphose avec les pierres magiques gagnées en réussissant les mondes`;
     case 'snipe':return`vise d'abord le méchant le plus costaud (réglable)`;
   }
@@ -907,7 +907,7 @@ function showGuard(gid,fromTeam,tab){
   const bi=biomeOf(gid),biome=rkChip+(bi?(()=>{const pc=v=>(v>1?'+':'−')+Math.round(Math.abs(v-1)*100)+' %',p=[];if(bi.pw)p.push(pc(bi.pw)+' puissance');if(bi.rg)p.push(pc(bi.rg)+' portée');
     return `<div><span class="chip ${(bi.pw||1)*(bi.rg||1)>=1?'up':'down'}">${WORLDS[G.world-1].em} <b>${p.join(', ')}</b>&nbsp;: ${bi.txt}</span></div>`;})():'');
   // onglet Améliorer : 4 cartes (toute la carte est le bouton), valeur actuelle → après l'amélioration
-  const card=(k,ic,nm,cur,nxt)=>{const max=u[k]>=CFG.MAX[k],ok=!max&&P.money>=cost;
+  const card=(k,ic,nm,cur,nxt,fmax)=>{const max=fmax||u[k]>=CFG.MAX[k],ok=!max&&P.money>=cost;
     return `<button class="upc${max?' max':''}" ${ok?'':'disabled'} onclick="buyUp('${gid}','${k}',${ft})"><span class="ic">${ic}</span><span class="nm">${nm}</span><span class="v">${max?'<b>'+cur+'</b> · max':'<b>'+cur+'</b> → '+nxt}</span><span class="pl">${max?'✓':'+'}</span><span class="lv"><i style="width:${u[k]/CFG.MAX[k]*100}%"></i></span></button>`;};
   let upPane,infoPane='';
   if(g.kind==='coin'){
@@ -916,12 +916,12 @@ function showGuard(gid,fromTeam,tab){
   }else{
     const rgN=s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
     const psy=g.kind==='psy',st0=psy?psyStun(gid):0,st1=psy?st0*(1+0.03*(u.pw+1))/(1+0.03*u.pw):0;
-    upPane=`<div class="ups">${psy?card('pw','💤','Sommeil',fr(st0.toFixed(1))+' s',fr(st1.toFixed(1))+' s'):card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${psy?card('sp','⏱️','Un sort toutes les',fr((1/s.rate).toFixed(2))+' s',fr((1/(s.rate*CFG.SP)).toFixed(2))+' s'):card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm&&!psy?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
+    upPane=`<div class="ups">${psy?card('pw','💤','Sommeil',fr(st0.toFixed(1))+' s',fr(Math.min(PSY_MAX,st1).toFixed(1))+' s',st0>=PSY_MAX):card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${psy?'':card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm&&!psy?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
       (arm&&g.kind!=='wind'?`<div class="lab2">CIBLE</div><div class="seg">${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'on':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`:'');
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1),cl=v=>v>=1.2?'g':v>=0.9?'m':'r';
     const evs=gid==='prismi'?'':ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
     const am=sp.arm*(1+CFG.CA*u.ca);
-    infoPane=evs+(g.kind==='psy'?`<div class="tiles"><div class="tile"><b>${fr(psyStun(gid).toFixed(1))} s</b><small>sommeil</small></div><div class="tile"><b>${fr((1/s.rate).toFixed(1))} s</b><small>entre 2 sorts</small></div><div class="tile"><b>×2</b><small>dégâts voisins</small></div>`:`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div>`)+`<div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
+    infoPane=evs+(g.kind==='psy'?`<div class="tiles"><div class="tile"><b>${fr(psyStun(gid).toFixed(1))} s</b><small>sommeil</small></div><div class="tile"><b>1</b><small>sort à la fois</small></div><div class="tile"><b>×2</b><small>dégâts voisins</small></div>`:`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div>`)+`<div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
       <div class="fxline">✨ ${effet(gid,s)}</div>`+
       (arm&&g.kind!=='psy'?`<div class="eff"><span class="${cl(am)}">🛡️ Armure ×${fr(Math.round(am*100)/100)}</span><span class="${cl(sp.life)}">❤️ Vie ×${fr(sp.life)}</span></div>`:'')+
       `<p class="pf">👍 <b>Fort :</b> ${sp.fort}<br>👎 <b>Faible :</b> ${sp.faible}</p>`;
@@ -949,6 +949,7 @@ function sheetTab(t){G.sheetTab=t;const b=$('sbox');
 function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
+  if(GUARD[gid].kind==='psy'&&(k==='sp'||k==='ca'||(k==='pw'&&psyStun(gid)>=PSY_MAX)))return;
   const f0=formOf(level(gid),gid);P.money-=cost;u[k]++;save();refreshHUD();
   const f1=formOf(level(gid),gid);
   if(f1>f0){
@@ -1273,6 +1274,7 @@ function update(dt){
   for(const t of G.towers){
     const g=GUARD[t.gid];t.anim+=dt;t.kick=Math.max(0,t.kick-dt*4);
     if(g.kind==='coin')continue;
+    if(g.kind==='psy'){psyUpdate(t,dt);continue;}
     const s=stats(t.gid);t.cd-=dt*s.rate*auraOf(t);
     if(t.cd>0)continue;
     let inR=G.enemies.filter(e=>(e.seen||(g.sees&&e.ghost))&&Math.hypot(e.x-t.x,e.y-t.y)<=s.rg+e.r);
@@ -1284,15 +1286,6 @@ function update(dt){
     let tg=mode==='strong'?inR.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a)
           :mode==='armor'?first(inR.some(e=>e.ap>0||e.armor)?inR.filter(e=>e.ap>0||e.armor):inR):first(inR);
     const dmg=s.dmg*(t.psy||1);
-    if(g.kind==='psy'){
-      // endort un méchant : il s'arrête ; ensuite il est réveillé et ne peut pas être rendormi pendant 1,5 s
-      const c=inR.filter(e=>!(e.stunT>0)&&!(e.stunCd>G.anim));
-      if(!c.length){t.cd=0;t.kick=0;continue;}
-      const e=mode==='strong'?c.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a):first(c);
-      const d=psyStun(t.gid)*(e.boss?0.4:1);e.stunT=d;e.stunCd=G.anim+d+1.5;
-      G.fx.push({k:'psy',x1:t.x,y1:t.y-30,x2:e.x,y2:e.y-10,t:0,life:0.45});
-      continue;
-    }
     if(g.kind==='wind'){
       waveFx(t.x,t.y,s.rg,'wind');
       for(const e of inR){hurt(e,dmg,'wind',s.ca);
@@ -1324,7 +1317,21 @@ function update(dt){
   G.texts=G.texts.filter(x=>x.t<x.life);
   if(G.state==='wave'&&!G.queue.length&&!G.enemies.length)waveClear();
 }
-function psyStun(gid){const s=stats(gid),u=up(gid);return (GUARD[gid].stun+0.5*(s.form-1))*(1+0.03*u.pw);}
+// Hypnou : un seul sort à la fois. Il endort un méchant (5 s au plus) ; quand le méchant se réveille
+// (ou disparaît), il attend 1 s avant de lancer son sort suivant. Un méchant réveillé ne peut pas être rendormi pendant 1,5 s.
+const PSY_MAX=5,PSY_PAUSE=1;
+function psyStun(gid){const s=stats(gid),u=up(gid);return Math.min(PSY_MAX,(GUARD[gid].stun+0.5*(s.form-1))*(1+0.03*u.pw));}
+function psyUpdate(t,dt){
+  const e0=t.pt;
+  if(e0&&e0.hp>0&&!e0.out&&e0.stunT>0)return;           // son sort est encore actif
+  if(e0){t.pt=null;t.pwait=PSY_PAUSE;}
+  if(t.pwait>0){t.pwait-=dt;return;}
+  const s=stats(t.gid),inR=G.enemies.filter(e=>e.hp>0&&e.seen&&!(e.stunT>0)&&!(e.stunCd>G.anim)&&Math.hypot(e.x-t.x,e.y-t.y)<=s.rg+e.r);
+  if(!inR.length)return;
+  const e=targetOf(t.gid)==='strong'?inR.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a):inR.reduce((a,b)=>(b.prog||0)>(a.prog||0)?b:a);
+  const d=psyStun(t.gid)*(e.boss?0.4:1);e.stunT=d;e.stunCd=G.anim+d+1.5;t.pt=e;t.kick=1;
+  G.fx.push({k:'psy',x1:t.x,y1:t.y-30,x2:e.x,y2:e.y-10,t:0,life:0.45});
+}
 function impact(p){
   const g=p.g,splash=g.splash?g.splash*(1+0.1*(p.form-1)):0;
   const main=p.tg&&p.tg.hp>0&&Math.hypot(p.tg.x-p.tx,p.tg.y-p.ty)<40?p.tg:null;
@@ -1423,19 +1430,20 @@ function drawCastleLife(wd){
 }
 const HALO_P=44,HALO_C=new Map();
 function hexA(h,a){if(!h||h[0]!=='#')return `rgba(255,255,255,${a})`;const n=parseInt(h.length===4?h.slice(1).split('').map(c=>c+c).join(''):h.slice(1,7),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
-function haloOf(im){
-  if(HALO_C.has(im))return HALO_C.get(im);
+function haloOf(im,col){
+  col=col||'#fff';const key=col==='#fff'?im:col+'|'+im.src;
+  if(HALO_C.has(key))return HALO_C.get(key);
   let c=null;
   try{
     const w=im.naturalWidth,h=im.naturalHeight,P=HALO_P;
     const sil=document.createElement('canvas');sil.width=w;sil.height=h;const sx=sil.getContext('2d');
-    sx.drawImage(im,0,0);sx.globalCompositeOperation='source-in';sx.fillStyle='#fff';sx.fillRect(0,0,w,h);
+    sx.drawImage(im,0,0);sx.globalCompositeOperation='source-in';sx.fillStyle=col;sx.fillRect(0,0,w,h);
     c=document.createElement('canvas');c.width=w+2*P;c.height=h+2*P;const cx=c.getContext('2d');
-    cx.shadowColor='#fff';cx.shadowBlur=28;
+    cx.shadowColor=col;cx.shadowBlur=28;
     for(let i=0;i<16;i++){const a=i/16*Math.PI*2;cx.drawImage(sil,P+Math.cos(a)*14,P+Math.sin(a)*14);}
     cx.shadowBlur=0;for(let i=0;i<16;i++){const a=i/16*Math.PI*2;cx.drawImage(sil,P+Math.cos(a)*11,P+Math.sin(a)*11);}
   }catch(e){c=null;}
-  HALO_C.set(im,c);return c;
+  HALO_C.set(key,c);return c;
 }
 function drawGuard(t,sel){
   if(GUARD[t.gid].kind==='psy'&&!(G.sel===t)){const rg=stats(t.gid).rg;ctx.save();ctx.strokeStyle='rgba(181,126,220,.55)';ctx.fillStyle='rgba(181,126,220,.08)';ctx.lineWidth=3;ctx.setLineDash([8,10]);ctx.lineDashOffset=-G.anim*20;ctx.beginPath();ctx.arc(t.x,t.y,rg,0,7);ctx.fill();ctx.stroke();ctx.restore();}
@@ -1446,9 +1454,12 @@ function drawGuard(t,sel){
   if(im&&im.complete&&im.naturalWidth){
     const hh=[0,74,90,106][s.form],ww=hh*im.naturalWidth/im.naturalHeight,base=t.y+r*0.8;
     const gr=ctx.createRadialGradient(t.x,base-hh*0.45,hh*0.1,t.x,base-hh*0.45,hh*0.62);
-    gr.addColorStop(0,'rgba(255,255,255,.7)');gr.addColorStop(0.55,hexA(g.col,.45));gr.addColorStop(1,hexA(g.col,0));
-    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(t.x,base-hh*0.45,hh*0.62,0,7);ctx.fill();
-    const hl=haloOf(im);
+    // gardien boosté par Hypnou (×2) : halo rouge qui pulse
+    const boost=t.psy>1&&g.kind!=='coin',pu=boost?0.75+0.25*Math.sin(G.anim*6):1;
+    if(boost){gr.addColorStop(0,`rgba(255,80,80,${0.75*pu})`);gr.addColorStop(0.55,`rgba(230,30,60,${0.5*pu})`);gr.addColorStop(1,'rgba(230,30,60,0)');}
+    else{gr.addColorStop(0,'rgba(255,255,255,.7)');gr.addColorStop(0.55,hexA(g.col,.45));gr.addColorStop(1,hexA(g.col,0));}
+    ctx.fillStyle=gr;ctx.beginPath();ctx.arc(t.x,base-hh*0.45,hh*(boost?0.72:0.62),0,7);ctx.fill();
+    const hl=haloOf(im,boost?'#FF2D4A':'#fff');
     ctx.save();ctx.translate(t.x,base);ctx.scale(1+k,1-k);
     if(hl){const sc=hh/im.naturalHeight;ctx.drawImage(hl,-ww/2-HALO_P*sc,-hh+b-HALO_P*sc,hl.width*sc,hl.height*sc);}
     ctx.drawImage(im,-ww/2,-hh+b,ww,hh);ctx.restore();
@@ -1459,7 +1470,7 @@ function drawGuard(t,sel){
   ctx.restore();}
   ctx.font='800 15px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='rgba(42,31,61,.8)';ctx.lineWidth=4;
   const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);
-  if(t.psy>1&&g.kind!=='coin'){ctx.font='800 16px "Baloo 2",sans-serif';ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.fillStyle='#8A4FC8';ctx.strokeText('×2',t.x+r+6,t.y-r);ctx.fillText('×2',t.x+r+6,t.y-r);}
+  if(t.psy>1&&g.kind!=='coin'){ctx.font='800 16px "Baloo 2",sans-serif';ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.fillStyle='#E0213F';ctx.strokeText('×2',t.x+r+6,t.y-r);ctx.fillText('×2',t.x+r+6,t.y-r);}
   ctx.globalAlpha=1;
 }
 function drawFoe(e){
