@@ -331,3 +331,20 @@ Draw 4 magic stones for a children's game, side by side from left to right, the 
 Background: perfectly flat solid pure magenta #FF00FF (chroma key), no gradient, no shadow, not transparent, no checkerboard.
 STYLE: cute 2D cartoon game items, clean dark outlines, simple cel shading, bright saturated colours. No text. Wide 16:9 image.
 ```
+
+## Badges des mondes (réussi, verrouillé…)
+
+Joindre : la planche de style. Remplacent le ✅ et le 🔒 sur les cartes des mondes.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw 4 cute game badges for a children's game, side by side from left to right, the same size, evenly spaced with a wide gap between them, front view, glossy, with a thick dark outline and a small white highlight:
+1. "World completed" badge: a round shiny golden medal with a big pink heart-shaped star in the middle, two short pink and lavender ribbons hanging below it, little sparkles around it
+2. "Locked" badge: a chunky cute golden padlock with a heart-shaped keyhole, slightly tilted
+3. "Boss defeated" badge: a small golden crown, a bit wonky, with pink gems, sitting on a lavender cushion
+4. "Star" badge: a big plump golden star with a soft glow
+
+Background: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no shadow, not transparent, no checkerboard. Do not use green in the badges.
+STYLE: cute 2D cartoon game icons, like a modern mobile game for kids, soft rounded shapes, simple cel shading, bright saturated colours. No text, no letters, no numbers. Wide 16:9 image.
+```
