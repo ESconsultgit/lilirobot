@@ -314,7 +314,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 46</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 47</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -391,6 +391,7 @@ const GUARD={
   etoilette:{name:'Étoilette',em:'⭐',col:'#F7A8D8',elem:'Étoile',     pow:'Rend ses voisins plus rapides. Seule à voir les Fantômes : dès qu\'elle en touche un, tout le monde le voit.',kind:'star',dmg:4,rg:150,rate:1.2,aura:0.25,auraRg:190,sees:true},
   lunette:  {name:'Lunette',  em:'🌙',col:'#6C4AB6',elem:'Lune',       pow:'Tire de très loin sur le plus costaud.',kind:'snipe',dmg:28,rg:270,rate:0.45},
   gloupi:   {name:'Gloupi',   em:'🧪',col:'#8BD94A',elem:'Poison',     pow:'Une boule de gelée qui empoisonne : le poison passe sous l\'armure.',kind:'poison',dmg:6,rg:140,rate:1.0,splash:40,poison:0.35},
+  hypnou:   {name:'Hypnou',   em:'🌀',col:'#B57EDC',elem:'Psy',        pow:'Endort un méchant quelques secondes (il s\'arrête) et double les dégâts des gardiens autour de lui. Il ne tire pas.',kind:'psy',dmg:0,rg:190,rate:0.4,stun:3},
   prismi:   {name:'Prismi',   em:'💎',col:'#C9B6E8',elem:'Prisme',kind:'prism',dmg:10,rg:150,rate:1.0},
   sousou:   {name:'Sousou',   em:'🪙',col:'#F2C230',elem:'Pièce',      pow:'N\'attaque pas : fait gagner des LiliDollars à chaque vague.',kind:'coin',gold:12}
 };
@@ -442,6 +443,7 @@ const SPEC={
   etoilette:{arm:0.8,life:1.0, role:'⭐ Soutien, seule à voir les Fantômes',fort:'les Fantômes : elle est la seule à les voir, et dès qu\'elle en touche un, tous tes gardiens peuvent l\'attaquer ; ses voisins tirent plus vite',faible:'petits dégâts',astuce:'Dans le Volcan, ne l\'oublie pas ! Mets-la au début du chemin pour démasquer les Fantômes tôt, au milieu de tes gardiens les plus forts.'},
   lunette:  {arm:1.0,life:1.25,role:'🌙 Tire de très loin',fort:'les boss et les Costauds',faible:'les groupes (un seul méchant à la fois), tire lentement',astuce:'Choisis sa cible : « le plus costaud » pour les boss, « les armures » contre les Casqués.'},
   gloupi:   {arm:0.3,life:1.0, role:'🧪 Poison qui passe sous l\'armure',fort:'les Costauds, les Casqués et les boss : le poison ronge leur vie même avec une armure, et il s\'accumule',faible:'les Fusées (elles passent avant que le poison agisse), petits dégâts directs',astuce:'Place-le au début du chemin : plus un méchant reste empoisonné longtemps, plus il perd de vie. Le poison s\'ajoute à chaque tir (jusqu\'à 3 fois).'},
+  hypnou:   {arm:0,life:0,     role:'🌀 Soutien : endort et double les dégâts',fort:'tous les méchants qui marchent ou volent : il les arrête net ; et il rend ses voisins deux fois plus forts',faible:'il ne fait aucun dégât lui-même ; les boss ne dorment que 40 % du temps',astuce:'Place-le au milieu de tes meilleurs gardiens : tous ceux qui sont dans son cercle font ×2 de dégâts. Un méchant réveillé ne peut pas être rendormi tout de suite.'},
   prismi:   {arm:1,life:1,role:'💎 Se métamorphose',fort:'',faible:'',astuce:''},
   sousou:   {arm:0,life:0,     role:'🪙 Tirelire',fort:'fait gagner des LiliDollars à chaque vague réussie',faible:'n\'attaque pas',astuce:'Il prend une place sur la map : choisis bien entre un gardien de plus et des LiliDollars, surtout quand le nombre de gardiens est limité.'}
 };
@@ -474,12 +476,12 @@ function targetOf(gid){return (armorOn()&&P.tgt&&P.tgt[gid])||(GUARD[gid].kind==
 // Gardiens à acheter en LiliDollars (les deux premiers gardiens non choisis au départ, et trois autres)
 const SHOP={braisou:150,gouttine:150,feuillou:150,sousou:400,zapic:700,givrou:1200,prismi:2500};
 // Gardiens libérés par les boss : clé « monde-vague »
-const BOSS_GIFT={'1-20':'plumo','1-40':'rocaillou','2-20':'etoilette','2-40':'lunette','3-20':'gloupi'};
-const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette','gloupi','prismi'];
+const BOSS_GIFT={'1-20':'plumo','1-40':'rocaillou','2-20':'etoilette','2-40':'lunette','3-20':'gloupi','3-40':'hypnou'};
+const BENCH_ORDER=['braisou','gouttine','feuillou','sousou','zapic','givrou','plumo','rocaillou','etoilette','lunette','gloupi','hypnou','prismi'];
 function giftOf(gid){for(const k in BOSS_GIFT)if(BOSS_GIFT[k]===gid){const[w,v]=k.split('-');return{world:+w,wave:+v};}return null;}
 const FORMS=['','bébé','grand','super'];
 // Gardiens qui ont déjà leurs images (img/g/<id>-<forme>.webp) ; les autres restent en ronds de couleur
-const ART={gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1,prismi:1};
+const ART={hypnou:0,gloupi:1,braisou:1,gouttine:1,feuillou:1,zapic:1,givrou:1,plumo:1,rocaillou:1,etoilette:1,lunette:1,sousou:1,prismi:1};
 // chemin de l'image d'un gardien (Prismi : une image par forme de métamorphose)
 function gFile(gid,form){return gid==='prismi'?'g/prismi-'+curMorph():'g/'+gid+'-'+form;}
 function gImg(gid,form){return ART[gid]?img(gFile(gid,form)):null;}
@@ -580,7 +582,7 @@ function up(gid){const u=P.up[gid]||(P.up[gid]={pw:0,rg:0,sp:0,ca:0});if(u.ca===
 // ---------- Statistiques d'un gardien ----------
 function level(gid){const u=up(gid);return u.pw+u.rg+u.sp+u.ca;}
 // Niveaux d'évolution de chaque gardien (forme 2 « grand », forme 3 « super ») : chacun évolue à son rythme
-const EVO={prismi:[9999,9999],gloupi:[22,65],braisou:[20,60],gouttine:[20,55],feuillou:[25,70],zapic:[22,65],givrou:[25,70],plumo:[18,50],rocaillou:[30,80],etoilette:[20,60],lunette:[30,80],sousou:[15,45]};
+const EVO={hypnou:[25,70],prismi:[9999,9999],gloupi:[22,65],braisou:[20,60],gouttine:[20,55],feuillou:[25,70],zapic:[22,65],givrou:[25,70],plumo:[18,50],rocaillou:[30,80],etoilette:[20,60],lunette:[30,80],sousou:[15,45]};
 function evoOf(gid){return EVO[gid]||CFG.EVO;}
 function formOf(lv,gid){const e=evoOf(gid);return lv>=e[1]?3:lv>=e[0]?2:1;}
 function stats(gid){
@@ -878,6 +880,7 @@ function effet(gid,s){
     case 'rock':return`écrase une zone (rayon ${fmt(g.splash*(1+0.1*(s.form-1)))})`;
     case 'star':return`ses voisins proches tirent ${Math.round((g.aura+0.1*(s.form-1))*100)} % plus vite ; seule à voir les Fantômes, et un Fantôme qu'elle touche devient visible pour tous`;
     case 'poison':return`empoisonne : ${fmt(s.dmg*g.poison)} dégâts par seconde pendant 4 s, s'ajoute jusqu'à 3 fois, et passe sous l'armure`;
+    case 'psy':return`endort un méchant ${String(psyStun(gid).toFixed(1)).replace('.',',')} s (les boss moins longtemps), et tous les gardiens dans son cercle font ×2 de dégâts`;
     case 'prism':return`se métamorphose avec les pierres magiques gagnées en réussissant les mondes`;
     case 'snipe':return`vise d'abord le méchant le plus costaud (réglable)`;
   }
@@ -904,14 +907,15 @@ function showGuard(gid,fromTeam,tab){
     upPane=`<div class="ups one">${card('pw','💰','Pièces / vague',fmt(gold),fmt(gold*n))}</div><p class="pf">${sp.astuce}</p>`;
   }else{
     const rgN=s.rg*(1+CFG.RG*(u.rg+1))/(1+CFG.RG*u.rg);
-    upPane=`<div class="ups">${card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
+    const psy=g.kind==='psy',st0=psy?psyStun(gid):0,st1=psy?st0*(1+0.03*(u.pw+1))/(1+0.03*u.pw):0;
+    upPane=`<div class="ups">${psy?card('pw','💤','Sommeil',fr(st0.toFixed(1))+' s',fr(st1.toFixed(1))+' s'):card('pw','💪','Puissance',fmt(s.dmg),fmt(s.dmg*CFG.PW))}${card('rg','🎯','Portée',fmt(s.rg),fmt(rgN))}${card('sp','⏱️','Vitesse',fr(s.rate.toFixed(1))+'/s',fr((s.rate*CFG.SP).toFixed(1))+'/s')}${arm&&!psy?card('ca','🔨','Anti-armure','+'+Math.round(CFG.CA*u.ca*100)+' %','+'+Math.round(CFG.CA*(u.ca+1)*100)+' %'):''}</div>`+
       (arm&&g.kind!=='wind'?`<div class="lab2">CIBLE</div><div class="seg">${Object.keys(TARGETS).map(m=>`<button class="${targetOf(gid)===m?'on':''}" onclick="setTarget('${gid}','${m}',${ft})">${TARGETS[m]}</button>`).join('')}</div>`:'');
     const dps=s.dmg*s.rate*(g.kind==='chain'?1+0.8+0.64:1),cl=v=>v>=1.2?'g':v>=0.9?'m':'r';
     const evs=gid==='prismi'?'':ART[gid]?`<div class="evos">${[1,2,3].map(f=>`<div class="evo${f===s.form?' on':''}"><img src="img/g/${gid}-${f}.webp" alt=""><b>${FORMS[f]}</b><small>${f===1?'départ':'niv. '+ev[f-2]}</small></div>`).join('<span class="arr">➜</span>')}</div>`:'';
     const am=sp.arm*(1+CFG.CA*u.ca);
-    infoPane=evs+`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div><div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
+    infoPane=evs+(g.kind==='psy'?`<div class="tiles"><div class="tile"><b>${fr(psyStun(gid).toFixed(1))} s</b><small>sommeil</small></div><div class="tile"><b>${fr((1/s.rate).toFixed(1))} s</b><small>entre 2 sorts</small></div><div class="tile"><b>×2</b><small>dégâts voisins</small></div>`:`<div class="tiles"><div class="tile"><b>${fmt(s.dmg)}</b><small>dégâts / tir</small></div><div class="tile"><b>${fr(s.rate.toFixed(1))}</b><small>tirs / s</small></div><div class="tile"><b>${fmt(dps)}</b><small>dégâts / s</small></div>`)+`<div class="tile"><b>${fmt(s.rg)}</b><small>portée</small></div></div>
       <div class="fxline">✨ ${effet(gid,s)}</div>`+
-      (arm?`<div class="eff"><span class="${cl(am)}">🛡️ Armure ×${fr(Math.round(am*100)/100)}</span><span class="${cl(sp.life)}">❤️ Vie ×${fr(sp.life)}</span></div>`:'')+
+      (arm&&g.kind!=='psy'?`<div class="eff"><span class="${cl(am)}">🛡️ Armure ×${fr(Math.round(am*100)/100)}</span><span class="${cl(sp.life)}">❤️ Vie ×${fr(sp.life)}</span></div>`:'')+
       `<p class="pf">👍 <b>Fort :</b> ${sp.fort}<br>👎 <b>Faible :</b> ${sp.faible}</p>`;
   }
   const tabs=g.kind==='coin'?'':`<div class="seg tabs"><button data-t="up" onclick="sheetTab('up')">⬆️ Améliorer</button><button data-t="info" onclick="sheetTab('info')">📋 Infos</button></div>`;
@@ -1239,7 +1243,8 @@ function update(dt){
     if(e.hp<=0)continue;
     if(e.pi===undefined)e.pi=(G.spawnN=(G.spawnN||0)+1)%wd.Ps.length; // un Chipeur sur deux prend l'autre chemin
     const path=wd.Ps[e.pi];
-    e.dist+=e.spd*e.slowF*dt;e.ph+=dt*8*e.slowF;e.prog=e.dist/path.len;
+    if(e.stunT>0)e.stunT-=dt;const mv=e.stunT>0?0:1;
+    e.dist+=e.spd*e.slowF*mv*dt;e.ph+=dt*8*e.slowF*mv;e.prog=e.dist/path.len;
     const p=posAt(path,e.dist);if(e.x!==undefined){const dx=p.x-e.x;if(Math.abs(dx)>0.01)e.face=dx<0?-1:1;}e.x=p.x;e.y=p.y;e.seen=seenBy(e);
     if(e.dist>=path.len){
       e.hp=0;e.out=true;G.hearts=Math.max(0,G.hearts-e.hearts);
@@ -1251,6 +1256,9 @@ function update(dt){
   if(G.state==='wave'&&G.hearts<=0){defeat();return;}
   // Gardiens
   const auraOf=t=>{let m=1;for(const o of G.towers){if(o!==t&&GUARD[o.gid].kind==='star'&&Math.hypot(o.x-t.x,o.y-t.y)<=GUARD.etoilette.auraRg){const f=formOf(level(o.gid),o.gid);m=Math.max(m,1+GUARD.etoilette.aura+0.1*(f-1));}}return m;};
+  // Hypnou : les gardiens dans son cercle font ×2 de dégâts
+  const psyT=G.towers.filter(o=>GUARD[o.gid].kind==='psy').map(o=>({o,rg:stats(o.gid).rg}));
+  for(const t of G.towers)t.psy=psyT.some(q=>q.o!==t&&Math.hypot(q.o.x-t.x,q.o.y-t.y)<=q.rg)?2:1;
   for(const t of G.towers){
     const g=GUARD[t.gid];t.anim+=dt;t.kick=Math.max(0,t.kick-dt*4);
     if(g.kind==='coin')continue;
@@ -1264,13 +1272,23 @@ function update(dt){
     const mode=targetOf(t.gid),first=l=>l.reduce((a,b)=>(b.prog||0)>(a.prog||0)?b:a);
     let tg=mode==='strong'?inR.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a)
           :mode==='armor'?first(inR.some(e=>e.ap>0||e.armor)?inR.filter(e=>e.ap>0||e.armor):inR):first(inR);
+    const dmg=s.dmg*(t.psy||1);
+    if(g.kind==='psy'){
+      // endort un méchant : il s'arrête ; ensuite il est réveillé et ne peut pas être rendormi pendant 1,5 s
+      const c=inR.filter(e=>!(e.stunT>0)&&!(e.stunCd>G.anim));
+      if(!c.length){t.cd=0;t.kick=0;continue;}
+      const e=mode==='strong'?c.reduce((a,b)=>(b.hp+(b.ap||0))>(a.hp+(a.ap||0))?b:a):first(c);
+      const d=psyStun(t.gid)*(e.boss?0.4:1);e.stunT=d;e.stunCd=G.anim+d+1.5;
+      G.fx.push({k:'psy',x1:t.x,y1:t.y-30,x2:e.x,y2:e.y-10,t:0,life:0.45});
+      continue;
+    }
     if(g.kind==='wind'){
       waveFx(t.x,t.y,s.rg,'wind');
-      for(const e of inR){hurt(e,s.dmg,'wind',s.ca);
+      for(const e of inR){hurt(e,dmg,'wind',s.ca);
         // recul : au plus une fois toutes les 3 s par méchant (sinon un Plumo rapide bloque tout, même les boss)
         if(!e.fly&&!(e.pushT>G.anim)){e.dist=Math.max(0,e.dist-g.push*(e.boss?0.4:1)*(1+0.15*(s.form-1)));e.pushT=G.anim+(e.boss?5:3);}}
     }else if(g.kind==='chain'){
-      let cur=tg,hit=[],from={x:t.x,y:t.y},d=s.dmg;
+      let cur=tg,hit=[],from={x:t.x,y:t.y},d=dmg;
       for(let i=0;i<g.chain+(s.form-1)&&cur;i++){
         hurt(cur,d,'chain',s.ca);hit.push(cur);G.fx.push({k:'bolt',x1:from.x,y1:from.y,x2:cur.x,y2:cur.y,t:0,life:0.15});
         from=cur;d*=0.8;
@@ -1278,7 +1296,7 @@ function update(dt){
       }
     }else{
       const sp=g.kind==='snipe'?1100:g.kind==='rock'?480:650;
-      G.projs.push({x:t.x,y:t.y-10,tg,tx:tg.x,ty:tg.y,sp,dmg:s.dmg,ca:s.ca,kind:g.kind,col:g.col,g,form:s.form,sx:t.x,sy:t.y,trav:0});
+      G.projs.push({x:t.x,y:t.y-10,tg,tx:tg.x,ty:tg.y,sp,dmg,ca:s.ca,kind:g.kind,col:g.col,g,form:s.form,sx:t.x,sy:t.y,trav:0});
     }
   }
   // Projectiles
@@ -1295,6 +1313,7 @@ function update(dt){
   G.texts=G.texts.filter(x=>x.t<x.life);
   if(G.state==='wave'&&!G.queue.length&&!G.enemies.length)waveClear();
 }
+function psyStun(gid){const s=stats(gid),u=up(gid);return (GUARD[gid].stun+0.5*(s.form-1))*(1+0.03*u.pw);}
 function impact(p){
   const g=p.g,splash=g.splash?g.splash*(1+0.1*(p.form-1)):0;
   const main=p.tg&&p.tg.hp>0&&Math.hypot(p.tg.x-p.tx,p.tg.y-p.ty)<40?p.tg:null;
@@ -1404,6 +1423,7 @@ function haloOf(im){
   HALO_C.set(im,c);return c;
 }
 function drawGuard(t,sel){
+  if(GUARD[t.gid].kind==='psy'&&!(G.sel===t)){const rg=stats(t.gid).rg;ctx.save();ctx.strokeStyle='rgba(181,126,220,.55)';ctx.fillStyle='rgba(181,126,220,.08)';ctx.lineWidth=3;ctx.setLineDash([8,10]);ctx.lineDashOffset=-G.anim*20;ctx.beginPath();ctx.arc(t.x,t.y,rg,0,7);ctx.fill();ctx.stroke();ctx.restore();}
   if(DR&&DR.active&&DR.gid===t.gid)ctx.globalAlpha=0.35;
   const g=GUARD[t.gid],s=stats(t.gid),r=22+6*s.form,b=Math.sin(t.anim*3)*2,k=t.kick*0.12;
   ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(t.x,t.y+r*0.8,r*0.9,r*0.3,0,0,7);ctx.fill();
@@ -1423,7 +1443,9 @@ function drawGuard(t,sel){
   ctx.font=`${r*1.05}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.em,0,2);
   ctx.restore();}
   ctx.font='800 15px "Baloo 2",sans-serif';ctx.fillStyle='#fff';ctx.strokeStyle='rgba(42,31,61,.8)';ctx.lineWidth=4;
-  const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);ctx.globalAlpha=1;
+  const lab='★'.repeat(s.form)+' '+s.lv;ctx.strokeText(lab,t.x,t.y+r+14);ctx.fillText(lab,t.x,t.y+r+14);
+  if(t.psy>1&&g.kind!=='coin'){ctx.font='800 16px "Baloo 2",sans-serif';ctx.lineWidth=4;ctx.strokeStyle='#fff';ctx.fillStyle='#8A4FC8';ctx.strokeText('×2',t.x+r+6,t.y-r);ctx.fillText('×2',t.x+r+6,t.y-r);}
+  ctx.globalAlpha=1;
 }
 function drawFoe(e){
   const fl=e.fly?22:0,b=Math.abs(Math.sin(e.ph))*(e.fly?3:6);
@@ -1437,6 +1459,7 @@ function drawFoe(e){
     ctx.save();ctx.translate(e.x,y+h*0.42);ctx.rotate(Math.sin(e.ph)*0.07);ctx.scale((e.face||1)*(FOE_FACE[e.art]||1),1);
     ctx.drawImage(im,-w/2,-h,w,h);ctx.restore();
     if(e.poisonT>0){ctx.fillStyle='rgba(139,217,74,.35)';ctx.beginPath();ctx.ellipse(e.x,y+h*0.1,w*0.5,h*0.45,0,0,7);ctx.fill();ctx.fillStyle='#8BD94A';for(let j=0;j<3;j++){const ph=(G.anim*1.5+j/3+e.ph*0.1)%1;ctx.globalAlpha=1-ph;ctx.beginPath();ctx.arc(e.x+(j-1)*8,y-h*0.3-ph*20,3,0,7);ctx.fill();}ctx.globalAlpha=1;}
+    if(e.stunT>0){ctx.font=`${e.r*0.75}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';for(let j=0;j<3;j++){const a=G.anim*3+j*2.09;ctx.fillText(j?'⭐':'💤',e.x+Math.cos(a)*e.r*0.9,y-h*0.62+Math.sin(a)*e.r*0.3);}}
     if(e.burnT>0){ctx.font=`${e.r*0.8}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🔥',e.x+(Math.sin(G.anim*12)*4),y-h*0.45);}
     if(e.type==='casque'&&(armorOn()?e.ap<=0:!e.armor)){ctx.font=`${e.r*0.7}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('💥',e.x,y-h*0.42);}
     ctx.globalAlpha=1;
@@ -1510,6 +1533,8 @@ function draw(){
         ctx.lineCap='butt';}
     }
     else if(f.k==='ring'){ctx.strokeStyle=f.col;ctx.lineWidth=5;ctx.beginPath();ctx.arc(f.x,f.y,f.r*(0.4+0.6*(1-a)),0,7);ctx.stroke();}
+    else if(f.k==='psy'){const a2=1-f.t/f.life;ctx.strokeStyle=`rgba(181,126,220,${a2})`;ctx.lineWidth=6;ctx.setLineDash([10,8]);ctx.lineDashOffset=-f.t*120;ctx.beginPath();ctx.moveTo(f.x1,f.y1);ctx.lineTo(f.x2,f.y2);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle=`rgba(181,126,220,${0.5*a2})`;ctx.beginPath();ctx.arc(f.x2,f.y2,20+30*(1-a2),0,7);ctx.fill();}
     else if(f.k==='bolt'){ctx.strokeStyle='#FFF27A';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(f.x1,f.y1);const n=5;for(let i=1;i<n;i++){ctx.lineTo(f.x1+(f.x2-f.x1)*i/n+(Math.random()-0.5)*18,f.y1+(f.y2-f.y1)*i/n+(Math.random()-0.5)*18);}ctx.lineTo(f.x2,f.y2);ctx.stroke();}
     ctx.globalAlpha=1;}
   for(const x of G.texts){ctx.globalAlpha=Math.min(1,2*(1-x.t/x.life));ctx.font=`800 ${x.size}px "Baloo 2",sans-serif`;ctx.textAlign='center';ctx.lineWidth=5;ctx.strokeStyle='#fff';ctx.strokeText(x.txt,x.x,x.y);ctx.fillStyle=x.col;ctx.fillText(x.txt,x.x,x.y);ctx.globalAlpha=1;}

@@ -348,3 +348,20 @@ Draw 4 cute game badges for a children's game, side by side from left to right, 
 Background: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no shadow, not transparent, no checkerboard. Do not use green in the badges.
 STYLE: cute 2D cartoon game icons, like a modern mobile game for kids, soft rounded shapes, simple cel shading, bright saturated colours. No text, no letters, no numbers. Wide 16:9 image.
 ```
+
+## Nouveau gardien — Hypnou (psy)
+
+Joindre : la planche de style.
+
+```
+Image 1 is the style reference: keep exactly the same art style.
+
+Draw Hypnou, a psychic guardian creature, in its 3 evolution stages, side by side from left to right, all facing the viewer in a 3/4 front view, full body, evenly spaced with a clear gap between them. Each stage is bigger and more impressive than the previous one, but clearly the same creature (same colours, same face, same key features). Hypnou is a small round floating creature, a mix of a baby axolotl and a kitten, lilac and soft violet with pastel pink cheeks, frilly gill-like ears, big sleepy-but-kind eyes, and a glowing pink-violet spiral mark on its forehead. It floats calmly a little above the ground, as if meditating:
+1. Baby: tiny and round, floating, eyes half closed and smiling, a small glowing spiral on its forehead, a few tiny sparkles around it
+2. Grand (teen): bigger, sitting cross-legged in the air like meditating, two small glowing violet orbs floating around it, longer frilly ears
+3. Super (final): majestic, meditating in the air with a soft glowing halo behind its head, a little cape made of starry night sky, three glowing orbs orbiting around it, its forehead spiral shining brightly
+Sizes: the baby is about half the height of the super form. Cute, calm and friendly, never scary or creepy.
+
+Background: perfectly flat solid pure green #00FF00 (chroma key), no gradient, no ground shadow, no other objects, not transparent, no checkerboard. Do not use green on the creature.
+STYLE: cute 2D cartoon illustration for a children's mobile game, like a modern animated kids' TV show. Soft rounded shapes, big shiny expressive eyes, clean dark outlines, simple cel shading, bright saturated colours. Simple, readable silhouette that is still recognisable when very small. No text. Wide 16:9 image.
+```
