@@ -170,7 +170,7 @@ Le décor aide ou gêne certains gardiens (tous les niveaux). Dans la barre du b
 
 ## Niveaux de jeu
 
-Chaque joueur choisit un niveau, modifiable à tout moment dans ⚙️ Menu :
+Chaque joueur choisit un niveau en créant son joueur ; il ne change plus ensuite (anti-triche, depuis la v48) :
 
 | Niveau | Pour qui | Différence |
 |---|---|---|
@@ -294,4 +294,5 @@ Total : environ **49 images**. Les gardiens s'affichent aussi en petit (40 px) d
 - **v45** (version 51) — Hypnou moins puissant : **un seul sort à la fois** (il endort un méchant, attend qu'il se réveille, puis 1 s de pause avant le suivant) ; sommeil de 3 s au départ, **5 s au plus** ; plus de jauge Vitesse ni Anti-armure pour lui. Les gardiens boostés ×2 par Hypnou ont un **halo rouge qui pulse** (et « ×2 » en rouge). Réglages : `PSY_MAX`, `PSY_PAUSE`.
 - **v46** (version 52) — classement corrigé et détaillé : le serveur bloquait la progression au monde 4 (plafond 450) ; il accepte maintenant les mondes suivants. Chaque ligne affiche le monde et la vague atteinte (« Monde 5 · vague 28/50 », « Monde 4 · 50/50 ✅ »). Toucher un joueur ouvre **sa fiche** : niveau de jeu, place, Chipeurs chassés, boss battus, sa progression dans chacun des mondes, et tous ses gardiens avec leur forme et leur niveau (Prismi avec sa forme actuelle). Le jeu envoie aussi l'équipe après chaque amélioration ou achat.
 - **v47** (version 53) — **reprendre sa partie sur un autre téléphone**, comme dans Lili Parc : ⚙️ Menu → 📤 Envoyer ma partie affiche un QR code (Android : le scanner avec l'appareil photo de l'autre téléphone) et un code à copier (iPhone : l'envoyer par message, puis « Qui joue ? » → 📥 J'ai un code). On choisit ensuite de la mettre en nouveau joueur ou de remplacer un joueur. Le code (« GL1. », partie compressée, environ 500 caractères) garde tout : gardiens, améliorations, LiliDollars, mondes, places achetées, et la même place au classement. `qrcode.js` est copié de Lili Parc.
+- **v48** (version 54) — anti-triche : le **niveau** (⭐, ⭐⭐, ⭐⭐⭐) se choisit à la création du joueur et **ne se change plus** (⚙️ Menu l'affiche avec un 🔒 ; pour un autre niveau, on crée un nouveau joueur). Une partie où l'on a utilisé les boutons du mode test (`#dev` : + argent, vague +5, gagner la vague) est marquée (`P.dev`) et n'est plus jamais envoyée au classement.
 - **v1** — glisser-déposer des gardiens (barre du bas → map, map → map avec échange, map → barre pour les rentrer) ; gardiens achetés en LiliDollars ou libérés par les boss (remplace le choix après chaque boss) ; « joueur » au lieu de « joueuse » dans le jeu (un copain peut jouer aussi).

@@ -209,6 +209,7 @@ textarea.code{width:100%;height:110px;font:13px/1.35 ui-monospace,monospace;bord
 .qrbox{flex:none;width:min(230px,34vw);aspect-ratio:1;background:#fff;border:3px solid #EDE4F8;border-radius:14px;padding:6px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px}
 .qrbox svg{width:100%;height:100%}
 .small{font-size:13.5px;opacity:.85}.err{color:#C0392B}.found{font-size:17px}
+.lockdiff{background:#F6F1FC;border-radius:14px;padding:10px 14px;font-size:17px;display:flex;align-items:center;gap:6px}.lockdiff span{margin-left:auto}
 input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border:2px solid #d9cce9;width:100%}
 .team{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
 
@@ -334,7 +335,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 53</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 54</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -1042,7 +1043,7 @@ function progTxt(p){const n=Math.max(1,Math.floor(p/100)),v=p%100,w=WORLDS[n-1],
   return v>=CFG.WAVES?`${em}Monde ${n} · 50/50 ✅`:`${em}Monde ${n} · vague ${v+1}/${CFG.WAVES}`;}
 let pushT=0;
 function pushScore(now){
-  if(!P||!P.uid||location.hash.includes('dev')||location.protocol==='file:')return;
+  if(!P||!P.uid||P.dev||/[?&#]dev/.test(location.href)||location.protocol==='file:')return;
   clearTimeout(pushT);pushT=setTimeout(()=>{
     const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses,best:sd.best}:null;}).filter(Boolean);
     const team=P.owned.map(g=>{const l=level(g),o={g,l,f:formOf(l,g)};if(g==='prismi')o.m=curMorph();return o;});
@@ -1160,7 +1161,7 @@ function newProfile(){
   openModal(`<h2>Nouveau joueur</h2>
     <p>Ton prénom :</p><input class="txt" id="npName" maxlength="14" autocomplete="off">
     <p>Ton avatar :</p><div class="avs">${avs}</div>
-    <p>Ton niveau :</p><div class="diffs">${diffs}</div>
+    <p>Ton niveau <small>(il ne pourra plus changer)</small> :</p><div class="diffs">${diffs}</div>
     <div class="right"><button onclick="showWho()">⬅️ Retour</button><button class="b-pink" onclick="createProfile()">C'est parti !</button></div>`,null,true);
 }
 function createProfile(){
@@ -1230,9 +1231,11 @@ function showWorlds(){
   if(wc&&cd&&cd.offsetLeft+cd.offsetWidth>wc.clientWidth)wc.scrollLeft=cd.offsetLeft-wc.offsetLeft-12;
 }
 function showMenu(){
-  const diffs=[1,2,3].map(d=>`<button class="${d===P.diff?'sel':''}" onclick="setDiff(${d})">${DIFF[d].stars} <b>${DIFF[d].name}</b> <small>(${DIFF[d].age}) — ${DIFF[d].txt}</small></button>`).join('');
+  // le niveau est choisi à la création du joueur et ne se change plus (sinon on triche au classement)
+  const D=DIFF[P.diff];
   openModal(`<h2>${ic('menu')} Menu</h2>
-    <p><b>Niveau</b></p><div class="diffs">${diffs}</div>
+    <p><b>Niveau</b></p><div class="lockdiff">${D.stars} <b>${D.name}</b> <small>— ${D.txt}</small> <span>🔒</span></div>
+    <p class="small">Le niveau se choisit quand on crée son joueur et ne change plus. Pour jouer à un autre niveau, crée un nouveau joueur.</p>
     <div class="right" style="justify-content:flex-start">
       <button onclick="showWorlds()">${ic('mondes')} Les mondes</button>
       <button onclick="showRank()">${ic('classement')} Classement</button>
@@ -1242,7 +1245,6 @@ function showMenu(){
       <button onclick="fullscreen()">${ic('plein-ecran')} Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
-function setDiff(d){P.diff=d;buildTowers();if(G.state!=='wave')G.hearts=Math.min(G.hearts,maxHearts());save();showMenu();refreshHUD();}
 function fullscreen(){const d=document.documentElement;try{(d.requestFullscreen||d.webkitRequestFullscreen).call(d);}catch(e){}closeModal();}
 
 // ---------- Boutons ----------
@@ -1741,9 +1743,10 @@ function frame(ts){
 
 // ---------- Outils de test (?dev) ----------
 if(/[?&#]dev/.test(location.href))$('dev').style.display='flex';
-function devMoney(){P.money+=Math.round(1000*rewMul(G.world,G.wave));save();refreshHUD();}
-function devSkip(n){if(G.state!=='idle')return;G.wave=Math.min(CFG.WAVES,G.wave+n);saveRun();refreshHUD();}
-function devWin(){if(G.state!=='wave')return;G.queue=[];G.enemies=[];}
+function devMark(){if(P&&!P.dev){P.dev=1;save();}}
+function devMoney(){devMark();P.money+=Math.round(1000*rewMul(G.world,G.wave));save();refreshHUD();}
+function devSkip(n){if(G.state!=='idle')return;devMark();G.wave=Math.min(CFG.WAVES,G.wave+n);saveRun();refreshHUD();}
+function devWin(){if(G.state!=='wave')return;devMark();G.queue=[];G.enemies=[];}
 
 // ---------- Démarrage ----------
 window.addEventListener('resize',resize);
