@@ -114,6 +114,7 @@ Débloquées par les **badges** (3, 6 puis 9 badges ; montants ÷8 au niveau 1),
 ## Le plan du parc
 
 - Chaque zone a une **grande rue qui serpente**, une **place ronde avec fontaine** au milieu, une rue qui la **croise** (vers le **kiosque à musique** en haut et un **jardin** en bas dans la zone 1 ; vers la **statue de Lili** et un jardin fleuri dans le Grand Parc), et une **petite allée** qui mène à chaque attraction. Arbres, buissons, fleurs, fanions et réverbères décorent le parc.
+- **Map dessinée** (Gemini, une image par zone : `liliparc/img/map-1.webp`, `map-2.webp`, 2200 × 1120) : herbe, rues pavées, buissons, fleurs, bancs. Elle a été faite à partir de guides générés par le jeu (rues exactes et terrains en magenta), donc les rues dessinées tombent sur les chemins des visiteurs. Fontaine, kiosque, statue, jardins, réverbères et fanions restent dessinés (et animés) par-dessus. Sans les images, le jeu redessine tout en code.
 - Les visiteurs **suivent les rues** (chacun garde sa droite), font la queue dans l'allée de l'attraction, et vont parfois se promener vers le kiosque ou le jardin.
 - Les postes de **sécurité** et de **secours** s'installent dans le jardin du bas de la zone 1.
 - Bouton **🔭 Tout voir** : vue d'ensemble des deux zones sur un seul écran, avec l'enseigne « Lili Parc », le parking et la forêt autour. On peut y cliquer sur une attraction, ou ailleurs dans une zone pour zoomer dessus (**🔍 Zoomer** pour revenir). Tant que le Grand Parc n'est pas acheté, il apparaît « à vendre ».

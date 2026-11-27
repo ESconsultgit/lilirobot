@@ -857,13 +857,18 @@ function drawBackground(){
     drawOutside(); for(const t of OUT_TREES) tree(t[0],t[1],t[2],t[3]); }
   const gr=g.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#8fdc74'); gr.addColorStop(1,'#6cc45a');
   g.fillStyle=gr; g.fillRect(0,0,WW,H);
-  for(const f of FLOWERS) if(f[0]<S.zones*W) circ(f[0],f[1],2,f[2]);
+  // Map dessinée (une image par zone) ; sinon herbe, rues et décor dessinés en code
+  const mapOK=z=>MAPS[z].complete&&MAPS[z].naturalWidth;
+  for(let z=0;z<NZ;z++) if(mapOK(z)&&(z<S.zones||cam.s<0.99)) g.drawImage(MAPS[z],z*W,0,W,H);
+  const allMaps=mapOK(0)&&(S.zones<2||mapOK(1));
+  if(!allMaps) for(const f of FLOWERS) if(f[0]<S.zones*W) circ(f[0],f[1],2,f[2]);
   if(lv()>=2&&S.weather==='snow'){ g.fillStyle='rgba(255,255,255,.3)'; g.fillRect(0,0,WW,H); }
   if(lv()>=3){ const k=1-(S.green??100)/100; if(k>0.1){ g.fillStyle=`rgba(150,130,50,${k*0.35})`; g.fillRect(0,0,S.zones*W,H); } }
   if(S.zones<NZ){ g.fillStyle='rgba(255,255,255,.28)'; g.fillRect(W,0,WW-W,H); }
-  drawStreets(); drawBunting();
-  for(const b of BUSHES) if(b[0]<S.zones*W||cam.s<0.99){ circ(b[0]+1,b[1]+2,b[2],'rgba(0,0,0,.12)'); circ(b[0],b[1],b[2],'#3f9a3f'); circ(b[0]-b[2]*0.3,b[1]-b[2]*0.3,b[2]*0.55,'#5cbf5c'); }
-  for(const t of TREES) if(inView(t[0]-20,t[0]+20)) tree(t[0],t[1],t[2],t[3]);
+  if(!allMaps){ drawStreets();
+    for(const b of BUSHES) if(b[0]<S.zones*W||cam.s<0.99){ circ(b[0]+1,b[1]+2,b[2],'rgba(0,0,0,.12)'); circ(b[0],b[1],b[2],'#3f9a3f'); circ(b[0]-b[2]*0.3,b[1]-b[2]*0.3,b[2]*0.55,'#5cbf5c'); }
+    for(const t of TREES) if(inView(t[0]-20,t[0]+20)) tree(t[0],t[1],t[2],t[3]); }
+  drawBunting();
   drawSquares(); drawLampPosts();
   // clôture du parc
   if(cam.s<0.99){ g.strokeStyle='#8b5a2b'; g.lineWidth=3; g.setLineDash([10,6]); g.strokeRect(-4,-4,(S.zones<NZ?W:WW)+8,H+8); g.setLineDash([]); }
@@ -882,6 +887,7 @@ function drawOutside(){
   for(let k=0;k<22;k++){ const a=k/22, x=cx-270+a*540; circ(x,cy-58,5,Math.floor(animT*3+k)%2?'#ffd23f':'#fff3b0'); circ(x,cy+38,5,Math.floor(animT*3+k)%2?'#fff3b0':'#ffd23f'); }
   g.fillStyle='#fff'; g.font='800 64px "Baloo 2"'; g.fillText('🎡 LILI PARC',cx,cy-8);
 }
+const MAPS=[1,2].map(k=>{ const im=new Image(); im.src='img/map-'+k+'.webp'; return im; });
 function drawForSale(){ const cx=W+W/2, cy=H/2;
   g.strokeStyle='rgba(139,90,43,.7)'; g.lineWidth=3; g.setLineDash([8,8]); g.strokeRect(W+20,20,W-40,H-40); g.setLineDash([]);
   g.fillStyle='#8b5a2b'; g.fillRect(cx-5,cy,10,70); rr(cx-170,cy-60,340,80,14); g.fillStyle='#f59e0b'; g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
@@ -1299,7 +1305,7 @@ function drawPlot(i){
 function drawPlotBase(i){
   const r=baseRect(i), p=S.plots[i];
   const signY=r.row? r.y+2 : r.y+r.h-30, areaY=r.row? r.y+36 : r.y+4;
-  rr(r.x,r.y,r.w,r.h,16); g.fillStyle= p? 'rgba(255,255,255,.18)' : 'rgba(146,97,48,.35)'; g.fill();
+  rr(r.x,r.y,r.w,r.h,16); g.fillStyle= p? (MAPS[0].naturalWidth?'rgba(255,255,255,0)':'rgba(255,255,255,.18)') : 'rgba(146,97,48,.22)'; g.fill();
   if(hoverPlot===i){ g.strokeStyle='#fff'; g.lineWidth=4; g.stroke(); }
   if(!p){
     g.setLineDash([8,6]); rr(r.x+6,r.y+6,r.w-12,r.h-12,12); g.strokeStyle='rgba(255,255,255,.7)'; g.lineWidth=3; g.stroke(); g.setLineDash([]);
