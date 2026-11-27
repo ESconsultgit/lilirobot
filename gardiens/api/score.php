@@ -16,11 +16,30 @@ try{
   $cols=array_column($db->query('PRAGMA table_info(scores)')->fetchAll(PDO::FETCH_ASSOC),'name');
   if(!in_array('team',$cols))$db->exec('ALTER TABLE scores ADD COLUMN team TEXT');
   if(!in_array('best',$cols))$db->exec('ALTER TABLE scores ADD COLUMN best TEXT');
+  // Remise à zéro de joueurs (triche) : leurs lignes sont effacées et leur téléphone efface la partie
+  // à sa prochaine connexion (réponse reset:true, puis accusé de réception ack:1).
+  $db->exec('CREATE TABLE IF NOT EXISTS resets(uid TEXT PRIMARY KEY,name TEXT,at INTEGER)');
+  $RESET_NAMES=['hardy07'];   // prénoms à remettre à zéro (une seule fois chacun)
+  foreach($RESET_NAMES as $rn){
+    $mk=$dir.'/reset-'.preg_replace('/[^a-z0-9]/','',strtolower($rn)).'.done';
+    if(file_exists($mk))continue;
+    $q=$db->prepare('SELECT DISTINCT uid,name FROM scores WHERE lower(name)=lower(?)');$q->execute([$rn]);
+    foreach($q->fetchAll(PDO::FETCH_ASSOC) as $u){
+      $db->prepare('INSERT OR REPLACE INTO resets(uid,name,at) VALUES(?,?,?)')->execute([$u['uid'],$u['name'],time()]);
+      $db->prepare('DELETE FROM scores WHERE uid=?')->execute([$u['uid']]);
+    }
+    file_put_contents($mk,date('c'));
+  }
 }catch(Exception $e){out(['error'=>'db'],500);}
 if($_SERVER['REQUEST_METHOD']==='POST'){
   $in=json_decode(file_get_contents('php://input',false,null,0,8000),true);
   if(!is_array($in))out(['error'=>'json'],400);
   $uid=$in['uid']??'';if(!preg_match('/^[a-z0-9]{8,24}$/',$uid))out(['error'=>'uid'],400);
+  $rs=$db->prepare('SELECT 1 FROM resets WHERE uid=?');$rs->execute([$uid]);
+  if($rs->fetchColumn()){
+    if(!empty($in['ack'])){$db->prepare('DELETE FROM resets WHERE uid=?')->execute([$uid]);out(['ok'=>true]);}
+    out(['reset'=>true]);
+  }
   $name=trim(preg_replace('/[\x00-\x1F<>]/u','',(string)($in['name']??'')));
   $name=mb_substr($name,0,14);if($name==='')$name='Joueur';
   $av=in_array($in['av']??'',$AV,true)?$in['av']:'princesse';

@@ -335,7 +335,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 54</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 55</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -1047,8 +1047,18 @@ function pushScore(now){
   clearTimeout(pushT);pushT=setTimeout(()=>{
     const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses,best:sd.best}:null;}).filter(Boolean);
     const team=P.owned.map(g=>{const l=level(g),o={g,l,f:formOf(l,g)};if(g==='prismi')o.m=curMorph();return o;});
-    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:avId(P.av),team,rows})}).catch(()=>{});
+    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:avId(P.av),team,rows})})
+      .then(r=>r.json()).then(j=>{if(j&&j.reset)adminReset();}).catch(()=>{});
   },now?300:1500);
+}
+// Partie remise à zéro depuis le serveur (triche) : même joueur, même niveau, mais tout recommence
+function adminReset(){
+  if(!P||!PID)return;const uid=P.uid,keep={name:P.name,av:P.av,diff:P.diff};
+  P=newSave(keep.name,keep.av,keep.diff);P.uid=uid;P.st={};LS.set('gardiens-'+PID,P);
+  fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid,ack:1})}).catch(()=>{});
+  G.towers=[];G.enemies=[];G.projs=[];G.state='idle';
+  openModal(`<h2>🔄 Partie remise à zéro</h2><p>Ta partie a été remise à zéro : tu recommences au début, et ta place au classement aussi.</p>
+    <div class="right"><button class="b-pink" onclick="selectProfile(PID)">OK</button></div>`,'princesse-inquiete',true);
 }
 let RK={diff:2,by:'prog'};
 function showRank(d,by){
