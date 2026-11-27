@@ -198,48 +198,91 @@ button .ic{pointer-events:none}.badge .bem .ic{width:30px;height:30px}
 .qrbox svg{width:100%;height:100%}
 #xcode,#icode{width:100%;height:80px;font-family:monospace;font-size:11px;border:2px solid #e5dcf7;border-radius:10px;padding:6px;word-break:break-all;resize:none}
 @media (max-height:560px) and (orientation:landscape){ .qrbox{width:190px;height:190px} #xcode{height:64px} .xright .small{font-size:11px!important} }
+
+/* ---------- Mise en page plein écran : la map prend tout l'écran, tout le reste flotte par-dessus ---------- */
+html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+.app{height:100dvh;background:#5fae4e}
+#cvWrap{position:relative;width:100%;height:100%;overflow:hidden}
+#cv{position:absolute;inset:0;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;display:block}
+#cvWrap .daybar{position:absolute;left:0;right:0;top:0;height:5px;z-index:2;background:rgba(255,255,255,.45)}
+#ov{position:absolute;inset:0;pointer-events:none;z-index:3;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+#ov>*{pointer-events:auto}
+#hud{position:absolute;top:12px;left:max(10px,env(safe-area-inset-left));display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:5px 14px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;white-space:nowrap;max-width:calc(100% - 260px);overflow:hidden}
+#hud>span{display:inline-flex;align-items:center;gap:4px}
+#hud>span+span::before{content:'·';margin:0 6px;opacity:.35}
+#hud .ic{width:1.2em;height:1.2em}
+#parkName{color:var(--pink)}
+#ctrl{position:absolute;top:10px;right:max(10px,env(safe-area-inset-right));display:flex;gap:6px;align-items:center}
+#ctrl button,#ctrl .speed button{width:44px;height:44px;padding:0;border-radius:999px;display:flex;align-items:center;justify-content:center;background:rgba(255,253,248,.95);box-shadow:0 3px 10px rgba(42,31,61,.3);font-size:20px}
+#ctrl .speed{display:flex;gap:4px;background:rgba(255,253,248,.6);border-radius:999px;padding:3px}
+#ctrl .speed button{width:38px;height:38px;box-shadow:none}
+#ctrl button.sel{background:#e9ddff;box-shadow:inset 0 0 0 2px var(--violet)}
+#ctrl .lbl{display:none}
+#ctrl .ic{width:26px;height:26px}
+#moreList{position:absolute;top:62px;right:max(10px,env(safe-area-inset-right));display:none;flex-direction:column;gap:6px;background:rgba(255,253,248,.97);padding:8px;border-radius:16px;box-shadow:0 6px 18px rgba(42,31,61,.3);min-width:190px;max-height:calc(100% - 80px);overflow:auto}
+#moreList.open{display:flex}
+#moreList #tipBtn{display:flex}#moreList .lbl{display:inline!important}#ctrl .lbl{display:none!important}
+#moreList button{box-shadow:none;background:#F1ECF7;text-align:left;display:flex;align-items:center;gap:6px;width:100%}
+#moreList button.sel{background:#e9ddff}
+#moreList #installBtn{display:none;background:var(--pink);color:#fff}
+#tipBox{position:absolute;left:max(10px,env(safe-area-inset-left));bottom:10px;display:flex;align-items:flex-end;gap:4px;max-width:min(560px,48%);cursor:pointer}
+#tipBox img{width:64px;height:70px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
+#tip{background:rgba(255,253,248,.95);border:3px solid var(--lime);border-radius:16px 16px 16px 4px;padding:7px 12px;font-size:14px;line-height:1.3;box-shadow:0 3px 10px rgba(42,31,61,.25)}
+#tip.pinkb,#tipBox.pinkb #tip{border-color:var(--pink)}
+#goalBox{position:absolute;right:max(10px,env(safe-area-inset-right));bottom:12px;width:min(380px,40%);background:rgba(255,253,248,.95);border-radius:16px;padding:7px 12px;box-shadow:0 3px 10px rgba(42,31,61,.25);font-size:14px}
+#goalBox .bar{height:9px;margin-top:5px}
+#toasts{bottom:auto!important;top:66px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important}
+@media (max-height:560px),(max-width:760px){
+  #hud{top:8px;font-size:13px;padding:3px 10px;max-width:calc(100% - 210px)} #hud>span+span::before{margin:0 3px}
+  #ctrl{top:6px;gap:4px} #ctrl button{width:36px;height:36px;font-size:17px} #ctrl .speed button{width:31px;height:31px} #ctrl .ic{width:21px;height:21px}
+  #moreList{top:48px;min-width:160px;padding:6px;gap:4px} #moreList button{font-size:13px;padding:5px 8px}
+  #tipBox{bottom:6px;max-width:52%} #tipBox img{width:40px;height:44px} #tip{font-size:11.5px;padding:4px 8px;border-width:2px}
+  #goalBox{bottom:6px;width:min(260px,38%);font-size:11.5px;padding:4px 9px} #goalBox .bar{height:6px;margin-top:3px}
+  #toasts{top:50px!important}
+  #tip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:300px}
+  #goalBox{width:min(210px,30%)} #goalTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <div class="hud-info">
-      <div class="title"><img src="img/lili-avatar.webp" alt=""><span id="parkName">Lili Parc<small>Jour 1</small></span></div>
-      <div class="pill money" title="Ton porte-monnaie"><span class="coin">L</span><span id="money">0</span></div>
-      <div class="pill" title="Ta tirelire" style="cursor:pointer" id="bankPill">🐷 <span id="bankAmt">0</span></div>
-      <div class="pill" title="Note des visiteurs" id="stars">★★★☆☆</div>
-      <div class="pill" title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></div>
-      <div class="pill" id="healthPill" title="Santé du parc et météo" style="cursor:pointer"><img class="ic" src="img/ui/coeur.webp" alt=""><span id="healthVal">100</span>% <span id="wxIcon">☀️</span></div>
-      <div class="goalMini"><div id="goalMiniTxt"></div><div class="bar"><i id="goalMiniFill"></i></div></div>
+<div class="app"><div id="cvWrap">
+  <canvas id="cv"></canvas>
+  <div class="daybar"><i id="dayFill"></i></div>
+  <!-- Couche posée sur la map : infos, boutons, astuce, objectif -->
+  <div id="ov">
+    <div id="hud">
+      <span id="parkName"></span>
+      <span class="money" title="Ton porte-monnaie"><span class="coin">L</span><span id="money">0</span></span>
+      <span id="bankPill" title="Ta tirelire" style="cursor:pointer">🐷 <span id="bankAmt">0</span></span>
+      <span id="stars" title="Note des visiteurs">★★★☆☆</span>
+      <span title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></span>
+      <span id="healthPill" title="Santé du parc et météo" style="cursor:pointer"><img class="ic" src="img/ui/coeur.webp" alt=""><span id="healthVal">100</span>% <span id="wxIcon">☀️</span></span>
     </div>
-    <div class="hud-btns">
+    <div id="ctrl">
       <div class="speed">
         <button id="spd0" title="Pause"><img class="ic" src="img/ui/pause.webp" alt=""></button>
         <button id="spd1" class="sel" title="Vitesse normale"><img class="ic" src="img/ui/play.webp" alt=""></button>
         <button id="spd2" title="Rapide"><img class="ic" src="img/ui/vitesse.webp" alt=""></button>
       </div>
-      <button id="zoneBtn" title="Changer de zone"><img class="ic" src="img/ui/mondes.webp" alt=""><span class="lbl"> Agrandir</span></button>
       <button id="zoomBtn" title="Voir tout le parc"><img class="ic" src="img/ui/longue-vue.webp" alt=""><span class="lbl"> Tout voir</span></button>
+      <button id="bMore" title="Boutons" aria-label="Boutons">☰</button>
+    </div>
+    <div id="moreList">
+      <button id="zoneBtn" title="Changer de zone"><img class="ic" src="img/ui/mondes.webp" alt=""><span class="lbl"> Agrandir</span></button>
       <button id="ticketBtn" title="Billet d'entrée">🎟️<span class="lbl"> Billet d'entrée</span></button>
       <button id="svcBtn" title="Services du parc">🛠️<span class="lbl"> Services</span></button>
       <button id="badgeBtn" title="Mes badges"><img class="ic" src="img/ui/medaille.webp" alt=""><span class="lbl"> Badges</span></button>
-      <button id="tipBtn" title="Astuce">💡</button>
+      <button id="tipBtn" title="Astuce">💡<span class="lbl"> Astuce</span></button>
+      <button id="fsBtn" title="Plein écran"><img class="ic" src="img/ui/plein-ecran.webp" alt=""><span class="lbl"> Plein écran</span></button>
+      <button id="soundBtn" title="Son">🔊<span class="lbl"> Son</span></button>
       <button id="installBtn" title="Installer l'application">📲<span class="lbl"> Installer</span></button>
-      <button id="fsBtn" title="Plein écran"><img class="ic" src="img/ui/plein-ecran.webp" alt=""></button>
-      <button id="soundBtn" title="Son">🔊</button>
-      <button id="menuBtn" title="Menu"><img class="ic" src="img/ui/menu.webp" alt=""></button>
-      <a class="pill" id="homeLink" href="/" title="Retour à l'atelier de Lili" style="text-decoration:none;color:inherit">🏠<span class="lbl"> Atelier</span></a>
+      <button id="menuBtn" title="Réglages"><img class="ic" src="img/ui/menu.webp" alt=""><span class="lbl"> Réglages</span></button>
     </div>
+    <div id="tipBox"><img id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div></div>
+    <div id="goalBox"><div id="goalTxt">Objectif</div><div class="bar"><i id="goalFill"></i></div>
+      <div style="display:none"><div id="goalMiniTxt"></div><i id="goalMiniFill"></i></div></div>
   </div>
-  <div class="stage">
-    <div class="daybar"><i id="dayFill"></i></div>
-    <canvas id="cv"></canvas>
-  </div>
-  <div class="bottom">
-    <div class="tip"><img class="face" id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div></div>
-    <div class="goal"><div id="goalTxt">Objectif</div><div class="bar"><i id="goalFill"></i></div></div>
-  </div>
-</div>
+</div></div>
 <div id="rotate"><img src="img/lili-coucou.webp" alt=""><div class="ph">📱</div><div>Tourne ton téléphone<br>pour jouer à Lili Parc !</div></div>
 <div id="toasts"></div>
 <div class="modal" id="modal"><div class="box" id="box"></div></div>
@@ -364,7 +407,7 @@ function startAnniv(){
   S.annivDone=(S.annivDone||[]); for(let d=100; d<=m; d++) if(isMilestone(d)&&!S.annivDone.includes(d)) S.annivDone.push(d);
   const gift=(m===365?2000:1000)*MUL;
   S.money+=gift; day.event='anniv'; day.eventCost=0; day.annivDay=m; day.annivGift=gift; fx=[];
-  for(let k=0;k<220;k++) confetti.push(mkConf(rnd(0,W),rnd(-120,0)));
+  for(let k=0;k<220;k++) confetti.push(mkConf(rnd(0,SW),rnd(-120,0)));
   tada(); setTimeout(tada,450); setTimeout(tada,900);
   const built=S.plots.filter(Boolean).length, nb=(S.badges||[]).length;
   openModal(`<h2>🎂 Joyeux anniversaire, ${S.name.replace(/</g,'&lt;')} !</h2>
@@ -415,7 +458,7 @@ function startEvent(){
   let rest=b.cost; const fromWallet=Math.min(Math.max(0,S.money),rest); S.money-=fromWallet; rest-=fromWallet; S.bank-=rest;
   day.event=ev.id; day.eventCost=b.cost; fx=[]; S.evDone=(S.evDone||0)+1;
   toast(ev.img,`${ev.em} ${ev.name} !`,rest>0?`Payé avec le porte-monnaie et <b>${fmt(rest)} L$</b> de la tirelire. Heureusement qu'on avait épargné !`:`C'est parti ! Les visiteurs arrivent en masse !`);
-  for(let k=0;k<80;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
+  for(let k=0;k<80;k++) confetti.push(mkConf(rnd(0,SW),rnd(-60,0)));
   save();
 }
 
@@ -426,21 +469,21 @@ function drawEventFx(dt){
   const id=day&&day.event; if(!id) return;
   const ev=EV[id];
   g.font='700 15px "Baloo 2"'; const txt=id==='anniv'?`🎂 JOYEUX ANNIVERSAIRE : ${day.annivDay===365?'1 AN':day.annivDay+' JOURS'} ! 🎂`:`${ev.em} ${ev.name.toUpperCase()} ${ev.em}`, tw=g.measureText(txt).width+28;
-  rr(W/2-tw/2,6,tw,24,12); g.fillStyle='rgba(194,54,122,.92)'; g.fill();
-  g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(txt,W/2,19);
+  rr(SW/2-tw/2,6,tw,24,12); g.fillStyle='rgba(194,54,122,.92)'; g.fill();
+  g.fillStyle='#fff'; g.textAlign='center'; g.textBaseline='middle'; g.fillText(txt,SW/2,19);
   const fire=f=>{ f.t+=dt; const r=f.t*90, a=Math.max(0,1-f.t/1.3); g.globalAlpha=a; for(let i=0;i<14;i++){ const an=i*Math.PI/7; circ(f.cx+Math.cos(an)*r,f.cy+Math.sin(an)*r+f.t*f.t*20,2.6,f.col); } g.globalAlpha=1; };
   const col=()=>['#ffd23f','#ff5fa2','#38bdf8','#a78bfa','#4ade80'][Math.floor(rnd(0,5))];
   if(id==='anniv'){
-    if(Math.random()<dt*6) fx.push({b:1,x:rnd(20,W-20),y:H+10,vy:rnd(30,60),c:BALLOONS[Math.floor(rnd(0,5))],s:rnd(0,6)});
-    if(Math.random()<dt*0.9) fx.push({b:0,cx:rnd(80,W-80),cy:rnd(30,180),col:col(),t:0});
+    if(Math.random()<dt*6) fx.push({b:1,x:rnd(20,SW-20),y:SH+10,vy:rnd(30,60),c:BALLOONS[Math.floor(rnd(0,5))],s:rnd(0,6)});
+    if(Math.random()<dt*0.9) fx.push({b:0,cx:rnd(80,SW-80),cy:rnd(30,180),col:col(),t:0});
     for(const f of fx){ if(f.b){ f.y-=f.vy*dt; const x=f.x+Math.sin(animT*2+f.s)*6; g.strokeStyle='#888'; g.lineWidth=1; g.beginPath(); g.moveTo(x,f.y+9); g.lineTo(x+Math.sin(animT*3+f.s)*3,f.y+26); g.stroke();
         g.beginPath(); g.ellipse(x,f.y,7,9,0,0,Math.PI*2); g.fillStyle=f.c; g.fill(); circ(x-2,f.y-3,2,'rgba(255,255,255,.7)'); } else fire(f); }
     fx=fx.filter(f=>f.b?f.y>-40:f.t<1.3);
   } else if(id==='noel'){
-    if(Math.random()<dt*25) fx.push({x:rnd(0,W),y:-5,vy:rnd(25,50),r:rnd(1.5,3.2)});
-    for(const f of fx){ f.y+=f.vy*dt; f.x+=Math.sin(animT*2+f.r)*0.3; circ(f.x,f.y,f.r,'rgba(255,255,255,.9)'); } fx=fx.filter(f=>f.y<H+5);
+    if(Math.random()<dt*25) fx.push({x:rnd(0,SW),y:-5,vy:rnd(25,50),r:rnd(1.5,3.2)});
+    for(const f of fx){ f.y+=f.vy*dt; f.x+=Math.sin(animT*2+f.r)*0.3; circ(f.x,f.y,f.r,'rgba(255,255,255,.9)'); } fx=fx.filter(f=>f.y<SH+5);
   } else if(id==='feu'){
-    if(Math.random()<dt*1.6) fx.push({cx:rnd(80,W-80),cy:rnd(30,200),col:col(),t:0});
+    if(Math.random()<dt*1.6) fx.push({cx:rnd(80,SW-80),cy:rnd(30,200),col:col(),t:0});
     for(const f of fx) fire(f); fx=fx.filter(f=>f.t<1.3);
   }
 }
@@ -717,10 +760,11 @@ function freeSpot(x,y,r){
 // ================== CANVAS ==================
 const cv=document.getElementById('cv'), g0=cv.getContext('2d'); let g=g0;
 // Le canvas est dessiné à la taille réelle de l'écran (× densité de pixels) : net sur téléphone comme sur grand écran.
-let BASE=1;
-function sizeCanvas(){ const dpr=Math.min(3,window.devicePixelRatio||1), cw=cv.clientWidth||W;
-  const bw=Math.round(Math.min(4200,Math.max(cw*dpr,W*Math.min(2,dpr)))), bh=Math.round(bw*H/W);
-  if(Math.abs(cv.width-bw)>2){ cv.width=bw; cv.height=bh; } BASE=cv.width/W; }
+let BASE=1, SW=W, SH=H;   // taille logique de l'écran (s'adapte à la forme de l'écran)
+function sizeCanvas(){ const dpr=Math.min(3,window.devicePixelRatio||1), cw=cv.clientWidth||W, ch=cv.clientHeight||H, a=cw/ch;
+  if(a>=W/H){ SH=H; SW=H*a; } else { SW=W; SH=W/a; }
+  let bw=Math.round(cw*dpr), bh=Math.round(ch*dpr); const k=Math.min(1,4200/bw); bw=Math.round(bw*k); bh=Math.round(bh*k);
+  if(Math.abs(cv.width-bw)>1||Math.abs(cv.height-bh)>1){ cv.width=bw; cv.height=bh; } BASE=cv.width/SW; }
 sizeCanvas();
 if(window.ResizeObserver) new ResizeObserver(()=>sizeCanvas()).observe(cv); window.addEventListener('resize',sizeCanvas);
 function rr(x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
@@ -738,8 +782,8 @@ const TREES=[], BUSHES=[], FLOWERS=[], TUFTS=[], OUT_TREES=[];
   for(let k=0;k<4000&&BUSHES.length<120;k++){ const x=srnd(4,WW-4), y=srnd(4,H-4), r=srnd(5,8); if(freeSpot(x,y,r)&&!TREES.some(t=>Math.hypot(t[0]-x,t[1]-y)<t[2]+r)) BUSHES.push([x,y,r]); }
   for(let k=0;k<6000&&FLOWERS.length<320;k++){ const x=srnd(0,WW), y=srnd(0,H); if(freeSpot(x,y,2)) FLOWERS.push([x,y,['#fff','#ffd23f','#ff8ac2','#b9a5ff'][k%4]]); }
   for(let k=0;k<9000&&TUFTS.length<520;k++){ const x=srnd(0,WW), y=srnd(0,H); if(freeSpot(x,y,4)) TUFTS.push([x,y,k%5]); }
-  for(let k=0;k<600&&OUT_TREES.length<150;k++){ const x=srnd(-260,WW+260), y=k%2?srnd(-300,-16):srnd(H+16,H+300); OUT_TREES.push([x,y,srnd(12,20),Math.floor(srnd(0,3))]); }
-  for(let k=0;k<40;k++){ const y=srnd(-20,H+20); OUT_TREES.push([srnd(-260,-18),y,srnd(12,20),k%3]); OUT_TREES.push([srnd(WW+18,WW+260),y,srnd(12,20),k%3]); }
+  for(let k=0;k<900&&OUT_TREES.length<230;k++){ const x=srnd(-700,WW+700), y=k%2?srnd(-300,-16):srnd(H+16,H+300); OUT_TREES.push([x,y,srnd(12,20),Math.floor(srnd(0,3))]); }
+  for(let k=0;k<90;k++){ const y=srnd(-20,H+20); OUT_TREES.push([srnd(-700,-18),y,srnd(12,20),k%3]); OUT_TREES.push([srnd(WW+18,WW+700),y,srnd(12,20),k%3]); }
   const keep=t=>!(t[0]>-60&&t[0]<590&&t[1]>H+20&&t[1]<H+200)&&!(t[0]>WW/2-330&&t[0]<WW/2+330&&t[1]>-250&&t[1]<-30);
   for(let k=OUT_TREES.length-1;k>=0;k--) if(!keep(OUT_TREES[k])) OUT_TREES.splice(k,1);
   OUT_TREES.sort((a,b)=>a[1]-b[1]); TREES.sort((a,b)=>a[1]-b[1]);
@@ -765,23 +809,23 @@ function drawWear(){
 function drawWeather(dt){
   if(lv()<2) return;
   const w=S.weather;
-  if(w==='rain'||w==='storm'){ g.fillStyle=w==='storm'?'rgba(30,41,59,.32)':'rgba(51,65,85,.18)'; g.fillRect(0,0,W,H);
+  if(w==='rain'||w==='storm'){ g.fillStyle=w==='storm'?'rgba(30,41,59,.32)':'rgba(51,65,85,.18)'; g.fillRect(0,0,SW,SH);
     g.strokeStyle='rgba(186,230,253,.75)'; g.lineWidth=1.5; g.beginPath(); const n=w==='storm'?150:90;
-    for(let i=0;i<n;i++){ const x=(i*131+animT*(w==='storm'?160:60))%W, y=(i*71+animT*560)%H; g.moveTo(x,y); g.lineTo(x-(w==='storm'?9:4),y+12); } g.stroke();
-    if(w==='storm'){ const ph=(animT*0.7)%5; if(ph<0.12){ g.fillStyle=`rgba(255,255,255,${0.55*(1-ph/0.12)})`; g.fillRect(0,0,W,H);
+    for(let i=0;i<n;i++){ const x=(i*131+animT*(w==='storm'?160:60))%SW, y=(i*71+animT*560)%SH; g.moveTo(x,y); g.lineTo(x-(w==='storm'?9:4),y+12); } g.stroke();
+    if(w==='storm'){ const ph=(animT*0.7)%5; if(ph<0.12){ g.fillStyle=`rgba(255,255,255,${0.55*(1-ph/0.12)})`; g.fillRect(0,0,SW,SH);
         g.strokeStyle='#fef08a'; g.lineWidth=3; g.beginPath(); const lx=200+((Math.floor(animT/5)*397)%700); g.moveTo(lx,0); g.lineTo(lx-20,60); g.lineTo(lx+10,70); g.lineTo(lx-15,140); g.stroke(); } } }
-  else if(w==='snow'){ for(let i=0;i<120;i++){ const x=(i*97+Math.sin(animT*1.3+i)*14+animT*8)%W, y=(i*53+animT*(28+i%5*6))%H; circ(x,y,1.4+(i%3)*0.8,'rgba(255,255,255,.95)'); } }
-  else if(w==='cloud'){ for(let i=0;i<4;i++){ const x=((animT*12+i*300)%(W+200))-100, y=20+i*12; circ(x,y,26,'rgba(255,255,255,.35)'); circ(x+28,y+4,20,'rgba(255,255,255,.35)'); circ(x-26,y+6,18,'rgba(255,255,255,.35)'); } }
+  else if(w==='snow'){ for(let i=0;i<120;i++){ const x=(i*97+Math.sin(animT*1.3+i)*14+animT*8)%SW, y=(i*53+animT*(28+i%5*6))%SH; circ(x,y,1.4+(i%3)*0.8,'rgba(255,255,255,.95)'); } }
+  else if(w==='cloud'){ for(let i=0;i<4;i++){ const x=((animT*12+i*300)%(SW+200))-100, y=20+i*12; circ(x,y,26,'rgba(255,255,255,.35)'); circ(x+28,y+4,20,'rgba(255,255,255,.35)'); circ(x-26,y+6,18,'rgba(255,255,255,.35)'); } }
 }
 // Jour, coucher de soleil, nuit (avec les lumières de la fête)
 function lightLevels(){ const t=S.time/DAY; return {dawn:t<0.1?(0.1-t)/0.1:0, sunset:t>0.55?Math.min(1,(t-0.55)/0.15)*(t<0.78?1:Math.max(0,1-(t-0.78)/0.08)):0, night:t>0.72?Math.min(1,(t-0.72)/0.13):0}; }
 function drawLighting(){
   const {dawn,sunset,night}=lightLevels();
   setScreen();
-  if(dawn>0){ g.fillStyle=`rgba(255,180,140,${dawn*0.22})`; g.fillRect(0,0,W,H); }
-  if(sunset>0){ g.fillStyle=`rgba(255,120,50,${sunset*0.22})`; g.fillRect(0,0,W,H); }
+  if(dawn>0){ g.fillStyle=`rgba(255,180,140,${dawn*0.22})`; g.fillRect(0,0,SW,SH); }
+  if(sunset>0){ g.fillStyle=`rgba(255,120,50,${sunset*0.22})`; g.fillRect(0,0,SW,SH); }
   if(night<=0) return;
-  g.fillStyle=`rgba(15,23,60,${night*0.5})`; g.fillRect(0,0,W,H);
+  g.fillStyle=`rgba(15,23,60,${night*0.5})`; g.fillRect(0,0,SW,SH);
   setCam(); g.save(); g.globalCompositeOperation='lighter';
   const glow=(x,y,r,col)=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,col); gr.addColorStop(1,'rgba(0,0,0,0)'); g.fillStyle=gr; g.fillRect(x-r,y-r,2*r,2*r); };
   for(const [x,y,z] of LAMPS) if(zoneOpen(z)&&inView(x-80,x+80)) glow(x,y-32,70,`rgba(255,220,130,${0.45*night})`);
@@ -790,7 +834,7 @@ function drawLighting(){
     glow(r.x+r.w/2,r.y+r.h/2,110,`rgba(255,${180+((i*37)%60)},${120+((i*53)%100)},${0.32*night})`);
     for(let k=0;k<6;k++) circ(r.x+(20+k*37)*PK,r.row?r.y+r.h-7:r.y+7,2.2,Math.floor(animT*4+k+i)%2?`rgba(255,240,150,${night})`:`rgba(255,120,200,${night})`); }
   g.restore();
-  setScreen(); for(let i=0;i<30;i++) circ((i*233)%W,(i*37)%30+3,1.2,`rgba(255,255,255,${night*0.8*(0.5+0.5*Math.sin(animT*3+i))})`);
+  setScreen(); for(let i=0;i<30;i++) circ((i*233)%SW,(i*37)%30+3,1.2,`rgba(255,255,255,${night*0.8*(0.5+0.5*Math.sin(animT*3+i))})`);
 }
 function tree(x,y,r,k){
   g.beginPath(); g.ellipse(x+3,y+r*0.75,r*0.95,r*0.38,0,0,Math.PI*2); g.fillStyle='rgba(0,0,0,.16)'; g.fill();
@@ -853,26 +897,27 @@ function drawBunting(){ const cols=['#ff5fa2','#ffd23f','#7b4cff','#38bdf8','#22
       g.fillStyle=cols[k++%5]; g.beginPath(); g.moveTo(x-4,y); g.lineTo(x+4,y); g.lineTo(x,y+6); g.closePath(); g.fill(); } } } }
 function drawBackground(){
   // autour du parc (visible en vue d'ensemble)
-  if(cam.s<0.99){ g.fillStyle='#5fae4e'; g.fillRect(-600,-600,WW+1200,H+1200);
+  const outV=outsideVisible();
+  if(outV){ g.fillStyle='#5fae4e'; g.fillRect(-1600,-900,WW+3200,H+1800);
     drawOutside(); for(const t of OUT_TREES) tree(t[0],t[1],t[2],t[3]); }
   const gr=g.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#8fdc74'); gr.addColorStop(1,'#6cc45a');
   g.fillStyle=gr; g.fillRect(0,0,WW,H);
   // Map dessinée (une image par zone) ; sinon herbe, rues et décor dessinés en code
   const mapOK=z=>MAPS[z].complete&&MAPS[z].naturalWidth;
-  for(let z=0;z<NZ;z++) if(mapOK(z)&&(z<S.zones||cam.s<0.99)) g.drawImage(MAPS[z],z*W,0,W,H);
+  for(let z=0;z<NZ;z++) if(mapOK(z)) g.drawImage(MAPS[z],z*W,0,W,H);
   const allMaps=mapOK(0)&&(S.zones<2||mapOK(1));
   if(!allMaps) for(const f of FLOWERS) if(f[0]<S.zones*W) circ(f[0],f[1],2,f[2]);
   if(lv()>=2&&S.weather==='snow'){ g.fillStyle='rgba(255,255,255,.3)'; g.fillRect(0,0,WW,H); }
   if(lv()>=3){ const k=1-(S.green??100)/100; if(k>0.1){ g.fillStyle=`rgba(150,130,50,${k*0.35})`; g.fillRect(0,0,S.zones*W,H); } }
   if(S.zones<NZ){ g.fillStyle='rgba(255,255,255,.28)'; g.fillRect(W,0,WW-W,H); }
   if(!allMaps){ drawStreets();
-    for(const b of BUSHES) if(b[0]<S.zones*W||cam.s<0.99){ circ(b[0]+1,b[1]+2,b[2],'rgba(0,0,0,.12)'); circ(b[0],b[1],b[2],'#3f9a3f'); circ(b[0]-b[2]*0.3,b[1]-b[2]*0.3,b[2]*0.55,'#5cbf5c'); }
+    for(const b of BUSHES) if(b[0]<S.zones*W||outV){ circ(b[0]+1,b[1]+2,b[2],'rgba(0,0,0,.12)'); circ(b[0],b[1],b[2],'#3f9a3f'); circ(b[0]-b[2]*0.3,b[1]-b[2]*0.3,b[2]*0.55,'#5cbf5c'); }
     for(const t of TREES) if(inView(t[0]-20,t[0]+20)) tree(t[0],t[1],t[2],t[3]); }
   drawBunting();
   drawSquares(); drawLampPosts();
   // clôture du parc
-  if(cam.s<0.99){ g.strokeStyle='#8b5a2b'; g.lineWidth=3; g.setLineDash([10,6]); g.strokeRect(-4,-4,(S.zones<NZ?W:WW)+8,H+8); g.setLineDash([]); }
-  if(S.zones<NZ && cam.s<0.99) drawForSale();
+  if(outV){ g.strokeStyle='#8b5a2b'; g.lineWidth=3; g.setLineDash([10,6]); g.strokeRect(-4,-4,(S.zones<NZ?W:WW)+8,H+8); g.setLineDash([]); }
+  if(S.zones<NZ && inView(W,WW)) drawForSale();
 }
 // Autour du parc : le parking près de l'entrée et la grande enseigne
 const CARS=Array.from({length:14},(_,k)=>[k%7,Math.floor(k/7),['#ef4444','#3b82f6','#facc15','#22c55e','#a855f7','#f97316','#ec4899'][(k*3)%7]]);
@@ -920,11 +965,14 @@ function drawGate(){
 // ---------- Caméra : une zone, ou tout le parc ----------
 let overview=false; const OVS=0.47;
 const cam={s:1,x:0,y:0};
-function camTarget(){ return overview?{s:OVS,x:(W-WW*OVS)/2,y:(H-H*OVS)/2}:{s:1,x:-view*W,y:0}; }
+function camTarget(){ if(overview){ const k=Math.min(SW/WW,SH/H)*0.96; return {s:k,x:(SW-WW*k)/2,y:(SH-H*k)/2}; }
+  return {s:1,x:-view*W+(SW-W)/2,y:(SH-H)/2}; }
+// Une partie du monde hors du parc est-elle visible (écran plus large ou plus haut que le parc, vue d'ensemble) ?
+function outsideVisible(){ const a=-cam.x/cam.s, b=(SW-cam.x)/cam.s, t=-cam.y/cam.s, u=(SH-cam.y)/cam.s; return a<-2||b>WW+2||t<-2||u>H+2||cam.s<0.99; }
 function stepCam(dt,snap){ const t=camTarget(), k=snap?1:Math.min(1,dt*7); for(const q of ['s','x','y']){ cam[q]+=(t[q]-cam[q])*k; if(Math.abs(t[q]-cam[q])<0.002) cam[q]=t[q]; } }
 function setCam(){ g.setTransform(BASE*cam.s,0,0,BASE*cam.s,BASE*cam.x,BASE*cam.y); }
 function setScreen(){ g.setTransform(BASE,0,0,BASE,0,0); }
-function inView(x0,x1){ const a=-cam.x/cam.s, b=(W-cam.x)/cam.s; return x1>=a-10&&x0<=b+10; }
+function inView(x0,x1){ const a=-cam.x/cam.s, b=(SW-cam.x)/cam.s; return x1>=a-10&&x0<=b+10; }
 const toWorld=(x,y)=>[(x-cam.x)/cam.s,(y-cam.y)/cam.s];
 
 // ---------- Attractions (dessin) ----------
@@ -1280,7 +1328,7 @@ let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
 // Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
 // loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
-const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop'};
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong'};
 const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
 function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
   const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
@@ -1717,7 +1765,7 @@ function newGameScreen(){
 function pickLvl(n,el){ window.chosenLvl=n; document.querySelectorAll('.lvl').forEach(b=>b.classList.toggle('sel',b===el)); blip(700,0.06); }
 function continueGame(sv){ S=sv||load(); delete S.pixel; visitors=[]; floats=[]; S.svc=S.svc||{}; S.level=S.level||2; initLevel(); S.seen=S.seen||['canards']; S.ever=S.ever||S.plots.filter(Boolean).map(p=>p.id); S.zones=S.zones||1; while(S.plots.length<16) S.plots.push(null); view=0; resetDay(); S.time=0; closeModal(); }
 function victory(){
-  for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,W),rnd(-100,0)));
+  for(let k=0;k<200;k++) confetti.push(mkConf(rnd(0,SW),rnd(-100,0)));
   tada(); setTimeout(tada,500);
   openModal(`<h2>🎢 BRAVO ! 🎉</h2><p style="font-size:20px">Le <b>Grand Huit Galactique</b> est construit ! ${S.name} est devenue la plus grande fête foraine du pays !</p>
     <p>Tu es parti·e d'une petite pêche aux canards et de ${fmt(100*MUL)} LiliDollars, et tu as gagné <b>${fmt(S.totalEarned)} L$</b> en ${S.dayNum} jours. Tu es un·e vrai·e chef·fe d'entreprise !</p>
@@ -1756,7 +1804,7 @@ function checkUnlocks(){
   }
 }
 function updateHUD(){
-  const pr=curProfile(); $('parkName').innerHTML=`Lili Parc<small>${pr?pr.av+' '+pr.name.replace(/</g,'&lt;')+' · ':''}Jour ${S.dayNum}</small>`;
+  const pr=curProfile(); $('parkName').textContent=`${pr?pr.av+' ':''}Jour ${S.dayNum}`;
   $('money').textContent=fmt(S.money); $('money').classList.toggle('neg',S.money<0);
   $('bankAmt').textContent=fmt(S.bank)+' L$';
   const L2=lv()>=2; $('svcBtn').style.display=L2?'':'none'; $('healthPill').style.display=L2?'':'none';
@@ -1775,7 +1823,7 @@ function updateHUD(){
 }
 
 // ================== ÉVÉNEMENTS ==================
-function canvasPos(e){ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height]; }
+function canvasPos(e){ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)*SW/r.width,(e.clientY-r.top)*SH/r.height]; }
 function hitPlot(x,y){ for(let i=0;i<S.zones*8;i++){ const r=plotRect(i); if(x>=r.x&&x<=r.x+r.w&&y>=r.y&&y<=r.y+r.h) return i; } return -1; }
 const nearRoad=(x,y,cx)=>Math.abs(x-cx)<34&&Math.abs(y-mainY(cx))<100;
 function hitSign(x,y){
@@ -1802,10 +1850,15 @@ function openZoneBuy(){
     <div class="right"><button onclick="closeModal()">Plus tard</button></div>`,'lili-idee');
 }
 function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COST; S.zones=2; save(); closeModal(); tada(); setView(1);
-  for(let k=0;k<120;k++) confetti.push(mkConf(rnd(0,W),rnd(-60,0)));
+  for(let k=0;k<120;k++) confetti.push(mkConf(rnd(0,SW),rnd(-60,0)));
   toast('duo-victoire','Le Grand Parc est à toi !','8 nouveaux terrains ! Les visiteurs passent par la droite pour venir ici.'); }
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(overview?view:(view?0:1)); else openZoneBuy(); };
 $('zoomBtn').onclick=toggleOverview;
+// Menu ☰ : s'ouvre et se ferme ; un choix le referme
+$('bMore').onclick=e=>{ e.stopPropagation(); $('moreList').classList.toggle('open'); };
+$('moreList').addEventListener('click',()=>setTimeout(()=>$('moreList').classList.remove('open'),0));
+cv.addEventListener('pointerdown',()=>$('moreList').classList.remove('open'));
+$('tipBox').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
 // Plein écran (pas sur iPhone, où l'app installée est déjà en plein écran)
 if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) $('fsBtn').style.display='none';
 $('fsBtn').onclick=()=>{ const d=document, el=d.documentElement;
@@ -1915,7 +1968,7 @@ function frame(now){
     drawLighting(); setScreen();
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
-    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tip').classList.toggle('pinkb',LIVIA(tp.img));
+    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tipBox').classList.toggle('pinkb',LIVIA(tp.img));
       if(!modalOpen && speed>0){ checkUnlocks(); checkBadges(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
