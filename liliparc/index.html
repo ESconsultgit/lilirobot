@@ -250,10 +250,11 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
 }
 
 /* ---------- Map à gauche, panneau de boutons à droite ---------- */
-:root{--pw:clamp(118px,10.5vw,190px)}
-#cv{right:auto!important;width:calc(100% - var(--pw))!important}
+:root{--pw:clamp(118px,10.5vw,190px);--hh:44px}
+#cv{right:auto!important;width:calc(100% - var(--pw))!important;top:var(--hh)!important;height:calc(100% - var(--hh))!important}
+#cvWrap{background:linear-gradient(#FFF8EC,#FBE7F1)}
 #ov{right:var(--pw)!important}
-#cvWrap .daybar{right:var(--pw)}
+#cvWrap .daybar{right:var(--pw);top:calc(var(--hh) - 5px)!important}
 #panel{position:absolute;top:0;right:0;bottom:0;width:var(--pw);z-index:4;background:linear-gradient(#FFF8EC,#FBE7F1);box-shadow:-3px 0 12px rgba(42,31,61,.18);
   display:flex;flex-direction:column;gap:8px;padding:max(10px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) 8px;overflow:auto}
 #panel .speed{display:flex;gap:4px;justify-content:center;background:#fff;border-radius:999px;padding:3px;box-shadow:0 2px 6px rgba(42,31,61,.15)}
@@ -277,6 +278,16 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
   #panel #goalBox{font-size:10.5px;padding:4px 7px} #panel #goalTxt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   #hud{max-width:calc(100% - 20px)!important}
 }
+
+#hud{top:0!important;left:0!important;right:var(--pw);max-width:none!important;height:calc(var(--hh) - 5px);border-radius:0!important;box-shadow:none!important;background:transparent!important;padding:0 12px!important;justify-content:center}
+#money{min-width:4em!important}#bankAmt{min-width:5em!important}#visCount{min-width:2em!important}#hud>span+span::before{margin:0 8px!important}
+@media (max-height:560px),(max-width:760px){ :root{--hh:30px} #hud{font-size:13px!important} }
+/* Astuce : juste la tête d'Ellie ou de Livia ; un halo quand il y a un nouveau conseil ; on touche pour le lire */
+#tipBox{left:6px!important;bottom:6px!important;align-items:flex-end}
+#tipBox.closed #tip,#tipBox.closed .x{display:none}
+#tipBox img{transition:transform .2s}
+#tipBox.new img{animation:halo 1.4s ease-in-out infinite;border-radius:50%}
+@keyframes halo{0%,100%{filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #ffd23f);transform:scale(1)}50%{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 18px #ffd23f);transform:scale(1.08)}}
 </style>
 </head>
 <body>
@@ -293,7 +304,7 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
       <span title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></span>
       <span id="healthPill" title="Santé du parc et météo" style="cursor:pointer"><img class="ic" src="img/ui/coeur.webp" alt=""><span id="healthVal">100</span>% <span id="wxIcon">☀️</span></span>
     </div>
-    <div id="tipBox"><img id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div><span class="x">✕</span></div>
+    <div id="tipBox" class="closed"><img id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div><span class="x">✕</span></div>
   </div>
   <div id="panel">
     <div class="speed">
@@ -1914,7 +1925,9 @@ function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COS
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(overview?view:(view?0:1)); else openZoneBuy(); };
 $('zoomBtn').onclick=toggleOverview;
 // Menu ☰ : s'ouvre et se ferme ; un choix le referme
-$('tipBox').onclick=()=>$('tipBox').classList.add('hide');
+let lastTip='';
+function tipOpen(o){ const b=$('tipBox'); b.classList.toggle('closed',!o); if(o) b.classList.remove('new'); $('tipBtn').classList.toggle('sel',o); }
+$('tipBox').onclick=()=>tipOpen($('tipBox').classList.contains('closed'));
 // Plein écran (pas sur iPhone, où l'app installée est déjà en plein écran)
 if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) $('fsBtn').style.display='none';
 $('fsBtn').onclick=()=>{ const d=document, el=d.documentElement;
@@ -1971,7 +1984,7 @@ function drawServices(){
     if(off){ g.font='700 12px "Baloo 2"'; g.textAlign='center'; g.fillStyle='#111'; g.fillText('🔒',x,y-10); }
     else { kid(x+(k==='secu'?-21:21),y+6,k==='secu'?'#1e3a8a':'#fff'); g.fillStyle=k==='secu'?'#1d4ed8':'#fff'; rr(x+(k==='secu'?-26:16),y+11,10,10,3); g.fill(); } });
 }
-$('tipBtn').onclick=()=>{ $('tipBox').classList.toggle('hide'); $('tipBtn').classList.toggle('sel',!$('tipBox').classList.contains('hide')); };
+$('tipBtn').onclick=()=>tipOpen($('tipBox').classList.contains('closed'));
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
 $('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').innerHTML=EMO('<span class="em">'+(soundOn?'🔊':'🔇')+'</span><span class="lbl">Son</span>'); };
 [0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); syncWake(); });
@@ -2024,7 +2037,7 @@ function frame(now){
     drawLighting(); setScreen();
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
-    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=EMO(tp.txt); const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tipBox').classList.toggle('pinkb',LIVIA(tp.img));
+    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=EMO(tp.txt); if(tp.txt!==lastTip){ lastTip=tp.txt; if($('tipBox').classList.contains('closed')) $('tipBox').classList.add('new'); } const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tipBox').classList.toggle('pinkb',LIVIA(tp.img));
       if(!modalOpen && speed>0){ checkUnlocks(); checkBadges(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
