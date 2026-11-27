@@ -231,7 +231,10 @@ Bouton **🏅**. Chaque badge a son image (médaille dessinée pour Lili Parc, `
 - **Icône de l'application** : Ellie et Livia devant une grande roue (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
-- **Dessins** : attractions dessinées en vectoriel et animées (le mode pixel art a été retiré).
+- **Dessins des attractions** : nouvelles images dessinées avec Gemini, **3 images par attraction** jouées en boucle (4 images par seconde) pour les animer : `liliparc/attractions/<id>-1.webp`, `-2`, `-3` (420 pixels de haut, fond transparent). Déjà faites : pêche aux canards, barbe à papa, churros, chamboule-tout, carrousel, petit train. Les autres gardent leur ancien dessin animé en code en attendant. Liste et mode de boucle dans `SPRITES` (`loop` = 1 2 3, `pingpong` = 1 2 3 2).
+- **Fenêtre d'une attraction** : l'attraction s'affiche en grand, animée, à côté du prix et des statistiques.
+- **Icônes** : boutons et compteurs avec les icônes dessinées des Gardiens de Lili (`liliparc/img/ui/`) : pause, jouer, rapide, zones, vue d'ensemble, badges, plein écran, menu, cœur, joueurs, cadenas.
+- **Plein écran** : bouton dédié (ordinateur, Android, tablette ; pas sur iPhone, où l'app installée est déjà en plein écran). En plein écran, le jeu prend toute la largeur, la barre du bas est masquée et l'objectif passe en haut.
 - **Net partout** : le jeu est dessiné à la taille réelle de l'écran et selon sa densité de pixels (jusqu'à ×3) ; sur grand écran, il s'agrandit (jusqu'à 1 900 pixels de large) tant que tout tient en hauteur.
 
 ## Transférer une partie sur un autre téléphone
@@ -274,4 +277,5 @@ Constantes en haut du script de `index.html` :
 - **PR #16** — mode pixel art retiré ; images dessinées pour les 16 badges (fenêtre des badges et annonces).
 - **PR #17** — logos des applications dans le menu Détente du site.
 - **PR #18** — nouveau plan du parc (rues qui serpentent, places, carrefours, allées, décor), vue d'ensemble 🔭, dessin net sur tous les écrans et jeu plus grand sur grand écran.
+- **PR #22** — premières images animées des attractions (6), grande image dans la fenêtre d'une attraction, icônes des Gardiens de Lili, plein écran.
 - **PR #21** — « joueur » à la place de « joueuse » (le jeu est pour tout le monde).

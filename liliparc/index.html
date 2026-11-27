@@ -40,6 +40,7 @@ button:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(45,27,78,.2)}
 button.main{background:var(--pink);color:#fff}
 button.ok{background:var(--green);color:#fff}
 button.sel{background:var(--violet);color:#fff}
+.hud-btns button.sel{background:#e9ddff;color:var(--ink);box-shadow:inset 0 0 0 2px var(--violet)}
 button:disabled{opacity:.45;cursor:not-allowed}
 .speed{display:flex;gap:4px}
 .speed button{padding:6px 10px}
@@ -161,6 +162,18 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
   .svcgrid{gap:5px;margin:4px 0}.sblk{padding:4px 8px}.sblk p{font-size:11.5px!important;margin:2px 0}.sblk .row{margin:2px 0}.sblk .price button{width:28px;height:28px;font-size:16px}.sblk .price{font-size:14px}
   .hrow{grid-template-columns:150px 1fr 44px;font-size:13px;margin:2px 0}
 }
+.box:has(.pview){max-width:820px}
+.pview{display:flex;gap:16px;align-items:flex-start}
+.pview .pinfo{flex:1;min-width:0}.pview .pinfo>p:first-child{margin-top:0}
+#plotPrev{width:280px;flex:none;aspect-ratio:225/210;border-radius:18px;background:radial-gradient(ellipse at 50% 85%,#cdeec0,#8fdc74 75%);box-shadow:inset 0 0 0 3px rgba(255,255,255,.6)}
+@media (max-width:560px){ .pview{flex-direction:column;align-items:center} #plotPrev{width:200px} }
+@media (max-height:560px) and (orientation:landscape){ #plotPrev{width:170px} .pview{gap:10px} }
+/* Plein écran (ordinateur, tablette) : le jeu prend toute la place */
+@media (min-height:561px){ body.fs .wrap{max-width:min(100vw,calc((100vh - 134px) * 1.964 + 20px))!important;padding-top:6px}
+  body.fs .bottom{display:none} body.fs .goalMini{display:block;background:#fff;border-radius:12px;padding:4px 10px;font-size:13px;min-width:190px;box-shadow:0 3px 0 rgba(45,27,78,.12)}
+  body.fs .goalMini .bar{height:7px;margin-top:3px} body.fs #tipBtn{display:inline-flex} body.fs .top{margin-bottom:4px} }
+.ic{width:1.4em;height:1.4em;object-fit:contain;vertical-align:-.32em;flex:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.12))}
+button .ic{pointer-events:none}.badge .bem .ic{width:30px;height:30px}
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin:6px 0}
 @media (min-width:900px) and (min-height:561px){ .box:has(.bgrid){max-width:960px} .bgrid{grid-template-columns:repeat(4,minmax(0,1fr))} }
 .badge{border:2px solid #F2C230;background:#FCF1C7;border-radius:14px;padding:6px 8px;display:grid;grid-template-columns:56px 1fr;column-gap:6px;align-items:center}
@@ -196,24 +209,25 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
       <div class="pill" title="Ta tirelire" style="cursor:pointer" id="bankPill">🐷 <span id="bankAmt">0</span></div>
       <div class="pill" title="Note des visiteurs" id="stars">★★★☆☆</div>
       <div class="pill" title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></div>
-      <div class="pill" id="healthPill" title="Santé du parc et météo" style="cursor:pointer">❤️ <span id="healthVal">100</span>% <span id="wxIcon">☀️</span></div>
+      <div class="pill" id="healthPill" title="Santé du parc et météo" style="cursor:pointer"><img class="ic" src="img/ui/coeur.webp" alt=""><span id="healthVal">100</span>% <span id="wxIcon">☀️</span></div>
       <div class="goalMini"><div id="goalMiniTxt"></div><div class="bar"><i id="goalMiniFill"></i></div></div>
     </div>
     <div class="hud-btns">
       <div class="speed">
-        <button id="spd0" title="Pause">⏸</button>
-        <button id="spd1" class="sel" title="Vitesse normale">▶</button>
-        <button id="spd2" title="Rapide">⏩</button>
+        <button id="spd0" title="Pause"><img class="ic" src="img/ui/pause.webp" alt=""></button>
+        <button id="spd1" class="sel" title="Vitesse normale"><img class="ic" src="img/ui/play.webp" alt=""></button>
+        <button id="spd2" title="Rapide"><img class="ic" src="img/ui/vitesse.webp" alt=""></button>
       </div>
-      <button id="zoneBtn" title="Changer de zone">🗺️<span class="lbl"> Agrandir</span></button>
-      <button id="zoomBtn" title="Voir tout le parc">🔭<span class="lbl"> Tout voir</span></button>
+      <button id="zoneBtn" title="Changer de zone"><img class="ic" src="img/ui/mondes.webp" alt=""><span class="lbl"> Agrandir</span></button>
+      <button id="zoomBtn" title="Voir tout le parc"><img class="ic" src="img/ui/longue-vue.webp" alt=""><span class="lbl"> Tout voir</span></button>
       <button id="ticketBtn" title="Billet d'entrée">🎟️<span class="lbl"> Billet d'entrée</span></button>
       <button id="svcBtn" title="Services du parc">🛠️<span class="lbl"> Services</span></button>
-      <button id="badgeBtn" title="Mes badges">🏅<span class="lbl"> Badges</span></button>
+      <button id="badgeBtn" title="Mes badges"><img class="ic" src="img/ui/medaille.webp" alt=""><span class="lbl"> Badges</span></button>
       <button id="tipBtn" title="Astuce">💡</button>
       <button id="installBtn" title="Installer l'application">📲<span class="lbl"> Installer</span></button>
+      <button id="fsBtn" title="Plein écran"><img class="ic" src="img/ui/plein-ecran.webp" alt=""></button>
       <button id="soundBtn" title="Son">🔊</button>
-      <button id="menuBtn" title="Menu">⚙️</button>
+      <button id="menuBtn" title="Menu"><img class="ic" src="img/ui/menu.webp" alt=""></button>
       <a class="pill" id="homeLink" href="/" title="Retour à l'atelier de Lili" style="text-decoration:none;color:inherit">🏠<span class="lbl"> Atelier</span></a>
     </div>
   </div>
@@ -317,7 +331,7 @@ function openBadges(){
   const got=S.badges||[], list=badgeList();
   const cards=list.map(b=>{ const ok=got.includes(b.id), pr=b.streak&&!ok?` · série ${(S.streak||{})[b.streak]||0}/${b.need}`:'';
     return `<div class="badge ${ok?'':'off'}"><img class="bimg" src="badges/${b.id}.webp" alt="${b.em}"><b>${b.name}</b><small>${bdesc(b)}${pr}</small><span class="brw">${ok?'✅ ':''}+${fmt(brew(b))} L$</span></div>`; }).join('');
-  const megas=DEFS.filter(d=>d.mega).map(d=>`<div class="badge ${got.length>=d.mega?'':'off'}"><div class="bem">${got.length>=d.mega?d.em:'🔒'}</div><b>${d.name}</b><small>${got.length>=d.mega?'Débloquée ! Construis-la sur un terrain libre.':'Avec '+d.mega+' badges'}</small><span class="brw">${fmt(d.cost)} L$</span></div>`).join('');
+  const megas=DEFS.filter(d=>d.mega).map(d=>`<div class="badge ${got.length>=d.mega?'':'off'}"><div class="bem">${got.length>=d.mega?d.em:ic('cadenas')}</div><b>${d.name}</b><small>${got.length>=d.mega?'Débloquée ! Construis-la sur un terrain libre.':'Avec '+d.mega+' badges'}</small><span class="brw">${fmt(d.cost)} L$</span></div>`).join('');
   openModal(`<h2>🏅 Mes badges : ${got.length} / ${list.length}</h2>
     <p class="small desc">Chaque badge rapporte des LiliDollars. Avec 3, 6 et 9 badges, tu débloques les méga-attractions bonus !</p>
     <div class="bgrid">${cards}</div><p><b>✨ Méga-attractions bonus</b></p><div class="bgrid">${megas}</div>
@@ -556,6 +570,8 @@ function load(id){ try{ const s=localStorage.getItem(keyOf(id||CUR)); return s?J
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const fmt=n=>Math.floor(n).toLocaleString('fr-FR');
 const coin='<span class="coin">L</span>';
+// Icônes dessinées (les mêmes que dans Les Gardiens de Lili)
+const ic=n=>`<img class="ic" src="img/ui/${n}.webp" alt="">`;
 const L$=n=>`<b>${fmt(n)}</b> ${coin}`;
 const lvlMul=(p,k)=>1+k*(p.lvl-1);
 const fairOf=p=>Math.round(DEF[p.id].fair*lvlMul(p,0.2)*10)/10;
@@ -1256,6 +1272,19 @@ const DRAW={arcenciel:dArcenciel,dragon:dDragon,robot:dRobot,cirque:dCirque,rivi
 
 let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
+// Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
+// loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop'};
+const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
+function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
+  const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
+function drawSprite(im,x,y,w,h){ const k=Math.min(w/im.naturalWidth,h/im.naturalHeight), dw=im.naturalWidth*k, dh=im.naturalHeight*k;
+  g.beginPath(); g.ellipse(x+w/2,y+h-3,dw*0.42,8,0,0,Math.PI*2); g.fillStyle='rgba(0,0,0,.13)'; g.fill();
+  g.drawImage(im,x+(w-dw)/2,y+h-dh,dw,dh); }
+// Dessine l'attraction (image ou dessin en code) dans un cadre 225 × h
+function drawAttraction(id,lvl,t,x,y,h,closed){ const im=sprFrame(id,closed?0:t);
+  if(im) drawSprite(im,x+2,y,221,h);
+  else { g.save(); g.translate(x,y+h-170); g.beginPath(); g.rect(-6,-12-(h-170),237,h+12); g.clip(); DRAW[id](225,170,closed?0:t,lvl); g.restore(); } }
 function drawSign(i){
   const r=baseRect(i), p=S.plots[i]; if(!p) return; const signY=r.row? r.y+1 : r.y+r.h-33;
   rr(r.x+8,signY,r.w-16,32,9); g.fillStyle='#8b5a2b'; g.fill(); rr(r.x+11,signY+3,r.w-22,26,7); g.fillStyle='#fff6e0'; g.fill();
@@ -1279,7 +1308,7 @@ function drawPlotBase(i){
     g.fillStyle='#fff'; g.font='600 17px \"Baloo 2\"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('Terrain libre',r.x+r.w/2,r.y+r.h/2+38);
     return;
   }
-  g.save(); g.translate(r.x,areaY); g.beginPath(); g.rect(-6,-12,r.w+12,180); g.clip(); DRAW[p.id](r.w,170,p.closed?0:animT,p.lvl); g.restore();
+  drawAttraction(p.id,p.lvl,animT+i*0.31,r.x,r.row?34:0,176,p.closed);
   if(p.closed){ rr(r.x,r.y,r.w,r.h,16); g.fillStyle='rgba(30,27,46,.55)'; g.fill();
     g.save(); g.translate(r.x+r.w/2,r.y+r.h/2-8); g.rotate(-0.12); rr(-74,-22,148,44,8); g.fillStyle='#fbbf24'; g.fill(); g.strokeStyle='#111'; g.lineWidth=3; g.stroke();
     g.fillStyle='#111'; g.font='800 20px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('FERMÉ 🔧',0,-5);
@@ -1533,7 +1562,7 @@ function openPlot(i){
   }
   const d=DEF[p.id], m=mood(p.price,fairOf(p)), earned=day.earned[i]||0;
   const canUp=p.lvl<3, uc=upCost(p);
-  openModal(`<h2>${d.em} ${d.name}</h2>${p.closed?`<p class="mood m3">🔒 Fermée aujourd'hui : elle n'a pas été entretenue (${p.missed}/3). Si elle n'est pas entretenue ce soir encore, ${p.missed>=2?'elle sera détruite':'son entretien doublera encore'} !</p>`:`<p>${d.desc}</p>`}
+  openModal(`<h2>${d.em} ${d.name}</h2><div class="pview"><canvas id="plotPrev" data-i="${i}" width="450" height="420"></canvas><div class="pinfo">${p.closed?`<p class="mood m3">🔒 Fermée aujourd'hui : elle n'a pas été entretenue (${p.missed}/3). Si elle n'est pas entretenue ce soir encore, ${p.missed>=2?'elle sera détruite':'son entretien doublera encore'} !</p>`:`<p>${d.desc}</p>`}
     <p class="small">Niveau ${'★'.repeat(p.lvl)}${'☆'.repeat(3-p.lvl)}</p>
     <p><b>Prix d'un tour :</b></p>
     <div class="row"><div class="price"><button onclick="setPrice(${i},-1)">−</button><span>${fmt(p.price)} ${coin}</span><button onclick="setPrice(${i},1)">+</button></div>
@@ -1546,9 +1575,15 @@ function openPlot(i){
     ${canUp?`<p>⬆️ <b>Améliorer au niveau ${p.lvl+1}</b> : plus rapide, plus amusant, et les visiteurs acceptent de payer un peu plus cher. Mais l'entretien coûtera aussi plus cher !</p>
       <div class="row"><button class="ok" ${S.money<uc?'disabled':''} onclick="upgrade(${i})">Améliorer pour ${fmt(uc)} L$</button>${S.money<uc?`<span class="small">Il te manque ${fmt(uc-S.money)} L$</span>`:''}</div>`
       :`<p>🌟 Niveau maximum atteint, bravo !</p>`}
+    </div></div>
     <div class="right"><button onclick="askDemolish(${i})">🧨 Démolir</button><button class="main" onclick="closeModal()">OK</button></div>`, m.c==='m3'||m.c==='m2'?'livia-pensive':'lili-explique');
 }
 const resaleOf=p=>Math.round(DEF[p.id].cost*0.25);
+function drawPreview(){
+  const c=$('plotPrev'); if(!c||!modalOpen) return; const i=+c.dataset.i, p=S.plots[i]; if(!p) return;
+  const old=g; g=c.getContext('2d'); g.setTransform(2,0,0,2,0,0); g.clearRect(0,0,225,210);
+  drawAttraction(p.id,p.lvl,animT,0,6,200,p.closed); g=old;
+}
 function askDemolish(i){
   const p=S.plots[i], d=DEF[p.id], back=resaleOf(p);
   openModal(`<h2>🧨 Démolir ${d.em} ${d.name} ?</h2>
@@ -1615,7 +1650,7 @@ function openMenu(){
     <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
       ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${a}</button>`).join('')}
       <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
-    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">👥 Changer de joueur</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
+    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">${ic('joueurs')} Changer de joueur</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
     <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
     <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
@@ -1722,8 +1757,9 @@ function updateHUD(){
   if(L2){ const hv=health(); $('healthVal').textContent=hv; $('healthPill').style.color=hv<50?'#dc2626':hv<75?'#d97706':''; $('wxIcon').textContent=WEATHER[S.weather||'sun'].em; }
   $('stars').textContent=starsTxt(S.stars);
   $('visCount').textContent=fmt(visitors.filter(v=>v.mode!=='leave').length*GROUP);
-  $('zoneBtn').innerHTML=S.zones>1?(overview?(view?'➡️<span class="lbl"> Zone 2</span>':'⬅️<span class="lbl"> Zone 1</span>'):(view?'⬅️<span class="lbl"> Zone 1</span>':'➡️<span class="lbl"> Zone 2</span>')):'🗺️<span class="lbl"> Agrandir</span>';
-  $('zoomBtn').innerHTML=overview?'🔍<span class="lbl"> Zoomer</span>':'🔭<span class="lbl"> Tout voir</span>';
+  const zl=S.zones>1?(overview?(view?'Zone 2':'Zone 1'):(view?'Zone 1':'Zone 2')):'Agrandir';
+  $('zoneBtn').innerHTML=ic('mondes')+'<span class="lbl"> '+zl+'</span>'; $('zoneBtn').title=S.zones>1?'Aller en '+zl:'Agrandir la fête';
+  $('zoomBtn').innerHTML=ic('longue-vue')+'<span class="lbl"> '+(overview?'Zoomer':'Tout voir')+'</span>';
   $('dayFill').style.width=(S.time/DAY*100)+'%';
   const ever=S.ever||[], nextD=DEFS.find(d=>!d.mega&&!ever.includes(d.id));
   let pct, mini;
@@ -1764,6 +1800,13 @@ function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COS
   toast('duo-victoire','Le Grand Parc est à toi !','8 nouveaux terrains ! Les visiteurs passent par la droite pour venir ici.'); }
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(overview?view:(view?0:1)); else openZoneBuy(); };
 $('zoomBtn').onclick=toggleOverview;
+// Plein écran (pas sur iPhone, où l'app installée est déjà en plein écran)
+if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) $('fsBtn').style.display='none';
+$('fsBtn').onclick=()=>{ const d=document, el=d.documentElement;
+  if(d.fullscreenElement||d.webkitFullscreenElement) (d.exitFullscreen||d.webkitExitFullscreen).call(d);
+  else { const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el,{navigationUI:'hide'}); r&&r.catch&&r.catch(()=>{}); } };
+const onFs=()=>{ const on=!!(document.fullscreenElement||document.webkitFullscreenElement); document.body.classList.toggle('fs',on); $('fsBtn').classList.toggle('sel',on); $('fsBtn').title=on?'Quitter le plein écran':'Plein écran'; setTimeout(sizeCanvas,60); };
+document.addEventListener('fullscreenchange',onFs); document.addEventListener('webkitfullscreenchange',onFs);
 function staffCtl(k){ const st=S.svc[k], sf=STAFF[k], n=st?(st.n||0):0, min=(k==='secu'||k==='secours')?1:0;
   return `<div class="row"><div class="price"><button ${n<=min?'disabled':''} onclick="hire('${k}',-1)">−</button><span>${sf.em} ${n}</span><button ${S.money<sf.hire?'disabled':''} onclick="hire('${k}',1)">+</button></div>
     <span class="small snote">+1 : ${fmt(sf.hire)} L$ · ${sf.pay} L$ / soir</span></div>`; }
@@ -1870,6 +1913,7 @@ function frame(now){
       if(!modalOpen && speed>0){ checkUnlocks(); checkBadges(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
+    drawPreview();
   }
   requestAnimationFrame(frame);
 }
