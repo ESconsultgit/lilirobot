@@ -229,7 +229,7 @@ Bouton **🏅**. Chaque badge a son image (médaille dessinée pour Lili Parc, `
 
 ## Affichage et téléphone
 
-- **Icône de l'application** : Ellie et Livia devant une grande roue (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
+- **Icône de l'application** : Ellie et Livia qui font coucou devant la grande roue, ballons et chapiteau (dessinée avec Gemini, novembre 2026) (`icon-192.png`, `icon-512.png`, `icon-maskable-512.png`, `apple-touch-icon.png`).
 - **Application** : sur Android, bouton « 📲 Installer » ; sur iPhone, Safari → Partager → « Sur l'écran d'accueil ». Le jeu marche hors connexion et l'écran reste allumé pendant que le jeu tourne.
 - **Téléphone à l'horizontale** : infos à gauche, jeu au centre, boutons à droite, sans défilement. En portrait, Ellie demande de tourner le téléphone.
 - **Dessins des attractions** : nouvelles images dessinées avec Gemini, **3 images par attraction** jouées en boucle (4 images par seconde) pour les animer : `liliparc/attractions/<id>-1.webp`, `-2`, `-3` (420 pixels de haut, fond transparent). Toutes faites (22/22). Le Dragon Volant a 2 images (ailes hautes / basses) et vole en rond au-dessus de son terrain, en code (mode `fly`). Les autres gardent leur ancien dessin animé en code en attendant. Liste et mode de boucle dans `SPRITES` (`loop` = 1 2 3, `pingpong` = 1 2 3 2).
