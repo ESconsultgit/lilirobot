@@ -50,7 +50,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   $team=[];
   foreach(array_slice((array)($in['team']??[]),0,24) as $t){
     $g=(string)($t['g']??'');if(!preg_match('/^[a-z]{3,12}$/',$g))continue;
-    $x=['g'=>$g,'l'=>max(0,min(999,(int)($t['l']??0))),'f'=>max(1,min(3,(int)($t['f']??1)))];
+    $x=['g'=>$g,'l'=>max(0,min(205,(int)($t['l']??0))),'f'=>max(1,min(3,(int)($t['f']??1)))];
     $m=(string)($t['m']??'');if(in_array($m,['base','plante','glace','feu','poison'],true))$x['m']=$m;
     $team[]=$x;
   }
