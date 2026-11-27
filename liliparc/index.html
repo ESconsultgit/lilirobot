@@ -209,6 +209,10 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
 #ov>*{pointer-events:auto}
 #hud{position:absolute;top:12px;left:max(10px,env(safe-area-inset-left));display:flex;gap:4px;align-items:center;background:rgba(255,253,248,.94);border-radius:999px;padding:5px 14px;box-shadow:0 3px 10px rgba(42,31,61,.3);font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;white-space:nowrap;max-width:calc(100% - 260px);overflow:hidden}
 #hud>span{display:inline-flex;align-items:center;gap:4px}
+/* chiffres de largeur fixe : la barre ne bouge pas quand les montants changent */
+#hud{font-variant-numeric:tabular-nums}
+#money,#bankAmt,#visCount,#healthVal{display:inline-block;text-align:right}
+#money{min-width:6.3em}#bankAmt{min-width:7.6em}#visCount{min-width:2.6em}#healthVal{min-width:1.9em}
 #hud>span+span::before{content:'·';margin:0 6px;opacity:.35}
 #hud .ic{width:1.2em;height:1.2em}
 #parkName{color:var(--pink)}
@@ -966,8 +970,9 @@ function drawForSale(){ const cx=W+W/2, cy=H/2;
   g.fillStyle='#8b5a2b'; g.fillRect(cx-5,cy,10,70); rr(cx-170,cy-60,340,80,14); g.fillStyle='#f59e0b'; g.fill(); g.strokeStyle='#fff'; g.lineWidth=5; g.stroke();
   g.fillStyle='#fff'; g.font='800 34px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('🔒 GRAND PARC',cx,cy-34);
   g.font='700 24px "Baloo 2"'; g.fillText('À vendre : '+fmt(ZONE_COST)+' L$',cx,cy+2); }
+const POSTY=280;   // tous les panneaux (entrée, zones, sortie) à la même hauteur
 function drawPost(cx,txt,col){
-  const cy=mainY(cx);
+  const cy=POSTY;
   g.fillStyle='#2F6E2B'; g.fillRect(cx-24,cy-88,12,156); g.fillRect(cx+12,cy-88,12,156);
   g.save(); g.translate(cx,cy); g.rotate(-Math.PI/2);
   rr(-82,-16,164,32,10); g.fillStyle=col; g.fill(); g.strokeStyle='#fff'; g.lineWidth=3; g.stroke();
@@ -977,12 +982,12 @@ function drawZoneSigns(){
   drawGate();
   const ov=cam.s<0.99||overview;
   if(S.zones<NZ){ drawPost(1062,'🔒 AGRANDIR','#f59e0b');
-    const pulse=1+Math.sin(animT*4)*0.08, y=mainY(1062)-112; g.save(); g.translate(1062,y); g.scale(pulse,pulse); circ(0,0,17,'#f59e0b'); g.fillStyle='#fff'; g.font='700 20px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('+',0,1); g.restore(); }
+    const pulse=1+Math.sin(animT*4)*0.08, y=POSTY-112; g.save(); g.translate(1062,y); g.scale(pulse,pulse); circ(0,0,17,'#f59e0b'); g.fillStyle='#fff'; g.font='700 20px "Baloo 2"'; g.textAlign='center'; g.textBaseline='middle'; g.fillText('+',0,1); g.restore(); }
   else { if(!ov){ if(view===0) drawPost(1062,'VERS LA ZONE 2','#7b4cff'); else drawPost(1138,'VERS LA ZONE 1','#7b4cff'); }
     drawPost(WW-38,'SORTIE','#2F6E2B'); }
 }
 function drawGate(){
-  const cy=mainY(30);
+  const cy=POSTY;
   g.fillStyle='#2F6E2B'; g.fillRect(6,cy-88,12,156); g.fillRect(42,cy-88,12,156);
   g.save(); g.translate(30,cy); g.rotate(-Math.PI/2);
   rr(-80,-16,160,32,10); g.fillStyle='#C2367A'; g.fill(); g.strokeStyle='#fff'; g.lineWidth=3; g.stroke();
@@ -1356,7 +1361,7 @@ let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
 // Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
 // loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
-const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong',fantome:'loop',riviere:'loop',chute:'pingpong'};
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong',fantome:'loop',riviere:'loop',chute:'pingpong',pendule:'pingpong'};
 const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
 function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
   const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
