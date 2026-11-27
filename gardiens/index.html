@@ -203,6 +203,12 @@ img.avi{width:1.35em;height:1.35em;vertical-align:-0.3em;border-radius:50%;box-s
 .avs button.sel,.diffs button.sel{outline:3px solid var(--pink)}
 .diffs{display:flex;flex-direction:column;gap:6px;margin:6px 0}
 .diffs button{text-align:left}
+textarea.code{width:100%;height:110px;font:13px/1.35 ui-monospace,monospace;border:2px solid #d9cce9;border-radius:12px;padding:8px;word-break:break-all;resize:none;background:#FBF8FF}
+.xfer{display:flex;gap:14px;align-items:flex-start}.xright{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.xfer .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qrbox{flex:none;width:min(230px,34vw);aspect-ratio:1;background:#fff;border:3px solid #EDE4F8;border-radius:14px;padding:6px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px}
+.qrbox svg{width:100%;height:100%}
+.small{font-size:13.5px;opacity:.85}.err{color:#C0392B}.found{font-size:17px}
 input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border:2px solid #d9cce9;width:100%}
 .team{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
 
@@ -328,7 +334,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 52</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 53</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -1083,6 +1089,57 @@ function showPlayerCard(i){
     <div class="lab2">GARDIENS (${team.length})</div><div class="pgs">${guards}</div>
     <div class="right"><button onclick="showRank()">⬅️ Classement</button><button class="b-pink" onclick="${P?'closeModal()':'showWho()'}">OK</button></div>`,null,!P,true);
 }
+// ---------- Transfert vers un autre téléphone : code (et QR code) avec la partie compressée ----------
+const b64u=bytes=>{let t='';for(let i=0;i<bytes.length;i++)t+=String.fromCharCode(bytes[i]);return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');};
+const unb64u=str=>{str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';const bin=atob(str),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u;};
+async function packSave(obj){const txt=JSON.stringify(obj);
+  try{if(window.CompressionStream){const st=new Blob([txt]).stream().pipeThrough(new CompressionStream('deflate-raw'));return 'GL1.'+b64u(new Uint8Array(await new Response(st).arrayBuffer()));}}catch(e){}
+  return 'GL0.'+b64u(new TextEncoder().encode(txt));}
+async function unpackSave(code){code=String(code||'').trim();const h=code.indexOf('#import=');if(h>=0)code=decodeURIComponent(code.slice(h+8));
+  const i=code.indexOf('GL');if(i<0)throw new Error('code');code=code.slice(i).replace(/\s+/g,'');const kind=code.slice(0,4),data=unb64u(code.slice(4));
+  let txt;if(kind==='GL1.'){const st=new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));txt=await new Response(st).text();}
+  else if(kind==='GL0.')txt=new TextDecoder().decode(data);else throw new Error('code');
+  const o=JSON.parse(txt);if(!o||!o.save||!o.save.worlds||!o.save.owned)throw new Error('code');return o;}
+function loadQR(){return window.qrcode?Promise.resolve():new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='qrcode.js';sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});}
+function farTxt(sv){let w=1,v=0;WORLDS.forEach(x=>{const st=sv.worlds[x.id];if(st&&st.done){w=x.id;v=CFG.WAVES;}});
+  const r=sv.runs||{};for(const k in r){if(+k>w||(+k===w&&v<CFG.WAVES)){w=+k;v=r[k].wave;}}
+  return v>=CFG.WAVES?`Monde ${w} réussi`:`Monde ${w} · vague ${Math.max(1,v)}`;}
+async function openExport(){
+  if(!P)return;save();
+  const code=await packSave({v:1,prof:{name:P.name,av:avId(P.av)},save:P}),url=location.origin+location.pathname+'#import='+code;
+  openModal(`<h2>📤 Envoyer ma partie sur un autre téléphone</h2>
+    <div class="xfer"><div id="qrBox" class="qrbox">⏳</div><div class="xright">
+      <p class="small"><b>Android :</b> scanne ce QR code avec l'appareil photo de l'autre téléphone.<br><b>iPhone</b> (ou si ça ne marche pas) : copie le code, envoie-le (message, mail…), puis dans le jeu de l'autre téléphone : « Qui joue ? » → <b>📥 J'ai un code</b>.</p>
+      <textarea id="xcode" class="code" readonly>${code}</textarea>
+      <div class="row"><button class="b-pink" id="copyBtn" onclick="copyCode()">📋 Copier le code</button><span class="small">${code.length} caractères · ${farTxt(P)}</span></div>
+    </div></div>
+    <div class="right"><button onclick="showMenu()">⬅️ Menu</button><button onclick="closeModal()">Fermer</button></div>`,null,false,true);
+  loadQR().then(()=>{try{const q=qrcode(0,'L');q.addData(url);q.make();$('qrBox').innerHTML=q.createSvgTag({cellSize:3,margin:2,scalable:true});}
+    catch(e){$('qrBox').textContent='Partie trop grande pour un QR code : utilise le code.';}}).catch(()=>{$('qrBox').textContent='QR code indisponible sans connexion : utilise le code.';});
+}
+function copyCode(){const ta=$('xcode'),done=()=>{$('copyBtn').textContent='✅ Copié !';};
+  try{navigator.clipboard.writeText(ta.value).then(done,()=>{ta.select();try{document.execCommand('copy');done();}catch(e){}});}catch(e){ta.select();try{document.execCommand('copy');done();}catch(e2){}}}
+function openImport(err){
+  openModal(`<h2>📥 Récupérer une partie</h2><p class="small">Colle ici le code reçu depuis l'autre téléphone (⚙️ Menu → 📤 Envoyer ma partie).</p>
+    <textarea id="icode" class="code" placeholder="GL1.…"></textarea>${err?`<p class="err"><b>${err}</b></p>`:''}
+    <div class="right"><button onclick="showWho()">⬅️ Retour</button><button class="b-pink" onclick="doImport($('icode').value)">Récupérer</button></div>`,null,true);
+}
+let pendingImport=null;
+async function doImport(code){
+  try{pendingImport=await unpackSave(code);}catch(e){openImport('Ce code ne marche pas. Vérifie qu\'il est complet.');return;}
+  const o=pendingImport,sv=o.save,pr=o.prof||{};PROFILES=LS.get(PKEY)||[];
+  openModal(`<h2>📥 Partie trouvée !</h2>
+    <p class="found">${avHtml(pr.av)} <b>${esc(pr.name||'Joueur')}</b> · ${DIFF[sv.diff]?DIFF[sv.diff].stars:''} · ${farTxt(sv)} · ${(sv.owned||[]).length} gardiens · ${fmt(sv.money||0)} L$</p>
+    <p class="small">Sur ce téléphone, tu veux la mettre…</p>
+    <div class="who"><button class="b-pink" onclick="importAs('new')">➕ Nouveau joueur</button>${PROFILES.map(p=>`<button onclick="importAs('${p.id}')">♻️ Remplacer ${avHtml(p.av)} ${esc(p.name)}</button>`).join('')}</div>
+    <div class="right"><button onclick="showWho()">Annuler</button></div>`,'princesse-contente',true);
+}
+function importAs(target){const o=pendingImport;if(!o)return;let id=target;const sv=o.save;
+  const name=(o.prof&&o.prof.name)||sv.name||'Joueur',av=avId((o.prof&&o.prof.av)||sv.av);
+  if(target==='new'){id=Date.now().toString(36);PROFILES.push({id,name,av});}
+  else{const p=PROFILES.find(p=>p.id===id);if(p){p.name=name;p.av=av;}}
+  sv.name=name;sv.av=av;LS.set(PKEY,PROFILES);LS.set('gardiens-'+id,sv);
+  pendingImport=null;G.towers=[];selectProfile(id);}
 // Avatars dessinés par Gemini (img/av/<id>.webp) ; les anciens avatars emoji sont convertis
 const AVATARS=['princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja','licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon'];
 const AV_OLD={'👧':'princesse','👸':'princesse','🧚':'fee','🦄':'licorne','🐱':'chaton','🐶':'chiot','🦊':'renard','🐼':'panda','🐰':'lapin','🐸':'grenouille','🌸':'fee','⭐':'sorcier'};
@@ -1093,7 +1150,7 @@ function showWho(){
   PROFILES=LS.get(PKEY)||[];migrateAvatars();
   const list=PROFILES.map(p=>`<div class="pl"><button class="go" onclick="selectProfile('${p.id}')">${avHtml(p.av)} ${esc(p.name)}</button><button onclick="editProfile('${p.id}')" title="Changer le prénom ou l'avatar">${ic('modifier')}</button><button onclick="delProfile('${p.id}')" title="Supprimer">🗑️</button></div>`).join('');
   openModal(`<h2>${ic('chateau')} Les Gardiens de Lili</h2><p><b>Qui joue ?</b></p>
-    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="showRank()">${ic('classement')} Classement</button></div>`,'princesse-contente',true);
+    <div class="who">${list}<button class="b-pink" onclick="newProfile()">➕ Nouveau joueur</button><button onclick="openImport()">📥 J'ai un code <small>(partie d'un autre téléphone)</small></button><button onclick="showRank()">${ic('classement')} Classement</button></div>`,'princesse-contente',true);
 }
 let NP={av:AVATARS[0],diff:2};
 function newProfile(){
@@ -1181,6 +1238,7 @@ function showMenu(){
       <button onclick="showRank()">${ic('classement')} Classement</button>
       <button onclick="editProfile(PID,'menu')">${ic('modifier')} Prénom et avatar</button>
       <button onclick="showWho()">${ic('joueurs')} Changer de joueur</button>
+      <button onclick="openExport()">📤 Envoyer ma partie</button>
       <button onclick="fullscreen()">${ic('plein-ecran')} Plein écran</button>
       <button class="b-pink" onclick="closeModal()">OK</button></div>`,null,false,true);
 }
@@ -1709,7 +1767,11 @@ function showIntro(next){
   to=setTimeout(()=>{if(v.readyState<2)end();},6000);
   v.play().catch(()=>{});
 }
-showIntro(showWho);
+// lien « #import=… » (QR code scanné) : on propose de récupérer la partie après la vidéo
+let HASH_IMPORT=location.hash.startsWith('#import=')?location.hash:null;
+if(HASH_IMPORT){try{history.replaceState(null,'',location.pathname);}catch(e){}}
+showIntro(()=>{if(HASH_IMPORT){const c=HASH_IMPORT;HASH_IMPORT=null;doImport(c);}else showWho();});
+window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#import=')){const c=location.hash;try{history.replaceState(null,'',location.pathname);}catch(e){}save();doImport(c);}});
 document.fonts&&document.fonts.ready.then(()=>buildBg());
 </script>
 </body>
