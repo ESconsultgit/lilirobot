@@ -335,7 +335,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 57</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 58</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -536,8 +536,9 @@ const WORLDS=[
   {id:4,name:'Le Marais enchanté',em:'🐸',theme:'marais',boss:{armorK:0.5,art:'boss-grenouille',name:'La Reine Grenouille Grognon',em:'🐸',col:'#5A9E3A'},
    paths:[[[-40,442],[262,442],[262,142],[630,142],[630,305],[905,305],[905,142],[1160,142],[1160,442],[1390,442]],
           [[-40,442],[262,442],[262,762],[560,762],[560,590],[865,590],[865,765],[1160,765],[1160,442],[1390,442]]]},
-  // Monde 5 : chemin en spirale jusqu'au château au centre ; tout est si proche que les portées sont divisées par 2 (rgK)
-  {id:5,name:'La Cité du Futur',em:'🛸',theme:'futur',cs:0.7,rgK:0.5,boss:{armorK:1.2,art:'boss-robot',name:'Le Robot Grognon',em:'🤖',col:'#7C8DA6'},
+  // Monde 5 : chemin en spirale jusqu'au château au centre ; tout est si proche que les portées sont divisées par 2 (rgK).
+  // hpK : les méchants ont 15 % de leur vie normale, sinon le monde est impossible (testé avec des gardiens au maximum : bloqué vague 29 en ⭐⭐⭐)
+  {id:5,name:'La Cité du Futur',em:'🛸',theme:'futur',cs:0.7,rgK:0.5,hpK:0.15,boss:{armorK:1.2,art:'boss-robot',name:'Le Robot Grognon',em:'🤖',col:'#7C8DA6'},
    path:[[-40,109],[1521,109],[1521,824],[80,824],[80,290],[1332,290],[1332,641],[270,641],[270,466],[760,466],[765,505]]}
 ];
 // Sens dans lequel regarde chaque image de méchant (1 = vers la droite, -1 = vers la gauche)
@@ -677,7 +678,7 @@ function saveRun(){P.runs[G.world]={wave:G.wave,hearts:G.hearts};save();}
 
 // ---------- Construction des vagues ----------
 function makeWave(world,w){
-  const R=rng(world*1000+w),d=dIndex(world,w),hpM=CFG.HP_BASE*Math.pow(CFG.HP_GROWTH,d)*DIFF[P.diff].hp,rw=rewMul(world,w);
+  const R=rng(world*1000+w),d=dIndex(world,w),hpM=CFG.HP_BASE*Math.pow(CFG.HP_GROWTH,d)*DIFF[P.diff].hp*(WORLDS[world-1].hpK||1),rw=rewMul(world,w);
   const pool=Object.keys(INTRO).filter(k=>{const[iw,iv]=INTRO[k];return world>iw||(world===iw&&w>=iv);});
   const pick=()=>{const tot=pool.reduce((a,k)=>a+INTRO[k][2],0);let x=R()*tot;for(const k of pool){x-=INTRO[k][2];if(x<=0)return k;}return pool[0];};
   const q=[];let t=0;const gap=Math.max(0.35,0.95-w*0.011);
@@ -1813,6 +1814,7 @@ function editMe(){editProfile(PID,'menu');}
 Object.assign(window,{pickStarter,$,buyGuard,buySlot,buyUp,closeGift,closeModal,copyCode,createProfile,delProfile,devMoney,devSkip,devWin,doImport,editProfile,enterWorld,fullscreen,importAs,newProfile,openExport,openImport,placeGuard,reallyDel,refreshHUD,resetField,saveEdit,selectProfile,setMorph,setTarget,sheetTab,showGuard,showMenu,showNextWave,showPlayerCard,showRank,showTeam,showWho,showWorlds,startWave,unplace,pick,reselect,editMe});
 // pour les tests en local uniquement (fichier ouvert depuis l'ordinateur)
 if(location.protocol==='file:')window.__T=()=>({P,G,GUARD,WORLDS,SPEC,DIFF,CFG,PID});
+if(location.protocol==='file:')window.__E=src=>eval(src);
 })();
 </script>
 </body>
