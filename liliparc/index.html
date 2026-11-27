@@ -1274,7 +1274,7 @@ let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
 // Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
 // loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
-const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong'};
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop'};
 const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
 function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
   const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
