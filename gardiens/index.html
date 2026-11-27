@@ -175,6 +175,19 @@ button:disabled{opacity:.45;cursor:default;transform:none}
 .rkn{width:30px;text-align:center;font:800 18px 'Baloo 2',sans-serif;color:#7A4FC8}
 .rkp{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rkv{white-space:nowrap;font-size:14px;color:#2A1F3D}
+.rkr{cursor:pointer}.rkgo{font:800 22px/1 'Baloo 2';color:#B9A5D9;margin-left:2px}
+.pc-head{display:flex;align-items:center;gap:12px}.pc-head h2{margin:0}.avi.big{width:56px;height:56px}
+.pc-sub{font-weight:700;color:#7A4FC8;font-size:14px}
+.pc-stats{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.pc-stats span{background:#F6F1FC;border-radius:99px;padding:4px 10px;font-weight:700;font-size:13.5px}
+.pws{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-top:8px}
+.pgs{margin-top:8px}
+.pw{flex:1;min-width:92px;border:3px solid var(--c);border-radius:14px;padding:4px 6px;text-align:center;display:flex;flex-direction:column;line-height:1.15;background:#fff}
+.pw span{font-size:20px}.pw b{font-size:13px}.pw small{font-size:12px;opacity:.8}
+.pw.done{background:#FFF6D9}.pw.none{opacity:.45;border-color:#ccc}
+.pgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px;max-height:34vh;overflow:auto;padding:2px}
+.pg{background:#FAF6FF;border-radius:12px;padding:4px;text-align:center;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.pg img{width:46px;height:46px;object-fit:contain}.pg b{font-size:12.5px}.pg small{font-size:11.5px;opacity:.8}
+.pgem{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px}
 .rk-msg{text-align:center;opacity:.75}
 .who{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .who .pl{display:flex;align-items:center;gap:10px}
@@ -315,7 +328,7 @@ input.txt{font:inherit;font-size:20px;padding:8px 12px;border-radius:12px;border
         <button id="bMore" class="fab" aria-label="Boutons">☰</button>
         <div id="moreList">
           <div id="sPlayer"></div>
-          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 51</div>
+          <div id="sVer" style="font-size:11px;text-align:center;opacity:.6">version 52</div>
           <button id="bAuto"><img class="ic" src="img/ui/auto.webp" alt=""> Auto</button>
           <button id="bSpeed"><img class="ic" src="img/ui/vitesse.webp" alt=""> ×1</button>
           <button id="bPause"><img class="ic" src="img/ui/pause.webp" alt=""> Pause</button>
@@ -784,7 +797,7 @@ function closeGift(){
 }
 function buyGuard(gid){
   const price=SHOP[gid];if(!price||P.owned.includes(gid)||P.money<price)return;
-  P.money-=price;P.owned.push(gid);save();closeModal();refreshHUD();
+  P.money-=price;P.owned.push(gid);save();closeModal();refreshHUD();pushScore();
   tip('lili-contente',`${GUARD[gid].name} est dans ton équipe ! Fais-le glisser sur un cercle ➕ libre.`,6000);
 }
 function benchTap(gid){
@@ -950,7 +963,7 @@ function buyUp(gid,k,fromTeam){
   const cost=upCost(gid),u=up(gid);
   if(P.money<cost||u[k]>=CFG.MAX[k])return;
   if(GUARD[gid].kind==='psy'&&(k==='sp'||k==='ca'||(k==='pw'&&psyStun(gid)>=PSY_MAX)))return;
-  const f0=formOf(level(gid),gid);P.money-=cost;u[k]++;save();refreshHUD();
+  const f0=formOf(level(gid),gid);P.money-=cost;u[k]++;save();refreshHUD();pushScore();
   const f1=formOf(level(gid),gid);
   if(f1>f0){
     const t=G.towers.find(t=>t.gid===gid);if(t)burst(t.x,t.y,GUARD[gid].col,24);
@@ -1018,14 +1031,16 @@ function initStats(){
   save();
 }
 function progOf(sd){let p=0;for(const n in sd.best){const v=sd.best[n];if(v>0)p=Math.max(p,n*100+v);}return p;}
-function progTxt(p){if(!p)return 'Monde 1 · vague 0';const n=Math.floor(p/100),v=p%100,w=WORLDS[n-1];
-  return v>=CFG.WAVES?`${w?w.em:''} Monde ${n} réussi !`:`${w?w.em:''} Monde ${n} · vague ${v}`;}
+// progression : le monde le plus loin et la vague atteinte (vagues réussies + 1), ex. « Monde 5 · vague 28/50 »
+function progTxt(p){const n=Math.max(1,Math.floor(p/100)),v=p%100,w=WORLDS[n-1],em=w?w.em+' ':'';
+  return v>=CFG.WAVES?`${em}Monde ${n} · 50/50 ✅`:`${em}Monde ${n} · vague ${v+1}/${CFG.WAVES}`;}
 let pushT=0;
 function pushScore(now){
   if(!P||!P.uid||location.hash.includes('dev')||location.protocol==='file:')return;
   clearTimeout(pushT);pushT=setTimeout(()=>{
-    const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses}:null;}).filter(Boolean);
-    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:avId(P.av),rows})}).catch(()=>{});
+    const rows=[1,2,3].map(d=>{const sd=(P.st||{})[d];return sd?{diff:d,prog:progOf(sd),kills:sd.kills,bosses:sd.bosses,best:sd.best}:null;}).filter(Boolean);
+    const team=P.owned.map(g=>{const l=level(g),o={g,l,f:formOf(l,g)};if(g==='prismi')o.m=curMorph();return o;});
+    fetch(RANK_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({uid:P.uid,name:P.name,av:avId(P.av),team,rows})}).catch(()=>{});
   },now?300:1500);
 }
 let RK={diff:2,by:'prog'};
@@ -1043,11 +1058,30 @@ function showRank(d,by){
     if(RK.diff!==d0||RK.by!==b0||!$('rkList'))return;
     const rows=j.rows||[];
     if(!rows.length){$('rkList').innerHTML='<p class="rk-msg">Personne encore à ce niveau. Sois le premier !</p>';return;}
-    const med=['🥇','🥈','🥉'];
-    $('rkList').innerHTML=rows.map((r,i)=>`<div class="rkr${r.me?' me':''}"><span class="rkn">${med[i]||i+1}</span><span class="rkp">${avHtml(r.av)} ${esc(r.name)}</span>
-      <span class="rkv">${b0==='kills'?`${fmt(r.kills)} 😠`:progTxt(r.prog)}</span></div>`).join('');
+    const med=['🥇','🥈','🥉'];RK.rows=rows;
+    $('rkList').innerHTML=rows.map((r,i)=>`<div class="rkr${r.me?' me':''}" onclick="showPlayerCard(${i})"><span class="rkn">${med[i]||i+1}</span><span class="rkp">${avHtml(r.av)} ${esc(r.name)}</span>
+      <span class="rkv">${b0==='kills'?`${fmt(r.kills)} 😠`:progTxt(r.prog)}</span><span class="rkgo">›</span></div>`).join('');
     const me=$('rkList').querySelector('.me');if(me)me.scrollIntoView({block:'center'});
   }).catch(()=>{if($('rkList'))$('rkList').innerHTML='<p class="rk-msg">Pas de connexion : le classement a besoin d\'internet.</p>';});
+}
+// Fiche d'un joueur du classement : ses mondes, ses Chipeurs chassés et tous ses gardiens avec leur niveau
+function showPlayerCard(i){
+  const r=(RK.rows||[])[i];if(!r)return;
+  let best=r.best||{};
+  if(!Object.keys(best).length&&r.prog){const n=Math.floor(r.prog/100);best={};for(let k=1;k<n;k++)best[k]=CFG.WAVES;best[n]=r.prog%100;} // fiche envoyée par une ancienne version
+  const team=(r.team||[]).filter(t=>GUARD[t.g]).sort((a,b)=>b.l-a.l);
+  const worlds=WORLDS.map(w=>{const v=best[w.id]||0,done=v>=CFG.WAVES;
+    return `<div class="pw${done?' done':''}${v?'':' none'}" style="--c:${WORLD_COL[w.id]}"><span>${w.em}</span><b>Monde ${w.id}</b><small>${done?'50/50 ✅':v?'vague '+(v+1)+'/50':'pas encore'}</small></div>`;}).join('');
+  const gimg=t=>{if(!ART[t.g])return `<span class="pgem" style="background:${GUARD[t.g].col}">${GUARD[t.g].em}</span>`;
+    const f=t.g==='prismi'?'g/prismi-'+(t.m||'base'):'g/'+t.g+'-'+t.f;return `<img src="img/${f}.webp" alt="">`;};
+  const nm=t=>t.g==='prismi'&&t.m&&MORPH[t.m]?MORPH[t.m].name:GUARD[t.g].name;
+  const guards=team.length?team.map(t=>`<div class="pg">${gimg(t)}<b>${nm(t)}</b><small>${t.g==='prismi'?'':'★'.repeat(t.f)+' '}niv. ${t.l}</small></div>`).join('')
+    :'<p class="rk-msg">Ses gardiens apparaîtront à sa prochaine partie.</p>';
+  openModal(`<div class="pc-head">${avHtml(r.av).replace('class="avi"','class="avi big"')}<div><h2>${esc(r.name)}</h2><div class="pc-sub">${DIFF[RK.diff].stars} ${DIFF[RK.diff].name} · ${i+1}<sup>${i?'e':'er'}</sup> du classement</div></div></div>
+    <div class="pc-stats"><span>${progTxt(r.prog)}</span><span>😠 <b>${fmt(r.kills)}</b> Chipeurs chassés</span><span>👑 <b>${fmt(r.bosses)}</b> boss battus</span></div>
+    <div class="lab2">MONDES</div><div class="pws">${worlds}</div>
+    <div class="lab2">GARDIENS (${team.length})</div><div class="pgs">${guards}</div>
+    <div class="right"><button onclick="showRank()">⬅️ Classement</button><button class="b-pink" onclick="${P?'closeModal()':'showWho()'}">OK</button></div>`,null,!P,true);
 }
 // Avatars dessinés par Gemini (img/av/<id>.webp) ; les anciens avatars emoji sont convertis
 const AVATARS=['princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja','licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon'];
