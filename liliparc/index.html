@@ -288,6 +288,33 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
 #tipBox img{transition:transform .2s}
 #tipBox.new img{animation:halo 1.4s ease-in-out infinite;border-radius:50%}
 @keyframes halo{0%,100%{filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #ffd23f);transform:scale(1)}50%{filter:drop-shadow(0 0 10px #fff) drop-shadow(0 0 18px #ffd23f);transform:scale(1.08)}}
+
+/* ---------- Fenêtre Réglages ---------- */
+.box:has(.menuc){max-width:640px}
+.menuc h2{margin:0 0 8px}
+.menuc .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.menuc .mcard{background:#F7F2FC;border-radius:14px;padding:8px 10px;margin-bottom:8px}
+.menuc .mt{display:block;font-family:'Baloo 2',sans-serif;font-size:15px;color:var(--violet);margin-bottom:4px}
+.menuc label{display:flex;flex-direction:column;font-size:12px;font-weight:700;color:#6b5a8a;gap:2px;flex:1;min-width:0}
+.menuc input[type=text]{width:100%;padding:6px 10px;font-size:15px;border:2px solid #e5dcf7;border-radius:10px;font-family:inherit}
+.menuc .mprof{display:flex;gap:10px;align-items:center}
+.menuc .avbig{position:relative;padding:0;width:58px;height:58px;border-radius:50%;flex:none;background:#fff}
+.menuc .avbig .ic.av{width:58px;height:58px}
+.menuc .avbig span{position:absolute;right:-4px;bottom:-4px;font-size:13px;background:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.menuc .lvls{grid-template-columns:repeat(3,1fr);margin:0}
+.menuc .lvl{padding:6px 8px;align-items:center;text-align:center}
+.menuc .lvld{margin:6px 2px 0}
+.menuc .mtiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
+.menuc .mtiles button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;font-size:13px;line-height:1.1}
+.menuc .mtiles button .ic{width:30px;height:30px}
+.menuc .minst summary{cursor:pointer;font-size:13px;font-weight:700;color:#6b5a8a}
+.menuc .avgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:8px 0}
+.menuc .avgrid .av{padding:4px;border-radius:50%;background:#fff}.menuc .avgrid .av .ic.av{width:100%;height:auto;aspect-ratio:1}
+@media (max-height:560px),(max-width:560px){
+  .menuc .mcard{padding:5px 8px;margin-bottom:5px} .menuc .mt{font-size:13px;margin-bottom:2px} .menuc input[type=text]{padding:3px 8px;font-size:14px}
+  .menuc .avbig,.menuc .avbig .ic.av{width:44px;height:44px} .menuc .mtiles button{padding:4px 2px;font-size:11.5px} .menuc .mtiles button .ic{width:24px;height:24px}
+  .menuc .lvl b{font-size:12.5px} .menuc .lvld{font-size:11px;margin-top:3px} .menuc .avgrid{gap:5px}
+}
 </style>
 </head>
 <body>
@@ -1769,21 +1796,35 @@ function openBank(){
 }
 function bank(n){ n=Math.floor(n); if(n>0&&S.money>=n){S.money-=n;S.bank+=n;} else if(n<0&&S.bank>=-n){S.bank+=n;S.money-=n;} else return; coinSound(); openBank(); }
 function openMenu(){
-  openModal(`<div class="menuc"><h2>⚙️ Menu</h2>
-    <p><b>Nom de ta fête foraine :</b></p><input type="text" id="nm" maxlength="32" value="${S.name.replace(/"/g,'&quot;')}">
-    <div class="row"><button class="ok" onclick="S.name=document.getElementById('nm').value.trim()||S.name;closeModal()">Enregistrer</button></div>
-    <p class="small">Ta partie est sauvegardée automatiquement dans ce navigateur à la fin de chaque journée.</p>
-    <p><b>Niveau de jeu :</b></p>
-    <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${lv()===n?'sel':''}" onclick="setLevel(${n})"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
-    ${curProfile()?`<p><b>Ton prénom et ton avatar :</b></p>
-    <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
-      ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${avH(a)}</button>`).join('')}
-      <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
-    <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">${ic('joueurs')} Changer de joueur</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
-    ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
-    <p class="small instx"><b>iPhone / iPad</b> : ouvre cette page dans Safari, touche le bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
-    <b>Android</b> : dans Chrome, touche le bouton « 📲 Installer » en haut, ou le menu ⋮ puis « Installer l'application ».</p>`}
-    <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div></div>`,'lili-explique');
+  const pr=curProfile(), esc=t=>String(t).replace(/"/g,'&quot;');
+  openModal(`<div class="menuc"><h2>⚙️ Réglages</h2>
+    <div class="mgrid">
+      ${pr?`<div class="mcard"><b class="mt">Mon profil</b>
+        <div class="mprof"><button class="avbig" title="Changer d'avatar" onclick="openAvatars()">${avH(pr.av)}<span>✏️</span></button>
+          <label>Mon prénom<input type="text" id="pnm2" maxlength="16" value="${esc(pr.name)}" onchange="curProfile().name=this.value.trim()||curProfile().name;saveProfiles();updateHUD()"></label></div></div>`:''}
+      <div class="mcard"><b class="mt">Ma fête foraine</b>
+        <label>Son nom<input type="text" id="nm" maxlength="32" value="${esc(S.name)}" onchange="S.name=this.value.trim()||S.name;save()"></label>
+        <p class="small">Sauvegarde automatique chaque soir.</p></div>
+    </div>
+    <div class="mcard"><b class="mt">Niveau de jeu</b>
+      <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${lv()===n?'sel':''}" onclick="setLevel(${n})"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b></button>`).join('')}</div>
+      <p class="small lvld">${LVL_DESC[lv()]}</p></div>
+    <div class="mtiles">
+      <button onclick="openExport()">📤<span>Envoyer ma partie</span></button>
+      <button onclick="switchPlayer()">${ic('joueurs')}<span>Changer de joueur</span></button>
+      <button onclick="showRules()">📖<span>Règles du jeu</span></button>
+      <button onclick="confirmReset()">🔄<span>Nouvelle partie</span></button>
+    </div>
+    ${isStandalone()?'':`<details class="minst"><summary>📲 Installer Lili Parc sur le téléphone ou la tablette</summary>
+      <p class="small"><b>iPhone / iPad</b> : dans Safari, bouton Partager (le carré avec la flèche), puis « Sur l'écran d'accueil ».<br>
+      <b>Android</b> : bouton 📲 Installer du panneau, ou menu ⋮ de Chrome puis « Installer l'application ».</p></details>`}
+    <div class="right"><button class="main" onclick="closeModal()">Fermer</button></div></div>`);
+}
+function openAvatars(){
+  const pr=curProfile();
+  openModal(`<div class="menuc"><h2>Choisis ton avatar</h2>
+    <div class="avgrid">${AVATARS.map(a=>`<button class="av ${a===pr.av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();updateHUD();openMenu()">${avH(a)}</button>`).join('')}</div>
+    <div class="right"><button onclick="openMenu()">Retour</button></div></div>`);
 }
 function confirmReset(){ openModal(`<h2>🔄 Nouvelle partie ?</h2><p>Ta fête foraine actuelle sera effacée. Tu es sûr·e ?</p>
   <div class="right"><button onclick="closeModal()">Non, je garde</button><button class="main" onclick="newGameScreen()">Oui, recommencer</button></div>`,'lili-perplexe'); }
