@@ -236,6 +236,7 @@ Bouton **🏅**. Chaque badge a son image (médaille dessinée pour Lili Parc, `
 - **Fenêtre d'une attraction** : l'attraction s'affiche en grand, animée, à côté du prix et des statistiques.
 - **Icônes** : boutons et compteurs avec les icônes dessinées des Gardiens de Lili (`liliparc/img/ui/`) : pause, jouer, rapide, zones, vue d'ensemble, badges, plein écran, menu, cœur, joueurs, cadenas.
 - **Écran** : la map remplit la gauche de l'écran ; à droite, un **panneau** regroupe pause / jouer / rapide, Tout voir, Agrandir ou changer de zone, Billet, Services, Badges, Astuce, Plein écran, Son, Réglages et l'objectif. Les compteurs flottent en haut de la map. L'astuce d'Ellie est en bas à gauche : la toucher la ferme, le bouton 💡 la rouvre. Le lien 🏠 vers l'atelier a été retiré.
+- **Icônes dessinées partout** à la place des émojis (`liliparc/img/ui/`, 3 planches Gemini de 16 + celles des Gardiens) : la fonction `EMO()` remplace les émojis dans les fenêtres, les bulles et l'astuce ; les attractions déjà dessinées s'affichent avec une vignette de leur image. Avatars dessinés (16, les mêmes que Les Gardiens, `img/av/`) ; les anciens avatars émojis sont repris automatiquement.
 - **Plein écran** : dans le panneau de droite (pas sur iPhone, où l'app installée est déjà en plein écran).
 - **Net partout** : le jeu est dessiné à la taille réelle de l'écran et selon sa densité de pixels (jusqu'à ×3) ; sur grand écran, il s'agrandit (jusqu'à 1 900 pixels de large) tant que tout tient en hauteur.
 

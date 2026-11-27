@@ -172,6 +172,8 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
 @media (min-height:561px){ body.fs .wrap{max-width:min(100vw,calc((100vh - 134px) * 1.964 + 20px))!important;padding-top:6px}
   body.fs .bottom{display:none} body.fs .goalMini{display:block;background:#fff;border-radius:12px;padding:4px 10px;font-size:13px;min-width:190px;box-shadow:0 3px 0 rgba(45,27,78,.12)}
   body.fs .goalMini .bar{height:7px;margin-top:3px} body.fs #tipBtn{display:inline-flex} body.fs .top{margin-bottom:4px} }
+.ic.av{width:1.6em;height:1.6em;border-radius:50%}.av .ic.av,.wav .ic.av{width:42px;height:42px}#hud .ic.av{width:1.5em;height:1.5em}
+.ic.thumb{width:1.8em;height:1.8em;vertical-align:-.5em}.card .em .ic.thumb{width:64px;height:64px}
 .ic{width:1.4em;height:1.4em;object-fit:contain;vertical-align:-.32em;flex:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.12))}
 button .ic{pointer-events:none}.badge .bem .ic{width:30px;height:30px}
 .bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;margin:6px 0}
@@ -581,7 +583,7 @@ function setLevel(n){ S.level=n; initLevel(); visitors=[]; runtime.forEach(r=>{r
 function resetDay(){ day={shown:{},refFear:0,refHealth:0,entries:0,entryRev:0,rideRev:0,refGate:0,refPrice:0,queueFull:0,rides:0,happy:0,sad:0,earned:{}}; }
 // ---- Profils : chaque joueur a sa propre partie sur le même téléphone ----
 let PROFILES=[], CUR=null;
-const AVATARS=['🦄','🐱','🐶','🦊','🐼','🐸','🐰','🐯','🐵','🤖'];
+const AVATARS=['licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon','princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja'];
 const keyOf=id=>'lilipark-'+id;
 function saveProfiles(){ try{ localStorage.setItem('lilipark-profiles',JSON.stringify(PROFILES)); }catch(e){} }
 function loadProfiles(){
@@ -628,14 +630,14 @@ async function doImport(code){
   try{ pendingImport=await unpackSave(code); }catch(e){ openImport("Ce code ne marche pas. Vérifie qu'il est complet."); return; }
   const o=pendingImport, sv=o.save, pr=o.prof||{};
   openModal(`<h2>📥 Partie trouvée !</h2>
-    <p><b>${pr.av||'🦄'} ${(pr.name||'Joueur').replace(/</g,'&lt;')}</b> · ${(sv.name||'Lili Parc').replace(/</g,'&lt;')} · jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)} · ${fmt(sv.money)} L$</p>
+    <p><b>${avH(pr.av||'licorne')} ${(pr.name||'Joueur').replace(/</g,'&lt;')}</b> · ${(sv.name||'Lili Parc').replace(/</g,'&lt;')} · jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)} · ${fmt(sv.money)} L$</p>
     <p class="small">Sur ce téléphone, tu veux la mettre…</p>
     <div class="row"><button class="main" onclick="importAs('new')">➕ Nouveau joueur</button>${PROFILES.map(p=>`<button onclick="importAs('${p.id}')">♻️ Remplacer ${p.av} ${p.name.replace(/</g,'&lt;')}</button>`).join('')}</div>
     <div class="right"><button onclick="whoPlays()">Annuler</button></div>`,'duo-victoire');
   $('box').dataset.lock='1';
 }
 function importAs(target){ const o=pendingImport; if(!o) return; let id=target;
-  if(target==='new'){ id='p'+Date.now(); PROFILES.push({id,name:(o.prof&&o.prof.name)||'Joueur',av:(o.prof&&o.prof.av)||'🦄'}); saveProfiles(); }
+  if(target==='new'){ id='p'+Date.now(); PROFILES.push({id,name:(o.prof&&o.prof.name)||'Joueur',av:(o.prof&&o.prof.av)||'licorne'}); saveProfiles(); }
   try{ localStorage.setItem(keyOf(id),JSON.stringify(o.save)); }catch(e){}
   pendingImport=null; tada(); choosePlayer(id); }
 function save(){ if(!CUR||!S) return; try{ localStorage.setItem(keyOf(CUR), JSON.stringify(S)); }catch(e){} }
@@ -1620,9 +1622,33 @@ function showReport(r){
 
 // ================== INTERFACE ==================
 const $=id=>document.getElementById(id);
-function openModal(html,img){ $('box').innerHTML=(img?`<img class="hero" src="img/${img}.webp" alt="">`:'')+html; $('modal').classList.add('show'); modalOpen=true; }
+// ---------- Icônes dessinées à la place des émojis ----------
+const EMO_IC={'🐷':'tirelire','👛':'porte-monnaie','💰':'sac-argent','🎟️':'billet','🎟':'billet','🧒':'visiteur','🛠️':'services','🛠':'services','🔧':'entretien','💡':'astuce',
+  '🔊':'son','🔇':'son-off','📲':'installer','📖':'regles','🎯':'objectif','🏆':'trophee','🧨':'demolir','🏗️':'construire','🏗':'construire',
+  '🛡️':'securite','🛡':'securite','⛑️':'secours','⛑':'secours','🧹':'nettoyage','🌳':'espaces-verts','👮':'agent','🚑':'ambulance','☀️':'soleil','☀':'soleil','⛅':'nuageux','🌦️':'nuageux',
+  '🌧️':'pluie','🌧':'pluie','❄️':'neige','❄':'neige','⛈️':'orage','⛈':'orage','🌙':'lune','🎂':'gateau','🎉':'fete','⚠️':'attention','⚠':'attention','✅':'ok','✔️':'ok',
+  '🎅':'noel','🎆':'feu','🎤':'concert','🤡':'clown','🚌':'bus','📤':'envoyer','📥':'recevoir','🗑️':'supprimer','🗑':'supprimer','🔄':'nouvelle','♻️':'nouvelle','⬆️':'ameliorer',
+  '📈':'hausse','📉':'baisse','😊':'humeur-1','🙂':'humeur-2','😕':'humeur-3','😟':'humeur-3','😡':'humeur-4',
+  '❤️':'coeur','🔒':'cadenas','🏅':'medaille','⭐':'etoile','🌟':'etoile','🗺️':'mondes','⚙️':'menu','👥':'joueurs','🔭':'longue-vue'};
+// Avatars dessinés (les mêmes que Les Gardiens de Lili) ; les anciens émojis sont repris
+const AV_IDS=['licorne','chaton','chiot','renard','panda','lapin','grenouille','dragon','princesse','chevalier','fee','sorcier','astronaute','pirate','heros','ninja'];
+const AV_OLD={'🦄':'licorne','🐱':'chaton','🐶':'chiot','🦊':'renard','🐼':'panda','🐸':'grenouille','🐰':'lapin','🐯':'dragon','🐵':'pirate','🤖':'astronaute'};
+const avH=a=>{ const id=AV_OLD[a]||a; return AV_IDS.includes(id)?`<img class="ic av" src="img/av/${id}.webp" alt="">`:(a||''); };
+let EMO_RE=null; const EMO_MAP={};
+function EMO(h){
+  if(h==null) return h; h=String(h);
+  if(!EMO_RE){ for(const k in EMO_IC) EMO_MAP[k]=`<img class="ic" src="img/ui/${EMO_IC[k]}.webp" alt="">`;
+    for(const d of DEFS) if(SPRITES[d.id]) EMO_MAP[d.em]=`<img class="ic thumb" src="attractions/${d.id}-1.webp" alt="">`;
+    for(const k in AV_OLD) EMO_MAP[k]=avH(k);
+    const keys=Object.keys(EMO_MAP).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    EMO_RE=new RegExp(keys.join('|'),'gu'); }
+  return h.replace(EMO_RE,m=>EMO_MAP[m]).replace(/\uFE0F/g,'');
+}
+['hud','panel'].forEach(id=>{ $(id).innerHTML=EMO($(id).innerHTML); });
+function openModal(html,img){ $('box').innerHTML=(img?`<img class="hero" src="img/${img}.webp" alt="">`:'')+EMO(html); $('modal').classList.add('show'); modalOpen=true; }
 const LIVIA=n=>n.startsWith('livia');
 function toast(img,title,txt){
+  title=EMO(title); txt=EMO(txt);
   const box=$('toasts'); while(box.children.length>=3) box.firstChild.remove();
   const el=document.createElement('div'); el.className='toast'+(LIVIA(img)?' pinkb':'');
   el.innerHTML=`<img src="${img.includes('/')?img:'img/'+img+'.webp'}" alt=""><div class="bub"><b class="t">${title}</b>${txt}</div>`;
@@ -1735,7 +1761,7 @@ function openMenu(){
     <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${lv()===n?'sel':''}" onclick="setLevel(${n})"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
     ${curProfile()?`<p><b>Ton prénom et ton avatar :</b></p>
     <div class="row"><input type="text" id="pnm2" maxlength="16" style="flex:1;min-width:120px" value="${curProfile().name.replace(/"/g,'&quot;')}">
-      ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${a}</button>`).join('')}
+      ${AVATARS.map(a=>`<button class="av ${a===curProfile().av?'sel':''}" onclick="curProfile().av='${a}';saveProfiles();openMenu()">${avH(a)}</button>`).join('')}
       <button class="ok" onclick="curProfile().name=document.getElementById('pnm2').value.trim()||curProfile().name;saveProfiles();updateHUD();openMenu()">OK</button></div>`:''}
     <div class="row"><button onclick="openExport()">📤 Envoyer ma partie</button><button onclick="switchPlayer()">${ic('joueurs')} Changer de joueur</button><button onclick="showRules()">📖 Règles du jeu</button><button onclick="confirmReset()">🔄 Nouvelle partie</button></div>
     ${isStandalone()?'':`<p class="instx"><b>📲 Lili Parc sur le téléphone ou la tablette :</b></p>
@@ -1762,7 +1788,7 @@ function showRules(){ const back=modalOpen&&!S.dayNum; openModal(`<h2>📖 Comme
 function startScreen(){ whoPlays(); }
 function whoPlays(){
   const cards=PROFILES.map(p=>{ const sv=load(p.id);
-    return `<div class="who"><button class="whob" onclick="choosePlayer('${p.id}')"><span class="wav">${p.av}</span><b>${p.name.replace(/</g,'&lt;')}</b>
+    return `<div class="who"><button class="whob" onclick="choosePlayer('${p.id}')"><span class="wav">${avH(p.av)}</span><b>${p.name.replace(/</g,'&lt;')}</b>
       <small>${sv?`Jour ${sv.dayNum} · ${'⭐'.repeat(sv.level||2)}<br>${(sv.name||'').replace(/</g,'&lt;')}`:'Nouvelle partie'}</small></button>
       <button class="whodel" title="Supprimer" onclick="askDelPlayer('${p.id}')">🗑️</button></div>`; }).join('');
   openModal(`<h2>👋 Qui joue ?</h2><p class="small">Chaque joueur a sa propre fête foraine et reprend là où il s'était arrêté.</p>
@@ -1772,14 +1798,14 @@ function whoPlays(){
 function newPlayerForm(){
   window.pickAv=AVATARS[PROFILES.length%AVATARS.length];
   openModal(`<h2>➕ Nouveau joueur</h2><p>Comment tu t'appelles ?</p><input type="text" id="pnm" maxlength="16" placeholder="Ton prénom">
-    <p>Choisis ton avatar :</p><div class="avs">${AVATARS.map(a=>`<button class="av ${a===window.pickAv?'sel':''}" onclick="window.pickAv='${a}';document.querySelectorAll('.av').forEach(b=>b.classList.toggle('sel',b===this))">${a}</button>`).join('')}</div>
+    <p>Choisis ton avatar :</p><div class="avs">${AVATARS.map(a=>`<button class="av ${a===window.pickAv?'sel':''}" onclick="window.pickAv='${a}';document.querySelectorAll('.av').forEach(b=>b.classList.toggle('sel',b===this))">${avH(a)}</button>`).join('')}</div>
     <div class="right">${PROFILES.length?'<button onclick="whoPlays()">Retour</button>':''}<button class="main" onclick="createPlayer()">C'est moi ! ✨</button></div>`,'lili-coucou');
   $('box').dataset.lock='1';
 }
 function createPlayer(){ const nm=(document.getElementById('pnm').value||'').trim()||('Joueur '+(PROFILES.length+1));
   const id='p'+Date.now(); PROFILES.push({id,name:nm,av:window.pickAv||'🦄'}); saveProfiles(); CUR=id; newGameScreen(); }
 function askDelPlayer(id){ const p=PROFILES.find(x=>x.id===id);
-  openModal(`<h2>🗑️ Supprimer ${p.av} ${p.name.replace(/</g,'&lt;')} ?</h2><p>Sa fête foraine sera effacée pour toujours.</p>
+  openModal(`<h2>🗑️ Supprimer ${avH(p.av)} ${p.name.replace(/</g,'&lt;')} ?</h2><p>Sa fête foraine sera effacée pour toujours.</p>
     <div class="right"><button onclick="whoPlays()">Non</button><button class="main" onclick="delPlayer('${id}')">Oui, supprimer</button></div>`,'lili-perplexe'); }
 function delPlayer(id){ PROFILES=PROFILES.filter(p=>p.id!==id); saveProfiles(); try{ localStorage.removeItem(keyOf(id)); }catch(e){} if(CUR===id) CUR=null; whoPlays(); }
 function choosePlayer(id){ CUR=id; try{ localStorage.setItem('lilipark-last',id); }catch(e){}
@@ -1787,7 +1813,7 @@ function choosePlayer(id){ CUR=id; try{ localStorage.setItem('lilipark-last',id)
 function switchPlayer(){ save(); visitors=[]; floats=[]; runtime.forEach(r=>{r.queue=[];r.timer=0;}); whoPlays(); }
 function newGameScreen(){
     const pr=curProfile();
-    openModal(`<h2>🎪 Bienvenue ${pr?pr.av+' '+pr.name.replace(/</g,'&lt;'):''} !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
+    openModal(`<h2>🎪 Bienvenue ${pr?avH(pr.av)+' '+pr.name.replace(/</g,'&lt;'):''} !</h2><p>Coucou ! Nous, c'est <b>Ellie</b> et <b>Livia</b>. On va t'aider à construire la plus belle fête foraine du monde ! Comment veux-tu l'appeler ?</p>
       <input type="text" id="nm0" maxlength="32" value="Lili Parc">
       <p><b>Choisis ton niveau :</b></p>
       <div class="lvls">${[1,2,3].map(n=>`<button class="lvl ${n===2?'sel':''}" onclick="pickLvl(${n},this)"><b>${'⭐'.repeat(n)} ${LVL_NAMES[n]}</b><small>${LVL_DESC[n]}</small></button>`).join('')}</div>
@@ -1837,11 +1863,11 @@ function checkUnlocks(){
   }
 }
 function updateHUD(){
-  const pr=curProfile(); $('parkName').textContent=`${pr?pr.av+' ':''}Jour ${S.dayNum}`;
+  const pr=curProfile(); $('parkName').innerHTML=`${pr?avH(pr.av)+' ':''}Jour ${S.dayNum}`;
   $('money').textContent=fmt(S.money); $('money').classList.toggle('neg',S.money<0);
   $('bankAmt').textContent=fmt(S.bank)+' L$';
   const L2=lv()>=2; $('svcBtn').style.display=L2?'':'none'; $('healthPill').style.display=L2?'':'none';
-  if(L2){ const hv=health(); $('healthVal').textContent=hv; $('healthPill').style.color=hv<50?'#dc2626':hv<75?'#d97706':''; $('wxIcon').textContent=WEATHER[S.weather||'sun'].em; }
+  if(L2){ const hv=health(); $('healthVal').textContent=hv; $('healthPill').style.color=hv<50?'#dc2626':hv<75?'#d97706':''; $('wxIcon').innerHTML=EMO(WEATHER[S.weather||'sun'].em); }
   $('stars').textContent=starsTxt(S.stars);
   $('visCount').textContent=fmt(visitors.filter(v=>v.mode!=='leave').length*GROUP);
   const zl=S.zones>1?(overview?(view?'Zone 2':'Zone 1'):(view?'Zone 1':'Zone 2')):'Agrandir';
@@ -1947,7 +1973,7 @@ function drawServices(){
 }
 $('tipBtn').onclick=()=>{ $('tipBox').classList.toggle('hide'); $('tipBtn').classList.toggle('sel',!$('tipBox').classList.contains('hide')); };
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
-$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').innerHTML='<span class="em">'+(soundOn?'🔊':'🔇')+'</span><span class="lbl">Son</span>'; };
+$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').innerHTML=EMO('<span class="em">'+(soundOn?'🔊':'🔇')+'</span><span class="lbl">Son</span>'); };
 [0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); syncWake(); });
 
 // ================== APPLICATION (téléphone / tablette) ==================
@@ -1998,7 +2024,7 @@ function frame(now){
     drawLighting(); setScreen();
     for(const c of confetti){ c.t-=dt; c.vy+=400*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.r+=dt*8; g.save(); g.translate(c.x,c.y); g.rotate(c.r); g.fillStyle=c.c; g.fillRect(-4,-2,8,4); g.restore(); }
     confetti=confetti.filter(c=>c.t>0&&c.y<H+20);
-    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=tp.txt; const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tipBox').classList.toggle('pinkb',LIVIA(tp.img));
+    tipT-=dt; if(tipT<=0){ tipT=1; syncWake(); const tp=getTip(); $('tip').innerHTML=EMO(tp.txt); const src='img/'+tp.img+'.webp'; if(!$('tipImg').src.endsWith(src)) $('tipImg').src=src; $('tipBox').classList.toggle('pinkb',LIVIA(tp.img));
       if(!modalOpen && speed>0){ checkUnlocks(); checkBadges(); if(tp.k && !day.shown[tp.k] && canToast(tp.k)){ day.shown[tp.k]=1; S.tipLog[tp.k]=S.dayNum; day.tipToasts=(day.tipToasts||0)+1; toast(tp.img,TIP_TITLES[tp.k],tp.txt); } }
       updateHUD(); }
     else { $('money').textContent=fmt(S.money); $('dayFill').style.width=(S.time/DAY*100)+'%'; }
