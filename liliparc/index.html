@@ -1374,16 +1374,21 @@ let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
 // Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
 // loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
-const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong',fantome:'loop',riviere:'loop',chute:'pingpong',pendule:'pingpong',huit:'loop',arcenciel:'loop',robot:'loop'};
-const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong',fantome:'loop',riviere:'loop',chute:'pingpong',pendule:'pingpong',huit:'loop',arcenciel:'loop',robot:'loop',dragon:'fly'};
+const SPR={}; for(const id in SPRITES) SPR[id]=(SPRITES[id]==='fly'?[1,2]:[1,2,3]).map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
 function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
-  const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
+  const seq=SPRITES[id]==='fly'?[0,1]:SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*(SPRITES[id]==='fly'?5:4))%seq.length]]; }
 function drawSprite(im,x,y,w,h){ const k=Math.min(w/im.naturalWidth,h/im.naturalHeight), dw=im.naturalWidth*k, dh=im.naturalHeight*k;
   g.beginPath(); g.ellipse(x+w/2,y+h-3,dw*0.42,8,0,0,Math.PI*2); g.fillStyle='rgba(0,0,0,.13)'; g.fill();
   g.drawImage(im,x+(w-dw)/2,y+h-dh,dw,dh); }
 // Dessine l'attraction (image ou dessin en code) dans un cadre 225 × h
 function drawAttraction(id,lvl,t,x,y,h,closed){ const im=sprFrame(id,closed?0:t);
-  if(im) drawSprite(im,x+2,y,221,h);
+  if(im&&SPRITES[id]==='fly'){ // le dragon vole en rond au-dessus de son terrain
+    const sp=closed?0:1, a=t*0.7*sp, dx=Math.sin(a)*42, dy=Math.sin(t*2.2*sp)*7-Math.cos(a)*6, right=Math.cos(a)>0;
+    const k=Math.min(165/im.naturalWidth,(h-34)/im.naturalHeight), dw=im.naturalWidth*k, dh=im.naturalHeight*k, cx=x+112+dx, by=y+h-30+dy;
+    g.beginPath(); g.ellipse(cx,y+h-4,dw*0.32,6,0,0,Math.PI*2); g.fillStyle='rgba(0,0,0,.14)'; g.fill();
+    g.save(); g.translate(cx,by); if(right) g.scale(-1,1); g.drawImage(im,-dw/2,-dh,dw,dh); g.restore(); }
+  else if(im) drawSprite(im,x+2,y,221,h);
   else { g.save(); g.translate(x,y+h-170); g.beginPath(); g.rect(-6,-12-(h-170),237,h+12); g.clip(); DRAW[id](225,170,closed?0:t,lvl); g.restore(); } }
 function drawSign(i){
   const r=baseRect(i), p=S.plots[i]; if(!p) return; const signY=r.row? r.y+1 : r.y+r.h-33;
