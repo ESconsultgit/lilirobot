@@ -105,7 +105,7 @@ ul.rules{padding-left:20px;font-size:16px;line-height:1.5;margin:8px 0}
 .top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
 .hud-info{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex:1 1 auto}
 .hud-btns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.goalMini,#tipBtn{display:none}
+.goalMini{display:none}
 /* ===== Téléphone à l'horizontale : infos à gauche, jeu au centre, boutons à droite, sans scroll ===== */
 @media (max-height:560px) and (orientation:landscape){
   html,body{height:100%;overflow:hidden}
@@ -242,6 +242,35 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
   #tip{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:300px}
   #goalBox{width:min(210px,30%)} #goalTxt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
+
+/* ---------- Map à gauche, panneau de boutons à droite ---------- */
+:root{--pw:clamp(150px,14vw,230px)}
+#cv{right:var(--pw)!important;width:auto!important}
+#ov{right:var(--pw)!important}
+#cvWrap .daybar{right:var(--pw)}
+#panel{position:absolute;top:0;right:0;bottom:0;width:var(--pw);z-index:4;background:linear-gradient(#FFF8EC,#FBE7F1);box-shadow:-3px 0 12px rgba(42,31,61,.18);
+  display:flex;flex-direction:column;gap:8px;padding:max(10px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) 8px;overflow:auto}
+#panel .speed{display:flex;gap:4px;justify-content:center;background:#fff;border-radius:999px;padding:3px;box-shadow:0 2px 6px rgba(42,31,61,.15)}
+#panel .speed button{flex:1;height:40px;padding:0;border-radius:999px;box-shadow:none;background:transparent;display:flex;align-items:center;justify-content:center}
+#panel .speed button.sel{background:#e9ddff;box-shadow:inset 0 0 0 2px var(--violet)}
+#panel .ic{width:26px;height:26px}
+.pbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pbtns button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;font-size:13px;line-height:1.05;border-radius:14px;min-height:56px}
+.pbtns button .em{font-size:22px;line-height:1}
+.pbtns button .lbl{display:block!important}
+.pbtns button.sel{background:#e9ddff}
+#panel #installBtn{display:none;background:var(--pink);color:#fff}
+#panel #goalBox{position:static;width:auto;margin-top:auto;font-size:13px;background:#fff}
+#tipBox .x{align-self:flex-start;margin-left:-14px;margin-top:-6px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 5px rgba(0,0,0,.2);font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+#tipBox.hide{display:none}
+#tipBox{max-width:min(560px,62%)!important}
+#toasts{left:calc((100% - var(--pw))/2)!important}
+@media (max-height:560px),(max-width:760px){
+  .pbtns{gap:4px} .pbtns button{min-height:0;padding:4px 2px;font-size:10.5px;border-radius:11px} .pbtns button .em{font-size:17px} #panel .ic{width:20px;height:20px}
+  #panel{gap:5px;padding-top:max(6px,env(safe-area-inset-top));padding-bottom:max(6px,env(safe-area-inset-bottom))} #panel .speed button{height:30px}
+  #panel #goalBox{font-size:10.5px;padding:4px 7px} #panel #goalTxt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #hud{max-width:calc(100% - 20px)!important}
+}
 </style>
 </head>
 <body>
@@ -258,27 +287,26 @@ html,body{height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
       <span title="Visiteurs dans le parc">🧒 <span id="visCount">0</span></span>
       <span id="healthPill" title="Santé du parc et météo" style="cursor:pointer"><img class="ic" src="img/ui/coeur.webp" alt=""><span id="healthVal">100</span>% <span id="wxIcon">☀️</span></span>
     </div>
-    <div id="ctrl">
-      <div class="speed">
-        <button id="spd0" title="Pause"><img class="ic" src="img/ui/pause.webp" alt=""></button>
-        <button id="spd1" class="sel" title="Vitesse normale"><img class="ic" src="img/ui/play.webp" alt=""></button>
-        <button id="spd2" title="Rapide"><img class="ic" src="img/ui/vitesse.webp" alt=""></button>
-      </div>
-      <button id="zoomBtn" title="Voir tout le parc"><img class="ic" src="img/ui/longue-vue.webp" alt=""><span class="lbl"> Tout voir</span></button>
-      <button id="bMore" title="Boutons" aria-label="Boutons">☰</button>
+    <div id="tipBox"><img id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div><span class="x">✕</span></div>
+  </div>
+  <div id="panel">
+    <div class="speed">
+      <button id="spd0" title="Pause"><img class="ic" src="img/ui/pause.webp" alt=""></button>
+      <button id="spd1" class="sel" title="Vitesse normale"><img class="ic" src="img/ui/play.webp" alt=""></button>
+      <button id="spd2" title="Rapide"><img class="ic" src="img/ui/vitesse.webp" alt=""></button>
     </div>
-    <div id="moreList">
-      <button id="zoneBtn" title="Changer de zone"><img class="ic" src="img/ui/mondes.webp" alt=""><span class="lbl"> Agrandir</span></button>
-      <button id="ticketBtn" title="Billet d'entrée">🎟️<span class="lbl"> Billet d'entrée</span></button>
-      <button id="svcBtn" title="Services du parc">🛠️<span class="lbl"> Services</span></button>
-      <button id="badgeBtn" title="Mes badges"><img class="ic" src="img/ui/medaille.webp" alt=""><span class="lbl"> Badges</span></button>
-      <button id="tipBtn" title="Astuce">💡<span class="lbl"> Astuce</span></button>
-      <button id="fsBtn" title="Plein écran"><img class="ic" src="img/ui/plein-ecran.webp" alt=""><span class="lbl"> Plein écran</span></button>
-      <button id="soundBtn" title="Son">🔊<span class="lbl"> Son</span></button>
-      <button id="installBtn" title="Installer l'application">📲<span class="lbl"> Installer</span></button>
-      <button id="menuBtn" title="Réglages"><img class="ic" src="img/ui/menu.webp" alt=""><span class="lbl"> Réglages</span></button>
+    <div class="pbtns">
+      <button id="zoomBtn" title="Voir tout le parc"><img class="ic" src="img/ui/longue-vue.webp" alt=""><span class="lbl">Tout voir</span></button>
+      <button id="zoneBtn" title="Changer de zone"><img class="ic" src="img/ui/mondes.webp" alt=""><span class="lbl">Agrandir</span></button>
+      <button id="ticketBtn" title="Billet d'entrée"><span class="em">🎟️</span><span class="lbl">Billet</span></button>
+      <button id="svcBtn" title="Services du parc"><span class="em">🛠️</span><span class="lbl">Services</span></button>
+      <button id="badgeBtn" title="Mes badges"><img class="ic" src="img/ui/medaille.webp" alt=""><span class="lbl">Badges</span></button>
+      <button id="tipBtn" title="Astuce"><span class="em">💡</span><span class="lbl">Astuce</span></button>
+      <button id="fsBtn" title="Plein écran"><img class="ic" src="img/ui/plein-ecran.webp" alt=""><span class="lbl">Plein écran</span></button>
+      <button id="soundBtn" title="Son"><span class="em">🔊</span><span class="lbl">Son</span></button>
+      <button id="installBtn" title="Installer l'application"><span class="em">📲</span><span class="lbl">Installer</span></button>
+      <button id="menuBtn" title="Réglages"><img class="ic" src="img/ui/menu.webp" alt=""><span class="lbl">Réglages</span></button>
     </div>
-    <div id="tipBox"><img id="tipImg" src="img/lili-explique.webp" alt=""><div id="tip">Bienvenue !</div></div>
     <div id="goalBox"><div id="goalTxt">Objectif</div><div class="bar"><i id="goalFill"></i></div>
       <div style="display:none"><div id="goalMiniTxt"></div><i id="goalMiniFill"></i></div></div>
   </div>
@@ -1328,7 +1356,7 @@ let hoverPlot=-1;
 const baseRect=i=>({x:0,y:0,w:225,h:210,row:plotRect(i).row});
 // Images dessinées des attractions (dossier attractions/) : 3 images par attraction, jouées en boucle.
 // loop = 1 2 3 1 2 3… ; pingpong = 1 2 3 2 1… Une attraction sans images garde son dessin animé en code.
-const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong'};
+const SPRITES={canards:'loop',barbe:'pingpong',churros:'loop',chamboule:'loop',carrousel:'loop',train:'loop',tasses:'loop',autos:'loop',chateau:'loop',trampo:'loop',pirate:'pingpong',roue:'loop',chaises:'loop',cirque:'pingpong',fantome:'loop'};
 const SPR={}; for(const id in SPRITES) SPR[id]=[1,2,3].map(k=>{ const im=new Image(); im.src='attractions/'+id+'-'+k+'.webp'; return im; });
 function sprFrame(id,t){ const fr=SPR[id]; if(!fr||!fr.every(im=>im.complete&&im.naturalWidth)) return null;
   const seq=SPRITES[id]==='pingpong'?[0,1,2,1]:[0,1,2]; return fr[seq[Math.floor(t*4)%seq.length]]; }
@@ -1812,8 +1840,8 @@ function updateHUD(){
   $('stars').textContent=starsTxt(S.stars);
   $('visCount').textContent=fmt(visitors.filter(v=>v.mode!=='leave').length*GROUP);
   const zl=S.zones>1?(overview?(view?'Zone 2':'Zone 1'):(view?'Zone 1':'Zone 2')):'Agrandir';
-  $('zoneBtn').innerHTML=ic('mondes')+'<span class="lbl"> '+zl+'</span>'; $('zoneBtn').title=S.zones>1?'Aller en '+zl:'Agrandir la fête';
-  $('zoomBtn').innerHTML=ic('longue-vue')+'<span class="lbl"> '+(overview?'Zoomer':'Tout voir')+'</span>';
+  $('zoneBtn').innerHTML=ic('mondes')+'<span class="lbl">'+zl+'</span>'; $('zoneBtn').title=S.zones>1?'Aller en '+zl:'Agrandir la fête';
+  $('zoomBtn').innerHTML=ic('longue-vue')+'<span class="lbl">'+(overview?'Zoomer':'Tout voir')+'</span>';
   $('dayFill').style.width=(S.time/DAY*100)+'%';
   const ever=S.ever||[], nextD=DEFS.find(d=>!d.mega&&!ever.includes(d.id));
   let pct, mini;
@@ -1855,10 +1883,7 @@ function buyZone(){ if(S.money<ZONE_COST||S.zones>=NZ) return; S.money-=ZONE_COS
 $('zoneBtn').onclick=()=>{ if(S.zones>1) setView(overview?view:(view?0:1)); else openZoneBuy(); };
 $('zoomBtn').onclick=toggleOverview;
 // Menu ☰ : s'ouvre et se ferme ; un choix le referme
-$('bMore').onclick=e=>{ e.stopPropagation(); $('moreList').classList.toggle('open'); };
-$('moreList').addEventListener('click',()=>setTimeout(()=>$('moreList').classList.remove('open'),0));
-cv.addEventListener('pointerdown',()=>$('moreList').classList.remove('open'));
-$('tipBox').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
+$('tipBox').onclick=()=>$('tipBox').classList.add('hide');
 // Plein écran (pas sur iPhone, où l'app installée est déjà en plein écran)
 if(!(document.fullscreenEnabled||document.webkitFullscreenEnabled)) $('fsBtn').style.display='none';
 $('fsBtn').onclick=()=>{ const d=document, el=d.documentElement;
@@ -1915,14 +1940,14 @@ function drawServices(){
     if(off){ g.font='700 12px "Baloo 2"'; g.textAlign='center'; g.fillStyle='#111'; g.fillText('🔒',x,y-10); }
     else { kid(x+(k==='secu'?-21:21),y+6,k==='secu'?'#1e3a8a':'#fff'); g.fillStyle=k==='secu'?'#1d4ed8':'#fff'; rr(x+(k==='secu'?-26:16),y+11,10,10,3); g.fill(); } });
 }
-$('tipBtn').onclick=()=>{ const tp=getTip(); toast(tp.img,'Astuce',tp.txt); };
+$('tipBtn').onclick=()=>{ $('tipBox').classList.toggle('hide'); $('tipBtn').classList.toggle('sel',!$('tipBox').classList.contains('hide')); };
 $('ticketBtn').onclick=openTicket; $('bankPill').onclick=openBank; $('menuBtn').onclick=openMenu;
-$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').textContent=soundOn?'🔊':'🔇'; };
+$('soundBtn').onclick=()=>{ soundOn=!soundOn; $('soundBtn').innerHTML='<span class="em">'+(soundOn?'🔊':'🔇')+'</span><span class="lbl">Son</span>'; };
 [0,1,2].forEach(k=>$('spd'+k).onclick=()=>{ speed=k===2?2.5:k; [0,1,2].forEach(j=>$('spd'+j).classList.toggle('sel',j===k)); syncWake(); });
 
 // ================== APPLICATION (téléphone / tablette) ==================
 let installEvt=null;
-window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; $('installBtn').style.display='inline-block'; });
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); installEvt=e; $('installBtn').style.display='flex'; });
 $('installBtn').onclick=async()=>{ if(!installEvt) return; installEvt.prompt(); try{ await installEvt.userChoice; }catch(e){} installEvt=null; $('installBtn').style.display='none'; };
 window.addEventListener('appinstalled',()=>{ $('installBtn').style.display='none'; });
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
